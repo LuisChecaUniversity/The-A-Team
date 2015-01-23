@@ -46,6 +46,8 @@
     <Compile Include="EntityAlive.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Projectile.cs" />
+    <Compile Include="ProjectileManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -57,18 +59,12 @@
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="assets\level1.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\dungeon_objects.png" />
-    <Content Include="assets\dungeon_tiles.png" />
-    <Content Include="assets\Vita_Circle.png" />
-    <Content Include="assets\Vita_Cross.png" />
-    <Content Include="assets\Vita_L.png" />
-    <Content Include="assets\Vita_Square.png" />
-    <Content Include="assets\Vita_Triangle.png" />
+    <Content Include="Assets\fireBullet.png" />
   </ItemGroup>
 </Project>
