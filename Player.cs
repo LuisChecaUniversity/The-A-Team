@@ -46,23 +46,23 @@ namespace PairedGame
 		{
 			var gamePadData = GamePad.GetData(0);
 			// Apply direction and animation
-			if((gamePadData.AnalogLeftX) != 0)
+			if((gamePadData.Buttons & GamePadButtons.Left) != 0)
 			{
 				MoveSpeed.X = -MoveDelta;
 				// Set animation range.
 				TileRangeX = new Vector2i(6, 7);
 			}
-			if((gamePadData.AnalogLeftX) != 0)
+			if((gamePadData.Buttons & GamePadButtons.Right) != 0)
 			{
 				MoveSpeed.X = MoveDelta;
 				TileRangeX = new Vector2i(4, 5);
 			}
-			if((gamePadData.AnalogLeftY) != 0)
+			if((gamePadData.Buttons & GamePadButtons.Up) != 0)
 			{
 				MoveSpeed.Y = MoveDelta;
 				TileRangeX = new Vector2i(2, 3);
 			}
-			if((gamePadData.AnalogLeftY) != 0)
+			if((gamePadData.Buttons & GamePadButtons.Down) != 0)
 			{
 				MoveSpeed.Y = -MoveDelta;
 				TileRangeX = new Vector2i(0, 1);
