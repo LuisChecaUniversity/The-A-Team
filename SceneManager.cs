@@ -1,6 +1,6 @@
 using System;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public sealed class SceneManager
 	{

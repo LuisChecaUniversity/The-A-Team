@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Sce.PlayStation.Core.Audio;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public static class AudioManager
 	{

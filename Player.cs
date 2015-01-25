@@ -3,7 +3,7 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public class Player: EntityAlive
 	{
@@ -35,7 +35,7 @@ namespace PairedGame
 			// Apply the movement
 			Position = Position + MoveSpeed;
 			// Make camera follow the player
-			Info.CameraCentre = Position;
+			Info.CameraCenter = Position;
 		}
 		
 		public AttackStatus Attack { get { return attackState; } }
@@ -106,49 +106,12 @@ namespace PairedGame
 			{
 				if(t.Overlaps(this))
 				{
-					if(!MoveSpeed.IsZero())
-						t.HandleCollision(Position, ref MoveSpeed);
+					if(!MoveSpeed.IsZero() && t.IsCollidable)
+						//t.HandleCollision(Position, ref MoveSpeed);
+						MoveSpeed = Vector2.Zero;
 					
 					if(t.Key == 'Z')
 						Info.LevelClear = true;
-				}
-			}
-			
-			foreach(EntityAlive e in SceneManager.CurrentScene.Children[1].Children)
-			{
-				if(e.Overlaps(this) && e.IsAlive)
-				{
-					if(!MoveSpeed.IsZero() && e.IsCollidable)
-						MoveSpeed *= -1f;
-					
-					/*if(e.IsBoss && !Info.InBattle)
-					{
-						if(!Info.HadConversation)
-						{
-							SceneManager.ReplaceUIScene(new Conversation());
-						}
-						else
-							e.IsCollidable = false;
-					}
-					else*/
-					if(e.IsAlive)
-					{
-						Opponent = e;
-						Opponent.Opponent = this;
-						Opponent.InBattle = true;
-						//if(!InBattle)
-						//	SceneManager.ReplaceUIScene(new FightUI(this, Opponent));
-						InBattle = true;
-						//Info.InBattle = true;
-					}
-					else
-					{
-						Opponent = null;
-						e.Opponent = null;
-						e.InBattle = false;
-						InBattle = false;
-						//Info.InBattle = false;
-					}
 				}
 			}
 		}

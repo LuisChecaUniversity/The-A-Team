@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public abstract class AssetManager<T>
 	{

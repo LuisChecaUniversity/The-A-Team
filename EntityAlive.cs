@@ -2,7 +2,7 @@ using System;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public enum AttackStatus
 	{

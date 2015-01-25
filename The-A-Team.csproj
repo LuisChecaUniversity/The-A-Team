@@ -59,7 +59,6 @@
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="assets\level1.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
@@ -72,5 +71,8 @@
     <Content Include="assets\Vita_L.png" />
     <Content Include="assets\Vita_Square.png" />
     <Content Include="assets\Vita_Triangle.png" />
+    <Content Include="assets\level1.txt">
+      <PSM-Content-Protection>Plain</PSM-Content-Protection>
+    </Content>
   </ItemGroup>
 </Project>
