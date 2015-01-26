@@ -108,7 +108,7 @@ namespace TheATeam
 				{
 					if(!MoveSpeed.IsZero() && t.IsCollidable)
 						//t.HandleCollision(Position, ref MoveSpeed);
-						MoveSpeed = Vector2.Zero;
+						MoveSpeed *= -1.0f;
 					
 					if(t.Key == 'Z')
 						Info.LevelClear = true;
