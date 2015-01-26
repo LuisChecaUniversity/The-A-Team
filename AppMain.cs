@@ -50,7 +50,7 @@ namespace TheATeam
 			Sce.PlayStation.HighLevel.GameEngine2D.Scene scene = new Sce.PlayStation.HighLevel.GameEngine2D.Scene();
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, scene);
+			Tile.XMLoader("/Application/assets/level1.xml", ref cameraCenter, scene);
 			Info.CameraCenter = cameraCenter;
 			scene.Camera2D.SetViewFromViewport();
 			
