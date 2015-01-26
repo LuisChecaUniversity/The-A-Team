@@ -13,9 +13,12 @@ namespace TheATeam
 		private static ProjectileManager instance = new ProjectileManager();
 		private static List<Projectile> projectiles;
 		private Scene scene;
+		private float bulletSpeed = 100.0f;
 		
 		private ProjectileManager ()
 		{
+			scene = Director.Instance.CurrentScene;
+			projectiles = new List<Projectile>();
 		}
 		
 		public static ProjectileManager Instance
@@ -25,8 +28,7 @@ namespace TheATeam
 		
 		public void Shoot(Vector2 playerPos, Vector2 direction)
 		{
-			float speed = 5.0f;
-			Vector2 Velocity = new Vector2(direction.X * speed, direction.Y * speed);
+			Vector2 Velocity = new Vector2(direction.X * bulletSpeed, direction.Y * bulletSpeed);
 			Projectile newProjectile = new Projectile(scene, playerPos, Velocity);
 			projectiles.Add(newProjectile);
 		}
@@ -41,17 +43,20 @@ namespace TheATeam
 			{
 				if(projectiles[i].collided)
 				{
+					projectiles[i].Dispose();
+					projectiles[i] = null;
 					projectiles.RemoveAt(i);
 					i--;
 				}
 			}
 		}
-		public void ProjectileCollision(Vector2 pos, Vector2 size)
+		public void ProjectileCollision(Vector2 pos, Bounds2 bounds)
 		{
+			Vector2 size = new Vector2(bounds.Point11.X, bounds.Point11.Y);
 			// Will need to check this against every tile + player positions
 			foreach(Projectile projectile in projectiles)
 			{
-				if(projectile.hasCollided(pos, size))
+				if(projectile.hasCollided(pos, size) || projectile.offScreen())
 					projectile.collided = true;
 			}
 		}

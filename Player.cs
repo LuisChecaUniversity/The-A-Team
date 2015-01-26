@@ -36,6 +36,13 @@ namespace TheATeam
 			Position = Position + MoveSpeed;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
+			
+			// handle bullet update and collision
+			ProjectileManager.Instance.Update(dt);
+			foreach(Tile t in Tile.Collisions)
+			{
+				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
+			}
 		}
 		
 		public AttackStatus Attack { get { return attackState; } }
@@ -66,6 +73,12 @@ namespace TheATeam
 			{
 				MoveSpeed.Y = -MoveDelta;
 				TileRangeX = new Vector2i(0, 1);
+			}
+			
+			// added player shoot 
+			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
+			{
+				ProjectileManager.Instance.Shoot(Position, MoveSpeed);
 			}
 			// Attacks if in battle
 			if(InBattle)
