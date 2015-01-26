@@ -34,6 +34,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Sce.PlayStation.Core" />
+    <Reference Include="Sce.PlayStation.HighLevel.GameEngine2D" />
+    <Reference Include="Sce.PlayStation.HighLevel.UI" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMain.cs" />
@@ -62,9 +65,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
-    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\fireBullet.png" />
+    <Content Include="assets\dungeon_objects.png" />
+    <Content Include="assets\dungeon_tiles.png" />
+    <Content Include="assets\Vita_Circle.png" />
+    <Content Include="assets\Vita_Cross.png" />
+    <Content Include="assets\Vita_L.png" />
+    <Content Include="assets\Vita_Square.png" />
+    <Content Include="assets\Vita_Triangle.png" />
+    <Content Include="assets\level1.txt">
+      <PSM-Content-Protection>Plain</PSM-Content-Protection>
+    </Content>
+    <Content Include="assets\level1.xml" />
   </ItemGroup>
 </Project>

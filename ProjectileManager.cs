@@ -37,7 +37,7 @@ namespace TheATeam
 			{
 				projectile.Update(dt);
 			}
-			for(int i = 0; i < projectiles.Count(); i++)
+			for(int i = 0; i < projectiles.Count; i++)
 			{
 				if(projectiles[i].collided)
 				{
@@ -48,6 +48,7 @@ namespace TheATeam
 		}
 		public void ProjectileCollision(Vector2 pos, Vector2 size)
 		{
+			// Will need to check this against every tile + player positions
 			foreach(Projectile projectile in projectiles)
 			{
 				if(projectile.hasCollided(pos, size))

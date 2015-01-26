@@ -19,10 +19,10 @@ namespace TheATeam
 		{
 			bulletTex = new TextureInfo("/Application/Assets/fireBullet.png");
 			bulletSprite = new SpriteUV(bulletTex);
-			bulletSprite.Quad.S = turretTex.TextureSizef;
+			bulletSprite.Quad.S = bulletTex.TextureSizef;
 			bulletSprite.CenterSprite(TRS.Local.Center);
 			
-			scene.AddChild(turret);
+			scene.AddChild(bulletSprite);
 			
 			position = pos;
 			velocity = vel;
