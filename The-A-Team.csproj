@@ -76,5 +76,6 @@
       <PSM-Content-Protection>Plain</PSM-Content-Protection>
     </Content>
     <Content Include="assets\level1.xml" />
+    <Content Include="assets\tiles.xml" />
   </ItemGroup>
 </Project>
