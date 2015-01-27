@@ -52,6 +52,10 @@
     <Compile Include="Projectile.cs" />
     <Compile Include="ProjectileManager.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="GameSceneManager.cs" />
+    <Compile Include="SplashScreen.cs" />
+    <Compile Include="MainMenu.cs" />
+    <Compile Include="TitleScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -82,5 +86,9 @@
     <Content Include="assets\tiles.xml" />
     <Content Include="assets\tiles.png" />
     <Content Include="assets\dungeon_tiles.png" />
+    <Content Include="assets\MainMenu.png" />
+    <Content Include="assets\selectIcon.png" />
+    <Content Include="assets\SplashScreen.png" />
+    <Content Include="assets\TitleScreen.png" />
   </ItemGroup>
 </Project>

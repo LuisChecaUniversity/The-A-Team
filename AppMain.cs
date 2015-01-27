@@ -8,15 +8,23 @@ namespace TheATeam
 {
 	public class AppMain
 	{		
+		public static bool 					QUITGAME = false;
+		private static GameSceneManager 	gsm;
+		private static Timer 				timer;
+		
+		private static float prevTime;
+		
 		public static void Main(string[] args)
 		{
 			Initialize();
-			bool quitGame = false;
+			
 			//GamePadData gamePadData = GamePad.GetData(0);
 			
-			while(!quitGame)
+			while(!QUITGAME)
 			{
+			
 				SystemEvents.CheckEvents();	// We check system events (such as pressing PS button, pressing power button to sleep, major and unknown crash!!)				
+				Update();
 				Director.Instance.Update();
 				//UISystem.Update(Touch.GetData(0), ref gamePadData); // Update UI Manager
 				Director.Instance.Render();
@@ -33,28 +41,53 @@ namespace TheATeam
 
 		public static void Initialize()
 		{
-			// Initialises the GameEngine2D supplied by Sony.
+//			// Initialises the GameEngine2D supplied by Sony.
+//			Director.Initialize();
+//			// Initialises the UI Framework supplied by Sony.
+//			//UISystem.Initialize(Director.Instance.GL.Context);
+//			// Load and store textures
+//
+//			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+//			                                                 new Vector2i(7, 1)));
+//
+//			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+//			                                                 new Vector2i(9, 14)));
+//			
+//			// Initial Values;
+//			Info.TotalGameTime = 0f;
+//			Info.LevelNumber = 1;
+//			
+//			// Tell the UISystem to run an empty scene
+//			//UISystem.SetScene(new GameUI(), null);
+//			// Tell the Director to run our scene
+//
+//			Director.Instance.RunWithScene(new Level(), true);
+			
+			timer = new Timer();
+			
 			Director.Initialize();
-			// Initialises the UI Framework supplied by Sony.
-			//UISystem.Initialize(Director.Instance.GL.Context);
-			// Load and store textures
-
-			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(7, 1)));
-
-			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
 			
-			// Initial Values;
-			Info.TotalGameTime = 0f;
-			Info.LevelNumber = 1;
+			gsm = new GameSceneManager();
 			
-			// Tell the UISystem to run an empty scene
-			//UISystem.SetScene(new GameUI(), null);
-			// Tell the Director to run our scene
+			SplashScreen splashScene = new SplashScreen();
+			splashScene.Camera.SetViewFromViewport();
+			
+			GameSceneManager.currentScene = splashScene;
+			
+			//Run the scene.
+			Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
 
-			Director.Instance.RunWithScene(new Level(), true);
-
+		}
+		
+		public static void Update ()
+		{
+			
+			float curTime = (float)timer.Milliseconds();
+			
+			float dt = curTime - prevTime ;
+			
+			prevTime = curTime;
+			gsm.Update(dt);
 		}
 	}
 }
