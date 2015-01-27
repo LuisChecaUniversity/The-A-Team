@@ -9,69 +9,72 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
 {	
+	public struct TileType
+	{
+		public char Key;
+		public Vector2i TileIndex2D;
+		public bool IsCollidable;
+	}
+	
 	public class Tile: SpriteTile
 	{
 		public bool IsCollidable = false;
 		public char Key;
 		
-		public Tile(Vector2 position): base()
+		public Tile(): base()
 		{
 			TextureInfo = TextureManager.Get("tiles");
-			Position = position;
 			Quad.S = TextureInfo.TileSizeInPixelsf;
 		}
+
+		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		
-		public Tile(char loadKey, Vector2 position): this(position)
+		public Tile(char loadKey, Vector2 position): this()
 		{
 			// Reset variables
-			Key = loadKey;
-			// Based on loadKey set Tile to draw and its collision.
-			switch(loadKey)
+			if(Types.Count < 1)
 			{
-			case 'S': 
-				TileIndex2D = new Vector2i(Info.Rnd.Next(1, 4), Info.Rnd.Next(1, 4));
-				break;
-			case 'H':
-			case 'X':
-				TileIndex2D = new Vector2i(Info.Rnd.Next(1, 4), Info.Rnd.Next(1, 4));
-				break;
-			case 'D':
-				TileIndex2D = new Vector2i(Info.Rnd.Next(8, 11), 1);
-				IsCollidable = true;
-				break;
-			case 'P':
-				TileIndex2D = new Vector2i(0, 4);
-				break;
-			case 'O':
-				TileIndex2D = new Vector2i(4, 4);
-				break;
-			case 'I':
-				TileIndex2D = new Vector2i(0, 0);
-				break;
-			case 'U':
-				TileIndex2D = new Vector2i(4, 0);
-				break;
-			case 'M':
-				TileIndex2D = new Vector2i(Info.Rnd.Next(1, 4), 4);
-				break;
-			case 'N':
-				TileIndex2D = new Vector2i(Info.Rnd.Next(1, 4), 0);
-				break;
-			case 'B':
-				TileIndex2D = new Vector2i(0, Info.Rnd.Next(1, 4));
-				break;
-			case 'V':
-				TileIndex2D = new Vector2i(4, Info.Rnd.Next(1, 4));
-				break;
-			case 'Z':
-				TileIndex2D = new Vector2i(11, 3);
-				break;
-			default:
-				break;
+				XMLTypeLoader("/Application/assets/tiles.xml");
+			}
+			
+			TileType tt = new TileType();
+			if(Types.TryGetValue(loadKey, out tt))
+			{
+				Key = tt.Key;
+				TileIndex2D = tt.TileIndex2D;
+				IsCollidable = tt.IsCollidable;
+			}
+			else
+			{
+				Key = loadKey;
+			}
+			
+			Position = position;
+		}
+		
+		private static void XMLTypeLoader(string filepath)
+		{
+			// Read whole level xml to doc
+			var doc = XDocument.Load(filepath);
+			var lines = from tiletype in doc.Root.Elements("tiletype")
+				select new {
+					X = (int)tiletype.Attribute("tx"),
+					Y = (int)tiletype.Attribute("ty"),
+					Key = char.Parse(tiletype.Attribute("k").Value.ToUpper()),
+					IsCollidable = (bool)tiletype.Attribute("c")
+				};
+			TileType tt = new TileType();
+			foreach(var line in lines)
+			{
+				tt.Key = line.Key;
+				tt.TileIndex2D = new Vector2i(line.X, line.Y);
+				tt.IsCollidable = line.IsCollidable;
+				
+				Types.Add(line.Key, tt);
 			}
 		}
 
-		private static float boundsScale = 1.0f;
+		private static float boundsScale = 0.8f;
 		
 		public bool Overlaps(SpriteBase sprite)
 		{
@@ -83,9 +86,9 @@ namespace TheATeam
 			return thisBounds.Overlaps(otherBounds);
 		}
 		
-		public static int Height { get { return 32; } }
+		public static int Height { get { return 64; } }
 
-		public static int Width { get { return 32; } }
+		public static int Width { get { return 64; } }
 		
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();

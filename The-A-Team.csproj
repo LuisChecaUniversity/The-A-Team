@@ -51,6 +51,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="ProjectileManager.cs" />
+    <Compile Include="Level.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -68,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\dungeon_objects.png" />
-    <Content Include="assets\dungeon_tiles.png" />
     <Content Include="assets\Vita_Circle.png" />
     <Content Include="assets\Vita_Cross.png" />
     <Content Include="assets\Vita_L.png" />
@@ -79,5 +79,8 @@
     </Content>
     <Content Include="assets\level1.xml" />
     <Content Include="assets\bullet.png" />
+    <Content Include="assets\tiles.xml" />
+    <Content Include="assets\tiles.png" />
+    <Content Include="assets\dungeon_tiles.png" />
   </ItemGroup>
 </Project>
