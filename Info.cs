@@ -1,6 +1,6 @@
 using System;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public static class Info
 	{
@@ -14,7 +14,7 @@ namespace PairedGame
 		
 		public static float CameraHeight { get; set; }
 		
-		public static Sce.PlayStation.Core.Vector2 CameraCentre { get; set; }
+		public static Sce.PlayStation.Core.Vector2 CameraCenter { get; set; }
 		
 		public static bool LevelClear { get; set; }
 
