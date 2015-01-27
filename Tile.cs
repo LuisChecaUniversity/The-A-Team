@@ -74,7 +74,7 @@ namespace TheATeam
 			}
 		}
 
-		private static float boundsScale = 1.0f;
+		private static float boundsScale = 0.8f;
 		
 		public bool Overlaps(SpriteBase sprite)
 		{
@@ -86,9 +86,9 @@ namespace TheATeam
 			return thisBounds.Overlaps(otherBounds);
 		}
 		
-		public static int Height { get { return 32; } }
+		public static int Height { get { return 64; } }
 
-		public static int Width { get { return 32; } }
+		public static int Width { get { return 64; } }
 		
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
@@ -120,6 +120,7 @@ namespace TheATeam
 				
 				foreach(char c in line)
 				{
+					
 					// Make tile at pos
 					t = new Tile(c, pos);
 					// Add to SpriteList for drawing

@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tiletypes>
-    <tiletype k='S' tx='1'  ty='1' c='0' />
-    <tiletype k='X' tx='1'  ty='1' c='0' />
-    <tiletype k='D' tx='8'  ty='1' c='1' />
-    <tiletype k='P' tx='0'  ty='4' c='0' />
-    <tiletype k='O' tx='4'  ty='4' c='0' />
-    <tiletype k='I' tx='0'  ty='0' c='0' />
-    <tiletype k='U' tx='4'  ty='4' c='0' />
-    <tiletype k='M' tx='1'  ty='4' c='0' />
-    <tiletype k='N' tx='1'  ty='0' c='0' />
-    <tiletype k='B' tx='0'  ty='1' c='0' />
-    <tiletype k='V' tx='4'  ty='1' c='0' />
-    <tiletype k='Z' tx='11' ty='3' c='0' />
+<tiletypes> 
+    <tiletype k='E' tx='0'  ty='0' c='0' />
+    <tiletype k='D' tx='1'  ty='0' c='1' /> 
+    <tiletype k='F' tx='2'  ty='0' c='1' /> 
+    <tiletype k='W' tx='3'  ty='0' c='1' />
+    <tiletype k='I' tx='4'  ty='0' c='1' />
+    <tiletype k='S' tx='5'  ty='0' c='0' />
+	<tiletype k='~' tx='6'  ty='0' c='1' />	
 </tiletypes>

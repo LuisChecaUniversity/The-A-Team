@@ -38,31 +38,19 @@ namespace TheATeam
 			// Initialises the UI Framework supplied by Sony.
 			//UISystem.Initialize(Director.Instance.GL.Context);
 			// Load and store textures
-			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/dungeon_tiles.png", false),
-			                                                 new Vector2i(21, 5)));
+			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+			                                                 new Vector2i(7, 1)));
 			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
 			                                                 new Vector2i(9, 14)));
 			
 			// Initial Values;
 			Info.TotalGameTime = 0f;
 			Info.LevelNumber = 1;
-			// Make our test scene
-			Sce.PlayStation.HighLevel.GameEngine2D.Scene scene = new Sce.PlayStation.HighLevel.GameEngine2D.Scene();
-			Info.LevelClear = false;
-			Vector2 cameraCenter = Vector2.Zero;
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, scene);
-			Info.CameraCenter = cameraCenter;
-			scene.Camera2D.SetViewFromViewport();
-			
-			scene.Schedule((dt) => {
-				Info.TotalGameTime += dt;
-				// Camera2D.SetViewFromHeightAndCenter(Info.CameraHeight, Info.CameraCenter);
-			});
 			
 			// Tell the UISystem to run an empty scene
 			//UISystem.SetScene(new GameUI(), null);
 			// Tell the Director to run our scene
-			Director.Instance.RunWithScene(scene, true);
+			Director.Instance.RunWithScene(new Level(), true);
 		}
 	}
 }
