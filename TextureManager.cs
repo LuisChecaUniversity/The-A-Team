@@ -1,7 +1,7 @@
 using System;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
-namespace PairedGame
+namespace TheATeam
 {
 	public class TextureManager: AssetManager<TextureInfo>
 	{
