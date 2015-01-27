@@ -40,6 +40,7 @@ namespace PairedGame
 		
 		public AttackStatus Attack { get { return attackState; } }
 		
+		private Vector2 Direction;
 		private static float MoveDelta = 2f;
 		
 		private void HandleInput()
@@ -66,6 +67,11 @@ namespace PairedGame
 			{
 				MoveSpeed.Y = -MoveDelta;
 				TileRangeX = new Vector2i(0, 1);
+			}
+			
+			if (MoveSpeed != Vector2.Zero)
+			{
+				Direction = MoveSpeed;
 			}
 			// Attacks if in battle
 			if(InBattle)
