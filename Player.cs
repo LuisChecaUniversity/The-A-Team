@@ -49,6 +49,7 @@ namespace TheATeam
 			{
 				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
 			}
+			ProjectileManager.Instance.ProjectileCollision(Position, Quad.Bounds2());
 		}
 		
 		public AttackStatus Attack { get { return attackState; } }
@@ -99,7 +100,9 @@ namespace TheATeam
 				if(canShoot)
 				{
 					canShoot = false;
-					ProjectileManager.Instance.Shoot(Position, Direction);
+					// need to pass the centre of the player x+widht, y+height
+					Vector2 pos = new Vector2(Position.X + this.Quad.Point11.X/2, Position.Y + this.Quad.Point11.Y/2);
+					ProjectileManager.Instance.Shoot(pos, Direction);
 				}
 			}
 			if(Input2.GamePad0.Cross.Release)
