@@ -5,9 +5,15 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
 {
+	public enum PlayerIndex
+	{
+		PlayerOne = 0,
+		PlayerTwo = 1,
+	}
 	public class Player: EntityAlive
 	{
 		private static int PLAYER_INDEX = 0;
+		private bool canShoot = true;
 		
 		public Player(Vector2 position):
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
@@ -53,6 +59,7 @@ namespace TheATeam
 		private void HandleInput()
 		{
 			var gamePadData = GamePad.GetData(0);
+			
 			// Apply direction and animation
 			if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
 			{
@@ -83,9 +90,20 @@ namespace TheATeam
 			// added player shoot 
 			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
 			{
-				Console.WriteLine("SHOOTING");
-				ProjectileManager.Instance.Shoot(Position, Direction);
+				//Console.WriteLine("SHOOTING");
+				//ProjectileManager.Instance.Shoot(Position, Direction);
 			}
+			
+			if(Input2.GamePad0.Cross.Down)
+			{
+				if(canShoot)
+				{
+					canShoot = false;
+					ProjectileManager.Instance.Shoot(Position, Direction);
+				}
+			}
+			if(Input2.GamePad0.Cross.Release)
+				canShoot = true;
 			// Attacks if in battle
 			if(InBattle)
 			{
