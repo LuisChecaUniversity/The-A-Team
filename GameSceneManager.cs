@@ -16,24 +16,14 @@ namespace TheATeam
 	public class GameSceneManager :  Sce.PlayStation.HighLevel.GameEngine2D.Scene
 	{
 		
-		private  static SplashScreen 		splashScreen;
-		//private  static TitleScreen 			titleScreen;
 		public static Sce.PlayStation.HighLevel.GameEngine2D.Scene currentScene;
 		
 		
-		public GameSceneManager ()
-		{
-			
-			
-			
-			
-		}
+		public GameSceneManager (){	}
 		
 		public  void Update(float deltaTime)
 		{
-
-			currentScene.Update(deltaTime);
-			
+			currentScene.Update(deltaTime);	
 		}
 
 		

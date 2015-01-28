@@ -20,7 +20,6 @@ namespace TheATeam
 		
 		public SplashScreen ()
 		{
-			Console.WriteLine("Inside SplashScreen");
 			sprite = new SpriteUV();
 				
 			textureInfo  		= new TextureInfo("/Application/assets/SplashScreen.png");
@@ -28,6 +27,7 @@ namespace TheATeam
 			sprite.Quad.S 	= textureInfo.TextureSizef;
 			sprite.Position = new Vector2(0.0f, 0.0f);
 			sprite.Color = new Vector4(1f,1f,1f,0f);
+			
 			fadeUp = true;
 			fadeDown = false;
 			finishedFade = false;
@@ -40,51 +40,55 @@ namespace TheATeam
 			base.Cleanup ();
 		}
 		
-			public override void Update(float deltaTime)
+		public override void Update(float deltaTime)
 		{
-			//Console.WriteLine("UPDATING");
-			if(fadeUp && !finishedFade)
-				{
-				
-					if(sprite.Color.A < 1.0f)
-					{
-						sprite.Color += new Vector4(0f,0f,0f,deltaTime * 0.001f);
-						
-					}
-					else
-					{
-						fadeUp = false;
-						fadeDown = true;
-					}
-				}
-				else if(fadeDown && !finishedFade)
-				{
-					if(sprite.Color.A > 0.0f)
-					{
-						sprite.Color += new Vector4(0f,0f,0f,-deltaTime * 0.001f);
-					
-					}
-					else
-					{
-						fadeUp = false;
-						fadeDown = false;
-						finishedFade = true;
-					}
-				}
-			
-			if(FinishedFade())
-				{
-					TitleScreen titleScreen = new TitleScreen();
-					titleScreen.Camera.SetViewFromViewport();
-					GameSceneManager.currentScene = titleScreen;
-					
-					Director.Instance.ReplaceScene(titleScreen);
-				}
-			
+		FadeSprite(deltaTime);	
 		}
+		
 		public bool FinishedFade()
 		{
 			return finishedFade;	
-		}	}
+		}	
+	
+		private void FadeSprite(float deltaTime)
+		{
+			if(fadeUp && !finishedFade)
+			{
+				
+				if(sprite.Color.A < 1.0f)
+				{
+					sprite.Color += new Vector4(0f,0f,0f,deltaTime * 0.001f);
+						
+				}
+				else
+				{
+					fadeUp = false;
+					fadeDown = true;
+				}
+			}
+			else if(fadeDown && !finishedFade)
+			{
+				if(sprite.Color.A > 0.0f)
+				{
+					sprite.Color += new Vector4(0f,0f,0f,-deltaTime * 0.001f);
+				}
+				else
+				{
+					fadeUp = false;
+					fadeDown = false;
+					finishedFade = true;
+				}
+			}
+			
+			if(FinishedFade())
+			{
+				TitleScreen titleScreen = new TitleScreen();
+				titleScreen.Camera.SetViewFromViewport();
+				GameSceneManager.currentScene = titleScreen;
+				
+				Director.Instance.ReplaceScene(titleScreen);
+			}
+		}
+	}
 }
 

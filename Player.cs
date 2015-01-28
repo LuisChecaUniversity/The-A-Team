@@ -83,6 +83,7 @@ namespace TheATeam
 			// added player shoot 
 			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
 			{
+				Console.WriteLine("SHOOTING");
 				ProjectileManager.Instance.Shoot(Position, Direction);
 			}
 			// Attacks if in battle

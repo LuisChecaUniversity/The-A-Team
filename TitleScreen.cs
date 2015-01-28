@@ -9,7 +9,7 @@ using Sce.PlayStation.Core.Audio;
 
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
-using Sce.PlayStation.HighLevel.UI;
+
 
 namespace TheATeam
 {
@@ -17,7 +17,6 @@ namespace TheATeam
 	{
 		private SpriteUV 	sprite;
 		private TextureInfo	titleTextureInfo;
-		//private MainMenu 	mainMenu;
 		
 		public TitleScreen ()
 		{
@@ -35,14 +34,12 @@ namespace TheATeam
 		{
 			
 			if(Input2.GamePad0.Start.Press)
-
-				{
-					
-					MainMenu mainMenu = new MainMenu();
-					mainMenu.Camera.SetViewFromViewport();
-					GameSceneManager.currentScene = mainMenu;
-					Director.Instance.ReplaceScene(mainMenu);
-				}
+			{
+				MainMenu mainMenu = new MainMenu();
+				mainMenu.Camera.SetViewFromViewport();
+				GameSceneManager.currentScene = mainMenu;
+				Director.Instance.ReplaceScene(mainMenu);
+			}
 		}
 		
 		
