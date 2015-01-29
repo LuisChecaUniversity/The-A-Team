@@ -10,31 +10,16 @@ namespace TheATeam
 		PlayerOne = 0,
 		PlayerTwo = 1,
 	}
-	
-	public enum PlayerState
-	{
-		Idle,
-		Moving,
-		Shooting,
-	}
 	public class Player: EntityAlive
 	{
 		private static int PLAYER_INDEX = 0;
 		private bool canShoot = true;
-		private PlayerIndex whichPlayer;
-		private PlayerState playerState;
 		
-		public Player(Vector2 position,bool isPlayer1):
+		public Player(Vector2 position):
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
 		{
 			IsDefending = false;
 			Stats.Lives = 5;
-			if(isPlayer1)
-				whichPlayer = PlayerIndex.PlayerOne;
-			else
-				whichPlayer = PlayerIndex.PlayerTwo;
-			
-			playerState = PlayerState.Idle;
 		}
 		
 		override public void Update(float dt)
@@ -75,69 +60,78 @@ namespace TheATeam
 		{
 			var gamePadData = GamePad.GetData(0);
 			
-//			if(whichPlayer == PlayerIndex.PlayerOne)
-//			{
-				// Apply direction and animation
-				if(Input2.GamePad0.Left.Down)//(gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
+			// Apply direction and animation
+			if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
+			{
+				MoveSpeed.X = -MoveDelta;
+				// Set animation range.
+				TileRangeX = new Vector2i(6, 7);
+			}
+			if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
+			{
+				MoveSpeed.X = MoveDelta;
+				TileRangeX = new Vector2i(4, 5);
+			}
+			if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
+			{
+				MoveSpeed.Y = MoveDelta;
+				TileRangeX = new Vector2i(2, 3);
+			}
+			if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
+			{
+				MoveSpeed.Y = -MoveDelta;
+				TileRangeX = new Vector2i(0, 1);
+			}
+			
+			if (MoveSpeed != Vector2.Zero)
+			{
+				Direction = MoveSpeed;
+			}
+			// added player shoot 
+			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
+			{
+				//Console.WriteLine("SHOOTING");
+				//ProjectileManager.Instance.Shoot(Position, Direction);
+			}
+			
+			if(Input2.GamePad0.Cross.Down)
+			{
+				if(canShoot)
 				{
-					MoveSpeed.X = -MoveDelta;
-					// Set animation range.
-					TileRangeX = new Vector2i(6, 7);
+					canShoot = false;
+					ProjectileManager.Instance.Shoot(Position, Direction);
 				}
-				if(Input2.GamePad0.Right.Down)//if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
+			}
+			if(Input2.GamePad0.Cross.Release)
+				canShoot = true;
+			// Attacks if in battle
+			if(InBattle)
+			{
+				if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0)
 				{
-					MoveSpeed.X = MoveDelta;
-					TileRangeX = new Vector2i(4, 5);
+					attackState = AttackStatus.MeleeNormal;
 				}
-				if(Input2.GamePad0.Up.Down)//if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
+				if((gamePadData.ButtonsDown & GamePadButtons.Circle) != 0)
 				{
-					MoveSpeed.Y = MoveDelta;
-					TileRangeX = new Vector2i(2, 3);
+					attackState = AttackStatus.MeleeStrong;
 				}
-				if(Input2.GamePad0.Down.Down)//if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
+				if((gamePadData.ButtonsDown & GamePadButtons.Square) != 0)
 				{
-					MoveSpeed.Y = -MoveDelta;
-					TileRangeX = new Vector2i(0, 1);
+					attackState = AttackStatus.RangedNormal;
+				}
+				if((gamePadData.ButtonsDown & GamePadButtons.Triangle) != 0)
+				{
+					attackState = AttackStatus.RangedStrong;
 				}
 				
-				if (MoveSpeed != Vector2.Zero)
+				if((gamePadData.ButtonsDown & GamePadButtons.L) != 0)
 				{
-					Direction = MoveSpeed;
-					playerState = PlayerState.Moving;
+					IsDefending = true;
 				}
-				else
-					playerState = PlayerState.Idle;
-				// added player shoot 
-				if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
-				{
-					//Console.WriteLine("SHOOTING");
-					//ProjectileManager.Instance.Shoot(Position, Direction);
-				}
-				
-				if(Input2.GamePad0.Cross.Down)
-				{
-					if(canShoot)
-					{
-						playerState = PlayerState.Shooting;
-						canShoot = false;
-						ProjectileManager.Instance.Shoot(Position, Direction);
-					}
-				}
-				if(Input2.GamePad0.Cross.Release)
-					canShoot = true;
-				
-				
-				
-//			}
-//			else if(whichPlayer == PlayerIndex.PlayerTwo)
-//			{
-//				
-//			}
+			}
 			// Set frame to start of animation range if outside of range
 			if(TileIndex2D.X < TileRangeX.X || TileIndex2D.X > TileRangeX.Y)
 				TileIndex2D.X = TileRangeX.X;
-			
-			
 		}
 		
 		private void HandleCollision()

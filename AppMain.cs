@@ -8,10 +8,8 @@ namespace TheATeam
 {
 	public class AppMain
 	{		
-		public static bool ISHOST = true;
 		public static bool 					QUITGAME = false;
 		private static GameSceneManager 	gsm;
-		public static LocalTCPConnection 	client;
 		private static Timer 				timer;
 		
 		private static float prevTime;

@@ -18,7 +18,7 @@ namespace TheATeam
 		
 		public Projectile (Scene scene, Vector2 pos, Vector2 vel)
 		{
-			bulletTex = new TextureInfo("/Application/assets/bullet.png");
+			bulletTex = new TextureInfo("/Application/Assets/bullet.png");
 			bulletSprite = new SpriteUV(bulletTex);
 			bulletSprite.Quad.S = bulletTex.TextureSizef;	
 			
