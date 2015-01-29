@@ -141,12 +141,38 @@ namespace TheATeam
 			// Loop through tiles
 			foreach(Tile t in Tile.Collisions)
 			{
-				if(t.Overlaps(this))
+				bool fromLeft = Position.X + 32  > t.Position.X;
+				bool fromRight = Position.X < t.Position.X + Tile.Width;
+				bool fromTop = Position.Y < t.Position.Y + Tile.Height;
+				bool fromBottom = Position.Y + 32  > t.Position.Y;
+				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
 					if(!MoveSpeed.IsZero() && t.IsCollidable)
+					{
 						//t.HandleCollision(Position, ref MoveSpeed);
-						MoveSpeed *= -1.0f;
+						
+						Vector2 HorizontalOffset = new Vector2(3, 0);
+						Vector2 VerticalOffset = new Vector2(0, 3);
+						if(fromLeft && MoveSpeed.X > 0)
+						{
+							Position = Position - HorizontalOffset;
+						}
+						if (fromRight && MoveSpeed.X < 0)
+						{
+							Position = Position + HorizontalOffset;
+						}
 					
+						if (fromTop && MoveSpeed.Y < 0)
+						{
+							Position = Position + VerticalOffset;
+						}
+						if (fromBottom && MoveSpeed.Y > 0)
+						{
+							Position = Position - VerticalOffset;
+						}
+						MoveSpeed = Vector2.Zero;
+					}
+						
 					if(t.Key == 'Z')
 						Info.LevelClear = true;
 				}
