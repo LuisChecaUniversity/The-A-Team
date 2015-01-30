@@ -9,19 +9,20 @@ namespace TheATeam
 {
 	public class Projectile
 	{
-		public TextureInfo bulletTex;
+		//public TextureInfo bulletTex;
 		public SpriteUV bulletSprite;
 		public Vector2 position;
 		public Vector2 velocity;
 		private Vector2 rotation;
 		public bool collided;
+		
 		private float bulletSpeed = 50.0f;
 
-		public Projectile (Scene scene, Vector2 pos, Vector2 vel)
+		public Projectile (Scene scene, TextureInfo tex, Vector2 pos, Vector2 vel)
 		{
-			bulletTex = new TextureInfo("/Application/Assets/bullet.png");
-			bulletSprite = new SpriteUV(bulletTex);
-			bulletSprite.Quad.S = bulletTex.TextureSizef;
+			//bulletTex = new TextureInfo("/Application/Assets/bullet.png");
+			bulletSprite = new SpriteUV(tex);
+			bulletSprite.Quad.S = tex.TextureSizef;
 			bulletSprite.CenterSprite();
 			
 			float offset;

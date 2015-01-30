@@ -102,7 +102,7 @@ namespace TheATeam
 					canShoot = false;
 					// need to pass the centre of the player x+widht, y+height
 					Vector2 pos = new Vector2(Position.X + this.Quad.Point11.X/2, Position.Y + this.Quad.Point11.Y/2);
-					ProjectileManager.Instance.Shoot(pos, Direction);
+					ProjectileManager.Instance.Shoot(pos, Direction, 0); // centre of player pos, facing direction, player element (replace with enum)
 				}
 			}
 			if(Input2.GamePad0.Cross.Release)
