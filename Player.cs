@@ -14,6 +14,8 @@ namespace TheATeam
 	{
 		private static int PLAYER_INDEX = 0;
 		private bool canShoot = true;
+		private PlayerIndex Index;
+		private bool KeyboardTest = true;
 		
 		public Player(Vector2 position):
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
@@ -60,27 +62,42 @@ namespace TheATeam
 		{
 			var gamePadData = GamePad.GetData(0);
 			
-			// Apply direction and animation
-			if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
+			if(Index == PlayerIndex.PlayerOne)
 			{
-				MoveSpeed.X = -MoveDelta;
-				// Set animation range.
-				TileRangeX = new Vector2i(6, 7);
+				MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
+				MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y; 
 			}
-			if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
+			
+			else if (Index == PlayerIndex.PlayerTwo)
 			{
-				MoveSpeed.X = MoveDelta;
-				TileRangeX = new Vector2i(4, 5);
+				MoveSpeed.X = Input2.GamePad0.AnalogRight.X;
+				MoveSpeed.Y = -Input2.GamePad0.AnalogRight.Y; 
 			}
-			if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
+			
+			if (KeyboardTest == true)
 			{
-				MoveSpeed.Y = MoveDelta;
-				TileRangeX = new Vector2i(2, 3);
-			}
-			if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
-			{
-				MoveSpeed.Y = -MoveDelta;
-				TileRangeX = new Vector2i(0, 1);
+				// Apply direction and animation
+				if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
+				{
+					MoveSpeed.X = -MoveDelta;
+					// Set animation range.
+					TileRangeX = new Vector2i(6, 7);
+				}
+				if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
+				{
+					MoveSpeed.X = MoveDelta;
+					TileRangeX = new Vector2i(4, 5);
+				}
+				if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
+				{
+					MoveSpeed.Y = MoveDelta;
+					TileRangeX = new Vector2i(2, 3);
+				}
+				if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
+				{
+					MoveSpeed.Y = -MoveDelta;
+					TileRangeX = new Vector2i(0, 1);
+				}
 			}
 			
 			if (MoveSpeed != Vector2.Zero)
