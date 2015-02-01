@@ -11,6 +11,8 @@ namespace TheATeam
 		public static bool 					QUITGAME = false;
 		private static GameSceneManager 	gsm;
 		private static Timer 				timer;
+	
+		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene gameScene;
 		
 		private static float prevTime;
 		

@@ -56,6 +56,8 @@
     <Compile Include="SplashScreen.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="TitleScreen.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -90,5 +92,6 @@
     <Content Include="assets\selectIcon.png" />
     <Content Include="assets\SplashScreen.png" />
     <Content Include="assets\TitleScreen.png" />
+    <Content Include="assets\FlagTemp.png" />
   </ItemGroup>
 </Project>
