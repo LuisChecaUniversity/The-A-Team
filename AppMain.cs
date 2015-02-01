@@ -12,8 +12,6 @@ namespace TheATeam
 		private static GameSceneManager 	gsm;
 		private static Timer 				timer;
 	
-		private static Sce.PlayStation.HighLevel.GameEngine2D.Scene gameScene;
-		
 		private static float prevTime;
 		
 		public static void Main(string[] args)
