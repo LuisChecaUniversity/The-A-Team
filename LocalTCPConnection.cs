@@ -125,6 +125,8 @@ namespace TheATeam
 		{
 			Monitor.Exit(syncObject);
 		}
+		
+		
 
 		/**
 		 * Get status
@@ -143,7 +145,8 @@ namespace TheATeam
 					}
 					else{
 						if (IsServer){
-							if(ClientSocket == null){
+							if(ClientSocket == null)
+							{
 								return Status.kListen;
 							}
 							return Status.kConnected;
@@ -249,15 +252,20 @@ namespace TheATeam
         /**
          * transceiver buffer
          */
-        private byte[] sendBuffer = new byte[8];
-		private byte[] recvBuffer = new byte[8];
-		
+		private char actionMsg;
+		public void SetActionMessage(char c)
+		{
+			actionMsg = c;	
+		}
+        private byte[] sendBuffer = new byte[10];
+		private byte[] recvBuffer = new byte[10];
+		private Sce.PlayStation.Core.Vector2  oldPosition;
 		public string testStatus = "Nothing";
 
 		/**
 		 * Our position or the other party's
 		 */
-		private Sce.PlayStation.Core.Vector2 myPosition		= new Sce.PlayStation.Core.Vector2(999, 999);
+		private Sce.PlayStation.Core.Vector2 myPosition		= new Sce.PlayStation.Core.Vector2(400, 200);
 		public	Sce.PlayStation.Core.Vector2 MyPosition
 		{
 			get { return myPosition; }
@@ -269,10 +277,17 @@ namespace TheATeam
 		}
 
 		
-		public Sce.PlayStation.Core.Vector2 networkPosition	= new Sce.PlayStation.Core.Vector2(999, 999);
+		public Sce.PlayStation.Core.Vector2 networkPosition	= new Sce.PlayStation.Core.Vector2(400, 200);
 		public Sce.PlayStation.Core.Vector2 NetworkPosition
 		{
 			get { return networkPosition; }
+		}
+		
+		private bool hasShot = false;
+		public bool HasShot { get { return hasShot;}}
+		public void SetHasShot(bool t)
+		{
+		hasShot = t;	
 		}
 		
 		/**
@@ -367,14 +382,15 @@ namespace TheATeam
 		       				break;
 		     			}
 		   			}
-					
-			
 				
+			
 					
-					// IPEndPoint EP = new IPEndPoint(IPAddress.Any, port);
+				
+					//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 					
 					//IPAddress ipAdd = IPAddress.Parse("192.168.43.133");
-					//IPAddress ipAdd = IPAddress.Parse(ip);
+					//IPAddress ipAdd = IPAddress.Parse(myIP);
+					//ipAddress = ipAdd;
 					IPEndPoint EP = new IPEndPoint(ipAddress, port);
 					socket.Bind(EP);
 					socket.Listen(1);
@@ -403,9 +419,13 @@ namespace TheATeam
 				enterCriticalSection();
 				socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-			
-				IPAddress ipAdd = IPAddress.Parse("192.168.43.133");
-				//IPAddress ipAdd = IPAddress.Parse("10.54.152.150");
+				//IPAddress ipAdd = IPAddress.Parse("192.168.1.105");
+				//PHONE 
+				//IPAddress ipAdd = IPAddress.Parse("192.168.43.105");
+				// HOME WIFI 
+				IPAddress ipAdd = IPAddress.Parse("192.168.0.12");
+				//IPAddress ipAdd = IPAddress.Parse("10.56.152.173");
+				//IPAddress ipAdd = IPAddress.Parse("192.168.0.26");
 				//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 				IPEndPoint EP = new IPEndPoint(ipAdd, port);
 				socket.BeginConnect(EP, new AsyncCallback(SocketEventCallback.ConnectCallback), this);
@@ -441,6 +461,7 @@ namespace TheATeam
 					socket.Close();
 					socket		= null;
 					IsConnect	= false;
+					//Console.WriteLine("Disconnected");
 				}
 			}
 			finally
@@ -459,27 +480,39 @@ namespace TheATeam
 				try
 				{
 					enterCriticalSection();
-					byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
-					byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
-					ArrayX.CopyTo(sendBuffer, 0);
-					ArrayY.CopyTo(sendBuffer, ArrayX.Length);
 					
-				
-					if (isServer){
-						if (clientSocket == null || IsConnect == false){
-							return false;
-						}
-						clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
-						clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 						
-					}
-					else{
-						if (socket == null || IsConnect == false){
-							return false;
+						byte[] action = BitConverter.GetBytes(actionMsg);
+						byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
+						byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
+						
+						action.CopyTo(sendBuffer,0);
+						ArrayX.CopyTo(sendBuffer, action.Length);
+						ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
+						
+					
+						if (isServer)
+						{
+							if (clientSocket == null || IsConnect == false)
+							{
+								return false;
+							}
+							
+								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
+							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
+							
 						}
-						socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
-						socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
-					}
+						else
+						{
+							if (socket == null || IsConnect == false){
+								return false;
+							}
+							
+								socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
+							socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
+							//Console.WriteLine("SENT AND RECIVED");
+						}
+					
 				}
 				finally
 				{
@@ -578,7 +611,7 @@ namespace TheATeam
 							Len = ClientSocket.EndReceive(AsyncResult);
 							// 切断
 							if (Len <= 0){
-								Disconnect();
+								//Disconnect();
 							}
 							else{
 								
@@ -586,15 +619,21 @@ namespace TheATeam
 								////////////////////////////////////////////////////////////////////TODO/////////////////////////////////////////
 								
 								
+								char action = BitConverter.ToChar(recvBuffer,0);
 								
-								
-								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
-								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
-								
-								if(networkPosition.X == 0 && networkPosition.Y == 0)
+								if(action.Equals('S'))
+									hasShot = true;
+							
+								else if(action.Equals('M'))
 								{
-									isConnect = true;
+									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
+									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
+								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
+//								if(networkPosition.X == 0 && networkPosition.Y == 0)
+//								{
+//									isConnect = true;
+//								}
 								//Console.WriteLine("Host: OnReceive");
 								testStatus = "Host: OnReceive";
 							}
@@ -605,15 +644,24 @@ namespace TheATeam
 							Len = Socket.EndReceive(AsyncResult);
 							// 切断
 							if (Len <= 0){
-								Disconnect();
+								//Disconnect();
 							}
 							else{
 								
-
+								char action = BitConverter.ToChar(recvBuffer,0);
 								
-								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
-								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
+								if(action.Equals('S'))
+									hasShot = true;
+							
+								else if(action.Equals('M'))
+								{
+									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
+									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
+								}
 								
+//								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
+//								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
+								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 								if(networkPosition.X == 0 && networkPosition.Y == 0)
 								{
 									isConnect = true;
@@ -684,9 +732,9 @@ namespace TheATeam
 			}
 			catch (Exception e)
 			{
-				//Console.WriteLine(e.ToString());
+				//Console.WriteLine(e.ToString());/
 			}
-//			Console.WriteLine("OnSend");
+			//Console.WriteLine("OnSend");
 		}
 	}
 }

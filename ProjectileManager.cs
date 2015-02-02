@@ -18,7 +18,7 @@ namespace TheATeam
 		private ProjectileManager ()
 		{
 			Console.WriteLine ("HERE");
-			scene = Director.Instance.CurrentScene;
+			scene = GameSceneManager.currentScene;
 			projectiles = new List<Projectile>();
 		}
 		

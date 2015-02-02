@@ -8,7 +8,7 @@ namespace TheATeam
 {
 	public class AppMain
 	{		
-		public static bool ISHOST = true;
+		public static bool 					ISHOST = true;
 		public static bool 					QUITGAME = false;
 		private static GameSceneManager 	gsm;
 		public static LocalTCPConnection 	client;
@@ -75,6 +75,8 @@ namespace TheATeam
 			splashScene.Camera.SetViewFromViewport();
 			
 			GameSceneManager.currentScene = splashScene;
+			
+			
 			
 			//Run the scene.
 			Director.Instance.RunWithScene(GameSceneManager.currentScene, true);

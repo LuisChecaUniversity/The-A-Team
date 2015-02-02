@@ -4,6 +4,12 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.Core.Imaging;
 using Sce.PlayStation.Core.Input;
+
+
+using Sce.PlayStation.Core.Audio;
+using Sce.PlayStation.Core.Environment;
+using Sce.PlayStation.Core.Graphics;
+
 //using System.Net;
 //using System.Net.Sockets;
 //using System.IO;
@@ -955,35 +961,6 @@ namespace TheATeam
 				if(isHost)
 				{
 					
-					
-					if( Input2.GamePad0.AnalogLeft.X < 0)
-					{
-						Vector2 temp = new Vector2(-1,0);
-						sprite.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.X > 0)
-					{
-						Vector2 temp = new Vector2(1,0);
-						sprite.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.Y < 0)
-					{
-						Vector2 temp = new Vector2(0,1);
-						sprite.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.Y > 0)
-					{
-						Vector2 temp = new Vector2(0,-1);
-						sprite.Position += temp; 	
-					}
-					
-					AppMain.client.SetMyPosition(sprite.Position.X,sprite.Position.Y) ;
-					
-					AppMain.client.DataExchange();
-					lblDebugLeft.Text = AppMain.client.networkPosition.X.ToString() + ", " +AppMain.client.networkPosition.Y.ToString() ;
-					
-					
-					sprite2.Position = AppMain.client.networkPosition;
 					if(AppMain.client.IsConnect)
 					{
 						lblBottomRight.Text = "Ready";
@@ -1000,33 +977,7 @@ namespace TheATeam
 						isPlayer2Ready = true;
 					}
 					
-					if( Input2.GamePad0.AnalogLeft.X < 0)
-					{
-						Vector2 temp = new Vector2(-1,0);
-						sprite2.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.X > 0)
-					{
-						Vector2 temp = new Vector2(1,0);
-						sprite2.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.Y < 0)
-					{
-						Vector2 temp = new Vector2(0,1);
-						sprite2.Position += temp; 	
-					}
-					if( Input2.GamePad0.AnalogLeft.Y > 0)
-					{
-						Vector2 temp = new Vector2(0,-1);
-						sprite2.Position += temp; 	
-					}
-					
-					
-					AppMain.client.SetMyPosition(sprite2.Position.X,sprite2.Position.Y) ;
-					AppMain.client.DataExchange();
-					sprite.Position = AppMain.client.networkPosition;
-					lblDebugLeft.Text = AppMain.client.networkPosition.X.ToString() + ", " +AppMain.client.networkPosition.Y.ToString() ;
-					
+//				
 					if(AppMain.client.IsConnect)
 					{
 						lblBottomLeft.Text = "Ready";
@@ -1044,6 +995,8 @@ namespace TheATeam
 					lblTopRight.Visible = false;
 					lblDebugLeft.Visible = false;
 					lblDebugCenter.Visible = false;
+					
+					
 					
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();

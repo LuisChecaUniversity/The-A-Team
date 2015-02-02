@@ -33,6 +33,8 @@ namespace TheATeam
 			finishedFade = false;
 			
 			this.AddChild(sprite);
+			
+			
 		}
 		public override void Cleanup ()
 		{
