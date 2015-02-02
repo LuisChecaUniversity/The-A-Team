@@ -48,34 +48,44 @@ namespace TheATeam
 			// Handle Death
 //			if(!IsAlive)
 //				SceneManager.ReplaceUIScene(new DeadUI());
-			
-			if(AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
+			switch (AppMain.TYPEOFGAME)
 			{
-			// Handle movement/attacks
-			HandleInput();
-			
-			
+			case "SINGLE":
+				// Handle movement/attacks
+					HandleInput();
+				
 				// Apply the movement
-			Position = Position + MoveSpeed;
-		
-			AppMain.client.SetMyPosition(Position.X,Position.Y);
-			//AppMain.client.DataExchange();
-			}
-			else
-			{
-				Position = AppMain.client.networkPosition;
-				Direction = AppMain.client.NetworkDirection;
-				if(AppMain.client.HasShot)
+					Position = Position + MoveSpeed;
+				break;
+				
+			case "MULTIPLAYER":
+				if(AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
 				{
-					AppMain.client.SetHasShot(false);	
-					Shoot();	
+					// Handle movement/attacks
+					HandleInput();
+					
+					// Apply the movement
+					Position = Position + MoveSpeed;
+					
+					//Set Position for Data Message
+					AppMain.client.SetMyPosition(Position.X,Position.Y);
 				}
+				else
+				{
+					//set position and direction from the network positions of enemy
+					Position = AppMain.client.networkPosition;
+					Direction = AppMain.client.NetworkDirection;
+					if(AppMain.client.HasShot)
+					{
+						Shoot();	
+						AppMain.client.SetHasShot(false);	
+					}
+				}
+			
+				break;
+			default:
+				break;
 			}
-			
-			
-			
-		
-			
 			// Find current tile and apply collision
 			HandleCollision();
 			
@@ -94,45 +104,8 @@ namespace TheATeam
 		
 		private void HandleInput()
 		{
-			var gamePadData = GamePad.GetData(0);
-			
-//			if(whichPlayer == PlayerIndex.PlayerOne && AppMain.ISHOST || whichPlayer == PlayerIndex.PlayerTwo && !AppMain.ISHOST)
-//			{
-				// Apply direction and animation
-//				if(Input2.GamePad0.Left.Down)//(gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
-//				{
-//					MoveSpeed.X = -MoveDelta;
-//					// Set animation range.
-//					TileRangeX = new Vector2i(6, 7);
-//				}
-//				if(Input2.GamePad0.Right.Down)//if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
-//				{
-//					MoveSpeed.X = MoveDelta;
-//					TileRangeX = new Vector2i(4, 5);
-//				}
-//				if(Input2.GamePad0.Up.Down)//if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
-//				{
-//					MoveSpeed.Y = MoveDelta;
-//					TileRangeX = new Vector2i(2, 3);
-//				}
-//				if(Input2.GamePad0.Down.Down)//if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
-//				{
-//					MoveSpeed.Y = -MoveDelta;
-//					TileRangeX = new Vector2i(0, 1);
-//				}
-//			//}
-//				if (MoveSpeed != Vector2.Zero)
-//				{
-//					Direction = MoveSpeed;
-//					playerState = PlayerState.Moving;
-//				}
-//				else
-//					playerState = PlayerState.Idle;
-				// added player shoot 
-			
-//			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
-//			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
-			
+			//var gamePadData = GamePad.GetData(0);
+	
 			MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
 			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
 			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
@@ -161,20 +134,26 @@ namespace TheATeam
 //			}
 //			
 			
-			if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
-				AppMain.client.SetActionMessage('I');
-			else
+			switch (AppMain.TYPEOFGAME)
 			{
-				AppMain.client.SetActionMessage('M');
+			case "SINGLE":
 				Direction = MoveSpeed;
-				AppMain.client.SetMyDirection(Direction.X,Direction.Y);
-			}			
-//				if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
-//				{
-//					//Console.WriteLine("SHOOTING");
-//					//ProjectileManager.Instance.Shoot(Position, Direction);
-//				
+				break;
+			case "MULTIPLAYER":
+				if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
+					AppMain.client.SetActionMessage('I');
+				else
+				{
+					AppMain.client.SetActionMessage('M');
+					Direction = MoveSpeed;
+					AppMain.client.SetMyDirection(Direction.X,Direction.Y);
+				}			
+				break;
+			default:
+				break;
+			}
 			
+		
 				
 				if(Input2.GamePad0.Cross.Down|| Input2.GamePad0.Cross.Down && Input2.GamePad0.Left.Down ||
 			   Input2.GamePad0.Cross.Down && Input2.GamePad0.Right.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Up.Down
@@ -182,20 +161,13 @@ namespace TheATeam
 				{
 					if(canShoot)
 					{
-//						AppMain.client.SetActionMessage('S');
-//						playerState = PlayerState.Shooting;
-//						canShoot = false;
-//						ProjectileManager.Instance.Shoot(Position, Direction);
-					Shoot ();
-					
+						Shoot ();
 					}
 				}
 				if(Input2.GamePad0.Cross.Release)
 					canShoot = true;
 				
 				
-				
-			
 			// Set frame to start of animation range if outside of range
 			if(TileIndex2D.X < TileRangeX.X || TileIndex2D.X > TileRangeX.Y)
 				TileIndex2D.X = TileRangeX.X;
@@ -224,10 +196,10 @@ namespace TheATeam
 		
 		public void Shoot()
 		{
-			AppMain.client.SetActionMessage('S');
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
 			ProjectileManager.Instance.Shoot(Position, Direction);
-			
 			canShoot = false;
 			
 		}

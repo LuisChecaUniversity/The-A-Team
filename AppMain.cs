@@ -11,8 +11,15 @@ using Sce.PlayStation.Core.Input;
 
 namespace TheATeam
 {
+	enum State
+	{
+		ChooseTypeGame,
+		ChooseHostClient,
+		ClientSide
+	}
 	public class AppMain
-	{		
+	{	
+		public static string 				TYPEOFGAME;
 		public static bool 					ISHOST = false;
 		public static string 				IPADDRESS;
 		public static string 				WHEREWIFI = "PHONE";
@@ -23,9 +30,10 @@ namespace TheATeam
 		public static Button button;
 		public static Button buttonHost;
 		public static Button buttonClient;
+		public static Button buttonMulti;
 		public static EditableText textbox;
 		private static float prevTime;
-		
+		private static State 				state = State.ChooseTypeGame;
 		private static bool 				runningDirector = false;
 		private static GraphicsContext graphics;
 		
@@ -86,12 +94,19 @@ namespace TheATeam
 				
 				buttonHost = new Button();
 				buttonHost.SetPosition(100.0f,250.0f);
-				buttonHost.Text = "Host";
+				buttonHost.SetSize(200.0f,100.0f);
+				buttonHost.Text = "Single Player";
 			
 			
-			buttonClient = new Button();
-				buttonClient.SetPosition(600.0f,250.0f);
-				buttonClient.Text = "Client";
+				buttonClient = new Button();
+				buttonClient.SetPosition(630.0f,250.0f);
+				buttonClient.SetSize(200.0f,100.0f);
+				buttonClient.Text = "Duo Play";
+			
+				buttonMulti = new Button();
+				buttonMulti.SetPosition(360.0f,350.0f);
+				buttonMulti.SetSize(200.0f,100.0f);
+				buttonMulti.Text = "Multiplayer";
 			
 			 	textbox = new EditableText();
 				textbox.SetPosition(300.0f,250.0f);
@@ -107,7 +122,7 @@ namespace TheATeam
 				uiScene.RootWidget.AddChildFirst(buttonClient);
 				uiScene.RootWidget.AddChildFirst(textbox);
 				uiScene.RootWidget.AddChildFirst(button);
-			
+				uiScene.RootWidget.AddChildFirst(buttonMulti);
 			
 
 		}
@@ -129,30 +144,77 @@ namespace TheATeam
 					float screenwidth = 960.0f;
 					float screenx = (touchDataList[0].X +0.5f) * screenwidth;
 					float screenY = (touchDataList[0].Y +0.5f) * screenheight;
-				if(button.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+					
+					
+					switch (state)
 					{
-						IPADDRESS = textbox.Text;
-						runningDirector = true;	
-						InitDirector();
+					case State.ChooseTypeGame:
+					if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+					{
+						Console.WriteLine("Duo Player");
+							TYPEOFGAME = "DUO";
 					}	
 					if(buttonHost.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{
-						ISHOST = true;
-						runningDirector = true;	
-						InitDirector();
+						Console.WriteLine("Single Player");
+							TYPEOFGAME = "SINGLE";
+							graphics.Dispose();
+							runningDirector = true;
+							InitDirector();
 					}
-					if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+					if(buttonMulti.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{
-						ISHOST = false;
-						buttonHost.Visible = false;
-						buttonClient.Visible = false;
-						textbox.Visible = true;
-						button.Visible = true;
+						Console.WriteLine("MultiPlayer");
+							TYPEOFGAME = "MULTI";
+							buttonMulti.Visible = false;
+							buttonHost.Text = "Host";
+							buttonClient.Text = "Client";
+							state = State.ChooseHostClient;
 					}
+						break;
+					case State.ChooseHostClient:
+						if(buttonHost.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+					{
+						Console.WriteLine("Host");
+						ISHOST = true;
+						TYPEOFGAME = "MULTIPLAYER";
+						graphics.Dispose();
+						runningDirector = true;
+						InitDirector();
+							
+					}
+						else if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+					{
+						Console.WriteLine("OK");
+						ISHOST = false;
+						textbox.Visible = true;
+						buttonHost.Visible = false;
+						buttonClient.SetPosition(360.0f,350.0f);
+						state = State.ClientSide;
+					}
+						break;
+					case State.ClientSide:
+						if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+						{
+							
+							if(textbox.Text.Length > 0)
+							{
+								graphics.Dispose();
+								AppMain.IPADDRESS = textbox.Text;
+								runningDirector = true;
+								InitDirector();	
+							}
+							
+						}
+						break;
+					default:
+						break;
+					}
+				
 				}
 			
 			}
-			//
+			
 		}
 		
 		public static void Render()

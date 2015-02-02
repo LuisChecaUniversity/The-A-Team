@@ -55,37 +55,40 @@ namespace TheATeam
 			player1 = new Player(new Vector2(64,300),true);
 			player2 = new Player(new Vector2(960 - 64,300),false);
 			
-		lblTopLeft = new Label();
-			lblTopLeft.FontMap = debugFont;
-			lblTopLeft.Text = "Player 1";
-			lblTopLeft.Position = new Vector2 (100, screenHeight - 200);
-			
-			lblTopRight = new Label();
-			lblBottomLeft = new Label();
-			lblBottomRight = new Label();
-			lblDebugLeft = new Label();
-			
-			lblTopRight.FontMap = debugFont;
-			lblTopRight.Text = "Player 2";
-			lblTopRight.Position = new Vector2(screenWidth - 200, screenHeight - 200);
-			
-			lblBottomLeft.FontMap = debugFont;
-			lblBottomLeft.Text = "Waiting";
-			lblBottomLeft.Position = new Vector2(100, 300);
-			
-			lblBottomRight.FontMap = debugFont;
-			lblBottomRight.Text = "Waiting";
-			lblBottomRight.Position = new Vector2(screenWidth -200, 300);
-			
-			lblDebugLeft.FontMap = debugFont;
-			lblDebugLeft.Text = "Waiting for both connections";
-			lblDebugLeft.Position = new Vector2(430, 200);
-			
-			this.AddChild(lblTopRight);
-			this.AddChild(lblBottomLeft);
-			this.AddChild(lblBottomRight);
-			this.AddChild(lblDebugLeft);
-			this.AddChild(lblTopLeft);
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			{
+				lblTopLeft = new Label();
+				lblTopLeft.FontMap = debugFont;
+				lblTopLeft.Text = "Player 1";
+				lblTopLeft.Position = new Vector2 (100, screenHeight - 200);
+				
+				lblTopRight = new Label();
+				lblBottomLeft = new Label();
+				lblBottomRight = new Label();
+				lblDebugLeft = new Label();
+				
+				lblTopRight.FontMap = debugFont;
+				lblTopRight.Text = "Player 2";
+				lblTopRight.Position = new Vector2(screenWidth - 200, screenHeight - 200);
+				
+				lblBottomLeft.FontMap = debugFont;
+				lblBottomLeft.Text = "Waiting";
+				lblBottomLeft.Position = new Vector2(100, 300);
+				
+				lblBottomRight.FontMap = debugFont;
+				lblBottomRight.Text = "Waiting";
+				lblBottomRight.Position = new Vector2(screenWidth -200, 300);
+				
+				lblDebugLeft.FontMap = debugFont;
+				lblDebugLeft.Text = "Waiting for both connections";
+				lblDebugLeft.Position = new Vector2(430, 200);
+				
+				this.AddChild(lblTopRight);
+				this.AddChild(lblBottomLeft);
+				this.AddChild(lblBottomRight);
+				this.AddChild(lblDebugLeft);
+				this.AddChild(lblTopLeft);
+			}
 			this.AddChild(player1);
 			this.AddChild(player2);
 			Camera2D.SetViewFromViewport();
@@ -99,70 +102,42 @@ namespace TheATeam
 		{
 			base.Update (dt);
 			
-			string status = AppMain.client.statusString;
-			if(status.Equals("None"))
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				AppMain.client.ChangeStatus();
-				lblDebugLeft.Text =  "Changing";	
+				string status = AppMain.client.statusString;
+				if(status.Equals("None"))
+				{
+					AppMain.client.ChangeStatus();
+					lblDebugLeft.Text =  "Changing";	
+				}
+				else
+					lblDebugLeft.Text =  status;
+				
+				if(AppMain.ISHOST)
+				{
+					player1.Update(dt);
+					AppMain.client.DataExchange();
+					player2.Update(dt);
+				}
+				else
+				{
+					player2.Update(dt);
+					AppMain.client.DataExchange();
+					player1.Update(dt);
+				}
 			}
-			else
-				lblDebugLeft.Text =  status;
+			else if (AppMain.TYPEOFGAME.Equals("SINGLE"))
+			{
+					player1.Update(dt);
+					//player2.Update(dt);
+			}
 			
-			if(AppMain.ISHOST)
-			{
-				
-				player1.Update(dt);
-				AppMain.client.DataExchange();
-				player2.Update(dt);
-//				player2.Position = AppMain.client.networkPosition;
-//				player2.Direction = AppMain.client.NetworkDirection;
-//				if(AppMain.client.HasShot){
-//				//	lblDebugLeft.Text = "Enemy SHot";
-//					AppMain.client.SetHasShot(false);	
-//					player2.Shoot();
-//				}
-				
-				
-				//lblTopRight.Text = AppMain.client.MyPosition.ToString();
-			//	lblBottomRight.Text = AppMain.client.networkPosition.ToString();
-				
-				//player2.Position = AppMain.client.networkPosition;
-				
-			}
-			else
-			{
-				
-				player2.Update(dt);
-				AppMain.client.DataExchange();
-				
-				player1.Update(dt);
-				
-//				if(AppMain.client.HasShot){
-//					lblDebugLeft.Text = "Enemy SHot";
-//					AppMain.client.SetHasShot(false);
-//					player1.Shoot();
-//				}
-				
-				
-			//	lblTopRight.Text = AppMain.client.MyPosition.ToString();
-			//	lblBottomRight.Text = AppMain.client.networkPosition.ToString();
-				//player1.Position = AppMain.client.networkPosition;
-			
-			}
 			
 			// handle bullet update and collision
 			ProjectileManager.Instance.Update(dt);
 			foreach(Tile t in Tile.Collisions)
 			{
 				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
-			}
-			
-			if(Input2.GamePad0.R.Press)
-			{
-				//Console.WriteLine("My Position  = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
-				//Console.WriteLine("Player = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
-				//Console.WriteLine("Enemy = X: " + player1.GetPosition.X + " ,Y: " + player1.GetPosition.Y);
-				//Console.WriteLine("NetWorkPosition = X: " + AppMain.client.networkPosition.X + " ,Y: " + AppMain.client.networkPosition.Y);
 			}
 		}
 	}
