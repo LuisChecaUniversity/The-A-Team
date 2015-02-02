@@ -93,17 +93,7 @@ namespace TheATeam
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 			
-<<<<<<< HEAD
-			
-=======
-			// handle bullet update and collision
-			ProjectileManager.Instance.Update(dt);
-			foreach(Tile t in Tile.Collisions)
-			{
-				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
-			}
-			ProjectileManager.Instance.ProjectileCollision(Position, Quad.Bounds2());
->>>>>>> origin/Peter
+
 		}
 		
 		public AttackStatus Attack { get { return attackState; } }
@@ -154,7 +144,7 @@ namespace TheATeam
 					AppMain.client.SetActionMessage('I');
 				else
 				{
-<<<<<<< HEAD
+
 					AppMain.client.SetActionMessage('M');
 					Direction = MoveSpeed;
 					AppMain.client.SetMyDirection(Direction.X,Direction.Y);
@@ -162,13 +152,7 @@ namespace TheATeam
 				break;
 			default:
 				break;
-=======
-					canShoot = false;
-					// need to pass the centre of the player x+widht, y+height
-					Vector2 pos = new Vector2(Position.X + this.Quad.Point11.X/2, Position.Y + this.Quad.Point11.Y/2);
-					ProjectileManager.Instance.Shoot(pos, Direction, 0); // centre of player pos, facing direction, player element (replace with enum)
-				}
->>>>>>> origin/Peter
+
 			}
 			
 		
@@ -217,7 +201,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
-			ProjectileManager.Instance.Shoot(Position, Direction);
+			ProjectileManager.Instance.Shoot(Position, Direction,1);
 			canShoot = false;
 			
 		}

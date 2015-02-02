@@ -13,14 +13,13 @@ namespace TheATeam
 		private static ProjectileManager instance = new ProjectileManager();
 		private static List<Projectile> projectiles;
 		private Scene scene;
-<<<<<<< HEAD
+
 		private float bulletSpeed = 0.5f;
-=======
-		private float bulletSpeed = 100.0f;
+
 		private static TextureInfo fireTex = new TextureInfo("/Application/Assets/FireBullet.png");
 		private static TextureInfo waterTex = new TextureInfo("/Application/Assets/WaterBullet.png");
 		private static TextureInfo neutralTex = new TextureInfo("/Application/Assets/bullet.png");
->>>>>>> origin/Peter
+
 		
 		private ProjectileManager ()
 		{
