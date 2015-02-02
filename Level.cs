@@ -106,22 +106,25 @@ namespace TheATeam
 				lblDebugLeft.Text =  "Changing";	
 			}
 			else
-			lblDebugLeft.Text =  status;
+				lblDebugLeft.Text =  status;
+			
 			if(AppMain.ISHOST)
 			{
 				
 				player1.Update(dt);
 				AppMain.client.DataExchange();
-				player2.Position = AppMain.client.networkPosition;
-				if(AppMain.client.HasShot){
-					lblDebugLeft.Text = "Enemy SHot";
-					AppMain.client.SetHasShot(false);	
-					player2.Shoot();
-				}
 				player2.Update(dt);
+//				player2.Position = AppMain.client.networkPosition;
+//				player2.Direction = AppMain.client.NetworkDirection;
+//				if(AppMain.client.HasShot){
+//				//	lblDebugLeft.Text = "Enemy SHot";
+//					AppMain.client.SetHasShot(false);	
+//					player2.Shoot();
+//				}
 				
-				lblTopRight.Text = AppMain.client.MyPosition.ToString();
-				lblBottomRight.Text = AppMain.client.networkPosition.ToString();
+				
+				//lblTopRight.Text = AppMain.client.MyPosition.ToString();
+			//	lblBottomRight.Text = AppMain.client.networkPosition.ToString();
 				
 				//player2.Position = AppMain.client.networkPosition;
 				
@@ -131,26 +134,35 @@ namespace TheATeam
 				
 				player2.Update(dt);
 				AppMain.client.DataExchange();
-				player1.Position = AppMain.client.networkPosition;
-				if(AppMain.client.HasShot){
-					lblDebugLeft.Text = "Enemy SHot";
-					AppMain.client.SetHasShot(false);
-					player1.Shoot();
-				}
+				
 				player1.Update(dt);
 				
-				lblTopRight.Text = AppMain.client.MyPosition.ToString();
-				lblBottomRight.Text = AppMain.client.networkPosition.ToString();
+//				if(AppMain.client.HasShot){
+//					lblDebugLeft.Text = "Enemy SHot";
+//					AppMain.client.SetHasShot(false);
+//					player1.Shoot();
+//				}
+				
+				
+			//	lblTopRight.Text = AppMain.client.MyPosition.ToString();
+			//	lblBottomRight.Text = AppMain.client.networkPosition.ToString();
 				//player1.Position = AppMain.client.networkPosition;
 			
 			}
 			
+			// handle bullet update and collision
+			ProjectileManager.Instance.Update(dt);
+			foreach(Tile t in Tile.Collisions)
+			{
+				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
+			}
+			
 			if(Input2.GamePad0.R.Press)
 			{
-				Console.WriteLine("My Position  = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
-				Console.WriteLine("Player = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
-				Console.WriteLine("Enemy = X: " + player1.GetPosition.X + " ,Y: " + player1.GetPosition.Y);
-				Console.WriteLine("NetWorkPosition = X: " + AppMain.client.networkPosition.X + " ,Y: " + AppMain.client.networkPosition.Y);
+				//Console.WriteLine("My Position  = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
+				//Console.WriteLine("Player = X: " + player2.GetPosition.X + " ,Y: " + player2.GetPosition.Y);
+				//Console.WriteLine("Enemy = X: " + player1.GetPosition.X + " ,Y: " + player1.GetPosition.Y);
+				//Console.WriteLine("NetWorkPosition = X: " + AppMain.client.networkPosition.X + " ,Y: " + AppMain.client.networkPosition.Y);
 			}
 		}
 	}

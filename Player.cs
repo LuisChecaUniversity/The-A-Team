@@ -24,6 +24,7 @@ namespace TheATeam
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		
+		private Vector2 oldPos;
 		public Player(Vector2 position,bool isPlayer1):
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
 		{
@@ -35,6 +36,7 @@ namespace TheATeam
 				whichPlayer = PlayerIndex.PlayerTwo;
 			
 			playerState = PlayerState.Idle;
+			Direction = new Vector2(1.0f,0.0f);
 		}
 		
 		override public void Update(float dt)
@@ -59,6 +61,19 @@ namespace TheATeam
 			AppMain.client.SetMyPosition(Position.X,Position.Y);
 			//AppMain.client.DataExchange();
 			}
+			else
+			{
+				Position = AppMain.client.networkPosition;
+				Direction = AppMain.client.NetworkDirection;
+				if(AppMain.client.HasShot)
+				{
+					AppMain.client.SetHasShot(false);	
+					Shoot();	
+				}
+			}
+			
+			
+			
 		
 			
 			// Find current tile and apply collision
@@ -68,12 +83,7 @@ namespace TheATeam
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 			
-			// handle bullet update and collision
-			ProjectileManager.Instance.Update(dt);
-			foreach(Tile t in Tile.Collisions)
-			{
-				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
-			}
+			
 		}
 		
 		public AttackStatus Attack { get { return attackState; } }
@@ -124,41 +134,51 @@ namespace TheATeam
 //			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
 			
 			MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
-	//		MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
-	//		MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
-			if(Input2.GamePad0.Left.Down)
-			{
-			MoveSpeed.X -= 1.0f;	
-			}
-			
-			if(Input2.GamePad0.Right.Down)
-			{
-			MoveSpeed.X += 1.0f;	
-			}
-			
-			if(Input2.GamePad0.Up.Down)
-			{
-			MoveSpeed.Y -= 1.0f;	
-			}
-			
-			if(Input2.GamePad0.Down.Down)
-			{
-			MoveSpeed.Y += 1.0f;	
-			}
+			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
+			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
+//			if(Input2.GamePad0.Left.Down)
+//			{
+//			MoveSpeed.X -= 1.0f;	
+//				Direction = MoveSpeed;
+//			}
 //			
-			Direction = MoveSpeed;
+//			if(Input2.GamePad0.Right.Down)
+//			{
+//			MoveSpeed.X += 1.0f;	
+//				Direction = MoveSpeed;
+//			}
+//			
+//			if(Input2.GamePad0.Up.Down)
+//			{
+//			MoveSpeed.Y -= 1.0f;	
+//				Direction = MoveSpeed;
+//			}
+//			
+//			if(Input2.GamePad0.Down.Down)
+//			{
+//			MoveSpeed.Y += 1.0f;	
+//				Direction = MoveSpeed;
+//			}
+//			
+			
 			if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
 				AppMain.client.SetActionMessage('I');
 			else
+			{
 				AppMain.client.SetActionMessage('M');
-			
+				Direction = MoveSpeed;
+				AppMain.client.SetMyDirection(Direction.X,Direction.Y);
+			}			
 //				if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
 //				{
 //					//Console.WriteLine("SHOOTING");
 //					//ProjectileManager.Instance.Shoot(Position, Direction);
-//				}
+//				
+			
 				
-				if(Input2.GamePad0.Cross.Down)
+				if(Input2.GamePad0.Cross.Down|| Input2.GamePad0.Cross.Down && Input2.GamePad0.Left.Down ||
+			   Input2.GamePad0.Cross.Down && Input2.GamePad0.Right.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Up.Down
+			   || Input2.GamePad0.Cross.Down && Input2.GamePad0.Down.Down)
 				{
 					if(canShoot)
 					{

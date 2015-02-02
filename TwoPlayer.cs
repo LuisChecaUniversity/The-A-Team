@@ -806,6 +806,8 @@ namespace TheATeam
 			lblDebugCenter.Text = "----";
 			lblDebugCenter.Position = new Vector2(430, 100);
 			
+			
+			
 			#endregion
 			textureInfo  = new TextureInfo("/Application/assets/bullet.png");
 			sprite	 		= new SpriteUV();
@@ -865,6 +867,7 @@ namespace TheATeam
 				else
 				{
 					AppMain.client = new LocalTCPConnection(false,11000);
+					AppMain.client.SetIPAddress(AppMain.IPADDRESS);
 					//client = new LocalTCPConnection(false, 11000);
 					lblDebugCenter.Text = "Client";
 				}
@@ -970,6 +973,7 @@ namespace TheATeam
 				}
 				else
 				{
+					lblDebugCenter.Text = AppMain.client.GetIP;
 					if(Input2.GamePad0.Circle.Press)
 					{
 						AppMain.client.Connect();

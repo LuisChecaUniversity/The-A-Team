@@ -257,9 +257,9 @@ namespace TheATeam
 		{
 			actionMsg = c;	
 		}
-        private byte[] sendBuffer = new byte[10];
-		private byte[] recvBuffer = new byte[10];
-		private Sce.PlayStation.Core.Vector2  oldPosition;
+        private byte[] sendBuffer = new byte[18];
+		private byte[] recvBuffer = new byte[18];
+
 		public string testStatus = "Nothing";
 
 		/**
@@ -288,6 +288,23 @@ namespace TheATeam
 		public void SetHasShot(bool t)
 		{
 		hasShot = t;	
+		}
+		
+		private Sce.PlayStation.Core.Vector2 myDirection = new Sce.PlayStation.Core.Vector2(0.0f,0.0f);
+		public	void	SetMyDirection(float X, float Y)
+		{
+			myDirection.X = X;
+			myDirection.Y = Y;
+		}
+		public Sce.PlayStation.Core.Vector2 MyDirection
+		{
+			get { return myDirection;}	
+		}
+		
+		private Sce.PlayStation.Core.Vector2 networkDirection = new Sce.PlayStation.Core.Vector2(0.0f,0.0f);
+		public Sce.PlayStation.Core.Vector2 NetworkDirection
+		{
+			get { return networkDirection;}	
 		}
 		
 		/**
@@ -338,6 +355,10 @@ namespace TheATeam
 		}
 		
 		private IPAddress ipAddress;
+		public void SetIPAddress(string ip)
+		{
+		ipAddress = IPAddress.Parse(ip);	
+		}
 		public String GetIP
 		{
 			get { return ipAddress.ToString();}	
@@ -418,16 +439,25 @@ namespace TheATeam
 			{
 				enterCriticalSection();
 				socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-				//IPAddress ipAdd = IPAddress.Parse("192.168.1.105");
-				//PHONE 
-				//IPAddress ipAdd = IPAddress.Parse("192.168.43.105");
-				// HOME WIFI 
-				IPAddress ipAdd = IPAddress.Parse("192.168.0.12");
+//				IPAddress ipAdd;
+//				//IPAddress ipAdd = IPAddress.Parse("192.168.1.105");
+//				//PHONE 
+//				//IPAddress ipAdd = IPAddress.Parse("192.168.43.105");
+//				// HOME WIFI 
+//				if(AppMain.WHEREWIFI.Equals("HOME"))
+//					ipAdd = IPAddress.Parse("192.168.0.12");
+//				   
+//				else if (AppMain.WHEREWIFI.Equals("UNI"))
+//					ipAdd = IPAddress.Parse("10.54.152.29");
+//				else if (AppMain.WHEREWIFI.Equals("PHONE"))
+//					ipAdd = IPAddress.Parse("192.168.43.105");
+//				else
+//					ipAdd = null;
 				//IPAddress ipAdd = IPAddress.Parse("10.56.152.173");
 				//IPAddress ipAdd = IPAddress.Parse("192.168.0.26");
 				//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
-				IPEndPoint EP = new IPEndPoint(ipAdd, port);
+				
+				IPEndPoint EP = new IPEndPoint(ipAddress, port);
 				socket.BeginConnect(EP, new AsyncCallback(SocketEventCallback.ConnectCallback), this);
 			}
 			finally
@@ -485,12 +515,14 @@ namespace TheATeam
 						byte[] action = BitConverter.GetBytes(actionMsg);
 						byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
 						byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
-						
+						byte[] DirectionX = BitConverter.GetBytes(myDirection.X);
+						byte[] DirectionY = BitConverter.GetBytes(myDirection.Y);
+					
 						action.CopyTo(sendBuffer,0);
 						ArrayX.CopyTo(sendBuffer, action.Length);
 						ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
-						
-					
+						DirectionX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length);
+						DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
 						if (isServer)
 						{
 							if (clientSocket == null || IsConnect == false)
@@ -629,6 +661,9 @@ namespace TheATeam
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
+								
+								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 //								if(networkPosition.X == 0 && networkPosition.Y == 0)
 //								{
@@ -658,7 +693,8 @@ namespace TheATeam
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
-								
+								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 //								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
 //								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);

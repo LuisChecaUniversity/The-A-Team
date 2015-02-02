@@ -14,7 +14,7 @@ namespace TheATeam
 		public Vector2 position;
 		public Vector2 velocity;
 		public bool collided;
-		private float bulletSpeed = 50.0f;
+		private float bulletSpeed = 4.0f;
 		
 		public Projectile (Scene scene, Vector2 pos, Vector2 vel)
 		{

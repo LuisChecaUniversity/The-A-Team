@@ -13,7 +13,7 @@ namespace TheATeam
 		private static ProjectileManager instance = new ProjectileManager();
 		private static List<Projectile> projectiles;
 		private Scene scene;
-		private float bulletSpeed = 100.0f;
+		private float bulletSpeed = 0.5f;
 		
 		private ProjectileManager ()
 		{
