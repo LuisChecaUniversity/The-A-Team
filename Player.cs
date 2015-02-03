@@ -10,16 +10,21 @@ namespace TheATeam
 		PlayerOne = 0,
 		PlayerTwo = 1,
 	}
+
 	public class Player: EntityAlive
 	{
-		private static int PLAYER_INDEX = 0;
+		private static int Y_INDEX = 1;
 		private bool canShoot = true;
+
+		public char Element { get; set; }
+
+		public AttackStatus Attack { get { return attackState; } }
 		
 		public Player(Vector2 position):
-			base(PLAYER_INDEX, position, new Vector2i(0, 1))
+			base(Y_INDEX, position, new Vector2i(0, 1))
 		{
+			Element = 'N';
 			IsDefending = false;
-			Stats.Lives = 5;
 		}
 		
 		override public void Update(float dt)
@@ -39,7 +44,7 @@ namespace TheATeam
 			HandleCollision();
 			
 			// Apply the movement
-			Position = Position + MoveSpeed;
+			Position = Position + positionDelta;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 			
@@ -51,8 +56,6 @@ namespace TheATeam
 			}
 		}
 		
-		public AttackStatus Attack { get { return attackState; } }
-		
 		private Vector2 Direction;
 		private static float MoveDelta = 2f;
 		
@@ -60,41 +63,30 @@ namespace TheATeam
 		{
 			var gamePadData = GamePad.GetData(0);
 			
-			// Apply direction and animation
+			// Apply direction
 			if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
 			{
-				MoveSpeed.X = -MoveDelta;
-				// Set animation range.
-				TileRangeX = new Vector2i(6, 7);
+				positionDelta.X = -MoveDelta;
 			}
 			if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
 			{
-				MoveSpeed.X = MoveDelta;
-				TileRangeX = new Vector2i(4, 5);
+				positionDelta.X = MoveDelta;
 			}
 			if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
 			{
-				MoveSpeed.Y = MoveDelta;
-				TileRangeX = new Vector2i(2, 3);
+				positionDelta.Y = MoveDelta;
 			}
 			if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
 			{
-				MoveSpeed.Y = -MoveDelta;
-				TileRangeX = new Vector2i(0, 1);
+				positionDelta.Y = -MoveDelta;
 			}
-			
-			if (MoveSpeed != Vector2.Zero)
+			// Preserve Movement vector in Direction
+			if(positionDelta != Vector2.Zero)
 			{
-				Direction = MoveSpeed;
+				Direction = positionDelta.Normalize();
 			}
-			// added player shoot 
-			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
-			{
-				//Console.WriteLine("SHOOTING");
-				//ProjectileManager.Instance.Shoot(Position, Direction);
-			}
-			
-			if(Input2.GamePad0.Cross.Down)
+			// Added player shoot
+			if(Input2.GamePad0.Cross.Down)  // S Eky
 			{
 				if(canShoot)
 				{
@@ -130,22 +122,46 @@ namespace TheATeam
 				}
 			}
 			// Set frame to start of animation range if outside of range
-			if(TileIndex2D.X < TileRangeX.X || TileIndex2D.X > TileRangeX.Y)
-				TileIndex2D.X = TileRangeX.X;
+			if(TileIndex2D.X < animationRangeX.X || TileIndex2D.X > animationRangeX.Y)
+				TileIndex2D.X = animationRangeX.X;
+		}
+		
+		private void HandleDirectionAnimation()
+		{
+			// Declare Ranges
+			Vector2i LeftRange = new Vector2i(6, 7);
+			Vector2i RightRange = new Vector2i(4, 5);
+			Vector2i UpRange = new Vector2i(2, 3);
+			Vector2i DownRange = new Vector2i(0, 1);
+			if(Direction.X > 0)
+			{
+				
+			}
 		}
 		
 		private void HandleCollision()
 		{
-			if(SceneManager.CurrentScene == null)
-				return;
 			// Loop through tiles
 			foreach(Tile t in Tile.Collisions)
 			{
 				if(t.Overlaps(this))
 				{
-					if(!MoveSpeed.IsZero() && t.IsCollidable)
-						//t.HandleCollision(Position, ref MoveSpeed);
-						MoveSpeed *= -1.0f;
+					if(!positionDelta.IsZero() && t.IsCollidable & t.Key != Element)
+					{
+						Vector2 X = new Vector2(3, 0);
+						Vector2 Y = new Vector2(0, 3);
+						if(positionDelta.X < 0)
+							Position = Position + X;
+						if(positionDelta.X > 0)
+							Position = Position - X;
+						
+						if(positionDelta.Y < 0)
+							Position = Position + Y;
+						if(positionDelta.Y > 0)
+							Position = Position - Y;
+						
+						positionDelta = Vector2.Zero;
+					}
 					
 					if(t.Key == 'Z')
 						Info.LevelClear = true;
