@@ -10,6 +10,7 @@ namespace TheATeam
 {
 	public class Level: Scene
 	{
+
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
@@ -25,6 +26,7 @@ namespace TheATeam
 		Font font;		
 		FontMap debugFont;
 		
+
 		public Level(): base()
 		{
 			
@@ -49,11 +51,13 @@ namespace TheATeam
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
 			//AddChild(new TextureInfo("/Application/assets/Background.png"));
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
+			Tile.Loader("/Application/assets/level3.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
 			
+
+	
 			player1 = new Player(new Vector2(64,300),true);
-			player2 = new Player(new Vector2(960 - 64,300),false);
+			player2 = new Player(new Vector2(960 - 164,300),false);
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
@@ -147,6 +151,7 @@ namespace TheATeam
 			{
 				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
 			}
+
 		}
 	}
 }

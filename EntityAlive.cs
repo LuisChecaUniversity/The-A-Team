@@ -16,6 +16,7 @@ namespace TheATeam
 	public class Statistics
 	{
 		public int MaxHealth = 100;
+		public int MaxLives = 2;
 		public int Health = 100;
 		public int Lives = 2;
 		public int Defense = 100;
@@ -25,18 +26,17 @@ namespace TheATeam
 		public double Luck { get { return Info.Rnd.NextDouble() * (1 - 0.5) + 0.5; } }
 	}
 	
-	public class EntityAlive: Entity
+	public class EntityAlive: Tile
 	{
 		protected AttackStatus attackState = AttackStatus.None;
-		protected Statistics stats = new Statistics();
-		protected Vector2 MoveSpeed = new Vector2();
-		protected Vector2i TileRangeX = new Vector2i();
+		protected Vector2 positionDelta = new Vector2();
+		protected Vector2i animationRangeX = new Vector2i();
 		
-		public Statistics Stats { get { return stats; } }
+		public Statistics Stats { get; set; }
 
 		public EntityAlive Opponent { get; set; }
-		
-		public bool IsCollidable { get; set; }
+
+		public bool IsAlive { get; protected set; }
 		
 		public bool IsBoss { get; set; }
 
@@ -51,6 +51,10 @@ namespace TheATeam
 		public EntityAlive(Vector2 position):
 			base(position)
 		{
+			// Make Stats
+			Stats = new Statistics();
+			// Alive by default
+			IsAlive = true;
 			// Collidable by default
 			IsCollidable = true;
 			// Not a boss by default
@@ -71,18 +75,18 @@ namespace TheATeam
 			}
 		}
 		
-		public EntityAlive(int tileIndexY, Vector2 position, Vector2i tileRangeX, float interval=0.2f):
+		public EntityAlive(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			this(position)
 		{
 			// Assign variables
-			TileIndex2D = new Vector2i(tileRangeX.X, tileIndexY);
-			TileRangeX = tileRangeX;
+			this.animationRangeX = animationRangeX;
+			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
 			// Attach custom animation function
 			ScheduleInterval((dt) => {
 				if(IsAlive)
 				{
-					int tileIndex = TileIndex2D.X < TileRangeX.Y ? TileIndex2D.X + 1 : TileRangeX.X;
-					TileIndex2D.X = tileIndex;
+					int newTileIndex = TileIndex2D.X < animationRangeX.Y ? TileIndex2D.X + 1 : animationRangeX.X;
+					TileIndex2D.X = newTileIndex;
 				}
 				else
 				{
@@ -100,13 +104,13 @@ namespace TheATeam
 		
 		override public void Update(float dt)
 		{
-			MoveSpeed = Vector2.Zero;
+			positionDelta = Vector2.Zero;
 			// Dying
-			if(stats.Health <= 0)
+			if(Stats.Health <= 0)
 			{
-				stats.Health = stats.MaxHealth;
-				stats.Lives--;
-				if(stats.Lives <= 0)
+				Stats.Health = Stats.MaxHealth;
+				Stats.Lives--;
+				if(Stats.Lives <= 0)
 					IsAlive = false;
 			}
 			// Fight!
@@ -130,10 +134,10 @@ namespace TheATeam
 				// Take damage
 				if(DamageReceived > 0)
 				{
-					if(IsDefending && stats.Defense > 0 && DamageReceived <= stats.Defense)
-						stats.Defense -= DamageReceived;
+					if(IsDefending && Stats.Defense > 0 && DamageReceived <= Stats.Defense)
+						Stats.Defense -= DamageReceived;
 					else
-						stats.Health -= DamageReceived;
+						Stats.Health -= DamageReceived;
 					
 					DamageReceived = 0;
 				}
@@ -152,16 +156,16 @@ namespace TheATeam
 			case AttackStatus.None:
 				break;
 			case AttackStatus.MeleeNormal:
-				damage = (int)(stats.Attack * stats.Luck);
+				damage = (int)(Stats.Attack * Stats.Luck);
 				break;
 			case AttackStatus.MeleeStrong:
-				damage = (int)(stats.Attack * stats.Luck * 1.15);
+				damage = (int)(Stats.Attack * Stats.Luck * 1.15);
 				break;
 			case AttackStatus.RangedNormal:
-				damage = (int)(stats.RangedAttack * stats.Luck);
+				damage = (int)(Stats.RangedAttack * Stats.Luck);
 				break;
 			case AttackStatus.RangedStrong:
-				damage = (int)(stats.RangedAttack * stats.Luck * 1.15);
+				damage = (int)(Stats.RangedAttack * Stats.Luck * 1.15);
 				break;
 			default:
 				break;

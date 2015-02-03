@@ -45,7 +45,6 @@
     <Compile Include="SceneManager.cs" />
     <Compile Include="TextureManager.cs" />
     <Compile Include="Tile.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="EntityAlive.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Player.cs" />
@@ -57,7 +56,9 @@
     <Compile Include="MainMenu.cs" />
     <Compile Include="TitleScreen.cs" />
     <Compile Include="LocalTCPConnection.cs" />
-    <Compile Include="TwoPlayer.cs" />
+    <Compile Include="HealthWall.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -94,5 +95,10 @@
     <Content Include="assets\TitleScreen.png" />
     <Content Include="assets\FireBullet.png" />
     <Content Include="assets\WaterBullet.png" />
+    <Content Include="assets\level2.txt" />
+    <Content Include="assets\level3.txt" />
+    <Content Include="assets\level4.txt" />
+    <Content Include="assets\level5.txt" />
+    <Content Include="assets\FlagTemp.png" />
   </ItemGroup>
 </Project>

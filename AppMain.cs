@@ -245,10 +245,10 @@ namespace TheATeam
 			
 			GameSceneManager.currentScene = splashScene;
 			
-			Director.Instance.RunWithScene(splashScene, true);
+			//Director.Instance.RunWithScene(splashScene, true);
 			
 			//Run the scene.
-			//Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
+			Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
 			
 			// pete lazyness - skip to game
 //			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),

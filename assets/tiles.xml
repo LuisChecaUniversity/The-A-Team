@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tiletypes> 
     <tiletype k='E' tx='0'  ty='0' c='0' />
-    <tiletype k='D' tx='1'  ty='0' c='1' /> 
+    <tiletype k='N' tx='1'  ty='0' c='1' /> 
     <tiletype k='F' tx='2'  ty='0' c='1' /> 
     <tiletype k='W' tx='3'  ty='0' c='1' />
     <tiletype k='I' tx='4'  ty='0' c='1' />
     <tiletype k='S' tx='5'  ty='0' c='0' />
 	<tiletype k='~' tx='6'  ty='0' c='1' />	
+	<tiletype k='P' tx='7'  ty='0' c='1' />
+	<tiletype k='B' tx='8'	ty='0' c='0' />
+	<tiletype k='R' tx='9'  ty='0' c='0' />
 </tiletypes>
