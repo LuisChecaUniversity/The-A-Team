@@ -136,6 +136,13 @@ namespace TheATeam
 			
 			// handle bullet update and collision
 			ProjectileManager.Instance.Update(dt);
+			
+			if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
+				Console.WriteLine("Player 1 got hit");
+			if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
+				Console.WriteLine("Player 2 got hit");
+			
+			
 			foreach(Tile t in Tile.Collisions)
 			{
 				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());

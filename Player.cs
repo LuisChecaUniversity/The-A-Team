@@ -7,8 +7,8 @@ namespace TheATeam
 {
 	public enum PlayerIndex
 	{
-		PlayerOne = 0,
-		PlayerTwo = 1,
+		PlayerOne = 1,
+		PlayerTwo = 2,
 	}
 	
 	public enum PlayerState
@@ -213,7 +213,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
-			ProjectileManager.Instance.Shoot(Position, Direction,1);
+			ProjectileManager.Instance.Shoot(Position, Direction,(int)whichPlayer);
 			canShoot = false;
 			
 		}
