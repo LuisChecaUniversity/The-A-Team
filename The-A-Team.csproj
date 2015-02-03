@@ -57,6 +57,8 @@
     <Compile Include="TitleScreen.cs" />
     <Compile Include="LocalTCPConnection.cs" />
     <Compile Include="HealthWall.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -97,5 +99,6 @@
     <Content Include="assets\level3.txt" />
     <Content Include="assets\level4.txt" />
     <Content Include="assets\level5.txt" />
+    <Content Include="assets\FlagTemp.png" />
   </ItemGroup>
 </Project>
