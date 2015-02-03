@@ -105,7 +105,11 @@ namespace TheATeam
 					break;
 					
 				case 2:
-					
+				
+					TwoPlayer networkingTest = new TwoPlayer();
+					networkingTest.Camera.SetViewFromViewport();
+					GameSceneManager.currentScene = networkingTest;
+					Director.Instance.ReplaceScene(networkingTest);
 //					optionsScene = new OptionsScene();
 //					optionsScene.Camera.SetViewFromViewport();
 //					GameSceneManager.currentScene = optionsScene;

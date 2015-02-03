@@ -117,9 +117,8 @@ namespace TheATeam
 		}
 		
 		
-		public AttackStatus Attack { get { return attackState; } }
 
-		}
+		
 
 		
 		public Vector2 Direction;

@@ -59,6 +59,7 @@
     <Compile Include="HealthWall.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemManager.cs" />
+    <Compile Include="TwoPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
