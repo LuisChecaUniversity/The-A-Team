@@ -29,7 +29,7 @@ namespace TheATeam
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
-		private float fireRate = 500.0f;
+		private float fireRate = 800.0f;
 		private float curTime = 0.0f;
 		
 		public Player(Vector2 position,bool isPlayer1):
@@ -118,7 +118,7 @@ namespace TheATeam
 		{
 			//var gamePadData = GamePad.GetData(0);
 	
-			MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
+			//MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
 			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
 			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
 			if(Input2.GamePad0.Left.Down)
@@ -135,13 +135,13 @@ namespace TheATeam
 			
 			if(Input2.GamePad0.Up.Down)
 			{
-			MoveSpeed.Y -= 1.0f;	
+			MoveSpeed.Y += 1.0f;	
 				Direction = MoveSpeed;
 			}
 			
 			if(Input2.GamePad0.Down.Down)
 			{
-			MoveSpeed.Y += 1.0f;	
+			MoveSpeed.Y -= 1.0f;	
 				Direction = MoveSpeed;
 			}
 //			
@@ -149,7 +149,7 @@ namespace TheATeam
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
-				Direction = MoveSpeed;
+				//Direction = MoveSpeed;
 				break;
 			case "MULTIPLAYER":
 				if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
@@ -213,7 +213,8 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
-			ProjectileManager.Instance.Shoot(Position, Direction,(int)whichPlayer);
+			Vector2 pos = new Vector2(Position.X + Quad.Bounds2().Point11.X/2, Position.Y + Quad.Bounds2().Point11.Y/2);
+			ProjectileManager.Instance.Shoot(pos, Direction,(int)whichPlayer);
 			canShoot = false;
 			
 		}

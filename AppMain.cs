@@ -245,21 +245,21 @@ namespace TheATeam
 			
 			GameSceneManager.currentScene = splashScene;
 			
-			
+			Director.Instance.RunWithScene(splashScene, true);
 			
 			//Run the scene.
 			//Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
 			
 			// pete lazyness - skip to game
-			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(7, 1)));
-			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
-			Info.TotalGameTime = 0f;
-			Info.LevelNumber = 1;
-			Level l = new Level();
-			GameSceneManager.currentScene = l;
-			Director.Instance.RunWithScene(l, true);
+//			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+//			                                                 new Vector2i(7, 1)));
+//			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+//			                                                 new Vector2i(9, 14)));
+//			Info.TotalGameTime = 0f;
+//			Info.LevelNumber = 1;
+//			Level l = new Level();
+//			GameSceneManager.currentScene = l;
+//			Director.Instance.RunWithScene(l, true);
 			// end of pete lazyness
 		}
 	}
