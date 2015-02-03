@@ -57,7 +57,7 @@ namespace TheATeam
 
 	
 			player1 = new Player(new Vector2(64,300),true);
-			player2 = new Player(new Vector2(960 - 64,300),false);
+			player2 = new Player(new Vector2(960 - 164,300),false);
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{

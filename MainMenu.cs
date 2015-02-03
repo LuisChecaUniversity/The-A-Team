@@ -96,7 +96,11 @@ namespace TheATeam
 //			//UISystem.SetScene(new GameUI(), null);
 //			// Tell the Director to run our scene
 //
-			Director.Instance.ReplaceScene(new Level());
+					Level level = new Level();
+					level.Camera.SetViewFromViewport();
+					GameSceneManager.currentScene = level;
+			Director.Instance.ReplaceScene(level);
+			//Director.Instance.ReplaceScene(new Level());
 					break;
 					
 				case 2:

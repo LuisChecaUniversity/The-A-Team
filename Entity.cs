@@ -18,7 +18,7 @@ namespace TheATeam
 			Quad.S = TextureInfo.TileSizeInPixelsf;
 			IsAlive = true;
 			// Attach update function to scheduler
-			ScheduleUpdate();
+			//ScheduleUpdate();
 		}
 		
 		public Entity(Vector2i tileIndex2D, Vector2 position):

@@ -10,6 +10,12 @@ namespace TheATeam
 		PlayerOne = 1,
 		PlayerTwo = 2,
 	}
+	public enum PlayerState
+	{
+		Idle,
+		Moving,
+		Shooting,
+	}
 	public class Player: EntityAlive
 	{
 		private static int PLAYER_INDEX = 0;
@@ -17,7 +23,8 @@ namespace TheATeam
 		private PlayerIndex Index;
 		private bool KeyboardTest = true;
 		
-
+		private PlayerIndex whichPlayer;
+		private PlayerState playerState;
 		
 
 		private Vector2 oldPos;
@@ -29,7 +36,6 @@ namespace TheATeam
 		private float curTime = 0.0f;
 		
 		public Player(Vector2 position,bool isPlayer1):
-
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
 		{
 			IsDefending = false;
@@ -57,6 +63,7 @@ namespace TheATeam
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
+				
 				// Handle movement/attacks
 					HandleInput();
 					
@@ -103,10 +110,7 @@ namespace TheATeam
 
 		}
 		
-		public void UpdateAI(Player player1)
-		{
-			
-		}
+		
 		public AttackStatus Attack { get { return attackState; } }
 		
 		public Vector2 Direction;
@@ -120,6 +124,7 @@ namespace TheATeam
 			//MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
 			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
 			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
+			
 			if(Input2.GamePad0.Left.Down)
 			{
 			MoveSpeed.X -= 1.0f;	

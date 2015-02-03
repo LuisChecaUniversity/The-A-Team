@@ -18,17 +18,14 @@ namespace TheATeam
 		ClientSide
 	}
 	public class AppMain
-
-			
-
 	{	
 		public static string 				TYPEOFGAME;
 		public static bool 					ISHOST = false;
 		public static string 				IPADDRESS;
 		public static string 				WHEREWIFI = "PHONE";
-
 		public static bool 					QUITGAME = false;
 		private static GameSceneManager 	gsm;
+		public static LocalTCPConnection 	client;
 		private static Timer 				timer;
 		public static Button button;
 		public static Button buttonHost;
@@ -248,10 +245,10 @@ namespace TheATeam
 			
 			GameSceneManager.currentScene = splashScene;
 			
-			Director.Instance.RunWithScene(splashScene, true);
+			//Director.Instance.RunWithScene(splashScene, true);
 			
 			//Run the scene.
-			//Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
+			Director.Instance.RunWithScene(GameSceneManager.currentScene, true);
 			
 			// pete lazyness - skip to game
 //			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
