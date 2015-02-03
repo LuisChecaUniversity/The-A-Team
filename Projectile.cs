@@ -9,23 +9,37 @@ namespace TheATeam
 {
 	public class Projectile
 	{
-		public TextureInfo bulletTex;
+		//public TextureInfo bulletTex;
 		public SpriteUV bulletSprite;
 		public Vector2 position;
 		public Vector2 velocity;
+		private Vector2 rotation;
 		public bool collided;
-		private float bulletSpeed = 50.0f;
-		
-		public Projectile (Scene scene, Vector2 pos, Vector2 vel)
+		private float bulletSpeed = 4.0f;
+		public Projectile (Scene scene, TextureInfo tex, Vector2 pos, Vector2 vel)
 		{
-			bulletTex = new TextureInfo("/Application/Assets/bullet.png");
-			bulletSprite = new SpriteUV(bulletTex);
-			bulletSprite.Quad.S = bulletTex.TextureSizef;	
-			
-			position = pos;
-			velocity = vel;
-			collided = false;
 
+
+			//bulletTex = new TextureInfo("/Application/Assets/bullet.png");
+			bulletSprite = new SpriteUV(tex);
+			bulletSprite.Quad.S = tex.TextureSizef;
+			bulletSprite.CenterSprite();
+
+			
+			float offset;
+			if(vel.X == 0.0f || vel.Y == 0.0f)
+				offset = 37.0f;
+			else
+				offset = 50.0f;
+			
+			
+			rotation = vel.Normalize();
+			velocity = vel;
+			position = new Vector2(pos.X + rotation.X * offset, pos.Y + rotation.Y * offset); 
+			collided = false;
+			
+			
+			
 			scene.AddChild(bulletSprite);
 		}
 		public void Dispose()
@@ -37,6 +51,9 @@ namespace TheATeam
 		public void Update(float dt)
 		{
 			position = new Vector2(position.X + velocity.X * dt, position.Y + velocity.Y *dt);
+			rotation = velocity.Normalize();
+			
+			bulletSprite.Rotation = rotation;
 			bulletSprite.Position = position;
 		}
 		
@@ -46,7 +63,9 @@ namespace TheATeam
 			
 			Bounds2 bulletBounds = bulletSprite.Quad.Bounds2();
 			float bulletWidth = bulletBounds.Point11.X;
-			float bulletHeight = bulletBounds.Point11.Y;
+			// because bullets rotate if a bullet is traveling in the y direction its collision 
+			// will be based off height - which is now the rotated width
+			float bulletHeight = bulletBounds.Point11.X;
 			
 			float objectWidth = objectSize.X;
 			float objectHeight = objectSize.Y;
@@ -62,13 +81,13 @@ namespace TheATeam
 //			else 
 //				return true;
 			
-			if((position.X ) < objectPosition.X - objectWidth)
+			if(position.X - bulletWidth> objectPosition.X + objectWidth)
 				return false;
-			else if(position.X - bulletWidth > (objectPosition.X ))
+			else if(position.X + bulletWidth < objectPosition.X )
 				return false;
-			else if((position.Y) < objectPosition.Y - objectHeight)
+			else if(position.Y - bulletHeight > objectPosition.Y + objectHeight)
 				return false;
-			else if(position.Y - bulletHeight > (objectPosition.Y ))
+			else if(position.Y + bulletHeight < objectPosition.Y )
 				return false;
 			else 
 				return true;
@@ -89,6 +108,7 @@ namespace TheATeam
 			else 
 				return false;
 		}
+		
 	}
 }
 

@@ -7,8 +7,8 @@ namespace TheATeam
 {
 	public enum PlayerIndex
 	{
-		PlayerOne = 0,
-		PlayerTwo = 1,
+		PlayerOne = 1,
+		PlayerTwo = 2,
 	}
 	public class Player: EntityAlive
 	{
@@ -17,11 +17,32 @@ namespace TheATeam
 		private PlayerIndex Index;
 		private bool KeyboardTest = true;
 		
-		public Player(Vector2 position):
+
+		
+
+		private Vector2 oldPos;
+		
+		//AI variables
+		private bool movingLeft = true;
+		private bool shooting = false;
+		private float fireRate = 800.0f;
+		private float curTime = 0.0f;
+		
+		public Player(Vector2 position,bool isPlayer1):
+
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
 		{
 			IsDefending = false;
 			Stats.Lives = 5;
+
+			if(isPlayer1)
+				whichPlayer = PlayerIndex.PlayerOne;
+			else
+				whichPlayer = PlayerIndex.PlayerTwo;
+			
+			playerState = PlayerState.Idle;
+			Direction = new Vector2(1.0f,0.0f);
+
 		}
 		
 		override public void Update(float dt)
@@ -33,35 +54,79 @@ namespace TheATeam
 			// Handle Death
 //			if(!IsAlive)
 //				SceneManager.ReplaceUIScene(new DeadUI());
+			switch (AppMain.TYPEOFGAME)
+			{
+			case "SINGLE":
+				// Handle movement/attacks
+					HandleInput();
+					
+				// Apply the movement
+					Position = Position + MoveSpeed;
 			
-			// Handle movement/attacks
-			HandleInput();
+				break;
+				
+			case "MULTIPLAYER":
+				if(AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
+				{
+					// Handle movement/attacks
+					HandleInput();
+					
+					// Apply the movement
+					Position = Position + MoveSpeed;
+					
+					//Set Position for Data Message
+					AppMain.client.SetMyPosition(Position.X,Position.Y);
+				}
+				else
+				{
+					//set position and direction from the network positions of enemy
+					Position = AppMain.client.networkPosition;
+					Direction = AppMain.client.NetworkDirection;
+					if(AppMain.client.HasShot)
+					{
+						Shoot();	
+						AppMain.client.SetHasShot(false);	
+					}
+				}
 			
+				break;
+			default:
+				break;
+			}
 			// Find current tile and apply collision
 			HandleCollision();
 			
-			// Apply the movement
-			Position = Position + MoveSpeed;
+			
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 			
-			// handle bullet update and collision
-			ProjectileManager.Instance.Update(dt);
-			foreach(Tile t in Tile.Collisions)
-			{
-				ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2());
-			}
+
 		}
 		
+		public void UpdateAI(Player player1)
+		{
+			
+		}
 		public AttackStatus Attack { get { return attackState; } }
 		
-		private Vector2 Direction;
+		public Vector2 Direction;
+		public Vector2 GetPosition { get { return Position; }}
 		private static float MoveDelta = 2f;
 		
 		private void HandleInput()
 		{
-			var gamePadData = GamePad.GetData(0);
+			//var gamePadData = GamePad.GetData(0);
+	
+			//MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
+			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
+			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
+			if(Input2.GamePad0.Left.Down)
+			{
+			MoveSpeed.X -= 1.0f;	
+				Direction = MoveSpeed;
+			}
 			
+
 			if(Index == PlayerIndex.PlayerOne)
 			{
 				MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
@@ -74,78 +139,69 @@ namespace TheATeam
 				MoveSpeed.Y = -Input2.GamePad0.AnalogRight.Y; 
 			}
 			
+			
+				
+			
+			
+			
 			if (KeyboardTest == true)
 			{
-				// Apply direction and animation
-				if((gamePadData.Buttons & GamePadButtons.Left) != 0) //&& gamePadData.AnalogLeftX <0)
-				{
-					MoveSpeed.X = -MoveDelta;
-					// Set animation range.
-					TileRangeX = new Vector2i(6, 7);
-				}
-				if((gamePadData.Buttons & GamePadButtons.Right) != 0) //&& gamePadData.AnalogLeftX >0)
-				{
-					MoveSpeed.X = MoveDelta;
-					TileRangeX = new Vector2i(4, 5);
-				}
-				if((gamePadData.Buttons & GamePadButtons.Up) != 0) //&& gamePadData.AnalogLeftY >0)
-				{
-					MoveSpeed.Y = MoveDelta;
-					TileRangeX = new Vector2i(2, 3);
-				}
-				if((gamePadData.Buttons & GamePadButtons.Down) != 0) //&& gamePadData.AnalogLeftY <0)
-				{
-					MoveSpeed.Y = -MoveDelta;
-					TileRangeX = new Vector2i(0, 1);
-				}
-			}
-			
-			if (MoveSpeed != Vector2.Zero)
+
+			if(Input2.GamePad0.Right.Down)
 			{
+			MoveSpeed.X += 1.0f;	
 				Direction = MoveSpeed;
 			}
-			// added player shoot 
-			if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0) // S key
+			
+			if(Input2.GamePad0.Up.Down)
 			{
-				//Console.WriteLine("SHOOTING");
-				//ProjectileManager.Instance.Shoot(Position, Direction);
+			MoveSpeed.Y += 1.0f;	
+				Direction = MoveSpeed;
 			}
 			
-			if(Input2.GamePad0.Cross.Down)
+			if(Input2.GamePad0.Down.Down)
 			{
-				if(canShoot)
-				{
-					canShoot = false;
-					ProjectileManager.Instance.Shoot(Position, Direction);
-				}
+			MoveSpeed.Y -= 1.0f;	
+				Direction = MoveSpeed;
 			}
-			if(Input2.GamePad0.Cross.Release)
-				canShoot = true;
-			// Attacks if in battle
-			if(InBattle)
+//			
+			}
+			
+			switch (AppMain.TYPEOFGAME)
 			{
-				if((gamePadData.ButtonsDown & GamePadButtons.Cross) != 0)
+			case "SINGLE":
+				Direction = MoveSpeed;
+				break;
+			case "MULTIPLAYER":
+				if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
+					AppMain.client.SetActionMessage('I');
+				else
 				{
-					attackState = AttackStatus.MeleeNormal;
-				}
-				if((gamePadData.ButtonsDown & GamePadButtons.Circle) != 0)
-				{
-					attackState = AttackStatus.MeleeStrong;
-				}
-				if((gamePadData.ButtonsDown & GamePadButtons.Square) != 0)
-				{
-					attackState = AttackStatus.RangedNormal;
-				}
-				if((gamePadData.ButtonsDown & GamePadButtons.Triangle) != 0)
-				{
-					attackState = AttackStatus.RangedStrong;
-				}
+					AppMain.client.SetActionMessage('M');
+					Direction = MoveSpeed;
+					AppMain.client.SetMyDirection(Direction.X,Direction.Y);
+				}			
+				break;
+			default:
+				break;
+
+			}
+			
+		
 				
-				if((gamePadData.ButtonsDown & GamePadButtons.L) != 0)
+				if(Input2.GamePad0.Cross.Down|| Input2.GamePad0.Cross.Down && Input2.GamePad0.Left.Down ||
+			   Input2.GamePad0.Cross.Down && Input2.GamePad0.Right.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Up.Down
+			   || Input2.GamePad0.Cross.Down && Input2.GamePad0.Down.Down)
 				{
-					IsDefending = true;
+					if(canShoot)
+					{
+						Shoot ();
+					}
 				}
-			}
+				if(Input2.GamePad0.Cross.Release)
+					canShoot = true;
+				
+
 			// Set frame to start of animation range if outside of range
 			if(TileIndex2D.X < TileRangeX.X || TileIndex2D.X > TileRangeX.Y)
 				TileIndex2D.X = TileRangeX.X;
@@ -192,6 +248,60 @@ namespace TheATeam
 						
 					if(t.Key == 'Z')
 						Info.LevelClear = true;
+				}
+			}
+		}
+		
+		public void Shoot()
+		{
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				AppMain.client.SetActionMessage('S');
+			playerState = PlayerState.Shooting;
+			Vector2 pos = new Vector2(Position.X + Quad.Bounds2().Point11.X/2, Position.Y + Quad.Bounds2().Point11.Y/2);
+			ProjectileManager.Instance.Shoot(pos, Direction,(int)whichPlayer);
+			canShoot = false;
+			
+		}
+		
+		public void UpdateAI(float dt,Player p)
+		{
+			if(movingLeft)
+			{
+				if(Position.X > 30)
+				{
+					MoveSpeed = new Vector2(-0.05f * dt,0.0f);
+					Position += MoveSpeed;
+					Direction = MoveSpeed;	
+				}
+				else
+				{
+				movingLeft = false;	
+				}
+			}
+			else
+			{
+				if(Position.X < 930)
+				{
+					MoveSpeed = new Vector2(0.05f * dt,0.0f);
+					Position += MoveSpeed;
+					Direction = MoveSpeed;	
+				}
+				else
+				{
+				movingLeft = true;	
+				}
+			}
+			
+			float dist = Vector2.Distance(p.Position,Position);	
+			if(dist <300)
+			{
+				curTime += dt;
+				if(curTime > fireRate)
+				{
+					Direction = p.Position - Position;
+					Direction = Direction.Normalize();
+					Shoot();
+					curTime = 0.0f;	
 				}
 			}
 		}
