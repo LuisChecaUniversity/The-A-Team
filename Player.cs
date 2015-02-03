@@ -149,14 +149,13 @@ namespace TheATeam
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
-				//Direction = MoveSpeed;
+				Direction = MoveSpeed;
 				break;
 			case "MULTIPLAYER":
 				if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
 					AppMain.client.SetActionMessage('I');
 				else
 				{
-
 					AppMain.client.SetActionMessage('M');
 					Direction = MoveSpeed;
 					AppMain.client.SetMyDirection(Direction.X,Direction.Y);
