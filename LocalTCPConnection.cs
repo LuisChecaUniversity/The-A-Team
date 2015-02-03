@@ -406,7 +406,7 @@ namespace TheATeam
 				
 			
 					
-				
+			//	ipAddress = IPAddress.Parse("192.168.43.40");
 					//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 					
 					//IPAddress ipAdd = IPAddress.Parse("192.168.43.133");

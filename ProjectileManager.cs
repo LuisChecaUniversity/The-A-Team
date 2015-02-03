@@ -16,9 +16,9 @@ namespace TheATeam
 
 		private float bulletSpeed = 0.5f;
 
-		private static TextureInfo fireTex = new TextureInfo("/Application/Assets/FireBullet.png");
-		private static TextureInfo waterTex = new TextureInfo("/Application/Assets/WaterBullet.png");
-		private static TextureInfo neutralTex = new TextureInfo("/Application/Assets/bullet.png");
+		private static TextureInfo fireTex = new TextureInfo("/Application/assets/FireBullet.png");
+		private static TextureInfo waterTex = new TextureInfo("/Application/assets/WaterBullet.png");
+		private static TextureInfo neutralTex = new TextureInfo("/Application/assets/bullet.png");
 
 		
 		private ProjectileManager ()
