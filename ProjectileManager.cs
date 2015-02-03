@@ -40,16 +40,19 @@ namespace TheATeam
 			if(type == 0)
 			{
 				newProjectile = new Projectile(scene, neutralTex, playerPos, Velocity);
+				newProjectile.setType(Type.Neutral);
 				projectiles.Add(newProjectile);
 			}
 			else if(type == 1)
 			{
 				newProjectile = new Projectile(scene, fireTex, playerPos, Velocity);
+				newProjectile.setType(Type.Fire);
 				projectiles.Add(newProjectile);
 			}
 			else if(type == 2)
 			{
 				newProjectile = new Projectile(scene, waterTex, playerPos, Velocity);
+				newProjectile.setType(Type.Water);
 				projectiles.Add(newProjectile);
 			}
 		}

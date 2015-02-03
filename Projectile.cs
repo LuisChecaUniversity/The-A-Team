@@ -7,15 +7,22 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
 {
+	public enum Type
+	{
+		Neutral = 0,
+		Fire = 1,
+		Water = 2,
+	};
 	public class Projectile
 	{
 		//public TextureInfo bulletTex;
-		public SpriteUV bulletSprite;
-		public Vector2 position;
-		public Vector2 velocity;
+		private SpriteUV bulletSprite;
+		private Vector2 position;
+		private Vector2 velocity;
 		private Vector2 rotation;
 		public bool collided;
-		private float bulletSpeed = 4.0f;
+		private Type bulletType;
+
 		public Projectile (Scene scene, TextureInfo tex, Vector2 pos, Vector2 vel)
 		{
 
@@ -28,9 +35,9 @@ namespace TheATeam
 			
 			float offset;
 			if(vel.X == 0.0f || vel.Y == 0.0f)
-				offset = 37.0f;
-			else
 				offset = 50.0f;
+			else
+				offset = 77.0f;
 			
 			
 			rotation = vel.Normalize();
@@ -108,6 +115,8 @@ namespace TheATeam
 			else 
 				return false;
 		}
+		public void setType(Type t){bulletType = t;}
+		public Type getType(){return bulletType;}
 		
 	}
 }
