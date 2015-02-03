@@ -104,10 +104,7 @@ namespace TheATeam
 
 		}
 		
-		public void UpdateAI(Player player1)
-		{
-			
-		}
+		
 		public AttackStatus Attack { get { return attackState; } }
 		
 		public Vector2 Direction;
