@@ -149,8 +149,8 @@ namespace TheATeam
 			// Add Entites to Scene
 			//scene.AddChild(entities);
 			// Player has position, add player last to scene
-			if(!playerPos.IsZero())
-				scene.AddChild(new Player(playerPos));
+//			if(!playerPos.IsZero())
+//				scene.AddChild(new Player(playerPos));
 			
 			// Resume Timers
 			SceneManager.ResumeScene();
@@ -211,8 +211,8 @@ namespace TheATeam
 			// Add Entites to Scene
 			//scene.AddChild(entities);
 			// Player has position, add player last to scene
-			if(!playerPos.IsZero())
-				scene.AddChild(new Player(playerPos));
+//			if(!playerPos.IsZero())
+//				scene.AddChild(new Player(playerPos));
 			
 			// Resume Timers
 			SceneManager.ResumeScene();
