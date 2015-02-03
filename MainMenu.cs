@@ -28,14 +28,14 @@ namespace TheATeam
 		//private Sce.PlayStation.HighLevel.GameEngine2D.Scene howToPlayScene;
 		
 		
-		public MainMenu ()
+		public MainMenu()
 		{
-			textureInfo  		= new TextureInfo("/Application/assets/MainMenu.png");
-			sprite 				= new SpriteUV(textureInfo);
-			sprite.Quad.S 		= textureInfo.TextureSizef;
-			sprite.Position 	= new Vector2(0.0f, 0.0f);
+			textureInfo = new TextureInfo("/Application/assets/MainMenu.png");
+			sprite = new SpriteUV(textureInfo);
+			sprite.Quad.S = textureInfo.TextureSizef;
+			sprite.Position = new Vector2(0.0f, 0.0f);
 			
-			selectTexture 		= new TextureInfo("/Application/assets/selectIcon.png");
+			selectTexture = new TextureInfo("/Application/assets/selectIcon.png");
 			option = 1;
 	
 			optionsPos[0] = 240.5f; 
@@ -43,54 +43,55 @@ namespace TheATeam
 			optionsPos[2] = 384.0f;
 			optionsPos[3] = 452.0f;
 			
-			selectIcon 			= new SpriteUV(selectTexture);
-			selectIcon.Quad.S 	= selectTexture.TextureSizef;
-			selectIcon.Scale = new Vector2(1.0f,1.0f);
-			selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height -  optionsPos[0]);
+			selectIcon = new SpriteUV(selectTexture);
+			selectIcon.Quad.S = selectTexture.TextureSizef;
+			selectIcon.Scale = new Vector2(1.0f, 1.0f);
+			selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[0]);
 			
 			this.AddChild(sprite);
 			this.AddChild(selectIcon);
 		}
-		public override void Update (float dt)
+
+		public override void Update(float dt)
 		{
 			if(Input2.GamePad0.Down.Press)
 			{
-			option++;
+				option++;
 				
 				if(option > 4)
 					option = 1;
-				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height -  optionsPos[option -1]);
+				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
 
 			}
 				
 			
 			if(Input2.GamePad0.Up.Press)
 			{
-			option--;
+				option--;
 				
 				if(option < 1)
 					option = 4;	
-				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height -  optionsPos[option -1]);
+				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
 			}
 				
 			
 			if(Input2.GamePad0.Square.Press)
 			{
-				switch (option) 
+				switch(option)
 				{
 				case 1:
 					
 // Load and store textures
 //
-			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(7, 1)));
+					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+			                                                 new Vector2i(10, 2)));
 //
-			TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
 			                                                 new Vector2i(9, 14)));
 //			
 //			// Initial Values;
-			Info.TotalGameTime = 0f;
-			Info.LevelNumber = 1;
+					Info.TotalGameTime = 0f;
+					Info.LevelNumber = 1;
 //			
 //			// Tell the UISystem to run an empty scene
 //			//UISystem.SetScene(new GameUI(), null);
@@ -165,7 +166,7 @@ namespace TheATeam
 //				else
 //					Console.WriteLine(screenx + " " + screenY );
 //				}
-			base.Update (dt);
+			base.Update(dt);
 		}
 	}
 }

@@ -16,9 +16,10 @@ namespace TheATeam
 		Moving,
 		Shooting,
 	}
+
 	public class Player: EntityAlive
 	{
-		private static int PLAYER_INDEX = 0;
+		private static int Y_INDEX = 1;
 		private bool canShoot = true;
 		private PlayerIndex Index;
 		private bool KeyboardTest = true;
@@ -34,12 +35,16 @@ namespace TheATeam
 		private bool shooting = false;
 		private float fireRate = 800.0f;
 		private float curTime = 0.0f;
+
+		public char Element { get; set; }
+
+		public AttackStatus Attack { get { return attackState; } }
 		
-		public Player(Vector2 position,bool isPlayer1):
-			base(PLAYER_INDEX, position, new Vector2i(0, 1))
+		public Player(Vector2 position, bool isPlayer1):
+			base(Y_INDEX, position, new Vector2i(0, 1))
 		{
+			Element = 'N';
 			IsDefending = false;
-			Stats.Lives = 5;
 
 			if(isPlayer1)
 				whichPlayer = PlayerIndex.PlayerOne;
@@ -48,7 +53,6 @@ namespace TheATeam
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f,0.0f);
-
 		}
 		
 		override public void Update(float dt)
@@ -68,7 +72,7 @@ namespace TheATeam
 					HandleInput();
 					
 				// Apply the movement
-					Position = Position + MoveSpeed;
+					Position = Position + positionDelta;
 			
 				break;
 				
@@ -79,7 +83,9 @@ namespace TheATeam
 					HandleInput();
 					
 					// Apply the movement
-					Position = Position + MoveSpeed;
+					Position = Position + positionDelta;
+					// Make camera follow the player
+					Info.CameraCenter = Position;
 					
 					//Set Position for Data Message
 					AppMain.client.SetMyPosition(Position.X,Position.Y);
@@ -102,88 +108,69 @@ namespace TheATeam
 			}
 			// Find current tile and apply collision
 			HandleCollision();
-			
-			
-			// Make camera follow the player
-			Info.CameraCenter = Position;
-			
-
 		}
 		
-		
-		public AttackStatus Attack { get { return attackState; } }
-		
 		public Vector2 Direction;
-		public Vector2 GetPosition { get { return Position; }}
-		private static float MoveDelta = 2f;
+		private static float MoveDelta = 1f;
 		
 		private void HandleInput()
 		{
 			//var gamePadData = GamePad.GetData(0);
-	
-			//MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
-			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
-			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
-			
+
 			if(Input2.GamePad0.Left.Down)
 			{
-			MoveSpeed.X -= 1.0f;	
-				Direction = MoveSpeed;
+				positionDelta.X = -MoveDelta;
 			}
-			
 
 			if(Index == PlayerIndex.PlayerOne)
 			{
-				MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
-				MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y; 
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y;
 			}
 			
 			else if (Index == PlayerIndex.PlayerTwo)
 			{
-				MoveSpeed.X = Input2.GamePad0.AnalogRight.X;
-				MoveSpeed.Y = -Input2.GamePad0.AnalogRight.Y; 
+				positionDelta.X = Input2.GamePad0.AnalogRight.X;
+				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
 			}
-			
-			
-				
-			
-			
-			
+
+
 			if (KeyboardTest == true)
 			{
 
 			if(Input2.GamePad0.Right.Down)
 			{
-			MoveSpeed.X += 1.0f;	
-				Direction = MoveSpeed;
+			positionDelta.X += MoveDelta;	
 			}
 			
 			if(Input2.GamePad0.Up.Down)
 			{
-			MoveSpeed.Y += 1.0f;	
-				Direction = MoveSpeed;
+			positionDelta.Y += MoveDelta;	
 			}
 			
 			if(Input2.GamePad0.Down.Down)
 			{
-			MoveSpeed.Y -= 1.0f;	
-				Direction = MoveSpeed;
+			positionDelta.Y -= MoveDelta;	
 			}
-//			
 			}
-			
+
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
-				Direction = MoveSpeed;
+				
+			// Preserve Movement vector in Direction
+			if(!positionDelta.IsZero())
+			{
+				Direction = positionDelta.Normalize();
+			}
 				break;
 			case "MULTIPLAYER":
-				if(MoveSpeed.X == 0.0f && MoveSpeed.Y == 0.0f)
+				if(positionDelta.IsZero())
 					AppMain.client.SetActionMessage('I');
 				else
 				{
 					AppMain.client.SetActionMessage('M');
-					Direction = MoveSpeed;
+					Direction = positionDelta;
 					AppMain.client.SetMyDirection(Direction.X,Direction.Y);
 				}			
 				break;
@@ -205,17 +192,26 @@ namespace TheATeam
 				}
 				if(Input2.GamePad0.Cross.Release)
 					canShoot = true;
+		}
+		
+		private void HandleDirectionAnimation()
+		{
+			// Declare Ranges
+			Vector2i LeftRange = new Vector2i(6, 7);
+			Vector2i RightRange = new Vector2i(4, 5);
+			Vector2i UpRange = new Vector2i(2, 3);
+			Vector2i DownRange = new Vector2i(0, 1);
+			if(Direction.X > 0)
+			{
 				
-
+			}
 			// Set frame to start of animation range if outside of range
-			if(TileIndex2D.X < TileRangeX.X || TileIndex2D.X > TileRangeX.Y)
-				TileIndex2D.X = TileRangeX.X;
+			if(TileIndex2D.X < animationRangeX.X || TileIndex2D.X > animationRangeX.Y)
+				TileIndex2D.X = animationRangeX.X;
 		}
 		
 		private void HandleCollision()
 		{
-			if(SceneManager.CurrentScene == null)
-				return;
 			// Loop through tiles
 			foreach(Tile t in Tile.Collisions)
 			{
@@ -225,34 +221,31 @@ namespace TheATeam
 				bool fromBottom = Position.Y + 32  > t.Position.Y;
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
-					if(!MoveSpeed.IsZero() && t.IsCollidable)
+					if(!positionDelta.IsZero() && t.IsCollidable && t.Key != Element)
 					{
 						//t.HandleCollision(Position, ref MoveSpeed);
 						
 						Vector2 HorizontalOffset = new Vector2(3, 0);
 						Vector2 VerticalOffset = new Vector2(0, 3);
-						if(fromLeft && MoveSpeed.X > 0)
+						if(fromLeft && positionDelta.X > 0)
 						{
 							Position = Position - HorizontalOffset;
 						}
-						if (fromRight && MoveSpeed.X < 0)
+						if (fromRight && positionDelta.X < 0)
 						{
 							Position = Position + HorizontalOffset;
 						}
 					
-						if (fromTop && MoveSpeed.Y < 0)
+						if (fromTop && positionDelta.Y < 0)
 						{
 							Position = Position + VerticalOffset;
 						}
-						if (fromBottom && MoveSpeed.Y > 0)
+						if (fromBottom && positionDelta.Y > 0)
 						{
 							Position = Position - VerticalOffset;
 						}
-						MoveSpeed = Vector2.Zero;
+						positionDelta = Vector2.Zero;
 					}
-						
-					if(t.Key == 'Z')
-						Info.LevelClear = true;
 				}
 			}
 		}
@@ -274,9 +267,9 @@ namespace TheATeam
 			{
 				if(Position.X > 30)
 				{
-					MoveSpeed = new Vector2(-0.05f * dt,0.0f);
-					Position += MoveSpeed;
-					Direction = MoveSpeed;	
+					positionDelta = new Vector2(-0.05f * dt,0.0f);
+					Position += positionDelta;
+					Direction = positionDelta;
 				}
 				else
 				{
@@ -287,9 +280,9 @@ namespace TheATeam
 			{
 				if(Position.X < 930)
 				{
-					MoveSpeed = new Vector2(0.05f * dt,0.0f);
-					Position += MoveSpeed;
-					Direction = MoveSpeed;	
+					positionDelta = new Vector2(0.05f * dt,0.0f);
+					Position += positionDelta;
+					Direction = positionDelta;
 				}
 				else
 				{
