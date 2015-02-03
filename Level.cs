@@ -57,6 +57,7 @@ namespace TheATeam
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
+				
 				lblTopLeft = new Label();
 				lblTopLeft.FontMap = debugFont;
 				lblTopLeft.Text = "Player 1";
@@ -129,7 +130,7 @@ namespace TheATeam
 			else if (AppMain.TYPEOFGAME.Equals("SINGLE"))
 			{
 					player1.Update(dt);
-					//player2.Update(dt);
+					player2.UpdateAI(dt,player1);
 			}
 			
 			

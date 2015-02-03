@@ -48,7 +48,7 @@ namespace TheATeam
 			float curTime = (float)timer.Milliseconds();
 			
 			float dt = curTime - prevTime ;
-			
+		
 			
 				SystemEvents.CheckEvents();	// We check system events (such as pressing PS button, pressing power button to sleep, major and unknown crash!!)				
 				if(!runningDirector)
@@ -66,7 +66,9 @@ namespace TheATeam
 					Director.Instance.GL.Context.SwapBuffers(); // Swap between back and front buffer
 					Director.Instance.PostSwap(); // Must be called after swap buffers - not 100% sure, imagine it resets back buffer to black/white, unallocates tied resources for next swap
 				}
+				
 				prevTime = curTime;
+				
 			}
 			TextureManager.Dispose();
 			AudioManager.StopMusic();

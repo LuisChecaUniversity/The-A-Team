@@ -25,6 +25,13 @@ namespace TheATeam
 		private PlayerState playerState;
 		
 		private Vector2 oldPos;
+		
+		//AI variables
+		private bool movingLeft = true;
+		private bool shooting = false;
+		private float fireRate = 500.0f;
+		private float curTime = 0.0f;
+		
 		public Player(Vector2 position,bool isPlayer1):
 			base(PLAYER_INDEX, position, new Vector2i(0, 1))
 		{
@@ -53,9 +60,10 @@ namespace TheATeam
 			case "SINGLE":
 				// Handle movement/attacks
 					HandleInput();
-				
+					
 				// Apply the movement
 					Position = Position + MoveSpeed;
+			
 				break;
 				
 			case "MULTIPLAYER":
@@ -96,6 +104,10 @@ namespace TheATeam
 
 		}
 		
+		public void UpdateAI(Player player1)
+		{
+			
+		}
 		public AttackStatus Attack { get { return attackState; } }
 		
 		public Vector2 Direction;
@@ -109,29 +121,29 @@ namespace TheATeam
 			MoveSpeed.X = 0.0f; MoveSpeed.Y = 0.0f;
 			MoveSpeed.X = Input2.GamePad0.AnalogLeft.X;
 			MoveSpeed.Y = -Input2.GamePad0.AnalogLeft.Y;
-//			if(Input2.GamePad0.Left.Down)
-//			{
-//			MoveSpeed.X -= 1.0f;	
-//				Direction = MoveSpeed;
-//			}
-//			
-//			if(Input2.GamePad0.Right.Down)
-//			{
-//			MoveSpeed.X += 1.0f;	
-//				Direction = MoveSpeed;
-//			}
-//			
-//			if(Input2.GamePad0.Up.Down)
-//			{
-//			MoveSpeed.Y -= 1.0f;	
-//				Direction = MoveSpeed;
-//			}
-//			
-//			if(Input2.GamePad0.Down.Down)
-//			{
-//			MoveSpeed.Y += 1.0f;	
-//				Direction = MoveSpeed;
-//			}
+			if(Input2.GamePad0.Left.Down)
+			{
+			MoveSpeed.X -= 1.0f;	
+				Direction = MoveSpeed;
+			}
+			
+			if(Input2.GamePad0.Right.Down)
+			{
+			MoveSpeed.X += 1.0f;	
+				Direction = MoveSpeed;
+			}
+			
+			if(Input2.GamePad0.Up.Down)
+			{
+			MoveSpeed.Y -= 1.0f;	
+				Direction = MoveSpeed;
+			}
+			
+			if(Input2.GamePad0.Down.Down)
+			{
+			MoveSpeed.Y += 1.0f;	
+				Direction = MoveSpeed;
+			}
 //			
 			
 			switch (AppMain.TYPEOFGAME)
@@ -204,6 +216,49 @@ namespace TheATeam
 			ProjectileManager.Instance.Shoot(Position, Direction,1);
 			canShoot = false;
 			
+		}
+		
+		public void UpdateAI(float dt,Player p)
+		{
+			if(movingLeft)
+			{
+				if(Position.X > 30)
+				{
+					MoveSpeed = new Vector2(-0.05f * dt,0.0f);
+					Position += MoveSpeed;
+					Direction = MoveSpeed;	
+				}
+				else
+				{
+				movingLeft = false;	
+				}
+			}
+			else
+			{
+				if(Position.X < 930)
+				{
+					MoveSpeed = new Vector2(0.05f * dt,0.0f);
+					Position += MoveSpeed;
+					Direction = MoveSpeed;	
+				}
+				else
+				{
+				movingLeft = true;	
+				}
+			}
+			
+			float dist = Vector2.Distance(p.Position,Position);	
+			if(dist <300)
+			{
+				curTime += dt;
+				if(curTime > fireRate)
+				{
+					Direction = p.Position - Position;
+					Direction = Direction.Normalize();
+					Shoot();
+					curTime = 0.0f;	
+				}
+			}
 		}
 	}
 }
