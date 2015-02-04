@@ -97,6 +97,8 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 			Camera2D.SetViewFromViewport();
+			
+			
 //			Schedule((dt) => {
 //				Info.TotalGameTime += dt;
 //				// Camera2D.SetViewFromHeightAndCenter(Info.CameraHeight, Info.CameraCenter);
@@ -151,8 +153,10 @@ namespace TheATeam
 			{
 				if(ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2())) 
 					Console.WriteLine("bullet hit tile"); // add tile.damage(); here **can hit more then 1 tile at a time**
-				
 			}
+			
+			ItemManager.Instance.Update(dt);
+			ItemManager.Instance.ItemCollision(player1.Position, player1.Quad.Bounds2());
 
 		}
 	}

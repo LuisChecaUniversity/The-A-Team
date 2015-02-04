@@ -55,9 +55,10 @@ namespace TheATeam
 		
 		public Item (Scene scene, Vector2 pos)
 		{
-			iTex = new TextureInfo("/Application/Assets/item.png");
+			iTex = new TextureInfo("/Application/Assets/FlagTemp.png");
 			iSprite = new SpriteUV(iTex);
 			iSprite.Quad.S = iTex.TextureSizef;	
+			iSprite.CenterSprite();
 			
 			position = pos;
 			collided = false;
@@ -75,8 +76,6 @@ namespace TheATeam
 		{
 			position = new Vector2(position.X, position.Y);
 			iSprite.Position = position;
-			
-			
 		}
 		
 		public bool hasCollided(Vector2 objectPosition, Vector2 objectSize)

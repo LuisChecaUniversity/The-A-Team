@@ -8,6 +8,12 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
 {
+	public enum ItemType
+	{
+		flag,
+		fire,
+		water,
+	}
 	public class ItemManager
 	{
 		private static ItemManager instance = new ItemManager();
@@ -17,9 +23,9 @@ namespace TheATeam
 		
 		private ItemManager ()
 		{
-			scene = Director.Instance.CurrentScene;
-			Vector2 pos1 = new Vector2(50,300);
-			Vector2 pos2 = new Vector2(800,300);
+			scene = GameSceneManager.currentScene;
+			Vector2 pos1 = new Vector2(100,290);
+			Vector2 pos2 = new Vector2(864,290);
 			redItem = new Item(scene, pos1);
 			blueItem = new Item(scene, pos2);
 		}
@@ -60,6 +66,8 @@ namespace TheATeam
 					blueItem.collided = true;
 				if(redItem.hasCollided(pos, size))
 					redItem.collided = true;
+			
+			Grabbed();
 		}
 		
 	}
