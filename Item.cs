@@ -48,16 +48,16 @@ namespace TheATeam
 
 	public class Item
 	{
-		public TextureInfo iTex;
+		//public TextureInfo iTex;
 		public SpriteUV iSprite;
 		public Vector2 position;
 		public bool collided;
 		
-		public Item (Scene scene, Vector2 pos)
+		public Item (Scene scene, Vector2 pos, TextureInfo texture)
 		{
-			iTex = new TextureInfo("/Application/Assets/FlagTemp.png");
-			iSprite = new SpriteUV(iTex);
-			iSprite.Quad.S = iTex.TextureSizef;	
+			//iTex = new TextureInfo("/Application/Assets/FlagTemp.png");
+			iSprite = new SpriteUV(texture);
+			iSprite.Quad.S = texture.TextureSizef;	
 			iSprite.CenterSprite();
 			
 			position = pos;
@@ -88,14 +88,25 @@ namespace TheATeam
 			
 			float objectWidth = objectSize.X;
 			float objectHeight = objectSize.Y;
+//			
+//			if((position.X) < objectPosition.X - objectWidth)
+//				return false;
+//			else if(position.X - iWidth > (objectPosition.X ))
+//				return false;
+//			else if((position.Y) < objectPosition.Y - objectHeight)
+//				return false;
+//			else if(position.Y - iHeight > (objectPosition.Y ))
+//				return false;
+//			else 
+//				return true;
 			
-			if((position.X ) < objectPosition.X - objectWidth)
+			if(position.X - iWidth> objectPosition.X + objectWidth)
 				return false;
-			else if(position.X - iWidth > (objectPosition.X ))
+			else if(position.X + iHeight < objectPosition.X )
 				return false;
-			else if((position.Y) < objectPosition.Y - objectHeight)
+			else if(position.Y - iWidth > objectPosition.Y + objectHeight)
 				return false;
-			else if(position.Y - iHeight > (objectPosition.Y ))
+			else if(position.Y + iHeight < objectPosition.Y )
 				return false;
 			else 
 				return true;

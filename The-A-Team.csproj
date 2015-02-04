@@ -101,5 +101,7 @@
     <Content Include="assets\level4.txt" />
     <Content Include="assets\level5.txt" />
     <Content Include="assets\FlagTemp.png" />
+    <Content Include="assets\FireElement.png" />
+    <Content Include="assets\WaterElement.png" />
   </ItemGroup>
 </Project>
