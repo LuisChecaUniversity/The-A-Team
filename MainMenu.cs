@@ -123,6 +123,25 @@ namespace TheATeam
 //					howToPlay.Camera.SetViewFromViewport();
 //					GameSceneManager.currentScene = howToPlay;
 //					Director.Instance.ReplaceScene(GameSceneManager.currentScene);
+					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+			                                                 new Vector2i(10, 2)));
+//
+					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+			                                                 new Vector2i(9, 14)));
+//			
+//			// Initial Values;
+					Info.TotalGameTime = 0f;
+					Info.LevelNumber = 1;
+//			
+//			// Tell the UISystem to run an empty scene
+//			//UISystem.SetScene(new GameUI(), null);
+//			// Tell the Director to run our scene
+//
+					Level placingTest = new Level();
+					placingTest.Camera.SetViewFromViewport();
+					GameSceneManager.currentScene = placingTest;
+					Director.Instance.ReplaceScene(placingTest);
+					
 					break;
 					
 				case 4:

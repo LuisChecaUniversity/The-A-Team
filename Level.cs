@@ -51,10 +51,10 @@ namespace TheATeam
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
 			//AddChild(new TextureInfo("/Application/assets/Background.png"));
-			Tile.Loader("/Application/assets/level3.txt", ref cameraCenter, this);
+			Tile.Loader("/Application/assets/level4.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
 			
-
+			
 	
 			player1 = new Player(new Vector2(64,300),true);
 			player2 = new Player(new Vector2(960 - 164,300),false);
