@@ -86,7 +86,6 @@
     <Content Include="assets\level1.txt">
       <PSM-Content-Protection>Plain</PSM-Content-Protection>
     </Content>
-    <Content Include="assets\level1.xml" />
     <Content Include="assets\bullet.png" />
     <Content Include="assets\tiles.xml" />
     <Content Include="assets\tiles.png" />
