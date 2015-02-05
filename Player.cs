@@ -2,6 +2,7 @@ using System;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
+using Sce.PlayStation.HighLevel.GameEngine2D;
 
 namespace TheATeam
 {
@@ -27,6 +28,7 @@ namespace TheATeam
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		
+		private float PlayerSize = 64;
 
 		private Vector2 oldPos;
 		
@@ -122,7 +124,7 @@ namespace TheATeam
 
 		
 		public Vector2 Direction;
-		private static float MoveDelta = 1f;
+		private static float MoveDelta = 4f;
 		
 		private void HandleInput()
 		{
@@ -223,21 +225,47 @@ namespace TheATeam
 		
 		private void HandleCollision()
 		{
+			
+			float screenWidth = Director.Instance.GL.Context.Screen.Width;
+			float screenHeight = Director.Instance.GL.Context.Screen.Height;
+			
+			Vector2 HorizontalOffset = new Vector2(3, 0);
+			Vector2 VerticalOffset = new Vector2(0, 3);
+			
+			if (Position.X + PlayerSize > screenWidth)
+			{
+				Position = Position - HorizontalOffset;
+			}
+			
+			if (Position.X < screenWidth + PlayerSize)
+			{
+				Position = Position + HorizontalOffset;
+			}
+			
+			if (Position.Y < screenHeight + PlayerSize)
+			{
+				Position = Position + VerticalOffset;
+			}
+			
+			if (Position.Y + PlayerSize > screenHeight)
+			{
+				Position = Position - VerticalOffset;
+			}
 			// Loop through tiles
+			
 			foreach(Tile t in Tile.Collisions)
 			{
-				bool fromLeft = Position.X + 32  > t.Position.X;
+				bool fromLeft = Position.X + 64  > t.Position.X;
 				bool fromRight = Position.X < t.Position.X + Tile.Width;
 				bool fromTop = Position.Y < t.Position.Y + Tile.Height;
-				bool fromBottom = Position.Y + 32  > t.Position.Y;
+				bool fromBottom = Position.Y + 64  > t.Position.Y;
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
 					if(!positionDelta.IsZero() && t.IsCollidable && t.Key != Element)
 					{
 						//t.HandleCollision(Position, ref MoveSpeed);
 						
-						Vector2 HorizontalOffset = new Vector2(3, 0);
-						Vector2 VerticalOffset = new Vector2(0, 3);
+						
 						if(fromLeft && positionDelta.X > 0)
 						{
 							Position = Position - HorizontalOffset;
