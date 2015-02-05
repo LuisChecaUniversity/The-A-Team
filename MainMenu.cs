@@ -81,29 +81,21 @@ namespace TheATeam
 				{
 				case 1:
 					
-// Load and store textures
-//
+					// Load and store textures
 					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(10, 2)));
-//
+			                                                 new Vector2i(10, 3)));
 					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
 			                                                 new Vector2i(9, 14)));
-//			
-//			// Initial Values;
+					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
+					
 					Info.TotalGameTime = 0f;
 					Info.LevelNumber = 1;
-//			
-//			// Tell the UISystem to run an empty scene
-//			//UISystem.SetScene(new GameUI(), null);
-//			// Tell the Director to run our scene
-//
+
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = level;
-			Director.Instance.ReplaceScene(level);
-			//Director.Instance.ReplaceScene(new Level());
+					Director.Instance.ReplaceScene(level);
 					break;
-					
 				case 2:
 				
 					TwoPlayer networkingTest = new TwoPlayer();

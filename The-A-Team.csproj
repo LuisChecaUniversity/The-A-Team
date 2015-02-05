@@ -60,6 +60,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="ItemManager.cs" />
     <Compile Include="TwoPlayer.cs" />
+    <Compile Include="Background.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -103,5 +104,6 @@
     <Content Include="assets\FlagTemp.png" />
     <Content Include="assets\FireElement.png" />
     <Content Include="assets\WaterElement.png" />
+    <Content Include="assets\Background.png" />
   </ItemGroup>
 </Project>
