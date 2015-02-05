@@ -1,6 +1,7 @@
 using System;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Input;
+using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
@@ -22,9 +23,10 @@ namespace TheATeam
 	{
 		private static int Y_INDEX = 2;
 		private static float MoveDelta = 4f;
-		private Vector2 Direction;
+		private static float PlayerSize = Tile.Width; // 64x64 px
 		private bool canShoot = true;
 		private bool keyboardTest = true;
+		private Vector2 Direction;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		
@@ -137,17 +139,17 @@ namespace TheATeam
 	
 				if (Input2.GamePad0.Right.Down)
 				{
-					positionDelta.X += MoveDelta;	
+					positionDelta.X = MoveDelta;	
 				}
 				
 				if (Input2.GamePad0.Up.Down)
 				{
-					positionDelta.Y += MoveDelta;	
+					positionDelta.Y = MoveDelta;	
 				}
 				
 				if (Input2.GamePad0.Down.Down)
 				{
-					positionDelta.Y -= MoveDelta;	
+					positionDelta.Y = -MoveDelta;	
 				}
 			}
 
@@ -207,21 +209,43 @@ namespace TheATeam
 		
 		private void HandleCollision()
 		{
+			float screenWidth = Director.Instance.GL.Context.Screen.Width;
+			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
+			
+			Vector2 HorizontalOffset = new Vector2(MoveDelta * 1.2f, 0);
+			Vector2 VerticalOffset = new Vector2(0, MoveDelta * 1.2f);
+			
+			if (Position.X + PlayerSize > screenWidth)
+			{
+				Position = Position - HorizontalOffset;
+			}
+			
+			if (Position.X < 0)
+			{
+				Position = Position + HorizontalOffset;
+			}
+			
+			if (Position.Y < 0)
+			{
+				Position = Position + VerticalOffset;
+			}
+			
+			if (Position.Y + PlayerSize > screenHeight)
+			{
+				Position = Position - VerticalOffset;
+			}
+			
 			// Loop through tiles
 			foreach (Tile t in Tile.Collisions)
 			{
-				bool fromLeft = Position.X + 32 > t.Position.X;
+				bool fromLeft = Position.X + PlayerSize > t.Position.X;
 				bool fromRight = Position.X < t.Position.X + Tile.Width;
 				bool fromTop = Position.Y < t.Position.Y + Tile.Height;
-				bool fromBottom = Position.Y + 32 > t.Position.Y;
+				bool fromBottom = Position.Y + PlayerSize > t.Position.Y;
 				if (fromLeft && fromRight && fromTop && fromBottom)
 				{
 					if (!positionDelta.IsZero() && t.IsCollidable && t.Key != Element)
 					{
-						//t.HandleCollision(Position, ref MoveSpeed);
-						
-						Vector2 HorizontalOffset = new Vector2(3, 0);
-						Vector2 VerticalOffset = new Vector2(0, 3);
 						if (fromLeft && positionDelta.X > 0)
 						{
 							Position = Position - HorizontalOffset;
