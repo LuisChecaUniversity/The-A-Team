@@ -20,9 +20,8 @@ namespace TheATeam
 	{
 		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		private char _key;
-		public static char[] elementKeys = {'N', 'W', 'F'};
+		public static char[] Elements = {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
-		
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
 
 		public static int Height { get { return 64; } }
@@ -107,8 +106,6 @@ namespace TheATeam
 			var lines = System.IO.File.ReadAllLines(filepath);
 			// Make SpriteLists to improve efficiency
 			var tiles = new SpriteList(TextureManager.Get("tiles"));
-			//var entities = new SpriteList(TextureManager.Get("entities"));
-			// Iterate end to start, line by line
 			for(int i = lines.Length - 1; i >= 0; i--)
 			{
 				// New row: reset x position
@@ -120,7 +117,7 @@ namespace TheATeam
 
 				foreach(char c in line)
 				{
-					if(elementKeys.Contains(c))
+					if(Elements.Contains(c))
 					{
 						// Make wall at pos
 						t = new HealthWall(c, pos);
@@ -139,9 +136,13 @@ namespace TheATeam
 					if(t.IsCollidable)
 						Collisions.Add(t);
 
-					// Player start, pass position
-					if(c == 'S')
+					// Player 1 start position
+					if(c == '1')
 						playerPos = pos;
+					
+					/* Player 2 start
+					if(c == '2')
+						player2Pos = pos;*/
 
 					// End col: Move to next tile "grid"
 					pos.X += Width;
@@ -149,67 +150,6 @@ namespace TheATeam
 				Grid.Add(gridLine);
 				// End row: Move y position to next tile row
 				pos.Y += Height;
-			}
-
-			// Add Tiles to Scene
-			scene.AddChild(tiles);
-			// Add Entites to Scene
-			//scene.AddChild(entities);
-			// Player has position, add player last to scene
-//			if(!playerPos.IsZero())
-//				scene.AddChild(new Player(playerPos));
-			// Resume Timers
-			SceneManager.ResumeScene();
-		}
-
-		public static void XMLoader(string filepath, ref Vector2 playerPos, Scene scene)
-		{
-			// Pause timer
-			SceneManager.PauseScene();
-			// Clear collision list
-			Collisions.Clear();
-
-			// Read whole level xml to doc
-			var doc = XDocument.Load(filepath);
-			var lines = from tt in doc.Root.Elements("tile")
-				select new {
-				X = (float)tt.Attribute("x"),
-				Y = (float)tt.Attribute("y"),
-				Key = char.Parse(tt.Attribute("key").Value.ToUpper())
-			};
-
-			Vector2 pos = Vector2.Zero;
-			Tile t = null;
-			// Make SpriteLists to improve efficiency
-			var tiles = new SpriteList(TextureManager.Get("tiles"));
-			// Make empty list for each row
-			List<Tile> gridLine = new List<Tile>();
-
-			// Iterate end to start, line by line
-			foreach(var line in lines)
-			{
-				pos = new Vector2(line.X, line.Y);
-				t = new Tile(line.Key, pos);
-				// Add to SpriteList for drawing
-				tiles.AddChild(t);
-
-				// Add to Grid row
-				//gridLine.Add(t);
-
-				// If has collision add to collisions checklist
-				if(t.IsCollidable)
-					Collisions.Add(t);
-
-				// Player start, pass position
-				if(line.Key == 'S')
-					playerPos = pos;
-
-				/* Add row to Grid
-				if(gridLine.Count == 30)
-				{
-					Grid.Add(gridLine);
-					gridLine.Clear();
-				}*/
 			}
 
 			// Add Tiles to Scene
