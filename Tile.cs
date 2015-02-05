@@ -20,7 +20,10 @@ namespace TheATeam
 	{
 		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		private char _key;
+		public static char[] elementKeys = {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
+		
+		public static List<List<Tile>> Grid = new List<List<Tile>>();
 
 		public static int Height { get { return 64; } }
 
@@ -105,8 +108,6 @@ namespace TheATeam
 			// Make SpriteLists to improve efficiency
 			var tiles = new SpriteList(TextureManager.Get("tiles"));
 			//var entities = new SpriteList(TextureManager.Get("entities"));
-			// Keys to make a wall
-			char[] wallKeys = {'N', 'W', 'F'};
 			// Iterate end to start, line by line
 			for(int i = lines.Length - 1; i >= 0; i--)
 			{
@@ -115,11 +116,11 @@ namespace TheATeam
 				// Read next line in caps, just in case
 				var line = lines[i].ToUpper();
 				// Make empty list for new row
-				//var gridLine = new List<Tile>();
+				var gridLine = new List<Tile>();
 
 				foreach(char c in line)
 				{
-					if(wallKeys.Contains(c))
+					if(elementKeys.Contains(c))
 					{
 						// Make wall at pos
 						t = new HealthWall(c, pos);
@@ -132,7 +133,7 @@ namespace TheATeam
 					// Add to SpriteList for drawing					
 					tiles.AddChild(t);
 					// Add to Tile Grid
-					//gridLine.Add(t);
+					gridLine.Add(t);
 
 					// If has collision add to collisions checklist
 					if(t.IsCollidable)
@@ -145,7 +146,7 @@ namespace TheATeam
 					// End col: Move to next tile "grid"
 					pos.X += Width;
 				}
-				//Grid.Add(gridLine);
+				Grid.Add(gridLine);
 				// End row: Move y position to next tile row
 				pos.Y += Height;
 			}
