@@ -19,24 +19,23 @@ namespace TheATeam
 
 	public class Player: EntityAlive
 	{
-		private static int Y_INDEX = 1;
+		private static int Y_INDEX = 2;
+		private static float MoveDelta = 1f;
+		public Vector2 Direction;
 		private bool canShoot = true;
-		private PlayerIndex Index;
 		private bool KeyboardTest = true;
 		
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
-		
-
-		private Vector2 oldPos;
 		
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
 		private float fireRate = 800.0f;
 		private float curTime = 0.0f;
-
-		public char Element { get; set; }
+		
+		private char _element;
+		public char Element { get { return _element; } set { _element = value; }} //TileIndex2D.Y = Y_INDEX + ''; } }
 
 		public AttackStatus Attack { get { return attackState; } }
 		
@@ -116,14 +115,6 @@ namespace TheATeam
 
 		}
 		
-		
-
-		
-
-		
-		public Vector2 Direction;
-		private static float MoveDelta = 1f;
-		
 		private void HandleInput()
 		{
 			//var gamePadData = GamePad.GetData(0);
@@ -133,13 +124,13 @@ namespace TheATeam
 				positionDelta.X = -MoveDelta;
 			}
 
-			if(Index == PlayerIndex.PlayerOne)
+			if(whichPlayer == PlayerIndex.PlayerOne)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y;
 			}
 			
-			else if (Index == PlayerIndex.PlayerTwo)
+			else if (whichPlayer == PlayerIndex.PlayerTwo)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
