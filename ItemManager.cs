@@ -11,6 +11,7 @@ namespace TheATeam
 	public enum ItemType
 	{
 		flag,
+		element,
 		fire,
 		water,
 	}
@@ -40,22 +41,30 @@ namespace TheATeam
 			if(items.Count == 0)
 			{
 				Vector2 pos1 = new Vector2(100,290);
-				Vector2 pos2 = new Vector2(864,290);
-				leftFlag = new Item(scene, pos1, flagTex);
-				rightFlag = new Item(scene, pos2, flagTex);
-				
-				pos1 = new Vector2(480,190);
-				pos2 = new Vector2(480,390);
-				fireElement = new Item(scene, pos1, fireTex);
-				waterElement = new Item(scene, pos2, waterTex);
-				
+				leftFlag = new Item(scene, pos1, flagTex, ItemType.flag, "Player1Flag");
 				items.Add(leftFlag);
-				items.Add(rightFlag);
-				items.Add(fireElement);
-				items.Add(waterElement);
+			}
+	
+		}
+		public void initFlags()
+		{
+			Vector2 pos2 = new Vector2(864,290);
+			rightFlag = new Item(scene, pos2, flagTex, ItemType.flag, "Player2Flag");
+			items.Add(rightFlag);
+		}
+		public void initElements()
+		{
+			if(null == GetItem(ItemType.element, "Fire")) 
+			{
+			Vector2 pos1 = new Vector2(480,190);
+			Vector2 pos2 = new Vector2(480,390);
+			fireElement = new Item(scene, pos1, fireTex, ItemType.element, "Fire");
+			waterElement = new Item(scene, pos2, waterTex, ItemType.element, "Water");
+				
+			items.Add(fireElement);
+			items.Add(waterElement);
 			}
 		}
-		
 		public static ItemManager Instance
 		{
 			get{return instance;}
@@ -108,6 +117,16 @@ namespace TheATeam
 //					redItem.collided = true;
 			
 			Grabbed();
+		}
+		public Item GetItem(ItemType type, string name)
+		{
+			Item toReturn = null;
+			foreach(Item item in items)
+			{
+				if(item.GetType() == type && item.GetName().CompareTo(name) == 0)
+					toReturn = item;
+			}
+			return toReturn;
 		}
 		
 	}

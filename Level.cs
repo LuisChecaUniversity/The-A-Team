@@ -200,7 +200,7 @@ namespace TheATeam
 						if(ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2()))
 							Console.WriteLine("bullet hit tile"); // add tile.damage(); here **can hit more then 1 tile at a time**
 					}
-		
+					
 					ItemManager.Instance.Update(dt);
 					ItemManager.Instance.ItemCollision(player1.Position, player1.Quad.Bounds2());
 				}
@@ -235,8 +235,12 @@ namespace TheATeam
 									{
 										if(player1Depolyed < maxDeployed)
 										{
-											t.Key = 'N';	
-											player1Depolyed++;
+											// returns player 1 flag and checks if touch pos collides with it
+											if(!ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").hasCollided(touchVec,new Vector2(5, 5)))
+											{
+												t.Key = 'N';	
+												player1Depolyed++;
+											}
 										}
 									}
 									else if(t.Key == 'N')
@@ -248,6 +252,8 @@ namespace TheATeam
 							}
 						}
 						
+						ItemManager.Instance.Update(dt);
+						
 					}
 					
 					if(Input2.GamePad0.Start.Down)
@@ -255,7 +261,9 @@ namespace TheATeam
 						this.RemoveChild(blockedAreaSprite,true);
 						this.RemoveChild(lblTopLeft,true);
 						this.RemoveChild(lblTopRight,true);
-						levelStage = LevelStage.CombatStage;	
+						levelStage = LevelStage.CombatStage;
+						ItemManager.Instance.initElements();
+						ItemManager.Instance.initFlags();
 					}
 					
 				}

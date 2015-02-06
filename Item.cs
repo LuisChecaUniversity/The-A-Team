@@ -49,11 +49,13 @@ namespace TheATeam
 	public class Item
 	{
 		//public TextureInfo iTex;
+		private ItemType type;
+		private string name;
 		public SpriteUV iSprite;
 		public Vector2 position;
 		public bool collided;
 		
-		public Item (Scene scene, Vector2 pos, TextureInfo texture)
+		public Item (Scene scene, Vector2 pos, TextureInfo texture, ItemType type, string name)
 		{
 			//iTex = new TextureInfo("/Application/Assets/FlagTemp.png");
 			iSprite = new SpriteUV(texture);
@@ -61,6 +63,8 @@ namespace TheATeam
 			iSprite.CenterSprite();
 			
 			position = pos;
+			this.type = type;
+			this.name = name;
 			collided = false;
 			iSprite.Visible = true;
 			scene.AddChild(iSprite);
@@ -112,24 +116,13 @@ namespace TheATeam
 				return true;
 			
 		}
-	//	public bool offScreen()
-	//	{
-	//		float width = Director.Instance.GL.Context.GetViewport().Width;
-	//		float height = Director.Instance.GL.Context.GetViewport().Height;
-	//		if(position.X > width)
-	//			return true;
-	//		else if(position.X < 0.0f)
-	//			return true;
-	//		else if(position.Y < 0.0f)
-	//			return true;
-	//		else if(position.Y  > height)
-	//			return true;
-	//		else 
-	//			return false;
-	//	}
+		
+		public ItemType GetType(){return type;}
+		public string GetName(){return name;}
+	
 	}
 	
-	
+
 	
 	
 	
