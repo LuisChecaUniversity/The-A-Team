@@ -16,23 +16,35 @@ namespace TheATeam
 	{
 		private SpriteUV 	sprite;
 		private TextureInfo	textureInfo;
+		private SpriteUV 	whiteBGsprite;
+		private TextureInfo	whiteBGTextureInfo;
 		private bool fadeUp, fadeDown,finishedFade;
 		
 		public SplashScreen ()
 		{
 			sprite = new SpriteUV();
 				
-			textureInfo  		= new TextureInfo("/Application/assets/SplashScreen.png");
+			textureInfo  		= new TextureInfo("/Application/assets/TheATeam.png");
 			sprite 			= new SpriteUV(textureInfo);
 			sprite.Quad.S 	= textureInfo.TextureSizef;
 			sprite.Position = new Vector2(0.0f, 0.0f);
 			sprite.Color = new Vector4(1f,1f,1f,0f);
 			
+			whiteBGsprite = new SpriteUV();
+				
+			whiteBGTextureInfo  		= new TextureInfo("/Application/assets/WhiteBG.png");
+			whiteBGsprite 			= new SpriteUV(whiteBGTextureInfo);
+			whiteBGsprite.Quad.S 	= whiteBGTextureInfo.TextureSizef;
+			whiteBGsprite.Position = new Vector2(0.0f, 0.0f);
+			whiteBGsprite.Color = new Vector4(1f,1f,1f,1f);
+			
 			fadeUp = true;
 			fadeDown = false;
 			finishedFade = false;
 			
+			this.AddChild(whiteBGsprite);
 			this.AddChild(sprite);
+			
 			
 			
 		}
@@ -59,7 +71,7 @@ namespace TheATeam
 				
 				if(sprite.Color.A < 1.0f)
 				{
-					sprite.Color += new Vector4(0f,0f,0f,deltaTime * 0.001f);
+					sprite.Color += new Vector4(0f,0f,0f,deltaTime * 0.0007f);
 						
 				}
 				else
@@ -72,7 +84,7 @@ namespace TheATeam
 			{
 				if(sprite.Color.A > 0.0f)
 				{
-					sprite.Color += new Vector4(0f,0f,0f,-deltaTime * 0.001f);
+					sprite.Color += new Vector4(0f,0f,0f,-deltaTime * 0.0007f);
 				}
 				else
 				{

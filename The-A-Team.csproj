@@ -104,5 +104,9 @@
     <Content Include="assets\FireElement.png" />
     <Content Include="assets\WaterElement.png" />
     <Content Include="assets\Background.png" />
+    <Content Include="assets\ATeam.png" />
+    <Content Include="assets\TheATeam.png" />
+    <Content Include="assets\WhiteBG.png" />
+    <Content Include="assets\BlockedArea.png" />
   </ItemGroup>
 </Project>
