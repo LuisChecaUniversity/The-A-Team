@@ -82,8 +82,8 @@ namespace TheATeam
 				case 1:
 					
 					// Load and store textures
-					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(10, 3)));
+					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
+			                                                 new Vector2i(4, 8)));
 					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
 			                                                 new Vector2i(9, 14)));
 					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));

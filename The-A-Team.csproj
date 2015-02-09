@@ -108,5 +108,6 @@
     <Content Include="assets\TheATeam.png" />
     <Content Include="assets\WhiteBG.png" />
     <Content Include="assets\BlockedArea.png" />
+    <Content Include="assets\SpriteSheetMaster-Recovered.png" />
   </ItemGroup>
 </Project>
