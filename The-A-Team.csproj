@@ -87,7 +87,6 @@
     <Content Include="assets\level1.txt">
       <PSM-Content-Protection>Plain</PSM-Content-Protection>
     </Content>
-    <Content Include="assets\level1.xml" />
     <Content Include="assets\bullet.png" />
     <Content Include="assets\tiles.xml" />
     <Content Include="assets\tiles.png" />
@@ -110,5 +109,6 @@
     <Content Include="assets\TheATeam.png" />
     <Content Include="assets\WhiteBG.png" />
     <Content Include="assets\BlockedArea.png" />
+    <Content Include="assets\SpriteSheetMaster-Recovered.png" />
   </ItemGroup>
 </Project>
