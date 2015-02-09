@@ -32,11 +32,11 @@ namespace TheATeam
 		{
 			scene = GameSceneManager.currentScene;
 			if(flagTex == null)
-				flagTex =  new TextureInfo("/Application/Assets/FlagTemp.png");
+				flagTex =  new TextureInfo("/Application/assets/FlagTemp.png");
 			if(fireTex == null)
-				fireTex = new TextureInfo("/Application/Assets/FireElement.png");
+				fireTex = new TextureInfo("/Application/assets/FireElement.png");
 			if(waterTex == null)
-				waterTex = new TextureInfo("/Application/Assets/WaterElement.png");
+				waterTex = new TextureInfo("/Application/assets/WaterElement.png");
 			
 			items = new List<Item>();
 			if(items.Count == 0)
