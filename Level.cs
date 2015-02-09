@@ -34,7 +34,7 @@ namespace TheATeam
 		private TextureInfo blockedAreaTexInfo;
 		// players tiles
 		List<Tile> player1Tiles = new List<Tile>();
-		List<List<Tile>> player2Tiles = new List<List<Tile>>();
+		List<Tile> player2Tiles = new List<Tile>();
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
 		
@@ -58,9 +58,27 @@ namespace TheATeam
 			
 			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
-
-			player1 = new Player(cameraCenter, true);
-			player2 = new Player(new Vector2(960 - 164, 300), false);
+			
+			for (int i = 0; i < 8; i++) 
+				{
+					for (int j = 0; j < 5; j++) 
+					{
+						player1Tiles.Add(Tile.Grid[i][j]);
+					
+					}
+				}
+			
+			for (int i = 0; i < 8; i++) 
+				{
+					for (int j = 10; j < 15; j++) 
+					{
+						player2Tiles.Add(Tile.Grid[i][j]);
+					
+					}
+				}
+			
+			player1 = new Player(cameraCenter, true,player1Tiles);
+			player2 = new Player(new Vector2(960 - 164, 300), false,player2Tiles);
 			
 			blockedAreaTexInfo = new TextureInfo("/Application/assets/BlockedArea.png");
 			
@@ -116,14 +134,14 @@ namespace TheATeam
 				lblTopRight.Text = "Press Start to Continue";
 				lblTopRight.Position = new Vector2(screenWidth/2 + 100, screenHeight/2- 150);
 				
-				for (int i = 0; i < 8; i++) 
-				{
-					for (int j = 0; j < 5; j++) 
-					{
-						player1Tiles.Add(Tile.Grid[i][j]);
-					
-					}
-				}
+//				for (int i = 0; i < 8; i++) 
+//				{
+//					for (int j = 0; j < 5; j++) 
+//					{
+//						player1Tiles.Add(Tile.Grid[i][j]);
+//					
+//					}
+//				}
 				
 			}
 			
@@ -180,8 +198,8 @@ namespace TheATeam
 			{
 				if(levelStage == LevelStage.CombatStage)
 				{
-					if(Input2.GamePad0.Triangle.Down)
-						ChangeTiles("Fire");
+//					if(Input2.GamePad0.Triangle.Down)
+//						ChangeTiles("Fire");
 					
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
@@ -202,7 +220,9 @@ namespace TheATeam
 					}
 					
 					ItemManager.Instance.Update(dt);
-					ItemManager.Instance.ItemCollision(player1.Position, player1.Quad.Bounds2());
+					ItemManager.Instance.ItemCollision(player1, player2);
+					
+						
 				}
 				else if(levelStage == LevelStage.BuildDefence)
 				{
@@ -275,26 +295,7 @@ namespace TheATeam
 
 		}
 		
-		public void ChangeTiles(string type)
-		{
-			if(type.Equals("Fire"))
-			{
-				foreach (Tile t in player1Tiles)
-				{
-					if(t.Key == 'N')
-						t.Key = 'F';
-				}
-			}
-			else if (type.Equals("Water"))
-			{
-				
-				foreach (Tile t in player1Tiles)
-				{
-					if(t.Key == 'N')
-						t.Key = 'W';
-				}
-			}
-		}
+		
 	}
 }
 

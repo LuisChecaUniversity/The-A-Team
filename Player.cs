@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D;
@@ -36,12 +37,17 @@ namespace TheATeam
 		private float fireRate = 800.0f;
 		private float curTime = 0.0f;
 		private char _element;
-
+		//
+		
+		//Player Tiles
+		private List<Tile> playerTiles = new List<Tile>();
+		//
+		
 		public char Element { get { return _element; } set { _element = value; } } //TileIndex2D.Y = Y_INDEX + ''; } }
 
 		public AttackStatus Attack { get { return attackState; } }
 		
-		public Player(Vector2 position, bool isPlayer1):
+		public Player(Vector2 position, bool isPlayer1,List<Tile> tiles):
 			base(Y_INDEX, position, new Vector2i(0, 1))
 		{
 			Element = 'N';
@@ -54,6 +60,7 @@ namespace TheATeam
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f, 0.0f);
+			playerTiles = tiles;
 		}
 		
 		override public void Update(float dt)
@@ -319,6 +326,27 @@ namespace TheATeam
 					Direction = Direction.Normalize();
 					Shoot();
 					curTime = 0.0f;	
+				}
+			}
+		}
+		
+		public void ChangeTiles(string type)
+		{
+			if(type.Equals("Fire"))
+			{
+				foreach (Tile t in playerTiles)
+				{
+					if(t.Key == 'N')
+						t.Key = 'F';
+				}
+			}
+			else if (type.Equals("Water"))
+			{
+				
+				foreach (Tile t in playerTiles)
+				{
+					if(t.Key == 'N')
+						t.Key = 'W';
 				}
 			}
 		}
