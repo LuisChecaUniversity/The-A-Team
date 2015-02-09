@@ -84,8 +84,6 @@ namespace TheATeam
 					// Load and store textures
 					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
 			                                                 new Vector2i(4, 8)));
-					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
 					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
 					
 					Info.TotalGameTime = 0f;
@@ -115,13 +113,10 @@ namespace TheATeam
 //					howToPlay.Camera.SetViewFromViewport();
 //					GameSceneManager.currentScene = howToPlay;
 //					Director.Instance.ReplaceScene(GameSceneManager.currentScene);
-					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-			                                                 new Vector2i(10, 2)));
-//
-					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
-//			
-//			// Initial Values;
+					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
+			                                                 new Vector2i(4, 8)));
+					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
+
 					Info.TotalGameTime = 0f;
 					Info.LevelNumber = 1;
 //			
