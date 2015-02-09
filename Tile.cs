@@ -20,7 +20,7 @@ namespace TheATeam
 	{
 		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		private char _key;
-		public static char[] Elements = {'N', 'W', 'F'};
+		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
 
@@ -55,6 +55,10 @@ namespace TheATeam
 				TileIndex2D = tt.TileIndex2D;
 				IsCollidable = tt.IsCollidable;
 			}
+		}
+		
+		public virtual void TakeDamage(char element='N', int damage=1)
+		{
 		}
 
 		public bool Overlaps(SpriteBase sprite)

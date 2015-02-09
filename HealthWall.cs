@@ -17,6 +17,11 @@ namespace TheATeam
 		{
 			if(IsAlive)
 			{
+				if(Stats.Health > Stats.MaxHealth && Stats.Lives < Stats.MaxLives)
+				{
+					Stats.Lives++;
+					Stats.Health = Stats.MaxHealth;
+				}
 				TileIndex2D.X = TileIndex2D.X + Stats.MaxLives - Stats.Lives;
 			}
 			else
@@ -25,6 +30,15 @@ namespace TheATeam
 				UnscheduleUpdate();
 			}
 			base.Update(dt);
+		}
+
+		public override void TakeDamage(char element='N', int damage=1)
+		{
+			if(IsAlive)
+			{
+				Stats.Health += damage * (element == Key ? 1 : -1);
+			}
+			base.TakeDamage(element, damage);
 		}
 	}
 }
