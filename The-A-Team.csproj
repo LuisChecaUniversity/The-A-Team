@@ -61,6 +61,7 @@
     <Compile Include="ItemManager.cs" />
     <Compile Include="TwoPlayer.cs" />
     <Compile Include="Background.cs" />
+    <Compile Include="MultiplayerLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

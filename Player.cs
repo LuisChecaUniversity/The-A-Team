@@ -113,11 +113,8 @@ namespace TheATeam
 			// Find current tile and apply collision
 			HandleCollision();
 	
-			
 			// Make camera follow the player
 			Info.CameraCenter = Position;
-			
-
 		}
 		
 		private void HandleInput()
@@ -134,8 +131,7 @@ namespace TheATeam
 				positionDelta.X = Input2.GamePad0.AnalogRight.X;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
 			}
-
-
+			
 			if (keyboardTest == true)
 			{
 
@@ -159,11 +155,9 @@ namespace TheATeam
 					positionDelta.Y = -MoveDelta;	
 				}
 			}
-
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
-				
 			// Preserve Movement vector in Direction
 				if (!positionDelta.IsZero())
 				{
@@ -182,9 +176,7 @@ namespace TheATeam
 				break;
 			default:
 				break;
-
 			}
-			
 			if (Input2.GamePad0.Cross.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Left.Down ||
 			   Input2.GamePad0.Cross.Down && Input2.GamePad0.Right.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Up.Down
 			   || Input2.GamePad0.Cross.Down && Input2.GamePad0.Down.Down)
@@ -197,7 +189,6 @@ namespace TheATeam
 			if (Input2.GamePad0.Cross.Release)
 				canShoot = true;
 		}
-		
 		private void HandleDirectionAnimation()
 		{
 			// Declare Ranges
