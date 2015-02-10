@@ -252,11 +252,12 @@ namespace TheATeam
         /**
          * transceiver buffer
          */
-		private char actionMsg;
+		private char actionMsg = 'D';
 		public void SetActionMessage(char c)
 		{
 			actionMsg = c;	
 		}
+		
         private byte[] sendBuffer = new byte[18];
 		private byte[] recvBuffer = new byte[18];
 
@@ -283,6 +284,8 @@ namespace TheATeam
 			get { return networkPosition; }
 		}
 		
+		
+		
 		private bool hasShot = false;
 		public bool HasShot { get { return hasShot;}}
 		public void SetHasShot(bool t)
@@ -306,6 +309,9 @@ namespace TheATeam
 		{
 			get { return networkDirection;}	
 		}
+		private char networkActionMsg = 'D';
+		
+		public char NetworkActionMsg { get { return networkActionMsg; }}
 		
 		/**
 		 * Are we connected
@@ -684,7 +690,7 @@ namespace TheATeam
 							else{
 								
 								char action = BitConverter.ToChar(recvBuffer,0);
-								
+								networkActionMsg = action;
 								if(action.Equals('S'))
 									hasShot = true;
 							
@@ -693,6 +699,7 @@ namespace TheATeam
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
+								
 								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
 								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 //								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);

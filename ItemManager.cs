@@ -20,6 +20,7 @@ namespace TheATeam
 		private static ItemManager instance = new ItemManager();
 
 		private List<Item> items;
+		//public List<Item> Items { get { return items;}}
 		private Item leftFlag, rightFlag, fireElement, waterElement;
 		private Scene scene;
 		
@@ -100,15 +101,39 @@ namespace TheATeam
 			
 		}
 		
-		public void ItemCollision(Vector2 pos, Bounds2 bounds)
+		public void ItemCollision(Player p1,Player p2)
 		{
-			Vector2 size = new Vector2(bounds.Point11.X, bounds.Point11.Y);
+			Vector2 p1Size = new Vector2(p1.Quad.Bounds2().Point11.X, p1.Quad.Bounds2().Point11.Y);
+			Vector2 p2Size = new Vector2(p2.Quad.Bounds2().Point11.X, p2.Quad.Bounds2().Point11.Y);
 			// Will need to check this against every tile + player positions
 			
 			foreach(Item item in items)
 			{
-				if(item.hasCollided(pos, size))
-					item.collided = true;
+				if(!item.collided)
+				{
+					//check player 1 with items first
+					if(item.hasCollided(p1.Position, p1Size))
+					{
+						Console.WriteLine("Collided with " + item.GetName());
+						switch (item.GetName()) 
+						{
+						case "Water":
+							p1.ChangeTiles("Water");
+							break;
+						case "Fire":
+							p1.ChangeTiles("Fire");
+							break;
+						case "Player1Flag":
+							break;
+						case "Player2Flag":
+							break;
+						default:
+							break;
+						}
+						item.iSprite.Visible = false;
+						item.collided = true;
+					}
+				}
 			}
 			
 //				if(blueItem.hasCollided(pos, size))
@@ -116,7 +141,7 @@ namespace TheATeam
 //				if(redItem.hasCollided(pos, size))
 //					redItem.collided = true;
 			
-			Grabbed();
+			//Grabbed();
 		}
 		public Item GetItem(ItemType type, string name)
 		{
