@@ -207,11 +207,14 @@ namespace TheATeam
 		
 					foreach(Tile t in Tile.Collisions)
 					{
-						if(ProjectileManager.Instance.ProjectileCollision(t.Position, t.Quad.Bounds2()))
+						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
+						if(collisionType != 'X')
 						{
-							Console.WriteLine("bullet hit tile"); // add tile.damage(); here **can hit more then 1 tile at a time**
-							t.TakeDamage();
+							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
+							t.TakeDamage(collisionType);
+	
 						}
+						
 					}
 					
 					ItemManager.Instance.Update(dt);

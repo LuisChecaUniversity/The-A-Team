@@ -88,6 +88,32 @@ namespace TheATeam
 			}
 			return collision;
 		}
+		public char ProjectileTileCollision(Vector2 pos, Bounds2 bounds)
+		{
+			char type = 'X';
+			Vector2 size = new Vector2(bounds.Point11.X, bounds.Point11.Y);
+			// Will need to check this against every tile + player positions
+			foreach(Projectile projectile in projectiles)
+			{
+				if(projectile.hasCollided(pos, size) || projectile.offScreen())
+				{
+					projectile.collided = true;
+					switch(projectile.getType())
+					{
+					case Type.Neutral:
+						type = 'N';
+					break;
+					case Type.Fire:
+						type = 'F';
+					break;
+					case Type.Water:
+						type = 'W';
+					break;
+					}
+				}
+			}
+			return type;
+		}
 	}
 }
 
