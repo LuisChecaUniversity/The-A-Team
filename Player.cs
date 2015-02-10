@@ -22,12 +22,13 @@ namespace TheATeam
 	{
 		private static int Y_INDEX = 4;
 		private static float MoveDelta = 4f;
-		private static float PlayerSize = Tile.Width; // 64x64 px
+		private static float PlayerSize = 64; // 64x64 px
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		private Vector2 Direction;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
+		
 		
 		//AI variables
 		private bool movingLeft = true;
@@ -55,8 +56,12 @@ namespace TheATeam
 			base(Y_INDEX, position, new Vector2i(0, 3))
 
 		{
+
+			Element = 'F';
+
 			CenterSprite();
-			Element = 'N';
+			
+
 			IsDefending = false;
 
 			if(isPlayer1)
@@ -221,59 +226,66 @@ namespace TheATeam
 		
 		private void HandleCollision()
 		{
+			Vector2 nextPos = Position + positionDelta;
 			float screenWidth = Director.Instance.GL.Context.Screen.Width;
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
 			
-			Vector2 HorizontalOffset = new Vector2(MoveDelta * 1.2f, 0);
-			Vector2 VerticalOffset = new Vector2(0, MoveDelta * 1.2f);
 			
-			if(Position.X + PlayerSize > screenWidth)
+			if (nextPos.X + PlayerSize > screenWidth + 50 )
 			{
-				Position = Position - HorizontalOffset;
+				 Position = new Vector2 (screenWidth + 50  - PlayerSize, Position.Y);
 			}
 			
-			if(Position.X < 0)
+
+			if (nextPos.X < 18)
 			{
-				Position = Position + HorizontalOffset;
+				Position = new Vector2 (18, Position.Y);
 			}
 			
-			if(Position.Y < 0)
+			if (nextPos.Y < 18)
 			{
-				Position = Position + VerticalOffset;
+				Position = new Vector2 (Position.X, 18);
 			}
+
+			if (nextPos.Y + PlayerSize > screenHeight + 50)
+
+			{
+				Position = new Vector2 (Position.X, screenHeight + 50 - PlayerSize);
+			}
+
 			
-			if(Position.Y + PlayerSize > screenHeight)
-			{
-				Position = Position - VerticalOffset;
-			}
 			
 			// Loop through tiles
 			foreach(Tile t in Tile.Collisions)
 			{
-				bool fromLeft = Position.X + PlayerSize > t.Position.X;
-				bool fromRight = Position.X < t.Position.X + Tile.Width;
-				bool fromTop = Position.Y < t.Position.Y + Tile.Height;
-				bool fromBottom = Position.Y + PlayerSize > t.Position.Y;
+
+				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
+				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
+				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
+				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
+				
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
 					if(!positionDelta.IsZero() && t.IsCollidable && t.Key != Element)
 					{
 						if(fromLeft && positionDelta.X > 0)
 						{
-							Position = Position - HorizontalOffset;
+							Position = new Vector2 (t.Position.X + 64 - PlayerSize, Position.Y);
 						}
-						if(fromRight && positionDelta.X < 0)
+						
+						else if(fromRight && positionDelta.X < 0)
 						{
-							Position = Position + HorizontalOffset;
+							Position = new Vector2 (t.Position.X + PlayerSize, Position.Y);
 						}
 					
-						if(fromTop && positionDelta.Y < 0)
+					 	else if(fromTop && positionDelta.Y < 0)
 						{
-							Position = Position + VerticalOffset;
+							Position = new Vector2 ( Position.X, t.Position.Y + 18 + PlayerSize);
 						}
-						if(fromBottom && positionDelta.Y > 0)
+						
+						else if(fromBottom && positionDelta.Y > 0)
 						{
-							Position = Position - VerticalOffset;
+							Position = new Vector2 ( Position.X, t.Position.Y + 50 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
 					}
