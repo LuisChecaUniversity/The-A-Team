@@ -257,7 +257,7 @@ namespace TheATeam
 		{
 			actionMsg = c;	
 		}
-		
+		public char ActionMsg { get { return actionMsg;}}
         private byte[] sendBuffer = new byte[18];
 		private byte[] recvBuffer = new byte[18];
 
@@ -658,7 +658,7 @@ namespace TheATeam
 								
 								
 								char action = BitConverter.ToChar(recvBuffer,0);
-								
+								networkActionMsg = action;
 								if(action.Equals('S'))
 									hasShot = true;
 							

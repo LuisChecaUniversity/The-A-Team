@@ -73,6 +73,19 @@ namespace TheATeam
 			return thisBounds.Overlaps(otherBounds);
 		}
 		
+		public static Vector2i LoadSpriteIndex(char loadkey)
+		{
+			if(Types.Count < 1)
+				XMLTypeLoader("/Application/assets/tiles.xml");
+			
+			TileType tt = new TileType();
+			if(Types.TryGetValue(loadkey, out tt))
+		  	{
+				return tt.TileIndex2D;
+			}
+			return new Vector2i();
+		}
+		
 		private static void XMLTypeLoader(string filepath)
 		{
 			// Read whole level xml to doc
