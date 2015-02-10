@@ -56,7 +56,6 @@
     <Compile Include="MainMenu.cs" />
     <Compile Include="TitleScreen.cs" />
     <Compile Include="LocalTCPConnection.cs" />
-    <Compile Include="HealthWall.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemManager.cs" />
     <Compile Include="TwoPlayer.cs" />

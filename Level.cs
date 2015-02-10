@@ -205,16 +205,21 @@ namespace TheATeam
 						Console.WriteLine("Player 2 got hit");
 		
 		
-					foreach(Tile t in Tile.Collisions)
+					for(int i = 0; i < Tile.Collisions.Count; i++)
 					{
+						Tile t = Tile.Collisions[i];
 						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
 						if(collisionType != 'X')
 						{
 							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
 							t.TakeDamage(collisionType);
-	
 						}
-						
+						// Remove from collisions if true
+						if(t.WallDamage())
+						{
+							Tile.Collisions.RemoveAt(i);
+							i--;
+						}
 					}
 					
 					ItemManager.Instance.Update(dt);

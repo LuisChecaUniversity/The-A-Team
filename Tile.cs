@@ -15,11 +15,21 @@ namespace TheATeam
 		public Vector2i TileIndex2D;
 		public bool IsCollidable;
 	}
+	
+	public class Stats
+	{
+		public int MaxHealth = 1;
+		public int MaxLives = 3;
+		public int Health = 1;
+		public int Lives = 3;
+	}
 
 	public class Tile: SpriteTile
 	{
 		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		private char _key;
+		private bool _isWall { get{ return Elements.Contains(_key); } }
+		private Stats Stats = new Stats();
 		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
@@ -48,7 +58,6 @@ namespace TheATeam
 		private void LoadTileProperties(char loadKey)
 		{
 			_key = loadKey;
-			
 			TileType tt = new TileType();
 			if(Types.TryGetValue(loadKey, out tt))
 			{
@@ -57,8 +66,45 @@ namespace TheATeam
 			}
 		}
 		
-		public virtual void TakeDamage(char element='N', int damage=1)
+		public bool WallDamage()
+		{			
+			if(!_isWall)
+				return false;
+			
+			if(Stats.Lives > 0)
+			{
+				if(Stats.Health > Stats.MaxHealth && Stats.Lives < Stats.MaxLives)
+				{
+					Stats.Lives++;
+					Stats.Health = Stats.MaxHealth;
+				}
+				
+				if(Stats.Health <= 0)
+				{
+					Stats.Lives--;
+					Stats.Health = Stats.MaxHealth;
+				}
+				
+				int newTileIndex = TileIndex2D.X + Stats.MaxLives - Stats.Lives;
+				if(newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
+				{
+					TileIndex2D.X = newTileIndex;
+				}
+			}
+			else
+			{
+				Key = 'E';
+				return true;
+			}
+			return false;
+		}
+		
+		public void TakeDamage(char element='N', int damage=1)
 		{
+			if(Stats.Lives > 0 && _isWall)
+			{
+				Stats.Health += damage * (element == Key ? 1 : -1);
+			}
 		}
 
 		public bool Overlaps(SpriteBase sprite)
@@ -134,16 +180,8 @@ namespace TheATeam
 
 				foreach(char c in line)
 				{
-					if(Elements.Contains(c))
-					{
-						// Make wall at pos
-						t = new HealthWall(c, pos);
-					}
-					else
-					{
-						// Make tile at pos
-						t = new Tile(c, pos);
-					}
+					// Makes a wall or tile
+					t = new Tile(c, pos);
 					// Add to SpriteList for drawing					
 					tiles.AddChild(t);
 					// Add to Tile Grid
