@@ -149,7 +149,7 @@ namespace TheATeam
 					}
 					//else
 						//lblDebugLeft.Text = status;
-	
+					lblTopLeft.Text = AppMain.client.ActionMsg.ToString();
 					if(AppMain.ISHOST)
 					{
 						player1.Update(dt);
