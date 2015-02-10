@@ -24,7 +24,7 @@ namespace TheATeam
 	{
 		private static int Y_INDEX = 4;
 		private static float MoveDelta = 4f;
-		private static float PlayerSize = Tile.Width; // 64x64 px
+		private static float PlayerSize = 64; // 64x64 px
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		private Vector2 Direction;
@@ -227,26 +227,26 @@ namespace TheATeam
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
 			
 			
-			if (nextPos.X + PlayerSize > screenWidth)
+			if (nextPos.X + PlayerSize > screenWidth + 18)
 			{
-				 Position = new Vector2 (screenWidth - PlayerSize, Position.Y);
+				 Position = new Vector2 (screenWidth + 18 - PlayerSize, Position.Y);
 			}
 			
 
-			if (nextPos.X < 0)
+			if (nextPos.X < -18)
 			{
-				Position = new Vector2 (0, Position.Y);
+				Position = new Vector2 (-18, Position.Y);
 			}
 			
-			if (nextPos.Y < 0)
+			if (nextPos.Y < -18)
 			{
-				Position = new Vector2 (Position.X, 0);
+				Position = new Vector2 (Position.X, -18);
 			}
 
-			if (nextPos.Y + PlayerSize > screenHeight)
+			if (nextPos.Y + PlayerSize > screenHeight + 18)
 
 			{
-				Position = new Vector2 (Position.X, screenHeight - PlayerSize);
+				Position = new Vector2 (Position.X, screenHeight + 18 - PlayerSize);
 			}
 
 			
@@ -255,10 +255,10 @@ namespace TheATeam
 			foreach(Tile t in Tile.Collisions)
 			{
 
-				bool fromLeft = nextPos.X + PlayerSize > t.Position.X;
-				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
-				bool fromTop = nextPos.Y < t.Position.Y + Tile.Height;
-				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y;
+				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 32;
+				bool fromRight = nextPos.X < t.Position.X - 32 + Tile.Width;
+				bool fromTop = nextPos.Y < t.Position.Y - 18 + Tile.Height;
+				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 18 ;
 				
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
@@ -266,20 +266,22 @@ namespace TheATeam
 					{
 						if(fromLeft && positionDelta.X > 0)
 						{
-							Position = new Vector2 (t.Position.X - PlayerSize, Position.Y);
+							Position = new Vector2 (t.Position.X + 32 - PlayerSize, Position.Y);
 						}
+						
 						else if(fromRight && positionDelta.X < 0)
 						{
-							Position = new Vector2 (t.Position.X + PlayerSize, Position.Y);
+							Position = new Vector2 (t.Position.X - 32 + PlayerSize, Position.Y);
 						}
 					
 					 	else if(fromTop && positionDelta.Y < 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y + PlayerSize);
+							Position = new Vector2 ( Position.X, t.Position.Y - 18 + PlayerSize);
 						}
+						
 						else if(fromBottom && positionDelta.Y > 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y - PlayerSize);
+							Position = new Vector2 ( Position.X, t.Position.Y + 18 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
 					}
