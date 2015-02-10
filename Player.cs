@@ -80,7 +80,7 @@ namespace TheATeam
 			case "SINGLE":
 				
 				// Handle movement/attacks
-				HandleInput();
+				HandleInput(dt);
 					
 				// Apply the movement
 				Position = Position + positionDelta;			
@@ -90,7 +90,7 @@ namespace TheATeam
 				if(AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
 				{
 					// Handle movement/attacks
-					HandleInput();
+					HandleInput(dt);
 					
 					// Apply the movement
 					Position = Position + positionDelta;
@@ -126,14 +126,14 @@ namespace TheATeam
 			Info.CameraCenter = Position;
 		}
 		
-		private void HandleInput()
+		private void HandleInput(float dt)
 		{
 			//var gamePadData = GamePad.GetData(0);
 
 			//if(whichPlayer == PlayerIndex.PlayerOne)
 			//{//
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta;
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * dt;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * dt;
 			//}
 			//else if(whichPlayer == PlayerIndex.PlayerTwo)
 			//{
