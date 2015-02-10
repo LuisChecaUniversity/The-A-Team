@@ -145,10 +145,10 @@ namespace TheATeam
 					if(status.Equals("None"))
 					{
 						AppMain.client.ChangeStatus();
-						lblDebugLeft.Text = "Changing";
+						//lblDebugLeft.Text = "Changing";
 					}
-					else
-						lblDebugLeft.Text = status;
+					//else
+						//lblDebugLeft.Text = status;
 	
 					if(AppMain.ISHOST)
 					{
