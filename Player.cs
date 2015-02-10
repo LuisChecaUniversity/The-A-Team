@@ -128,16 +128,16 @@ namespace TheATeam
 		{
 			//var gamePadData = GamePad.GetData(0);
 
-			if(whichPlayer == PlayerIndex.PlayerOne)
-			{
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y;
-			}
-			else if(whichPlayer == PlayerIndex.PlayerTwo)
-			{
-				positionDelta.X = Input2.GamePad0.AnalogRight.X;
-				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
-			}
+			//if(whichPlayer == PlayerIndex.PlayerOne)
+			//{//
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta;
+			//}
+			//else if(whichPlayer == PlayerIndex.PlayerTwo)
+			//{
+				//positionDelta.X = Input2.GamePad0.AnalogRight.X;
+				//positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
+			//}
 
 			
 			if (keyboardTest == true)
