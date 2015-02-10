@@ -24,33 +24,30 @@ namespace TheATeam
 		private Item leftFlag, rightFlag, fireElement, waterElement;
 		private Scene scene;
 		
-		private static TextureInfo flagTex;// =  new TextureInfo("/Application/Assets/FlagTemp.png");
-		private static TextureInfo fireTex;// = new TextureInfo("/Application/Assets/FireElement.png");
-		private static TextureInfo waterTex;// = new TextureInfo("/Application/Assets/WaterElement.png");
+		private static Vector2i flagIndex = Tile.LoadSpriteIndex('~');
+		private static Vector2i fireIndex = Tile.LoadSpriteIndex('R');
+		private static Vector2i waterIndex =  Tile.LoadSpriteIndex('B');
 		
 		private ItemManager ()
 		{
 			scene = GameSceneManager.currentScene;
-			if(flagTex == null)
-				flagTex =  new TextureInfo("/Application/assets/FlagTemp.png");
-			if(fireTex == null)
-				fireTex = new TextureInfo("/Application/assets/FireElement.png");
-			if(waterTex == null)
-				waterTex = new TextureInfo("/Application/assets/WaterElement.png");
 			
 			items = new List<Item>();
 			if(items.Count == 0)
 			{
 				Vector2 pos1 = new Vector2(100,290);
-				leftFlag = new Item(scene, pos1, flagTex, ItemType.flag, "Player1Flag");
+				leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 				items.Add(leftFlag);
 			}
-	
 		}
 		public void initFlags()
 		{
+			Vector2 pos1 = leftFlag.position;
+			items.Remove(leftFlag);
+			leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
+			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
-			rightFlag = new Item(scene, pos2, flagTex, ItemType.flag, "Player2Flag");
+			rightFlag = new Item(scene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
 		}
 		public void initElements()
@@ -59,8 +56,8 @@ namespace TheATeam
 			{
 			Vector2 pos1 = new Vector2(480,190);
 			Vector2 pos2 = new Vector2(480,390);
-			fireElement = new Item(scene, pos1, fireTex, ItemType.element, "Fire");
-			waterElement = new Item(scene, pos2, waterTex, ItemType.element, "Water");
+			fireElement = new Item(scene, pos1, fireIndex, ItemType.element, "Fire");
+			waterElement = new Item(scene, pos2, waterIndex, ItemType.element, "Water");
 				
 			items.Add(fireElement);
 			items.Add(waterElement);

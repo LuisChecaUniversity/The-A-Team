@@ -48,18 +48,18 @@ namespace TheATeam
 
 	public class Item
 	{
-		//public TextureInfo iTex;
 		private ItemType type;
 		private string name;
-		public SpriteUV iSprite;
+		public SpriteTile iSprite;
 		public Vector2 position;
 		public bool collided;
 		
-		public Item (Scene scene, Vector2 pos, TextureInfo texture, ItemType type, string name)
+		public Item (Scene scene, Vector2 pos, Vector2i spriteIndex2D, ItemType type, string name)
 		{
-			//iTex = new TextureInfo("/Application/Assets/FlagTemp.png");
-			iSprite = new SpriteUV(texture);
-			iSprite.Quad.S = texture.TextureSizef;	
+			iSprite = new SpriteTile();
+			iSprite.TextureInfo = TextureManager.Get("tiles");
+			iSprite.Quad.S = iSprite.TextureInfo.TileSizeInPixelsf;
+			iSprite.TileIndex2D = spriteIndex2D;
 			iSprite.CenterSprite();
 			
 			position = pos;

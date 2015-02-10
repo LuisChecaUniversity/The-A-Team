@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
@@ -57,6 +55,7 @@ namespace TheATeam
 			base(Y_INDEX, position, new Vector2i(0, 3))
 
 		{
+			CenterSprite();
 			Element = 'N';
 			IsDefending = false;
 
@@ -117,6 +116,9 @@ namespace TheATeam
 			default:
 				break;
 			}
+			// Rotate player based on his direction
+			HandleDirectionAnimation();
+			
 			// Find current tile and apply collision
 			HandleCollision();
 	
@@ -203,17 +205,15 @@ namespace TheATeam
 			if(Input2.GamePad0.Cross.Release)
 				canShoot = true;
 		}
+		
 		private void HandleDirectionAnimation()
 		{
-			// Declare Ranges
-			Vector2i LeftRange = new Vector2i(6, 7);
-			Vector2i RightRange = new Vector2i(4, 5);
-			Vector2i UpRange = new Vector2i(2, 3);
-			Vector2i DownRange = new Vector2i(0, 1);
-			if(Direction.X > 0)
+			// Convert direction into angle
+			if(!Direction.IsZero())
 			{
-				
+				RotationNormalize = Direction;
 			}
+			
 			// Set frame to start of animation range if outside of range
 			if(TileIndex2D.X < animationRangeX.X || TileIndex2D.X > animationRangeX.Y)
 				TileIndex2D.X = animationRangeX.X;
