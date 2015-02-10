@@ -33,17 +33,10 @@ namespace TheATeam
 			scene = GameSceneManager.currentScene;
 			
 			items = new List<Item>();
-			if(items.Count == 0)
-			{
-				Vector2 pos1 = new Vector2(100,290);
-				leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
-				items.Add(leftFlag);
-			}
 		}
 		public void initFlags()
 		{
-			Vector2 pos1 = leftFlag.position;
-			items.Remove(leftFlag);
+			Vector2 pos1 = new Vector2(100,290);
 			leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
@@ -112,13 +105,29 @@ namespace TheATeam
 					if(item.hasCollided(p1.Position, p1Size))
 					{
 						Console.WriteLine("Collided with " + item.GetName());
+						item.iSprite.Visible = false;
+						item.collided = true;
 						switch (item.GetName()) 
 						{
 						case "Water":
+							if(p1.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
 							p1.ChangeTiles("Water");
+							p1.Element = 'W';
 							break;
 						case "Fire":
+							if(p1.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
 							p1.ChangeTiles("Fire");
+							p1.Element = 'F';
 							break;
 						case "Player1Flag":
 							break;
@@ -127,8 +136,6 @@ namespace TheATeam
 						default:
 							break;
 						}
-						item.iSprite.Visible = false;
-						item.collided = true;
 					}
 				}
 			}

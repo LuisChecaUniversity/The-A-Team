@@ -63,9 +63,10 @@ namespace TheATeam
 			for (int i = 0; i < 8; i++) 
 				{
 					for (int j = 0; j < 5; j++) 
-					{
+					{						
+						if(Tile.Grid[i][j].Key == 'E')
+							Tile.Grid[i][j].Key = 'A';
 						player1Tiles.Add(Tile.Grid[i][j]);
-					
 					}
 				}
 			
@@ -137,20 +138,19 @@ namespace TheATeam
 				
 
 			
-			this.AddChild(player1);
-			this.AddChild(player2);
-			this.AddChild(blockedAreaSprite);
-			this.AddChild(lblTopLeft);
-			this.AddChild(lblTopRight);
-			Camera2D.SetViewFromViewport();
-
+				this.AddChild(player1);
+				this.AddChild(player2);
+				this.AddChild(blockedAreaSprite);
+				this.AddChild(lblTopLeft);
+				this.AddChild(lblTopRight);
+				Camera2D.SetViewFromViewport();
 			}
-//			Schedule((dt) => {
-//				Info.TotalGameTime += dt;
-//				// Camera2D.SetViewFromHeightAndCenter(Info.CameraHeight, Info.CameraCenter);
-//			});
 		}
-
+		public override void OnEnter()
+		{
+			base.OnEnter();			
+			ItemManager.Instance.initFlags();
+		}
 		public override void Update(float dt)
 		{
 			base.Update(dt);
@@ -296,7 +296,7 @@ namespace TheATeam
 								t.Key = 'E';
 						}
 						ItemManager.Instance.initElements();
-						ItemManager.Instance.initFlags();
+						//ItemManager.Instance.initFlags();
 					}
 					
 				}
