@@ -112,7 +112,7 @@ namespace TheATeam
 			
 			 	textbox = new EditableText();
 				textbox.SetPosition(300.0f,250.0f);
-				textbox.Text = "192.168.43.40"; //vita13 //144
+				textbox.Text = "192.168.43.133"; //vita13 //144
 				textbox.Visible = false;	
 			
 				button = new Button();

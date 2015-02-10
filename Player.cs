@@ -39,7 +39,7 @@ namespace TheATeam
 		private char _element;
 		
 		//Player Tiles
-		private List<Tile> playerTiles = new List<Tile>();
+		public List<Tile> playerTiles = new List<Tile>();
 		
 		public char Element
 		{

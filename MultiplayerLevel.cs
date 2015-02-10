@@ -32,10 +32,10 @@ namespace TheATeam
 		List<Tile> player1Tiles = new List<Tile>();
 		List<Tile> player2Tiles = new List<Tile>();
 		int maxDeployed = 10;
-		int player1Depolyed = 0;
+		int playerDepolyed = 0;
 		
 		bool startDeploying;
-		bool playerReady;
+		bool playerReady = false;
 		float timeLeft = 30.0f;
 		
 		public MultiplayerLevel()
@@ -95,7 +95,7 @@ namespace TheATeam
 				
 				lblTopRight = new Label();
 				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Press Start to Begin!";
+				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(screenWidth/2 + 100, screenHeight/2- 150);
 			}
 			else
@@ -108,7 +108,7 @@ namespace TheATeam
 				
 				lblTopRight = new Label();
 				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Press Start to Begin!";
+				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(100, screenHeight/2- 150);
 			}
 
@@ -165,32 +165,117 @@ namespace TheATeam
 				}
 				else if(levelStage == LevelStage.BuildDefence)
 				{
+					AppMain.client.DataExchange();
+					
+					string status = AppMain.client.statusString;
+					if(status.Equals("None"))
+					{
+						AppMain.client.ChangeStatus();
+						lblTopLeft.Text = "Changing";
+					}
+					else
+						lblTopLeft.Text = status;
+					
 					//check if both players pressed start;
-					//if(AppMain.ISHOST)
-					//{
-						if(!playerReady)
+					
+						if(!startDeploying)
+						{
+							if(!playerReady)
+							{
+								if(Input2.GamePad0.Start.Down)
+								{
+									AppMain.client.SetActionMessage('R');
+									playerReady = true;
+								}
+								
+							}
+								if(AppMain.ISHOST)
+									lblTopRight.Text = "HOST : " + AppMain.client.ActionMsg.ToString() + " Client: " + AppMain.client.NetworkActionMsg.ToString();
+								else
+									lblTopRight.Text = "Client : " + AppMain.client.ActionMsg.ToString() + "HOST : " + AppMain.client.NetworkActionMsg.ToString();
+							
+							if(AppMain.client.NetworkActionMsg.Equals('R') && AppMain.client.ActionMsg.Equals('R'))
+							{
+									startDeploying = true;
+									AppMain.client.SetActionMessage('D');
+							}
+						}
+						else if(startDeploying)
 						{
 							if(Input2.GamePad0.Start.Down)
 							{
 								AppMain.client.SetActionMessage('R');
-								AppMain.client.DataExchange();
-								playerReady = true;
 							}
-							
-						}
 						
-						//lblTopRight.Text = AppMain.client.NetworkActionMsg.ToString();
-						if(AppMain.client.NetworkActionMsg.Equals('R'))
+							if(AppMain.client.NetworkActionMsg.Equals('R') && AppMain.client.ActionMsg.Equals('R'))
 							{
-								startDeploying = true;
+									
+								AppMain.client.SetActionMessage('D');
+								levelStage = LevelStage.CombatStage;
 							}
-					
-					if(startDeploying)
-					{
-						lblTopRight.Text = "Tap to deploy";
-					}
+						
+							if(AppMain.ISHOST)
+								DeployUpdate(player1,dt);
+							else
+								DeployUpdate(player2,dt);
+						}
 				}
 			}
+		}
+		
+		private void DeployUpdate(Player player, float dt)
+		{
+			var testtouches = Touch.GetData(0);
+					if(playerDepolyed == maxDeployed)
+						lblTopLeft.Text = "";
+					else
+						lblTopLeft.Text = "Objects Left: " + (maxDeployed - playerDepolyed);
+					
+					
+					if(testtouches.Count > 0)
+					{
+						float screenheight = Director.Instance.GL.Context.GetViewport().Height;
+						float screenwidth = Director.Instance.GL.Context.GetViewport().Width;
+						float screenx = (testtouches[0].X + 0.5f) * screenwidth;
+						float screenY = screenHeight - (testtouches[0].Y + 0.5f) * screenheight;
+						Vector2 touchVec = new Vector2(screenx, screenY);
+						
+						if(testtouches[0].Status == TouchStatus.Down)
+						{
+							foreach(Tile t in player.playerTiles)
+							{
+								if(t.Key == 'E')
+									t.Key = 'A';
+								
+								if(touchVec.X > t.Position.X && touchVec.X < t.Position.X + 64 &&
+								   touchVec.Y > t.Position.Y && touchVec.Y < t.Position.Y + 64)
+								{
+									if(t.Key != 'N')
+									{
+										if(playerDepolyed < maxDeployed)
+										{
+											// returns player 1 flag and checks if touch pos collides with it
+											if(!ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").hasCollided(touchVec, new Vector2(5, 5)))
+											{
+												t.Key = 'N';
+												Tile.Collisions.Add(t);
+												playerDepolyed++;
+											}
+										}
+									}
+									else if(t.Key == 'N')
+									{
+										t.Key = 'A';
+										Tile.Collisions.Remove(t);
+										playerDepolyed--;
+									}
+								}
+							}
+						}
+						
+						ItemManager.Instance.Update(dt);
+						
+					}	
 		}
 		
 		
