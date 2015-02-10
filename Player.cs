@@ -56,12 +56,12 @@ namespace TheATeam
 			base(Y_INDEX, position, new Vector2i(0, 3))
 
 		{
-<<<<<<< HEAD
+
 			Element = 'F';
-=======
+
 			CenterSprite();
-			Element = 'N';
->>>>>>> origin/master
+			
+
 			IsDefending = false;
 
 			if(isPlayer1)
@@ -231,26 +231,26 @@ namespace TheATeam
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
 			
 			
-			if (nextPos.X + PlayerSize > screenWidth + 18)
+			if (nextPos.X + PlayerSize > screenWidth + 50 )
 			{
-				 Position = new Vector2 (screenWidth + 18 - PlayerSize, Position.Y);
+				 Position = new Vector2 (screenWidth + 50  - PlayerSize, Position.Y);
 			}
 			
 
-			if (nextPos.X < -18)
+			if (nextPos.X < 18)
 			{
-				Position = new Vector2 (-18, Position.Y);
+				Position = new Vector2 (18, Position.Y);
 			}
 			
-			if (nextPos.Y < -18)
+			if (nextPos.Y < 18)
 			{
-				Position = new Vector2 (Position.X, -18);
+				Position = new Vector2 (Position.X, 18);
 			}
 
-			if (nextPos.Y + PlayerSize > screenHeight + 18)
+			if (nextPos.Y + PlayerSize > screenHeight + 50)
 
 			{
-				Position = new Vector2 (Position.X, screenHeight + 18 - PlayerSize);
+				Position = new Vector2 (Position.X, screenHeight + 50 - PlayerSize);
 			}
 
 			
@@ -259,10 +259,10 @@ namespace TheATeam
 			foreach(Tile t in Tile.Collisions)
 			{
 
-				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 32;
-				bool fromRight = nextPos.X < t.Position.X - 32 + Tile.Width;
-				bool fromTop = nextPos.Y < t.Position.Y - 18 + Tile.Height;
-				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 18 ;
+				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
+				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
+				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
+				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
 				
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
@@ -270,22 +270,22 @@ namespace TheATeam
 					{
 						if(fromLeft && positionDelta.X > 0)
 						{
-							Position = new Vector2 (t.Position.X + 32 - PlayerSize, Position.Y);
+							Position = new Vector2 (t.Position.X + 64 - PlayerSize, Position.Y);
 						}
 						
 						else if(fromRight && positionDelta.X < 0)
 						{
-							Position = new Vector2 (t.Position.X - 32 + PlayerSize, Position.Y);
+							Position = new Vector2 (t.Position.X + PlayerSize, Position.Y);
 						}
 					
 					 	else if(fromTop && positionDelta.Y < 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y - 18 + PlayerSize);
+							Position = new Vector2 ( Position.X, t.Position.Y + 18 + PlayerSize);
 						}
 						
 						else if(fromBottom && positionDelta.Y > 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y + 18 - PlayerSize);
+							Position = new Vector2 ( Position.X, t.Position.Y + 50 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
 					}
