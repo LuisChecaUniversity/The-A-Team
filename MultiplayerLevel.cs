@@ -14,7 +14,7 @@ namespace TheATeam
 	
 	public class MultiplayerLevel: Scene
 	{
-		private LevelStage levelStage = LevelStage.BuildDefence;
+		private LevelStage levelStage = LevelStage.CombatStage;
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
@@ -119,9 +119,9 @@ namespace TheATeam
 			
 			this.AddChild(player1);
 			this.AddChild(player2);
-			this.AddChild(blockedAreaSprite);
-			this.AddChild(lblTopLeft);
-			this.AddChild(lblTopRight);
+			//this.AddChild(blockedAreaSprite);
+			//this.AddChild(lblTopLeft);
+			//this.AddChild(lblTopRight);
 			Camera2D.SetViewFromViewport();
 
 
