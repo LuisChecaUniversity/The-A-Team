@@ -299,7 +299,7 @@ namespace TheATeam
 				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
 			Vector2 pos = new Vector2(Position.X + Quad.Bounds2().Point11.X / 2, Position.Y + Quad.Bounds2().Point11.Y / 2);
-			ProjectileManager.Instance.Shoot(pos, Direction, (int)whichPlayer);
+			ProjectileManager.Instance.Shoot(pos, Direction, _element);
 			canShoot = false;
 			
 		}
