@@ -43,8 +43,7 @@ namespace TheATeam
 		public char Element
 		{
 			get { return _element; }
-			set
-			{
+			set {
 				_element = value;
 				TileIndex2D.Y = Y_INDEX - Tile.Elements.IndexOf(value);
 			}
@@ -52,12 +51,11 @@ namespace TheATeam
 
 		public AttackStatus Attack { get { return attackState; } }
 		
-	public Player(Vector2 position, bool isPlayer1,List<Tile> tiles):
+		public Player(Vector2 position, bool isPlayer1, List<Tile> tiles):
 			base(Y_INDEX, position, new Vector2i(0, 3))
-
 		{
 
-			Element = 'F';
+			Element = 'N';
 
 			CenterSprite();
 			
@@ -147,8 +145,7 @@ namespace TheATeam
 			}
 
 			
-			if (keyboardTest == true)
-
+			if(keyboardTest == true)
 			{
 
 				if(Input2.GamePad0.Left.Down)
@@ -173,7 +170,6 @@ namespace TheATeam
 			}
 
 			switch(AppMain.TYPEOFGAME)
-
 			{
 			case "SINGLE":
 			// Preserve Movement vector in Direction
@@ -231,26 +227,25 @@ namespace TheATeam
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
 			
 			
-			if (nextPos.X + PlayerSize > screenWidth + 50 )
+			if(nextPos.X + PlayerSize > screenWidth + 50)
 			{
-				 Position = new Vector2 (screenWidth + 50  - PlayerSize, Position.Y);
+				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
 			}
 			
 
-			if (nextPos.X < 18)
+			if(nextPos.X < 18)
 			{
-				Position = new Vector2 (18, Position.Y);
+				Position = new Vector2(18, Position.Y);
 			}
 			
-			if (nextPos.Y < 18)
+			if(nextPos.Y < 18)
 			{
-				Position = new Vector2 (Position.X, 18);
+				Position = new Vector2(Position.X, 18);
 			}
 
-			if (nextPos.Y + PlayerSize > screenHeight + 50)
-
+			if(nextPos.Y + PlayerSize > screenHeight + 50)
 			{
-				Position = new Vector2 (Position.X, screenHeight + 50 - PlayerSize);
+				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
 			}
 
 			
@@ -270,22 +265,19 @@ namespace TheATeam
 					{
 						if(fromLeft && positionDelta.X > 0)
 						{
-							Position = new Vector2 (t.Position.X + 64 - PlayerSize, Position.Y);
+							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
 						}
-						
 						else if(fromRight && positionDelta.X < 0)
 						{
-							Position = new Vector2 (t.Position.X + PlayerSize, Position.Y);
+							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
 						}
-					
-					 	else if(fromTop && positionDelta.Y < 0)
+						else if(fromTop && positionDelta.Y < 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y + 18 + PlayerSize);
+							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
 						}
-						
 						else if(fromBottom && positionDelta.Y > 0)
 						{
-							Position = new Vector2 ( Position.X, t.Position.Y + 50 - PlayerSize);
+							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
 					}
@@ -351,16 +343,16 @@ namespace TheATeam
 		{
 			if(type.Equals("Fire"))
 			{
-				foreach (Tile t in playerTiles)
+				foreach(Tile t in playerTiles)
 				{
 					if(t.Key == 'N')
 						t.Key = 'F';
 				}
 			}
-			else if (type.Equals("Water"))
+			else if(type.Equals("Water"))
 			{
 				
-				foreach (Tile t in playerTiles)
+				foreach(Tile t in playerTiles)
 				{
 					if(t.Key == 'N')
 						t.Key = 'W';

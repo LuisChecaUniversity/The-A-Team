@@ -28,7 +28,9 @@ namespace TheATeam
 	{
 		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
 		private char _key;
-		private bool _isWall { get{ return Elements.Contains(_key); } }
+
+		private bool _isWall { get { return Elements.Contains(_key); } }
+
 		private Stats Stats = new Stats();
 		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
@@ -85,7 +87,7 @@ namespace TheATeam
 					Stats.Health = Stats.MaxHealth;
 				}
 				
-				int newTileIndex = TileIndex2D.X + Stats.MaxLives - Stats.Lives;
+				int newTileIndex = Stats.MaxLives - Stats.Lives;
 				if(newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
 				{
 					TileIndex2D.X = newTileIndex;
@@ -126,7 +128,7 @@ namespace TheATeam
 			
 			TileType tt = new TileType();
 			if(Types.TryGetValue(loadkey, out tt))
-		  	{
+			{
 				return tt.TileIndex2D;
 			}
 			return new Vector2i();
