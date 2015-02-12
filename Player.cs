@@ -304,10 +304,13 @@ namespace TheATeam
 			
 			if(goingForElement)
 			{
-				Vector2 dir = new Vector2(480.0f,390.0f);
-				Position = Vector2.Lerp(Position,dir,0.004f);
-				if(Position.X - 480.0f < 20.0f && 
-				   Position.Y - 390.0f < 20.0f)
+				Vector2 dir = new Vector2(470.0f,380.0f);
+				Vector2 newDir = new Vector2(dir.X - Position.X  ,dir.Y- Position.Y );
+				positionDelta = newDir * 0.009f;
+				Position += positionDelta;
+						Direction = positionDelta;
+				if(Position.X - 480.0f < 40.0f && 
+				   Position.Y - 390.0f < 40.0f)
 				goingForElement = false;
 			}
 			else if(!isChasing && !goingForElement)
