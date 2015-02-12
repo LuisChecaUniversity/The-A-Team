@@ -122,6 +122,8 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 			
+			
+			
 			ItemManager.Instance.initFlags(this);
 			ItemManager.Instance.initElements(this);
 			//this.AddChild(blockedAreaSprite);
@@ -169,6 +171,7 @@ namespace TheATeam
 					}
 					ProjectileManager.Instance.Update(dt);
 		
+					
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
 						Console.WriteLine("Player 1 got hit");
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))

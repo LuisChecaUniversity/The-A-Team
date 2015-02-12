@@ -137,6 +137,42 @@ namespace TheATeam
 							break;
 						}
 					}
+					//check player 2 with items first
+					if(item.hasCollided(p2.Position, p2Size))
+					{
+						//Console.WriteLine("Collided with " + item.GetName());
+						item.iSprite.Visible = false;
+						item.collided = true;
+						switch (item.GetName()) 
+						{
+						case "Water":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Water");
+							p2.Element = 'W';
+							break;
+						case "Fire":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Fire");
+							p2.Element = 'F';
+							break;
+						case "Player1Flag":
+							break;
+						case "Player2Flag":
+							break;
+						default:
+							break;
+						}
+					}
 				}
 			}
 			
