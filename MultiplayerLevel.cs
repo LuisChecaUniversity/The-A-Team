@@ -14,7 +14,7 @@ namespace TheATeam
 	
 	public class MultiplayerLevel: Scene
 	{
-		private LevelStage levelStage = LevelStage.BuildDefence;
+		private LevelStage levelStage = LevelStage.CombatStage;
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
@@ -51,7 +51,9 @@ namespace TheATeam
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
-
+			
+			ItemManager.Instance.initFlags();
+			ItemManager.Instance.initElements();
 
             AddChild(new Background());
 			
@@ -119,9 +121,9 @@ namespace TheATeam
 			
 			this.AddChild(player1);
 			this.AddChild(player2);
-			this.AddChild(blockedAreaSprite);
-			this.AddChild(lblTopLeft);
-			this.AddChild(lblTopRight);
+			//this.AddChild(blockedAreaSprite);
+			//this.AddChild(lblTopLeft);
+			//this.AddChild(lblTopRight);
 			Camera2D.SetViewFromViewport();
 
 
@@ -145,10 +147,10 @@ namespace TheATeam
 					if(status.Equals("None"))
 					{
 						AppMain.client.ChangeStatus();
-						lblDebugLeft.Text = "Changing";
+						//lblDebugLeft.Text = "Changing";
 					}
-					else
-						lblDebugLeft.Text = status;
+					//else
+					//	lblDebugLeft.Text = status;
 	
 					if(AppMain.ISHOST)
 					{
@@ -162,6 +164,33 @@ namespace TheATeam
 						AppMain.client.DataExchange();
 						player1.Update(dt);
 					}
+					ProjectileManager.Instance.Update(dt);
+		
+					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
+						Console.WriteLine("Player 1 got hit");
+					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
+						Console.WriteLine("Player 2 got hit");
+		
+		
+					for(int i = 0; i < Tile.Collisions.Count; i++)
+					{
+						Tile t = Tile.Collisions[i];
+						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
+						if(collisionType != 'X')
+						{
+							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
+							t.TakeDamage(collisionType);
+						}
+						// Remove from collisions if true
+						if(t.WallDamage())
+						{
+							Tile.Collisions.RemoveAt(i);
+							i--;
+						}
+					}
+					
+					ItemManager.Instance.Update(dt);
+					ItemManager.Instance.ItemCollision(player1, player2);
 				}
 				else if(levelStage == LevelStage.BuildDefence)
 				{

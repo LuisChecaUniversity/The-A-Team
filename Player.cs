@@ -298,6 +298,7 @@ namespace TheATeam
 		
 		public void UpdateAI(float dt, Player p)
 		{
+			HandleDirectionAnimation();
 			if(movingLeft)
 			{
 				if(Position.X > 30)
