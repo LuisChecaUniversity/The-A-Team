@@ -36,7 +36,8 @@ namespace TheATeam
 		private float fireRate = 600.0f;
 		private float curTime = 0.0f;
 		private char _element;
-		
+		bool isChasing = false;
+		bool goingForElement = true;
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
 		
@@ -299,44 +300,64 @@ namespace TheATeam
 		public void UpdateAI(float dt, Player p)
 		{
 			HandleDirectionAnimation();
-			if(movingLeft)
+			HandleCollision();
+			
+			if(goingForElement)
 			{
-				if(Position.X > 30)
+				Vector2 dir = new Vector2(480.0f,390.0f);
+				Position = Vector2.Lerp(Position,dir,0.004f);
+				if(Position.X - 480.0f < 20.0f && 
+				   Position.Y - 390.0f < 20.0f)
+				goingForElement = false;
+			}
+			else if(!isChasing && !goingForElement)
+			{
+				if(movingLeft)
 				{
-					positionDelta = new Vector2(-0.05f * dt, 0.0f);
-					Position += positionDelta;
-					Direction = positionDelta;
+					if(Position.X > 30)
+					{
+						positionDelta = new Vector2(-0.05f * dt, 0.0f);
+						Position += positionDelta;
+						Direction = positionDelta;
+					}
+					else
+					{
+						movingLeft = false;	
+					}
 				}
 				else
 				{
-					movingLeft = false;	
+					if(Position.X < 930)
+					{
+						positionDelta = new Vector2(0.05f * dt, 0.0f);
+						Position += positionDelta;
+						Direction = positionDelta;
+					}
+					else
+					{
+						movingLeft = true;	
+					}
 				}
+				
+				float dist = Vector2.Distance(p.Position, Position);	
+				if(dist < 300)
+				{
+					curTime += dt;
+					if(curTime > fireRate)
+					{
+						Direction = p.Position - Position;
+						Direction = Direction.Normalize();
+						Shoot();
+						curTime = 0.0f;	
+					}
+				}
+				if(dist < 100)
+					isChasing = true;
 			}
 			else
 			{
-				if(Position.X < 930)
-				{
-					positionDelta = new Vector2(0.05f * dt, 0.0f);
-					Position += positionDelta;
-					Direction = positionDelta;
-				}
-				else
-				{
-					movingLeft = true;	
-				}
-			}
-			
-			float dist = Vector2.Distance(p.Position, Position);	
-			if(dist < 300)
-			{
-				curTime += dt;
-				if(curTime > fireRate)
-				{
-					Direction = p.Position - Position;
-					Direction = Direction.Normalize();
-					Shoot();
-					curTime = 0.0f;	
-				}
+			if(!positionDelta.IsZero())	
+				Position = Vector2.Lerp(Position,p.Position,0.01f);
 			}
 		}
 		

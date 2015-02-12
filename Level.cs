@@ -157,39 +157,7 @@ namespace TheATeam
 		{
 			base.Update(dt);
 
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
-				if(levelStage == LevelStage.CombatStage)
-				{
-					string status = AppMain.client.statusString;
-					if(status.Equals("None"))
-					{
-						AppMain.client.ChangeStatus();
-						lblDebugLeft.Text = "Changing";
-					}
-					else
-						lblDebugLeft.Text = status;
-	
-					if(AppMain.ISHOST)
-					{
-						player1.Update(dt);
-						AppMain.client.DataExchange();
-						player2.Update(dt);
-					}
-					else
-					{
-						player2.Update(dt);
-						AppMain.client.DataExchange();
-						player1.Update(dt);
-					}
-				}
-				else if(levelStage == LevelStage.BuildDefence)
-				{
-					
-				}
-			}
-			else if(AppMain.TYPEOFGAME.Equals("SINGLE"))
-			{
+			
 				if(levelStage == LevelStage.CombatStage)
 				{
 //					if(Input2.GamePad0.Triangle.Down)
@@ -310,7 +278,7 @@ namespace TheATeam
 
 		}
 
-	}
+	
 }
 
 
