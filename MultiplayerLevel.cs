@@ -14,6 +14,7 @@ namespace TheATeam
 	
 	public class MultiplayerLevel: Scene
 	{
+		
 		private LevelStage levelStage = LevelStage.CombatStage;
 		Player player1;
 		Player player2;
@@ -40,7 +41,7 @@ namespace TheATeam
 		
 		public MultiplayerLevel()
 		{
-
+			
 			screenWidth = Director.Instance.GL.Context.Screen.Width;
 			screenHeight = Director.Instance.GL.Context.Screen.Height;
 
@@ -52,8 +53,7 @@ namespace TheATeam
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
 			
-			ItemManager.Instance.initFlags();
-			ItemManager.Instance.initElements();
+			
 
             AddChild(new Background());
 			
@@ -121,6 +121,9 @@ namespace TheATeam
 			
 			this.AddChild(player1);
 			this.AddChild(player2);
+			
+			ItemManager.Instance.initFlags(this);
+			ItemManager.Instance.initElements(this);
 			//this.AddChild(blockedAreaSprite);
 			//this.AddChild(lblTopLeft);
 			//this.AddChild(lblTopRight);

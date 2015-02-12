@@ -149,7 +149,7 @@ namespace TheATeam
 		public override void OnEnter()
 		{
 			base.OnEnter();			
-			ItemManager.Instance.initFlags();
+			ItemManager.Instance.initFlags(this);
 		}
 		public override void Update(float dt)
 		{
@@ -295,7 +295,7 @@ namespace TheATeam
 							if(t.Key == 'A')
 								t.Key = 'E';
 						}
-						ItemManager.Instance.initElements();
+						ItemManager.Instance.initElements(this);
 						//ItemManager.Instance.initFlags();
 					}
 					

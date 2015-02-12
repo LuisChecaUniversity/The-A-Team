@@ -34,23 +34,23 @@ namespace TheATeam
 			
 			items = new List<Item>();
 		}
-		public void initFlags()
+		public void initFlags(Scene curScene)
 		{
 			Vector2 pos1 = new Vector2(100,290);
-			leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
+			leftFlag = new Item(curScene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
-			rightFlag = new Item(scene, pos2, flagIndex, ItemType.flag, "Player2Flag");
+			rightFlag = new Item(curScene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
 		}
-		public void initElements()
+		public void initElements(Scene curScene)
 		{
 			if(null == GetItem(ItemType.element, "Fire")) 
 			{
 			Vector2 pos1 = new Vector2(480,190);
 			Vector2 pos2 = new Vector2(480,390);
-			fireElement = new Item(scene, pos1, fireIndex, ItemType.element, "Fire");
-			waterElement = new Item(scene, pos2, waterIndex, ItemType.element, "Water");
+			fireElement = new Item(curScene, pos1, fireIndex, ItemType.element, "Fire");
+			waterElement = new Item(curScene, pos2, waterIndex, ItemType.element, "Water");
 				
 			items.Add(fireElement);
 			items.Add(waterElement);
