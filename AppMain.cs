@@ -154,7 +154,10 @@ namespace TheATeam
 					if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{
 						Console.WriteLine("Duo Player");
-							TYPEOFGAME = "DUO";
+							TYPEOFGAME = "DUAL";
+							graphics.Dispose();
+							runningDirector = true;
+							InitDirector();
 					}	
 					if(buttonHost.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{

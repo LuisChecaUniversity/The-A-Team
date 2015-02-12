@@ -24,12 +24,12 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
 		private bool canShoot = true;
-		private bool keyboardTest = true;
+		private bool keyboardTest = false;
 		private Vector2 Direction;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		public int health = 100;
-		
+		private Vector2 startingPosition;
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
@@ -55,7 +55,7 @@ namespace TheATeam
 		public Player(Vector2 position, bool isPlayer1, List<Tile> tiles):
 			base(Y_INDEX, position, new Vector2i(0, 3))
 		{
-
+			startingPosition = position;
 			Element = 'N';
 
 			CenterSprite();
@@ -81,6 +81,7 @@ namespace TheATeam
 			
 			switch(AppMain.TYPEOFGAME)
 			{
+			case "DUAL":
 			case "SINGLE":
 				
 				// Handle movement/attacks
@@ -138,11 +139,40 @@ namespace TheATeam
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
+				
+				//dual play
+				if(AppMain.TYPEOFGAME.Equals("DUAL"))
+				{
+					if(Input2.GamePad0.Up.Down )
+					{
+						if(canShoot)
+						{
+							Shoot();
+						}
+					}
+				
+				
+					if(Input2.GamePad0.Up.Release)
+					canShoot = true;
+				}
 			}
 			else if(whichPlayer == PlayerIndex.PlayerTwo)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
+				
+				if(AppMain.TYPEOFGAME.Equals("DUAL"))
+				{
+					if(Input2.GamePad0.Triangle.Down)
+					{
+						if(canShoot)
+						{
+						Shoot();
+						}
+					}
+					if(Input2.GamePad0.Triangle.Release)
+						canShoot = true;
+				}
 			}
 
 			
@@ -172,6 +202,7 @@ namespace TheATeam
 
 			switch(AppMain.TYPEOFGAME)
 			{
+			case "DUAL":
 			case "SINGLE":
 			// Preserve Movement vector in Direction
 				if(!positionDelta.IsZero())
@@ -194,18 +225,7 @@ namespace TheATeam
 			}
 
 			
-			if(Input2.GamePad0.Cross.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Left.Down ||
-
-			   Input2.GamePad0.Cross.Down && Input2.GamePad0.Right.Down || Input2.GamePad0.Cross.Down && Input2.GamePad0.Up.Down
-			   || Input2.GamePad0.Cross.Down && Input2.GamePad0.Down.Down)
-			{
-				if(canShoot)
-				{
-					Shoot();
-				}
-			}
-			if(Input2.GamePad0.Cross.Release)
-				canShoot = true;
+			
 		}
 		
 		private void HandleDirectionAnimation()
@@ -317,7 +337,7 @@ namespace TheATeam
 			{
 				if(movingLeft)
 				{
-					if(Position.X > 30)
+					if(Position.X > 240)
 					{
 						positionDelta = new Vector2(-0.05f * dt, 0.0f);
 						Position += positionDelta;
@@ -388,7 +408,12 @@ namespace TheATeam
 		public void TakeDamage(int dmg)
 		{
 			if(health > 0)
-				health-= dmg;	
+				health-= dmg;
+			else
+			{
+				Position = startingPosition;
+				health = 100;
+			}
 		}
 	}
 }

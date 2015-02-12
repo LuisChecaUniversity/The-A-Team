@@ -191,7 +191,10 @@ namespace TheATeam
 					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
 				
 					player1.Update(dt);
-					player2.UpdateAI(dt, player1);
+					if(AppMain.TYPEOFGAME.Equals("DUAL"))
+						player2.Update(dt);	
+					else
+						player2.UpdateAI(dt, player1);
 					
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
