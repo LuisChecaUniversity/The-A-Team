@@ -33,7 +33,7 @@ namespace TheATeam
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
-		private float fireRate = 800.0f;
+		private float fireRate = 600.0f;
 		private float curTime = 0.0f;
 		private char _element;
 		

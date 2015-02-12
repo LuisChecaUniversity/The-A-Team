@@ -399,10 +399,10 @@ namespace TheATeam
 				
 				
 					IPHostEntry host;
-		  	 		
 		   			host = Dns.GetHostEntry(Dns.GetHostName());
 		   			foreach (IPAddress ipp in host.AddressList)
 		   			{
+						
 		     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
 		     			{
 					       	ipAddress = ipp;

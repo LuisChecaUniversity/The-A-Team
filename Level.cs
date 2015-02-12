@@ -57,7 +57,7 @@ namespace TheATeam
 			AddChild(new Background());
 			
 			
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
+			Tile.Loader("/Application/assets/level2.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
 			
 			for (int i = 0; i < 8; i++) 
@@ -140,9 +140,8 @@ namespace TheATeam
 			
 				this.AddChild(player1);
 				this.AddChild(player2);
-				this.AddChild(blockedAreaSprite);
-				this.AddChild(lblTopLeft);
-				this.AddChild(lblTopRight);
+				
+				
 				Camera2D.SetViewFromViewport();
 			}
 		}
@@ -150,6 +149,9 @@ namespace TheATeam
 		{
 			base.OnEnter();			
 			ItemManager.Instance.initFlags(this);
+			this.AddChild(blockedAreaSprite);
+			this.AddChild(lblTopLeft);
+				this.AddChild(lblTopRight);
 		}
 		public override void Update(float dt)
 		{
