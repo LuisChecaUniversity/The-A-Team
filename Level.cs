@@ -39,6 +39,13 @@ namespace TheATeam
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
 		
+		
+		private SpriteUV p1HealthSprite;
+		private TextureInfo p1HealthTexInfo;
+		private SpriteUV p2HealthSprite;
+		private TextureInfo p2HealthTexInfo;
+		
+		
 		public Level(): base()
 		{
 
@@ -138,10 +145,27 @@ namespace TheATeam
 				
 
 			
+				
+				
 				this.AddChild(player1);
 				this.AddChild(player2);
 				
 				
+				//extra for video to use later
+				p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+				p1HealthSprite = new SpriteUV(p1HealthTexInfo);
+				
+				p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p1HealthSprite.Position = new Vector2(200, screenHeight -30);
+				
+				p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+				p2HealthSprite = new SpriteUV(p2HealthTexInfo);
+				
+				p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p2HealthSprite.Position = new Vector2(600, screenHeight -30);
+				
+				this.AddChild(p1HealthSprite);
+				this.AddChild(p2HealthSprite);
 				Camera2D.SetViewFromViewport();
 			}
 		}
@@ -163,6 +187,9 @@ namespace TheATeam
 //					if(Input2.GamePad0.Triangle.Down)
 //						ChangeTiles("Fire");
 					
+					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
+					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
+				
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
 					
@@ -170,9 +197,9 @@ namespace TheATeam
 					ProjectileManager.Instance.Update(dt);
 		
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
-						Console.WriteLine("Player 1 got hit");
+						player1.TakeDamage(10);
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
-						Console.WriteLine("Player 2 got hit");
+						player2.TakeDamage(10);
 		
 		
 					for(int i = 0; i < Tile.Collisions.Count; i++)

@@ -28,7 +28,7 @@ namespace TheATeam
 		private Vector2 Direction;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
-		
+		public int health = 100;
 		
 		//AI variables
 		private bool movingLeft = true;
@@ -136,8 +136,8 @@ namespace TheATeam
 
 			if(whichPlayer == PlayerIndex.PlayerOne)
 			{
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y;
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
 			}
 			else if(whichPlayer == PlayerIndex.PlayerTwo)
 			{
@@ -354,7 +354,7 @@ namespace TheATeam
 						curTime = 0.0f;	
 					}
 				}
-				if(dist < 100)
+				if(dist < 50)
 					isChasing = true;
 			}
 			else
@@ -383,6 +383,12 @@ namespace TheATeam
 						t.Key = 'W';
 				}
 			}
+		}
+		
+		public void TakeDamage(int dmg)
+		{
+			if(health > 0)
+				health-= dmg;	
 		}
 	}
 }
