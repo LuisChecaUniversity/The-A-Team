@@ -58,7 +58,7 @@ namespace TheATeam
             AddChild(new Background());
 			
 			
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
+			Tile.Loader("/Application/assets/level2.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
 			
 			for (int i = 0; i < 8; i++) 

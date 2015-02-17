@@ -24,7 +24,7 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
 		private bool canShoot = true;
-		private bool keyboardTest = false;
+		private bool keyboardTest = true;
 		private Vector2 Direction;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
@@ -134,7 +134,13 @@ namespace TheATeam
 		private void HandleInput()
 		{
 			//var gamePadData = GamePad.GetData(0);
-
+			if(AppMain.TYPEOFGAME.Equals("MULITPLAYER"))
+			{
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
+			}
+			else
+			{
 			if(whichPlayer == PlayerIndex.PlayerOne)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
@@ -174,7 +180,7 @@ namespace TheATeam
 						canShoot = true;
 				}
 			}
-
+			}
 			
 			if(keyboardTest == true)
 			{
@@ -224,7 +230,15 @@ namespace TheATeam
 				break;
 			}
 
-			
+			if(Input2.GamePad0.Cross.Down)
+			{
+				if(canShoot)
+				{
+				Shoot();
+				}
+			}
+			if(Input2.GamePad0.Cross.Release)
+				canShoot = true;
 			
 		}
 		
