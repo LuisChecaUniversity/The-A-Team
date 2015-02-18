@@ -109,5 +109,6 @@
     <Content Include="assets\SpriteSheetMaster-Recovered.png" />
     <Content Include="assets\health.png" />
     <Content Include="assets\mana.png" />
+    <Content Include="assets\pointer.png" />
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D;
@@ -27,6 +28,7 @@ namespace TheATeam
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		private Vector2 Direction;
+		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		public int health = 100;
@@ -92,6 +94,7 @@ namespace TheATeam
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f, 0.0f);
+			ShootingDirection = new Vector2(1.0f, 0.0f);
 			playerTiles = tiles;
 		}
 		
@@ -198,15 +201,22 @@ namespace TheATeam
 			}
 			
 			if(!positionDelta.IsZero())
-				{
+			{
 				Direction = positionDelta.Normalize();
-				}
+				ShootingDirection = Direction;
+			}
 		}
 		
 		private void SingleUpdate(float dt)
 		{
 			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
 			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
+			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
+			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+			if(ShootingDirection.IsZero())
+			{
+				ShootingDirection = Direction;
+			}
 			if(!positionDelta.IsZero())
 			{
 				Direction = positionDelta.Normalize();
@@ -356,8 +366,8 @@ namespace TheATeam
 					AppMain.client.SetActionMessage('S');
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y );
-				
-				ProjectileManager.Instance.Shoot(pos, Direction, _element);
+				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
+				ProjectileManager.Instance.Shoot(pos, ShootingDirection, _element);
 				canShoot = false;
 			}
 			
@@ -417,6 +427,7 @@ namespace TheATeam
 					{
 						Direction = p.Position - Position;
 						Direction = Direction.Normalize();
+						ShootingDirection = Direction;
 						Shoot();
 						curTime = 0.0f;	
 					}

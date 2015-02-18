@@ -50,6 +50,9 @@ namespace TheATeam
 		private SpriteUV p2ManaSprite;
 		private TextureInfo p2ManaTexInfo;
 		
+		private SpriteUV playerPointer;
+		private TextureInfo pointerTex;
+		
 		
 		public Level(): base()
 		{
@@ -180,10 +183,16 @@ namespace TheATeam
 				p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
 				p2ManaSprite.Position = new Vector2(750, screenHeight -30);
 				
+				pointerTex = new TextureInfo("/Application/assets/pointer.png");
+				playerPointer = new SpriteUV(pointerTex);
+				playerPointer.Quad.S = pointerTex.TextureSizef;
+				playerPointer.CenterSprite();
+				
 				this.AddChild(p1HealthSprite);
 				this.AddChild(p2HealthSprite);
 				this.AddChild(p1ManaSprite);
 				this.AddChild(p2ManaSprite);
+				this.AddChild(playerPointer);
 				Camera2D.SetViewFromViewport();
 			}
 		}
@@ -210,7 +219,9 @@ namespace TheATeam
 				
 					p1ManaSprite.Quad.S = new Vector2(player1.mana,30.0f);
 					p2ManaSprite.Quad.S = new Vector2(player2.mana,30.0f);
-				
+					
+					playerPointer.Rotation = player1.ShootingDirection;
+					playerPointer.Position = player1.Position;
 				
 					player1.Update(dt);
 					if(AppMain.TYPEOFGAME.Equals("DUAL"))
