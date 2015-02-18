@@ -60,7 +60,7 @@ namespace TheATeam
 
 			CenterSprite();
 			
-
+			
 			IsDefending = false;
 
 			if(isPlayer1)

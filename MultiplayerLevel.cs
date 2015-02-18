@@ -14,10 +14,7 @@ namespace TheATeam
 	
 	public class MultiplayerLevel: Scene
 	{
-<<<<<<< HEAD
-=======
-		
->>>>>>> origin/master
+
 		private LevelStage levelStage = LevelStage.CombatStage;
 		Player player1;
 		Player player2;
