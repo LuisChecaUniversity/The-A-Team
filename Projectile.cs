@@ -25,19 +25,17 @@ namespace TheATeam
 
 		public Projectile (Scene scene, TextureInfo tex, Vector2 pos, Vector2 vel)
 		{
-
-
 			//bulletTex = new TextureInfo("/Application/Assets/bullet.png");
 			bulletSprite = new SpriteUV(tex);
 			bulletSprite.Quad.S = tex.TextureSizef;
 			bulletSprite.CenterSprite();
 
 			
-			float offset;
+			float offset = 0.0f;
 			if(vel.X == 0.0f || vel.Y == 0.0f)
 				offset = 50.0f;
 			else
-				offset = 77.0f;
+				offset = 200.0f;
 			
 			
 			rotation = vel.Normalize();

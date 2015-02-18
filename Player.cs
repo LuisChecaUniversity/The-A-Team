@@ -217,6 +217,10 @@ namespace TheATeam
 				{
 					positionDelta.Y = -MoveDelta;	
 				}
+				if(!positionDelta.IsZero())
+			{
+				Direction = positionDelta.Normalize();
+			}
 			}
 
 //			switch(AppMain.TYPEOFGAME)
@@ -404,7 +408,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 				AppMain.client.SetActionMessage('S');
 			playerState = PlayerState.Shooting;
-			Vector2 pos = new Vector2(Position.X + Quad.Bounds2().Point11.X / 2, Position.Y + Quad.Bounds2().Point11.Y / 2);
+			Vector2 pos = new Vector2(Position.X, Position.Y );
 			ProjectileManager.Instance.Shoot(pos, Direction, _element);
 			canShoot = false;
 			

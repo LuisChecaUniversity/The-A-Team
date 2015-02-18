@@ -22,16 +22,13 @@ namespace TheATeam
 		private List<Item> items;
 		//public List<Item> Items { get { return items;}}
 		private Item leftFlag, rightFlag, fireElement, waterElement;
-		private Scene scene;
-		
+			
 		private static Vector2i flagIndex = Tile.LoadSpriteIndex('~');
 		private static Vector2i fireIndex = Tile.LoadSpriteIndex('R');
 		private static Vector2i waterIndex =  Tile.LoadSpriteIndex('B');
 		
 		private ItemManager ()
-		{
-			scene = GameSceneManager.currentScene;
-			
+		{			
 			items = new List<Item>();
 		}
 		public void initFlags(Scene curScene)
