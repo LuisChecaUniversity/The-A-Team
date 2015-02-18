@@ -24,9 +24,6 @@ namespace TheATeam
 		Player player2;
 		Label lblTopLeft;
 		private Label lblTopRight;
-		private Label lblBottomLeft;
-		private Label lblBottomRight;
-		private Label lblDebugLeft;
 		private int screenWidth;
 		private int screenHeight;
 		Font font;
@@ -72,7 +69,6 @@ namespace TheATeam
 
 			AddChild(new Background());
 			
-			
 			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
 			
 			for (int i = 0; i < 8; i++) 
@@ -104,97 +100,56 @@ namespace TheATeam
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 			
 			
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
-
-				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
-				lblTopLeft.Text = "Player 1";
-				lblTopLeft.Position = new Vector2(100, screenHeight - 200);
-
-				lblTopRight = new Label();
-				lblBottomLeft = new Label();
-				lblBottomRight = new Label();
-				lblDebugLeft = new Label();
-
-				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Player 2";
-				lblTopRight.Position = new Vector2(screenWidth - 200, screenHeight - 200);
-
-				lblBottomLeft.FontMap = debugFont;
-				lblBottomLeft.Text = "Waiting";
-				lblBottomLeft.Position = new Vector2(100, 300);
-
-				lblBottomRight.FontMap = debugFont;
-				lblBottomRight.Text = "Waiting";
-				lblBottomRight.Position = new Vector2(screenWidth - 200, 300);
-
-				lblDebugLeft.FontMap = debugFont;
-				lblDebugLeft.Text = "Waiting for both connections";
-				lblDebugLeft.Position = new Vector2(430, 200);
-
-				this.AddChild(lblTopRight);
-				this.AddChild(lblBottomLeft);
-				this.AddChild(lblBottomRight);
-				this.AddChild(lblDebugLeft);
-				this.AddChild(lblTopLeft);
-			}
-			else
-			{
-				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
-				lblTopLeft.Text = "";
-				lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
-				
-				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Press Start to Continue";
-				lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
-				
-
+		
+			lblTopLeft = new Label();
+			lblTopLeft.FontMap = debugFont;
+			lblTopLeft.Text = "";
+			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
-				
-				
-				this.AddChild(player1);
-				this.AddChild(player2);
-				
-				
-				//extra for video to use later
-				p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
-				p1HealthSprite = new SpriteUV(p1HealthTexInfo);
-				
-				p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
-				p1HealthSprite.Position = new Vector2(200, screenHeight -30);
-				
-				p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
-				p2HealthSprite = new SpriteUV(p2HealthTexInfo);
-				
-				p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
-				p2HealthSprite.Position = new Vector2(600, screenHeight -30);
-				
-				//
-				p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
-				p1ManaSprite = new SpriteUV(p1ManaTexInfo);
-				p1ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
-				p1ManaSprite.Position = new Vector2(50, screenHeight -30);
-				
-				p2ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
-				p2ManaSprite = new SpriteUV(p2ManaTexInfo);
-				p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
-				p2ManaSprite.Position = new Vector2(750, screenHeight -30);
-				
-				pointerTex = new TextureInfo("/Application/assets/pointer.png");
-				playerPointer = new SpriteUV(pointerTex);
-				playerPointer.Quad.S = pointerTex.TextureSizef;
-				playerPointer.CenterSprite();
-				
-				this.AddChild(p1HealthSprite);
-				this.AddChild(p2HealthSprite);
-				this.AddChild(p1ManaSprite);
-				this.AddChild(p2ManaSprite);
-				this.AddChild(playerPointer);
-				Camera2D.SetViewFromViewport();
-			}
+			lblTopRight = new Label();
+			lblTopRight.FontMap = debugFont;
+			lblTopRight.Text = "Press Start to Continue";
+			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+			
+			this.AddChild(player1);
+			this.AddChild(player2);
+			
+			//extra for video to use later
+			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+			p1HealthSprite = new SpriteUV(p1HealthTexInfo);
+			
+			p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p1HealthSprite.Position = new Vector2(200, screenHeight -30);
+			
+			p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+			p2HealthSprite = new SpriteUV(p2HealthTexInfo);
+			
+			p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p2HealthSprite.Position = new Vector2(600, screenHeight -30);
+			
+			//
+			p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+			p1ManaSprite = new SpriteUV(p1ManaTexInfo);
+			p1ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p1ManaSprite.Position = new Vector2(50, screenHeight -30);
+			
+			p2ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+			p2ManaSprite = new SpriteUV(p2ManaTexInfo);
+			p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p2ManaSprite.Position = new Vector2(750, screenHeight -30);
+			
+			pointerTex = new TextureInfo("/Application/assets/pointer.png");
+			playerPointer = new SpriteUV(pointerTex);
+			playerPointer.Quad.S = pointerTex.TextureSizef;
+			playerPointer.CenterSprite();
+			
+			this.AddChild(p1HealthSprite);
+			this.AddChild(p2HealthSprite);
+			this.AddChild(p1ManaSprite);
+			this.AddChild(p2ManaSprite);
+			this.AddChild(playerPointer);
+			Camera2D.SetViewFromViewport();
+			
 		}
 		public override void OnEnter()
 		{
@@ -210,10 +165,7 @@ namespace TheATeam
 
 			
 				if(levelStage == LevelStage.CombatStage)
-				{
-//					if(Input2.GamePad0.Triangle.Down)
-//						ChangeTiles("Fire");
-					
+				{		
 					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
 					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
 				
@@ -224,10 +176,7 @@ namespace TheATeam
 					playerPointer.Position = player1.Position;
 				
 					player1.Update(dt);
-					if(AppMain.TYPEOFGAME.Equals("DUAL"))
-						player2.Update(dt);	
-					else
-						player2.UpdateAI(dt, player1);
+					player2.UpdateAI(dt, player1);
 					
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
@@ -329,19 +278,12 @@ namespace TheATeam
 								t.Key = 'E';
 						}
 						ItemManager.Instance.initElements(this);
-						//ItemManager.Instance.initFlags();
 					}
 					
 				}
 				
 			}
-
-
-			
-
 		}
-
-	
 }
 
 
