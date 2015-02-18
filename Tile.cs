@@ -26,12 +26,12 @@ namespace TheATeam
 
 	public class Tile: SpriteTile
 	{
-		private static Dictionary<char, TileType> _types = new Dictionary<char, TileType>();
+		private static Dictionary<char, TileType> _types = XMLTypeLoader();
+		private Stats _stats = new Stats();
 		private char _key;
 
 		private bool _isWall { get { return Elements.Contains(_key); } }
-
-		private Stats _stats = new Stats();
+		
 		public static TextureInfo TexInfo = TextureManager.Get("tiles");
 		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
@@ -64,7 +64,7 @@ namespace TheATeam
 		{
 			_key = loadKey;
 			TileType tt = new TileType();
-			if(_types.TryGetValue(loadKey, out tt))
+			if (_types.TryGetValue(loadKey, out tt))
 			{
 				TileIndex2D = tt.TileIndex2D;
 				IsCollidable = tt.IsCollidable;
@@ -73,25 +73,25 @@ namespace TheATeam
 		
 		public bool WallDamage()
 		{			
-			if(!_isWall)
+			if (!_isWall)
 				return false;
 			
-			if(IsAlive)
+			if (IsAlive)
 			{
-				if(_stats.Health > _stats.MaxHealth && _stats.Lives < _stats.MaxLives)
+				if (_stats.Health > _stats.MaxHealth && _stats.Lives < _stats.MaxLives)
 				{
 					_stats.Lives++;
 					_stats.Health = _stats.MaxHealth;
 				}
 				
-				if(_stats.Health <= 0)
+				if (_stats.Health <= 0)
 				{
 					_stats.Lives--;
 					_stats.Health = _stats.MaxHealth;
 				}
 				
 				int newTileIndex = _stats.MaxLives - _stats.Lives;
-				if(newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
+				if (newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
 				{
 					TileIndex2D.X = newTileIndex;
 				}
@@ -106,7 +106,7 @@ namespace TheATeam
 		
 		public void TakeDamage(char element='N', int damage=1)
 		{
-			if(IsAlive && _isWall)
+			if (IsAlive && _isWall)
 			{
 				_stats.Health += damage * (element == Key ? 1 : -1);
 			}
@@ -126,55 +126,47 @@ namespace TheATeam
 		
 		public static Vector2i LoadSpriteIndex(char loadkey)
 		{
-			if(_types.Count < 1)
-				XMLTypeLoader("/Application/assets/tiles.xml");
+			if (_types.Count < 1)
+				XMLTypeLoader();
 			
 			TileType tt = new TileType();
-			if(_types.TryGetValue(loadkey, out tt))
+			if (_types.TryGetValue(loadkey, out tt))
 			{
 				return tt.TileIndex2D;
 			}
 			return new Vector2i();
 		}
 		
-		private static void XMLTypeLoader(string filepath)
+		private static Dictionary<char, TileType> XMLTypeLoader(string filepath="/Application/assets/tiles.xml")
 		{
 			// Read whole level xml to doc
 			var doc = XDocument.Load(filepath);
 			// Assign attributes to anonymous type with LINQ
-			var lines = from tiletype in doc.Root.Elements("tiletype")
-				select new {
-					X = (int)tiletype.Attribute("tx"),
-					Y = (int)tiletype.Attribute("ty"),
-					Key = char.Parse(tiletype.Attribute("k").Value.ToUpper()),
-					IsCollidable = (bool)tiletype.Attribute("c")
-				};
-			// Loop through anonymous types and assign to TileType
-			TileType tt = new TileType();
-			foreach(var line in lines)
-			{
-				tt.Key = line.Key;
-				tt.TileIndex2D = new Vector2i(line.X, line.Y);
-				tt.IsCollidable = line.IsCollidable;
-
-				_types.Add(line.Key, tt);
-			}
+			Dictionary<char, TileType> types = doc.Descendants("tiletype").ToDictionary(
+				desc => char.Parse(desc.Attribute("k").Value.ToUpper()), 
+                desc => new TileType {
+						TileIndex2D = new Vector2i((int)desc.Attribute("tx"), (int)desc.Attribute("ty")),
+						Key = char.Parse(desc.Attribute("k").Value.ToUpper()),
+						IsCollidable = (bool)desc.Attribute("c")
+					}
+				);
+			return types;
 		}
-
+		
 		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, Scene scene)
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
 			// Load types if empty
-			if(_types.Count < 1)
-				XMLTypeLoader("/Application/assets/tiles.xml");
+			if (_types.Count < 1)
+				XMLTypeLoader();
 			// Clear collision list
 			Collisions.Clear();
 			// Read whole level files to lines
 			var lines = System.IO.File.ReadAllLines(filepath);
 			// Make SpriteLists to improve efficiency
 			var tiles = new SpriteList(TexInfo);
-			for(int i = lines.Length - 1; i >= 0; i--)
+			for (int i = lines.Length - 1; i >= 0; i--)
 			{
 				// New row: reset x position
 				pos.X = 0;
@@ -183,7 +175,7 @@ namespace TheATeam
 				// Make empty list for new row
 				var gridLine = new List<Tile>();
 
-				foreach(char c in line)
+				foreach (char c in line)
 				{
 					// Makes a wall or tile
 					t = new Tile(c, pos);
@@ -193,15 +185,15 @@ namespace TheATeam
 					gridLine.Add(t);
 
 					// If has collision add to collisions checklist
-					if(t.IsCollidable)
+					if (t.IsCollidable)
 						Collisions.Add(t);
 
 					// Player 1 start position
-					if(c == '1')
+					if (c == '1')
 						player1Pos = pos;
 					
 					// Player 2 start
-					if(c == '2')
+					if (c == '2')
 						player2Pos = pos;
 
 					// End col: Move to next tile "grid"
