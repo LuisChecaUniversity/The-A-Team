@@ -26,12 +26,13 @@ namespace TheATeam
 
 	public class Tile: SpriteTile
 	{
-		private static Dictionary<char, TileType> Types = new Dictionary<char, TileType>();
+		private static Dictionary<char, TileType> _types = new Dictionary<char, TileType>();
 		private char _key;
 
 		private bool _isWall { get { return Elements.Contains(_key); } }
 
-		private Stats Stats = new Stats();
+		private Stats _stats = new Stats();
+		
 		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
@@ -43,6 +44,8 @@ namespace TheATeam
 		public bool IsCollidable { get; set; }
 
 		public char Key { get { return _key; } set { LoadTileProperties(value); } }
+		
+		public bool IsAlive { get { return _stats.Lives > 0; } }
 
 		public Tile(Vector2 position): base()
 		{
@@ -61,7 +64,7 @@ namespace TheATeam
 		{
 			_key = loadKey;
 			TileType tt = new TileType();
-			if(Types.TryGetValue(loadKey, out tt))
+			if(_types.TryGetValue(loadKey, out tt))
 			{
 				TileIndex2D = tt.TileIndex2D;
 				IsCollidable = tt.IsCollidable;
@@ -73,21 +76,21 @@ namespace TheATeam
 			if(!_isWall)
 				return false;
 			
-			if(Stats.Lives > 0)
+			if(IsAlive)
 			{
-				if(Stats.Health > Stats.MaxHealth && Stats.Lives < Stats.MaxLives)
+				if(_stats.Health > _stats.MaxHealth && _stats.Lives < _stats.MaxLives)
 				{
-					Stats.Lives++;
-					Stats.Health = Stats.MaxHealth;
+					_stats.Lives++;
+					_stats.Health = _stats.MaxHealth;
 				}
 				
-				if(Stats.Health <= 0)
+				if(_stats.Health <= 0)
 				{
-					Stats.Lives--;
-					Stats.Health = Stats.MaxHealth;
+					_stats.Lives--;
+					_stats.Health = _stats.MaxHealth;
 				}
 				
-				int newTileIndex = Stats.MaxLives - Stats.Lives;
+				int newTileIndex = _stats.MaxLives - _stats.Lives;
 				if(newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
 				{
 					TileIndex2D.X = newTileIndex;
@@ -103,9 +106,9 @@ namespace TheATeam
 		
 		public void TakeDamage(char element='N', int damage=1)
 		{
-			if(Stats.Lives > 0 && _isWall)
+			if(IsAlive && _isWall)
 			{
-				Stats.Health += damage * (element == Key ? 1 : -1);
+				_stats.Health += damage * (element == Key ? 1 : -1);
 			}
 		}
 
@@ -123,11 +126,11 @@ namespace TheATeam
 		
 		public static Vector2i LoadSpriteIndex(char loadkey)
 		{
-			if(Types.Count < 1)
+			if(_types.Count < 1)
 				XMLTypeLoader("/Application/assets/tiles.xml");
 			
 			TileType tt = new TileType();
-			if(Types.TryGetValue(loadkey, out tt))
+			if(_types.TryGetValue(loadkey, out tt))
 			{
 				return tt.TileIndex2D;
 			}
@@ -154,7 +157,7 @@ namespace TheATeam
 				tt.TileIndex2D = new Vector2i(line.X, line.Y);
 				tt.IsCollidable = line.IsCollidable;
 
-				Types.Add(line.Key, tt);
+				_types.Add(line.Key, tt);
 			}
 		}
 
@@ -162,10 +165,8 @@ namespace TheATeam
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
-			// Pause timer
-			SceneManager.PauseScene();
 			// Load types if empty
-			if(Types.Count < 1)
+			if(_types.Count < 1)
 				XMLTypeLoader("/Application/assets/tiles.xml");
 			// Clear collision list
 			Collisions.Clear();
@@ -213,8 +214,6 @@ namespace TheATeam
 
 			// Add Tiles to Scene
 			scene.AddChild(tiles);
-			// Resume Timers
-			SceneManager.ResumeScene();
 		}
 	}
 }

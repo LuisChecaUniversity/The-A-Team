@@ -18,7 +18,7 @@ namespace TheATeam
 		Shooting,
 	}
 
-	public class Player: EntityAlive
+	public class Player: Tile
 	{
 		private static int Y_INDEX = 4;
 		private static float MoveDelta = 4f;
@@ -35,6 +35,8 @@ namespace TheATeam
 		private int manaCost = 30;
 		private int manaRechargeRate = 20;
 		private Vector2 startingPosition;
+		private Vector2 positionDelta;
+		private Vector2i animationRangeX;
 		
 		//AI variables
 		private bool movingLeft = true;
@@ -57,23 +59,36 @@ namespace TheATeam
 			}
 		}
 
-		public AttackStatus Attack { get { return attackState; } }
+		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
+			base(position)
+		{
+			// Assign variables
+			this.animationRangeX = animationRangeX;
+			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
+			// Attach custom animation function
+			ScheduleInterval((dt) => {
+				if(IsAlive)
+				{
+					int newTileIndex = TileIndex2D.X < animationRangeX.Y ? TileIndex2D.X + 1 : animationRangeX.X;
+					TileIndex2D.X = newTileIndex;
+				}
+				else
+				{
+					TileIndex2D.X = TextureInfo.NumTiles.X - 1;
+					UnscheduleUpdate();
+				}
+			}, interval);
+		}
 		
 		public Player(Vector2 position, bool isPlayer1, List<Tile> tiles):
-			base(Y_INDEX, position, new Vector2i(0, 3))
+			this(Y_INDEX, position, new Vector2i(0, 3))
 		{
 			startingPosition = position;
 			Element = 'N';
 
 			CenterSprite();
-			
-			
-			IsDefending = false;
 
-			if(isPlayer1)
-				whichPlayer = PlayerIndex.PlayerOne;
-			else
-				whichPlayer = PlayerIndex.PlayerTwo;
+			whichPlayer = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f, 0.0f);

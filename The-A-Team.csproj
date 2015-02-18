@@ -42,10 +42,8 @@
     <Compile Include="AppMain.cs" />
     <Compile Include="AssetManager.cs" />
     <Compile Include="AudioManager.cs" />
-    <Compile Include="SceneManager.cs" />
     <Compile Include="TextureManager.cs" />
     <Compile Include="Tile.cs" />
-    <Compile Include="EntityAlive.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Projectile.cs" />
