@@ -39,6 +39,13 @@ namespace TheATeam
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
 		
+		
+		private SpriteUV p1HealthSprite;
+		private TextureInfo p1HealthTexInfo;
+		private SpriteUV p2HealthSprite;
+		private TextureInfo p2HealthTexInfo;
+		
+		
 		public Level(): base()
 		{
 
@@ -57,15 +64,16 @@ namespace TheATeam
 			AddChild(new Background());
 			
 			
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
+			Tile.Loader("/Application/assets/level2.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
 			
 			for (int i = 0; i < 8; i++) 
 				{
 					for (int j = 0; j < 5; j++) 
-					{
+					{						
+						if(Tile.Grid[i][j].Key == 'E')
+							Tile.Grid[i][j].Key = 'A';
 						player1Tiles.Add(Tile.Grid[i][j]);
-					
 					}
 				}
 			
@@ -137,84 +145,81 @@ namespace TheATeam
 				
 
 			
-			this.AddChild(player1);
-			this.AddChild(player2);
+				
+				
+				this.AddChild(player1);
+				this.AddChild(player2);
+				
+				
+				//extra for video to use later
+				p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+				p1HealthSprite = new SpriteUV(p1HealthTexInfo);
+				
+				p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p1HealthSprite.Position = new Vector2(200, screenHeight -30);
+				
+				p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+				p2HealthSprite = new SpriteUV(p2HealthTexInfo);
+				
+				p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p2HealthSprite.Position = new Vector2(600, screenHeight -30);
+				
+				this.AddChild(p1HealthSprite);
+				this.AddChild(p2HealthSprite);
+				Camera2D.SetViewFromViewport();
+			}
+		}
+		public override void OnEnter()
+		{
+			base.OnEnter();			
+			ItemManager.Instance.initFlags(this);
 			this.AddChild(blockedAreaSprite);
 			this.AddChild(lblTopLeft);
-			this.AddChild(lblTopRight);
-			Camera2D.SetViewFromViewport();
-
-			}
-//			Schedule((dt) => {
-//				Info.TotalGameTime += dt;
-//				// Camera2D.SetViewFromHeightAndCenter(Info.CameraHeight, Info.CameraCenter);
-//			});
+				this.AddChild(lblTopRight);
 		}
-
 		public override void Update(float dt)
 		{
 			base.Update(dt);
 
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
-				if(levelStage == LevelStage.CombatStage)
-				{
-					string status = AppMain.client.statusString;
-					if(status.Equals("None"))
-					{
-						AppMain.client.ChangeStatus();
-						lblDebugLeft.Text = "Changing";
-					}
-					else
-						lblDebugLeft.Text = status;
-	
-					if(AppMain.ISHOST)
-					{
-						player1.Update(dt);
-						AppMain.client.DataExchange();
-						player2.Update(dt);
-					}
-					else
-					{
-						player2.Update(dt);
-						AppMain.client.DataExchange();
-						player1.Update(dt);
-					}
-				}
-				else if(levelStage == LevelStage.BuildDefence)
-				{
-					
-				}
-			}
-			else if(AppMain.TYPEOFGAME.Equals("SINGLE"))
-			{
+			
 				if(levelStage == LevelStage.CombatStage)
 				{
 //					if(Input2.GamePad0.Triangle.Down)
 //						ChangeTiles("Fire");
 					
+					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
+					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
+				
 					player1.Update(dt);
-					player2.UpdateAI(dt, player1);
+					if(AppMain.TYPEOFGAME.Equals("DUAL"))
+						player2.Update(dt);	
+					else
+						player2.UpdateAI(dt, player1);
 					
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
 		
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
-						Console.WriteLine("Player 1 got hit");
+						player1.TakeDamage(10);
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
-						Console.WriteLine("Player 2 got hit");
+						player2.TakeDamage(10);
 		
 		
-					foreach(Tile t in Tile.Collisions)
+					for(int i = 0; i < Tile.Collisions.Count; i++)
 					{
+						Tile t = Tile.Collisions[i];
 						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
 						if(collisionType != 'X')
 						{
 							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
 							t.TakeDamage(collisionType);
-	
 						}
-						
+						// Remove from collisions if true
+						if(t.WallDamage())
+						{
+							Tile.Collisions.RemoveAt(i);
+							i--;
+						}
 					}
 					
 					ItemManager.Instance.Update(dt);
@@ -290,8 +295,8 @@ namespace TheATeam
 							if(t.Key == 'A')
 								t.Key = 'E';
 						}
-						ItemManager.Instance.initElements();
-						ItemManager.Instance.initFlags();
+						ItemManager.Instance.initElements(this);
+						//ItemManager.Instance.initFlags();
 					}
 					
 				}
@@ -303,7 +308,7 @@ namespace TheATeam
 
 		}
 
-	}
+	
 }
 
 

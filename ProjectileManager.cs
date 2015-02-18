@@ -32,23 +32,23 @@ namespace TheATeam
 			get{return instance;}
 		}
 		
-		public void Shoot(Vector2 playerPos, Vector2 direction, int type)
+		public void Shoot(Vector2 playerPos, Vector2 direction, char type)
 		{
 			Vector2 Velocity = new Vector2(direction.X * bulletSpeed, direction.Y * bulletSpeed);
 			Projectile newProjectile;
-			if(type == 0)
+			if(type == 'N')
 			{
 				newProjectile = new Projectile(scene, neutralTex, playerPos, Velocity);
 				newProjectile.setType(Type.Neutral);
 				projectiles.Add(newProjectile);
 			}
-			else if(type == 1)
+			else if(type == 'F')
 			{
 				newProjectile = new Projectile(scene, fireTex, playerPos, Velocity);
 				newProjectile.setType(Type.Fire);
 				projectiles.Add(newProjectile);
 			}
-			else if(type == 2)
+			else if(type == 'W')
 			{
 				newProjectile = new Projectile(scene, waterTex, playerPos, Velocity);
 				newProjectile.setType(Type.Water);
@@ -95,7 +95,7 @@ namespace TheATeam
 			// Will need to check this against every tile + player positions
 			foreach(Projectile projectile in projectiles)
 			{
-				if(projectile.hasCollided(pos, size) || projectile.offScreen())
+				if(projectile.hasCollided(pos, size))
 				{
 					projectile.collided = true;
 					switch(projectile.getType())

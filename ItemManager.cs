@@ -33,31 +33,24 @@ namespace TheATeam
 			scene = GameSceneManager.currentScene;
 			
 			items = new List<Item>();
-			if(items.Count == 0)
-			{
-				Vector2 pos1 = new Vector2(100,290);
-				leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
-				items.Add(leftFlag);
-			}
 		}
-		public void initFlags()
+		public void initFlags(Scene curScene)
 		{
-			Vector2 pos1 = leftFlag.position;
-			items.Remove(leftFlag);
-			leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
+			Vector2 pos1 = new Vector2(100,290);
+			leftFlag = new Item(curScene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
-			rightFlag = new Item(scene, pos2, flagIndex, ItemType.flag, "Player2Flag");
+			rightFlag = new Item(curScene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
 		}
-		public void initElements()
+		public void initElements(Scene curScene)
 		{
 			if(null == GetItem(ItemType.element, "Fire")) 
 			{
 			Vector2 pos1 = new Vector2(480,190);
 			Vector2 pos2 = new Vector2(480,390);
-			fireElement = new Item(scene, pos1, fireIndex, ItemType.element, "Fire");
-			waterElement = new Item(scene, pos2, waterIndex, ItemType.element, "Water");
+			fireElement = new Item(curScene, pos1, fireIndex, ItemType.element, "Fire");
+			waterElement = new Item(curScene, pos2, waterIndex, ItemType.element, "Water");
 				
 			items.Add(fireElement);
 			items.Add(waterElement);
@@ -112,13 +105,29 @@ namespace TheATeam
 					if(item.hasCollided(p1.Position, p1Size))
 					{
 						Console.WriteLine("Collided with " + item.GetName());
+						item.iSprite.Visible = false;
+						item.collided = true;
 						switch (item.GetName()) 
 						{
 						case "Water":
+							if(p1.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
 							p1.ChangeTiles("Water");
+							p1.Element = 'W';
 							break;
 						case "Fire":
+							if(p1.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
 							p1.ChangeTiles("Fire");
+							p1.Element = 'F';
 							break;
 						case "Player1Flag":
 							break;
@@ -127,8 +136,42 @@ namespace TheATeam
 						default:
 							break;
 						}
+					}
+					//check player 2 with items first
+					if(item.hasCollided(p2.Position, p2Size))
+					{
+						//Console.WriteLine("Collided with " + item.GetName());
 						item.iSprite.Visible = false;
 						item.collided = true;
+						switch (item.GetName()) 
+						{
+						case "Water":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Water");
+							p2.Element = 'W';
+							break;
+						case "Fire":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Fire");
+							p2.Element = 'F';
+							break;
+						case "Player1Flag":
+							break;
+						case "Player2Flag":
+							break;
+						default:
+							break;
+						}
 					}
 				}
 			}
