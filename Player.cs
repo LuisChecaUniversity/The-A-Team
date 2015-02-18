@@ -27,7 +27,8 @@ namespace TheATeam
 		private static float UISize = 32;
 		private bool canShoot = true;
 		private bool keyboardTest = true;
-		private Vector2 Direction, ShootingDirection;
+		private Vector2 Direction;
+		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		public int health = 100;
