@@ -45,6 +45,11 @@ namespace TheATeam
 		private SpriteUV p2HealthSprite;
 		private TextureInfo p2HealthTexInfo;
 		
+		private SpriteUV p1ManaSprite;
+		private TextureInfo p1ManaTexInfo;
+		private SpriteUV p2ManaSprite;
+		private TextureInfo p2ManaTexInfo;
+		
 		
 		public Level(): base()
 		{
@@ -164,8 +169,21 @@ namespace TheATeam
 				p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
 				p2HealthSprite.Position = new Vector2(600, screenHeight -30);
 				
+				//
+				p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+				p1ManaSprite = new SpriteUV(p1ManaTexInfo);
+				p1ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p1ManaSprite.Position = new Vector2(50, screenHeight -30);
+				
+				p2ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+				p2ManaSprite = new SpriteUV(p2ManaTexInfo);
+				p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+				p2ManaSprite.Position = new Vector2(750, screenHeight -30);
+				
 				this.AddChild(p1HealthSprite);
 				this.AddChild(p2HealthSprite);
+				this.AddChild(p1ManaSprite);
+				this.AddChild(p2ManaSprite);
 				Camera2D.SetViewFromViewport();
 			}
 		}
@@ -189,6 +207,10 @@ namespace TheATeam
 					
 					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
 					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
+				
+					p1ManaSprite.Quad.S = new Vector2(player1.mana,30.0f);
+					p2ManaSprite.Quad.S = new Vector2(player2.mana,30.0f);
+				
 				
 					player1.Update(dt);
 					if(AppMain.TYPEOFGAME.Equals("DUAL"))
