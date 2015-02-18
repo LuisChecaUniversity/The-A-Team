@@ -138,6 +138,7 @@ namespace TheATeam
 		{
 			// Read whole level xml to doc
 			var doc = XDocument.Load(filepath);
+			// Assign attributes to anonymous type with LINQ
 			var lines = from tiletype in doc.Root.Elements("tiletype")
 				select new {
 					X = (int)tiletype.Attribute("tx"),
@@ -145,6 +146,7 @@ namespace TheATeam
 					Key = char.Parse(tiletype.Attribute("k").Value.ToUpper()),
 					IsCollidable = (bool)tiletype.Attribute("c")
 				};
+			// Loop through anonymous types and assign to TileType
 			TileType tt = new TileType();
 			foreach(var line in lines)
 			{
@@ -156,7 +158,7 @@ namespace TheATeam
 			}
 		}
 
-		public static void Loader(string filepath, ref Vector2 playerPos, Scene scene)
+		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, Scene scene)
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
@@ -195,11 +197,11 @@ namespace TheATeam
 
 					// Player 1 start position
 					if(c == '1')
-						playerPos = pos;
+						player1Pos = pos;
 					
-					/* Player 2 start
+					// Player 2 start
 					if(c == '2')
-						player2Pos = pos;*/
+						player2Pos = pos;
 
 					// End col: Move to next tile "grid"
 					pos.X += Width;
@@ -211,11 +213,6 @@ namespace TheATeam
 
 			// Add Tiles to Scene
 			scene.AddChild(tiles);
-			// Add Entites to Scene
-			//scene.AddChild(entities);
-			// Player has position, add player last to scene
-//			if(!playerPos.IsZero())
-//				scene.AddChild(new Player(playerPos));
 			// Resume Timers
 			SceneManager.ResumeScene();
 		}

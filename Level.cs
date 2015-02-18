@@ -58,14 +58,14 @@ namespace TheATeam
 			// Reload the font becuase FontMap disposes of it
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
 			Info.LevelClear = false;
-			Vector2 cameraCenter = Vector2.Zero;
+			Vector2 player1Pos = Vector2.Zero;
+			Vector2 player2Pos = Vector2.Zero;
 
 
 			AddChild(new Background());
 			
 			
-			Tile.Loader("/Application/assets/level2.txt", ref cameraCenter, this);
-			Info.CameraCenter = cameraCenter;
+			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
 			
 			for (int i = 0; i < 8; i++) 
 				{
@@ -86,8 +86,8 @@ namespace TheATeam
 					}
 				}
 			
-			player1 = new Player(cameraCenter, true,player1Tiles);
-			player2 = new Player(new Vector2(960 - 164, 300), false,player2Tiles);
+			player1 = new Player(player1Pos, true,player1Tiles);
+			player2 = new Player(player2Pos, false,player2Tiles);
 			
 			blockedAreaTexInfo = new TextureInfo("/Application/assets/BlockedArea.png");
 			
