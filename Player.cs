@@ -211,7 +211,7 @@ namespace TheATeam
 			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
 			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
 			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
-			ShootingDirection.Y = Input2.GamePad0.AnalogRight.Y;
+			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
 			if(ShootingDirection.IsZero())
 			{
 				ShootingDirection = Direction;
