@@ -133,21 +133,6 @@ namespace TheATeam
 		private void HandleInput(float dt)
 		{
 
-			//var gamePadData = GamePad.GetData(0);
-
-			//if(whichPlayer == PlayerIndex.PlayerOne)
-			//{//
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * dt;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * dt;
-			//}
-			//else if(whichPlayer == PlayerIndex.PlayerTwo)
-			//{
-				//positionDelta.X = Input2.GamePad0.AnalogRight.X;
-				//positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
-			//}
-
-
-			
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
@@ -162,55 +147,6 @@ namespace TheATeam
 			default:
 				break;
 			}
-			//var gamePadData = GamePad.GetData(0);
-//			if(AppMain.TYPEOFGAME.Equals("MULITPLAYER"))
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-//				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
-//			}
-//			else
-//			{
-//			if(whichPlayer == PlayerIndex.PlayerOne)
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-//				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
-//				
-				//dual play
-//				if(AppMain.TYPEOFGAME.Equals("DUAL"))
-//				{
-////					if(Input2.GamePad0.Up.Down )
-////					{
-////						if(canShoot)
-////						{
-////							Shoot();
-////						}
-////					}
-////				
-////				
-////					if(Input2.GamePad0.Up.Release)
-////					canShoot = true;
-//				}
-//			}
-//			else if(whichPlayer == PlayerIndex.PlayerTwo)
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogRight.X;
-//				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
-//				
-//				if(AppMain.TYPEOFGAME.Equals("DUAL"))
-//				{
-////					if(Input2.GamePad0.Triangle.Down)
-////					{
-////						if(canShoot)
-////						{
-////						Shoot();
-////						}
-////					}
-////					if(Input2.GamePad0.Triangle.Release)
-////						canShoot = true;
-//				}
-//			}
-//			}
-
 			
 			if(keyboardTest)
 			{
@@ -235,40 +171,6 @@ namespace TheATeam
 					positionDelta.Y = -MoveDelta;	
 				}
 			}
-
-//			switch(AppMain.TYPEOFGAME)
-//			{
-//			case "DUAL":
-//			case "SINGLE":
-//			// Preserve Movement vector in Direction
-////				if(!positionDelta.IsZero())
-////				{
-////					Direction = positionDelta.Normalize();
-////				}
-//				break;
-//			case "MULTIPLAYER":
-////				if(positionDelta.IsZero())
-////					AppMain.client.SetActionMessage('I');
-////				else
-////				{
-////					AppMain.client.SetActionMessage('M');
-////					Direction = positionDelta;
-////					AppMain.client.SetMyDirection(Direction.X, Direction.Y);
-////				}			
-//				break;
-//			default:
-//				break;
-//			}
-
-//			if(Input2.GamePad0.Cross.Down)
-//			{
-//				if(canShoot)
-//				{
-//				Shoot();
-//				}
-//			}
-//			if(Input2.GamePad0.Cross.Release)
-//				canShoot = true;
 			
 		}
 		
