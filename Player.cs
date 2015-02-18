@@ -23,6 +23,7 @@ namespace TheATeam
 		private static int Y_INDEX = 4;
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
+		private static float UISize = 32;
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		private Vector2 Direction;
@@ -34,6 +35,7 @@ namespace TheATeam
 		private int manaCost = 30;
 		private int manaRechargeRate = 20;
 		private Vector2 startingPosition;
+		
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
@@ -42,6 +44,7 @@ namespace TheATeam
 		private char _element;
 		bool isChasing = false;
 		bool goingForElement = true;
+		
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
 		
@@ -64,7 +67,7 @@ namespace TheATeam
 
 			CenterSprite();
 			
-
+			
 			IsDefending = false;
 
 			if(isPlayer1)
@@ -101,6 +104,7 @@ namespace TheATeam
 				{
 					// Handle movement/attacks
 					HandleInput(dt);
+
 					// Apply the movement
 					Position = Position + positionDelta;
 					// Make camera follow the player
@@ -136,7 +140,7 @@ namespace TheATeam
 		
 		private void HandleInput(float dt)
 		{
-			
+
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
@@ -151,58 +155,11 @@ namespace TheATeam
 			default:
 				break;
 			}
-			//var gamePadData = GamePad.GetData(0);
-//			if(AppMain.TYPEOFGAME.Equals("MULITPLAYER"))
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-//				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
-//			}
-//			else
-//			{
-//			if(whichPlayer == PlayerIndex.PlayerOne)
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-//				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
-//				
-				//dual play
-//				if(AppMain.TYPEOFGAME.Equals("DUAL"))
-//				{
-////					if(Input2.GamePad0.Up.Down )
-////					{
-////						if(canShoot)
-////						{
-////							Shoot();
-////						}
-////					}
-////				
-////				
-////					if(Input2.GamePad0.Up.Release)
-////					canShoot = true;
-//				}
-//			}
-//			else if(whichPlayer == PlayerIndex.PlayerTwo)
-//			{
-//				positionDelta.X = Input2.GamePad0.AnalogRight.X;
-//				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y;
-//				
-//				if(AppMain.TYPEOFGAME.Equals("DUAL"))
-//				{
-////					if(Input2.GamePad0.Triangle.Down)
-////					{
-////						if(canShoot)
-////						{
-////						Shoot();
-////						}
-////					}
-////					if(Input2.GamePad0.Triangle.Release)
-////						canShoot = true;
-//				}
-//			}
-//			}
 			
 			if(keyboardTest)
 			{
-
+				
+				
 				if(Input2.GamePad0.Left.Down)
 				{
 					positionDelta.X = -MoveDelta;
@@ -222,46 +179,13 @@ namespace TheATeam
 				{
 					positionDelta.Y = -MoveDelta;	
 				}
-				if(!positionDelta.IsZero())
-			{
-				Direction = positionDelta.Normalize();
-			}
-			}
 
-//			switch(AppMain.TYPEOFGAME)
-//			{
-//			case "DUAL":
-//			case "SINGLE":
-//			// Preserve Movement vector in Direction
-////				if(!positionDelta.IsZero())
-////				{
-////					Direction = positionDelta.Normalize();
-////				}
-//				break;
-//			case "MULTIPLAYER":
-////				if(positionDelta.IsZero())
-////					AppMain.client.SetActionMessage('I');
-////				else
-////				{
-////					AppMain.client.SetActionMessage('M');
-////					Direction = positionDelta;
-////					AppMain.client.SetMyDirection(Direction.X, Direction.Y);
-////				}			
-//				break;
-//			default:
-//				break;
-//			}
-
-//			if(Input2.GamePad0.Cross.Down)
-//			{
-//				if(canShoot)
-//				{
-//				Shoot();
-//				}
-//			}
-//			if(Input2.GamePad0.Cross.Release)
-//				canShoot = true;
+			}
 			
+			if(!positionDelta.IsZero())
+				{
+				Direction = positionDelta.Normalize();
+				}
 		}
 		
 		private void SingleUpdate(float dt)
@@ -272,12 +196,12 @@ namespace TheATeam
 			{
 				Direction = positionDelta.Normalize();
 			}
-			if(Input2.GamePad0.Cross.Down)
+			if(Input2.GamePad0.R.Down)
 			{
 				if(canShoot)
 					Shoot();
 			}
-			if(Input2.GamePad0.Cross.Release)
+			if(Input2.GamePad0.R.Release)
 				canShoot = true;
 		}
 		
@@ -293,13 +217,13 @@ namespace TheATeam
 				Direction = positionDelta;
 				AppMain.client.SetMyDirection(Direction.X, Direction.Y);
 			}			
-			if(Input2.GamePad0.Cross.Down)
+			if(Input2.GamePad0.R.Down)
 			{
 				if(canShoot)
 					Shoot();
 			
 			}
-			if(Input2.GamePad0.Cross.Release)
+			if(Input2.GamePad0.R.Release)
 				canShoot = true;
 		}
 		
@@ -347,7 +271,7 @@ namespace TheATeam
 		{
 			Vector2 nextPos = Position + positionDelta;
 			float screenWidth = Director.Instance.GL.Context.Screen.Width;
-			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
+			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
 			
 			
 			if(nextPos.X + PlayerSize > screenWidth + 50)

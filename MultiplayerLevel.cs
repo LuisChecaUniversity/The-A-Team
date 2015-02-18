@@ -14,7 +14,7 @@ namespace TheATeam
 	
 	public class MultiplayerLevel: Scene
 	{
-		
+
 		private LevelStage levelStage = LevelStage.CombatStage;
 		Player player1;
 		Player player2;
@@ -121,11 +121,10 @@ namespace TheATeam
 			
 			this.AddChild(player1);
 			this.AddChild(player2);
-			
-			
-			
+
 			ItemManager.Instance.initFlags(this);
 			ItemManager.Instance.initElements(this);
+
 			//this.AddChild(blockedAreaSprite);
 			//this.AddChild(lblTopLeft);
 			//this.AddChild(lblTopRight);
@@ -155,8 +154,13 @@ namespace TheATeam
 						//lblDebugLeft.Text = "Changing";
 					}
 					//else
+
+						//lblDebugLeft.Text = status;
+					lblTopLeft.Text = AppMain.client.ActionMsg.ToString();
+
 					//	lblDebugLeft.Text = status;
 	
+
 					if(AppMain.ISHOST)
 					{
 						player1.Update(dt);
@@ -169,23 +173,27 @@ namespace TheATeam
 						AppMain.client.DataExchange();
 						player1.Update(dt);
 					}
-					ProjectileManager.Instance.Update(dt);
 		
-					
+					// handle bullet update and collision
+					ProjectileManager.Instance.Update(dt);
+
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
 						Console.WriteLine("Player 1 got hit");
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
 						Console.WriteLine("Player 2 got hit");
 		
 		
+
 					for(int i = 0; i < Tile.Collisions.Count; i++)
 					{
 						Tile t = Tile.Collisions[i];
+
 						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
 						if(collisionType != 'X')
 						{
 							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
 							t.TakeDamage(collisionType);
+
 						}
 						// Remove from collisions if true
 						if(t.WallDamage())
@@ -193,6 +201,7 @@ namespace TheATeam
 							Tile.Collisions.RemoveAt(i);
 							i--;
 						}
+
 					}
 					
 					ItemManager.Instance.Update(dt);
