@@ -35,7 +35,7 @@ namespace TheATeam
 			if(vel.X == 0.0f || vel.Y == 0.0f)
 				offset = 50.0f;
 			else
-				offset = 200.0f;
+				offset = 77.0f;
 			
 			
 			rotation = vel.Normalize();

@@ -29,6 +29,10 @@ namespace TheATeam
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
 		public int health = 100;
+		public int mana = 100;
+		public float manaTimer;
+		private int manaCost = 30;
+		private int manaRechargeRate = 20;
 		private Vector2 startingPosition;
 		//AI variables
 		private bool movingLeft = true;
@@ -78,6 +82,7 @@ namespace TheATeam
 	
 			// Handle battle
 			base.Update(dt);
+			updateMana(dt);
 			
 			switch(AppMain.TYPEOFGAME)
 			{
@@ -405,12 +410,17 @@ namespace TheATeam
 		
 		public void Shoot()
 		{
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-				AppMain.client.SetActionMessage('S');
-			playerState = PlayerState.Shooting;
-			Vector2 pos = new Vector2(Position.X, Position.Y );
-			ProjectileManager.Instance.Shoot(pos, Direction, _element);
-			canShoot = false;
+			if(mana >= manaCost)
+			{
+				mana -= manaCost;
+				if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+					AppMain.client.SetActionMessage('S');
+				playerState = PlayerState.Shooting;
+				Vector2 pos = new Vector2(Position.X, Position.Y );
+				
+				ProjectileManager.Instance.Shoot(pos, Direction, _element);
+				canShoot = false;
+			}
 			
 		}
 		
@@ -418,6 +428,7 @@ namespace TheATeam
 		{
 			HandleDirectionAnimation();
 			HandleCollision();
+			updateMana(dt);
 			
 			if(goingForElement)
 			{
@@ -504,13 +515,27 @@ namespace TheATeam
 		
 		public void TakeDamage(int dmg)
 		{
-			if(health > 0)
+			if(health > 0 +dmg)
 				health-= dmg;
-			else
+			else  
 			{
 				Position = startingPosition;
 				health = 100;
+				mana = 100;
 			}
 		}
+		public void updateMana(float dt)
+		{
+			if(mana < 100)
+			{
+				manaTimer += dt;
+			}
+			if(manaTimer >= manaRechargeRate)
+			{
+				mana++;
+				manaTimer = 0.0f;
+			}
+		}
+		
 	}
 }
