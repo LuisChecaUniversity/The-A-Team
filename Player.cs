@@ -23,6 +23,7 @@ namespace TheATeam
 		private static int Y_INDEX = 4;
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
+		private static float UISize = 32;
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		private Vector2 Direction;
@@ -30,6 +31,7 @@ namespace TheATeam
 		private PlayerState playerState;
 		public int health = 100;
 		private Vector2 startingPosition;
+		
 		//AI variables
 		private bool movingLeft = true;
 		private bool shooting = false;
@@ -38,6 +40,7 @@ namespace TheATeam
 		private char _element;
 		bool isChasing = false;
 		bool goingForElement = true;
+		
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
 		
@@ -150,7 +153,8 @@ namespace TheATeam
 			
 			if(keyboardTest)
 			{
-
+				
+				
 				if(Input2.GamePad0.Left.Down)
 				{
 					positionDelta.X = -MoveDelta;
@@ -170,8 +174,13 @@ namespace TheATeam
 				{
 					positionDelta.Y = -MoveDelta;	
 				}
+				
 			}
 			
+			if(!positionDelta.IsZero())
+				{
+				Direction = positionDelta.Normalize();
+				}
 		}
 		
 		private void SingleUpdate(float dt)
@@ -182,12 +191,12 @@ namespace TheATeam
 			{
 				Direction = positionDelta.Normalize();
 			}
-			if(Input2.GamePad0.Cross.Down)
+			if(Input2.GamePad0.R.Down)
 			{
 				if(canShoot)
 					Shoot();
 			}
-			if(Input2.GamePad0.Cross.Release)
+			if(Input2.GamePad0.R.Release)
 				canShoot = true;
 		}
 		
@@ -203,13 +212,13 @@ namespace TheATeam
 				Direction = positionDelta;
 				AppMain.client.SetMyDirection(Direction.X, Direction.Y);
 			}			
-			if(Input2.GamePad0.Cross.Down)
+			if(Input2.GamePad0.R.Down)
 			{
 				if(canShoot)
 					Shoot();
 			
 			}
-			if(Input2.GamePad0.Cross.Release)
+			if(Input2.GamePad0.R.Release)
 				canShoot = true;
 		}
 		
@@ -257,7 +266,7 @@ namespace TheATeam
 		{
 			Vector2 nextPos = Position + positionDelta;
 			float screenWidth = Director.Instance.GL.Context.Screen.Width;
-			float screenHeight = Director.Instance.GL.Context.Screen.Height - 32; // Blank space for UI.
+			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
 			
 			
 			if(nextPos.X + PlayerSize > screenWidth + 50)
