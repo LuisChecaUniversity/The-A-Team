@@ -32,7 +32,7 @@ namespace TheATeam
 		private bool _isWall { get { return Elements.Contains(_key); } }
 
 		private Stats _stats = new Stats();
-		
+		public static TextureInfo TexInfo = TextureManager.Get("tiles");
 		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
@@ -50,7 +50,7 @@ namespace TheATeam
 		public Tile(Vector2 position): base()
 		{
 			Position = position;
-			TextureInfo = TextureManager.Get("tiles");
+			TextureInfo = TexInfo;
 			Quad.S = TextureInfo.TileSizeInPixelsf;
 			IsCollidable = false;
 		}
@@ -173,7 +173,7 @@ namespace TheATeam
 			// Read whole level files to lines
 			var lines = System.IO.File.ReadAllLines(filepath);
 			// Make SpriteLists to improve efficiency
-			var tiles = new SpriteList(TextureManager.Get("tiles"));
+			var tiles = new SpriteList(TexInfo);
 			for(int i = lines.Length - 1; i >= 0; i--)
 			{
 				// New row: reset x position

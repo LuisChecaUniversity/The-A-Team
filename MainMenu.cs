@@ -1,15 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Audio;
-using Sce.PlayStation.Core.Environment;
-using Sce.PlayStation.Core.Graphics;
-using Sce.PlayStation.Core.Input;
-
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
-using Sce.PlayStation.HighLevel.UI;
 
 namespace TheATeam
 {
@@ -79,13 +70,7 @@ namespace TheATeam
 			{
 				switch(option)
 				{
-				case 1:
-					
-					// Load and store textures
-					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-			                                                 new Vector2i(4, 8)));
-					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-					
+				case 1:					
 					Info.TotalGameTime = 0f;
 					Info.LevelNumber = 1;
 
@@ -113,10 +98,6 @@ namespace TheATeam
 //					howToPlay.Camera.SetViewFromViewport();
 //					GameSceneManager.currentScene = howToPlay;
 //					Director.Instance.ReplaceScene(GameSceneManager.currentScene);
-					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-			                                                 new Vector2i(4, 8)));
-					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-
 					Info.TotalGameTime = 0f;
 					Info.LevelNumber = 1;
 //			
