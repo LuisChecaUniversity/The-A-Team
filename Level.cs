@@ -23,6 +23,7 @@ namespace TheATeam
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
+		Label lblTimer;
 		private Label lblTopRight;
 		private Label lblBottomLeft;
 		private Label lblBottomRight;
@@ -31,6 +32,7 @@ namespace TheATeam
 		private int screenHeight;
 		Font font;
 		FontMap debugFont;
+		double counter = 300;
 		private SpriteUV blockedAreaSprite;
 		private TextureInfo blockedAreaTexInfo;
 		// players tiles
@@ -53,9 +55,7 @@ namespace TheATeam
 			Info.LevelClear = false;
 			Vector2 cameraCenter = Vector2.Zero;
 
-
 			AddChild(new Background());
-			
 			
 			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
 			Info.CameraCenter = cameraCenter;
@@ -88,6 +88,12 @@ namespace TheATeam
 			blockedAreaSprite.Quad.S = blockedAreaTexInfo.TextureSizef;
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 			
+			lblTimer = new Label();
+				lblTimer.FontMap = debugFont;
+				lblTimer.Text = ""; //set ui to separate class
+				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
+					
+				this.AddChild(lblTimer);
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
@@ -117,7 +123,7 @@ namespace TheATeam
 				lblDebugLeft.FontMap = debugFont;
 				lblDebugLeft.Text = "Waiting for both connections";
 				lblDebugLeft.Position = new Vector2(430, 200);
-
+				
 				this.AddChild(lblTopRight);
 				this.AddChild(lblBottomLeft);
 				this.AddChild(lblBottomRight);
@@ -135,8 +141,6 @@ namespace TheATeam
 				lblTopRight.FontMap = debugFont;
 				lblTopRight.Text = "Press Start to Continue";
 				lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
-				
-
 			
 				this.AddChild(player1);
 				this.AddChild(player2);
@@ -190,11 +194,13 @@ namespace TheATeam
 			{
 				if(levelStage == LevelStage.CombatStage)
 				{
-//					if(Input2.GamePad0.Triangle.Down)
-//						ChangeTiles("Fire");
-					
+		//					if(Input2.GamePad0.Triangle.Down)
+//						ChangeTiles("Fire");	
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
+					
+					counter -= 0.02; //will be made more intricate
+					lblTimer.Text = "Time Left: " + (int)counter;
 					
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
