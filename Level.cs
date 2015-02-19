@@ -8,7 +8,7 @@ using Sce.PlayStation.Core.Audio;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
-
+using System.Timers;
 namespace TheATeam
 {
 	enum LevelStage
@@ -23,8 +23,9 @@ namespace TheATeam
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
+		System.Timers.Timer timerA;
 		Label lblTimer;
-		double counter;
+		int countSecs = 3; //5  mins = 300 // convert to have mins:secs
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -116,12 +117,7 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 			
-				lblTimer = new Label();
-				lblTimer.FontMap = debugFont;
-				lblTimer.Text = ""; // might be worth having a ui to separate class
-				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
-					
-				this.AddChild(lblTimer);
+			
 			
 			//extra for video to use later
 			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
@@ -157,9 +153,38 @@ namespace TheATeam
 			this.AddChild(p1ManaSprite);
 			this.AddChild(p2ManaSprite);
 			this.AddChild(playerPointer);
-			Camera2D.SetViewFromViewport();
 			
+				lblTimer = new Label();
+				lblTimer.FontMap = debugFont;
+				lblTimer.Text = ""; // might be worth having a ui to separate class
+				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
+					
+				this.AddChild(lblTimer);
+			
+			timerA = new System.Timers.Timer();
+			timerA.Elapsed += new ElapsedEventHandler(tickDown);
+			timerA.Interval = 1000;
+			timerA.Start();
+			timerA.Enabled = true;
+			//bool timer.enable used for pausing
+			
+			Camera2D.SetViewFromViewport();
 		}
+		
+		private void tickDown(object sender, EventArgs e)
+		{
+			if(levelStage == LevelStage.CombatStage)
+			{
+				countSecs --;
+				lblTimer.Text = "Time Left: " + countSecs;
+				if(countSecs == 0)
+				{
+					lblTimer.Text = "Game Over";
+					timerA.Stop();
+				}	
+			}
+		}
+		
 		public override void OnEnter()
 		{
 			base.OnEnter();			
@@ -186,9 +211,9 @@ namespace TheATeam
 				
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
-					
-					counter -= 0.02; //will be made more intricate
-					lblTimer.Text = "Time Left: " + (int)counter;
+				
+				if(timerA.Enabled == true)
+				lblTimer.Text = "Time Left: " + countSecs;
 				
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
