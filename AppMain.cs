@@ -112,7 +112,7 @@ namespace TheATeam
 			
 			 	textbox = new EditableText();
 				textbox.SetPosition(300.0f,250.0f);
-				textbox.Text = "192.168.43.133"; //vita13 //144
+				textbox.Text = "10.54.153.20";//"192.168.43.133"; //vita13 //144
 				textbox.Visible = false;	
 			
 				button = new Button();
@@ -126,6 +126,10 @@ namespace TheATeam
 				uiScene.RootWidget.AddChildFirst(button);
 				uiScene.RootWidget.AddChildFirst(buttonMulti);
 			
+			TYPEOFGAME = "SINGLE";
+							graphics.Dispose();
+							runningDirector = true;
+							InitDirector();
 
 		}
 		
@@ -154,7 +158,10 @@ namespace TheATeam
 					if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{
 						Console.WriteLine("Duo Player");
-							TYPEOFGAME = "DUO";
+							TYPEOFGAME = "DUAL";
+							graphics.Dispose();
+							runningDirector = true;
+							InitDirector();
 					}	
 					if(buttonHost.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
 					{

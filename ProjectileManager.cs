@@ -80,10 +80,14 @@ namespace TheATeam
 			// Will need to check this against every tile + player positions
 			foreach(Projectile projectile in projectiles)
 			{
-				if(projectile.hasCollided(pos, size) || projectile.offScreen())
+				if(projectile.hasCollided(pos, size))
 				{
 					projectile.collided = true;
 					collision = true;
+				}
+				else if(projectile.offScreen())
+				{
+					projectile.collided = true;
 				}
 			}
 			return collision;

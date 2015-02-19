@@ -399,10 +399,10 @@ namespace TheATeam
 				
 				
 					IPHostEntry host;
-		  	 		
 		   			host = Dns.GetHostEntry(Dns.GetHostName());
 		   			foreach (IPAddress ipp in host.AddressList)
 		   			{
+						
 		     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
 		     			{
 					       	ipAddress = ipp;
@@ -529,14 +529,17 @@ namespace TheATeam
 						ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
 						DirectionX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length);
 						DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
+						
+					
 						if (isServer)
 						{
 							if (clientSocket == null || IsConnect == false)
 							{
 								return false;
 							}
-							
+							if(!actionMsg.Equals('I'))
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
+							
 							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							
 						}
@@ -545,9 +548,10 @@ namespace TheATeam
 							if (socket == null || IsConnect == false){
 								return false;
 							}
-							
+							if(!actionMsg.Equals('I'))
 								socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
-							socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
+							
+						socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							//Console.WriteLine("SENT AND RECIVED");
 						}
 					

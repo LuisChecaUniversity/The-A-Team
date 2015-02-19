@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace TheATeam
@@ -15,7 +14,8 @@ namespace TheATeam
 		
 		public static void RemoveAsset(string key)
 		{
-			resourceMap.Remove(key);
+			if(IsAssetLoaded(key))
+				resourceMap.Remove(key);
 		}
 		
 		public static bool IsAssetLoaded(string key)

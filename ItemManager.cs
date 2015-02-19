@@ -22,35 +22,32 @@ namespace TheATeam
 		private List<Item> items;
 		//public List<Item> Items { get { return items;}}
 		private Item leftFlag, rightFlag, fireElement, waterElement;
-		private Scene scene;
-		
+			
 		private static Vector2i flagIndex = Tile.LoadSpriteIndex('~');
 		private static Vector2i fireIndex = Tile.LoadSpriteIndex('R');
 		private static Vector2i waterIndex =  Tile.LoadSpriteIndex('B');
 		
 		private ItemManager ()
-		{
-			scene = GameSceneManager.currentScene;
-			
+		{			
 			items = new List<Item>();
 		}
-		public void initFlags()
+		public void initFlags(Scene curScene)
 		{
 			Vector2 pos1 = new Vector2(100,290);
-			leftFlag = new Item(scene, pos1, flagIndex, ItemType.flag, "Player1Flag");
+			leftFlag = new Item(curScene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
-			rightFlag = new Item(scene, pos2, flagIndex, ItemType.flag, "Player2Flag");
+			rightFlag = new Item(curScene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
 		}
-		public void initElements()
+		public void initElements(Scene curScene)
 		{
 			if(null == GetItem(ItemType.element, "Fire")) 
 			{
 			Vector2 pos1 = new Vector2(480,190);
 			Vector2 pos2 = new Vector2(480,390);
-			fireElement = new Item(scene, pos1, fireIndex, ItemType.element, "Fire");
-			waterElement = new Item(scene, pos2, waterIndex, ItemType.element, "Water");
+			fireElement = new Item(curScene, pos1, fireIndex, ItemType.element, "Fire");
+			waterElement = new Item(curScene, pos2, waterIndex, ItemType.element, "Water");
 				
 			items.Add(fireElement);
 			items.Add(waterElement);
@@ -128,6 +125,42 @@ namespace TheATeam
 							}
 							p1.ChangeTiles("Fire");
 							p1.Element = 'F';
+							break;
+						case "Player1Flag":
+							break;
+						case "Player2Flag":
+							break;
+						default:
+							break;
+						}
+					}
+					//check player 2 with items first
+					if(item.hasCollided(p2.Position, p2Size))
+					{
+						//Console.WriteLine("Collided with " + item.GetName());
+						item.iSprite.Visible = false;
+						item.collided = true;
+						switch (item.GetName()) 
+						{
+						case "Water":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Water");
+							p2.Element = 'W';
+							break;
+						case "Fire":
+							if(p2.Element != 'N')
+							{
+								item.iSprite.Visible = true;
+								item.collided = false;
+								break;
+							}
+							p2.ChangeTiles("Fire");
+							p2.Element = 'F';
 							break;
 						case "Player1Flag":
 							break;
