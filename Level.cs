@@ -25,7 +25,7 @@ namespace TheATeam
 		Label lblTopLeft;
 		System.Timers.Timer timerA;
 		Label lblTimer;
-		int countSecs = 3; //5  mins = 300 // convert to have mins:secs
+		int countSecs = 300; //5  mins = 300 // convert to have mins:secs 
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -38,7 +38,6 @@ namespace TheATeam
 		List<Tile> player2Tiles = new List<Tile>();
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
-		
 		
 		private SpriteUV p1HealthSprite;
 		private TextureInfo p1HealthTexInfo;
@@ -101,8 +100,6 @@ namespace TheATeam
 			blockedAreaSprite = new SpriteUV(blockedAreaTexInfo);
 			blockedAreaSprite.Quad.S = blockedAreaTexInfo.TextureSizef;
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
-			
-			
 		
 			lblTopLeft = new Label();
 			lblTopLeft.FontMap = debugFont;
@@ -117,8 +114,6 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 			
-			
-			
 			//extra for video to use later
 			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
 			p1HealthSprite = new SpriteUV(p1HealthTexInfo);
@@ -131,7 +126,6 @@ namespace TheATeam
 			
 			p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
 			p2HealthSprite.Position = new Vector2(600, screenHeight -30);
-			
 			//
 			p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
 			p1ManaSprite = new SpriteUV(p1ManaTexInfo);
@@ -153,13 +147,13 @@ namespace TheATeam
 			this.AddChild(p1ManaSprite);
 			this.AddChild(p2ManaSprite);
 			this.AddChild(playerPointer);
-			
-				lblTimer = new Label();
-				lblTimer.FontMap = debugFont;
-				lblTimer.Text = ""; // might be worth having a ui to separate class
-				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
+			//Timer Stuff
+			lblTimer = new Label();
+			lblTimer.FontMap = debugFont;
+			lblTimer.Text = ""; // might be worth having a ui to separate class
+			lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
 					
-				this.AddChild(lblTimer);
+			this.AddChild(lblTimer);
 			
 			timerA = new System.Timers.Timer();
 			timerA.Elapsed += new ElapsedEventHandler(tickDown);
@@ -197,7 +191,6 @@ namespace TheATeam
 		{
 			base.Update(dt);
 
-			
 				if(levelStage == LevelStage.CombatStage)
 				{		
 					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
@@ -212,8 +205,8 @@ namespace TheATeam
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
 				
-				if(timerA.Enabled == true)
-				lblTimer.Text = "Time Left: " + countSecs;
+					if(timerA.Enabled == true)
+						lblTimer.Text = "Time Left: " + countSecs;
 				
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
