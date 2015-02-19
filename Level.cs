@@ -23,8 +23,8 @@ namespace TheATeam
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
-		Label Timer;
-		float counter;
+		Label lblTimer;
+		double counter;
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
