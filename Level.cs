@@ -23,6 +23,8 @@ namespace TheATeam
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
+		Label Timer;
+		float counter;
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -114,6 +116,13 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 			
+				lblTimer = new Label();
+				lblTimer.FontMap = debugFont;
+				lblTimer.Text = ""; // might be worth having a ui to separate class
+				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
+					
+				this.AddChild(lblTimer);
+			
 			//extra for video to use later
 			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
 			p1HealthSprite = new SpriteUV(p1HealthTexInfo);
@@ -178,9 +187,12 @@ namespace TheATeam
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
 					
+					counter -= 0.02; //will be made more intricate
+					lblTimer.Text = "Time Left: " + (int)counter;
+				
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
-		
+					
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
 						player1.TakeDamage(10);
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
