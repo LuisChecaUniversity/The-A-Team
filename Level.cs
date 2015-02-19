@@ -23,16 +23,11 @@ namespace TheATeam
 		Player player1;
 		Player player2;
 		Label lblTopLeft;
-		Label lblTimer;
 		private Label lblTopRight;
-		private Label lblBottomLeft;
-		private Label lblBottomRight;
-		private Label lblDebugLeft;
 		private int screenWidth;
 		private int screenHeight;
 		Font font;
 		FontMap debugFont;
-		double counter = 300;
 		private SpriteUV blockedAreaSprite;
 		private TextureInfo blockedAreaTexInfo;
 		// players tiles
@@ -40,6 +35,21 @@ namespace TheATeam
 		List<Tile> player2Tiles = new List<Tile>();
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
+		
+		
+		private SpriteUV p1HealthSprite;
+		private TextureInfo p1HealthTexInfo;
+		private SpriteUV p2HealthSprite;
+		private TextureInfo p2HealthTexInfo;
+		
+		private SpriteUV p1ManaSprite;
+		private TextureInfo p1ManaTexInfo;
+		private SpriteUV p2ManaSprite;
+		private TextureInfo p2ManaTexInfo;
+		
+		private SpriteUV playerPointer;
+		private TextureInfo pointerTex;
+		
 		
 		public Level(): base()
 		{
@@ -53,12 +63,13 @@ namespace TheATeam
 			// Reload the font becuase FontMap disposes of it
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
 			Info.LevelClear = false;
-			Vector2 cameraCenter = Vector2.Zero;
+			Vector2 player1Pos = Vector2.Zero;
+			Vector2 player2Pos = Vector2.Zero;
+
 
 			AddChild(new Background());
 			
-			Tile.Loader("/Application/assets/level1.txt", ref cameraCenter, this);
-			Info.CameraCenter = cameraCenter;
+			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
 			
 			for (int i = 0; i < 8; i++) 
 				{
@@ -79,8 +90,8 @@ namespace TheATeam
 					}
 				}
 			
-			player1 = new Player(cameraCenter, true,player1Tiles);
-			player2 = new Player(new Vector2(960 - 164, 300), false,player2Tiles);
+			player1 = new Player(player1Pos, true,player1Tiles);
+			player2 = new Player(player2Pos, false,player2Tiles);
 			
 			blockedAreaTexInfo = new TextureInfo("/Application/assets/BlockedArea.png");
 			
@@ -88,127 +99,92 @@ namespace TheATeam
 			blockedAreaSprite.Quad.S = blockedAreaTexInfo.TextureSizef;
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 			
-			lblTimer = new Label();
-				lblTimer.FontMap = debugFont;
-				lblTimer.Text = ""; //set ui to separate class
-				lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
-					
-				this.AddChild(lblTimer);
 			
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
-
-				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
-				lblTopLeft.Text = "Player 1";
-				lblTopLeft.Position = new Vector2(100, screenHeight - 200);
-
-				lblTopRight = new Label();
-				lblBottomLeft = new Label();
-				lblBottomRight = new Label();
-				lblDebugLeft = new Label();
-
-				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Player 2";
-				lblTopRight.Position = new Vector2(screenWidth - 200, screenHeight - 200);
-
-				lblBottomLeft.FontMap = debugFont;
-				lblBottomLeft.Text = "Waiting";
-				lblBottomLeft.Position = new Vector2(100, 300);
-
-				lblBottomRight.FontMap = debugFont;
-				lblBottomRight.Text = "Waiting";
-				lblBottomRight.Position = new Vector2(screenWidth - 200, 300);
-
-				lblDebugLeft.FontMap = debugFont;
-				lblDebugLeft.Text = "Waiting for both connections";
-				lblDebugLeft.Position = new Vector2(430, 200);
-				
-				this.AddChild(lblTopRight);
-				this.AddChild(lblBottomLeft);
-				this.AddChild(lblBottomRight);
-				this.AddChild(lblDebugLeft);
-				this.AddChild(lblTopLeft);
-			}
-			else
-			{
-				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
-				lblTopLeft.Text = "";
-				lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
-				
-				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
-				lblTopRight.Text = "Press Start to Continue";
-				lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+		
+			lblTopLeft = new Label();
+			lblTopLeft.FontMap = debugFont;
+			lblTopLeft.Text = "";
+			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
-				this.AddChild(player1);
-				this.AddChild(player2);
-				this.AddChild(blockedAreaSprite);
-				this.AddChild(lblTopLeft);
-				this.AddChild(lblTopRight);
-				Camera2D.SetViewFromViewport();
-			}
+			lblTopRight = new Label();
+			lblTopRight.FontMap = debugFont;
+			lblTopRight.Text = "Press Start to Continue";
+			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+			
+			this.AddChild(player1);
+			this.AddChild(player2);
+			
+			//extra for video to use later
+			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+			p1HealthSprite = new SpriteUV(p1HealthTexInfo);
+			
+			p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p1HealthSprite.Position = new Vector2(200, screenHeight -30);
+			
+			p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
+			p2HealthSprite = new SpriteUV(p2HealthTexInfo);
+			
+			p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p2HealthSprite.Position = new Vector2(600, screenHeight -30);
+			
+			//
+			p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+			p1ManaSprite = new SpriteUV(p1ManaTexInfo);
+			p1ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p1ManaSprite.Position = new Vector2(50, screenHeight -30);
+			
+			p2ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
+			p2ManaSprite = new SpriteUV(p2ManaTexInfo);
+			p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
+			p2ManaSprite.Position = new Vector2(750, screenHeight -30);
+			
+			pointerTex = new TextureInfo("/Application/assets/pointer.png");
+			playerPointer = new SpriteUV(pointerTex);
+			playerPointer.Quad.S = pointerTex.TextureSizef;
+			playerPointer.CenterSprite();
+			
+			this.AddChild(p1HealthSprite);
+			this.AddChild(p2HealthSprite);
+			this.AddChild(p1ManaSprite);
+			this.AddChild(p2ManaSprite);
+			this.AddChild(playerPointer);
+			Camera2D.SetViewFromViewport();
+			
 		}
 		public override void OnEnter()
 		{
 			base.OnEnter();			
-			ItemManager.Instance.initFlags();
+			ItemManager.Instance.initFlags(this);
+			this.AddChild(blockedAreaSprite);
+			this.AddChild(lblTopLeft);
+				this.AddChild(lblTopRight);
 		}
 		public override void Update(float dt)
 		{
 			base.Update(dt);
 
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
+			
 				if(levelStage == LevelStage.CombatStage)
-				{
-					string status = AppMain.client.statusString;
-					if(status.Equals("None"))
-					{
-						AppMain.client.ChangeStatus();
-						lblDebugLeft.Text = "Changing";
-					}
-					else
-						lblDebugLeft.Text = status;
-	
-					if(AppMain.ISHOST)
-					{
-						player1.Update(dt);
-						AppMain.client.DataExchange();
-						player2.Update(dt);
-					}
-					else
-					{
-						player2.Update(dt);
-						AppMain.client.DataExchange();
-						player1.Update(dt);
-					}
-				}
-				else if(levelStage == LevelStage.BuildDefence)
-				{
+				{		
+					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
+					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
+				
+					p1ManaSprite.Quad.S = new Vector2(player1.mana,30.0f);
+					p2ManaSprite.Quad.S = new Vector2(player2.mana,30.0f);
 					
-				}
-			}
-			else if(AppMain.TYPEOFGAME.Equals("SINGLE"))
-			{
-				if(levelStage == LevelStage.CombatStage)
-				{
-		//					if(Input2.GamePad0.Triangle.Down)
-//						ChangeTiles("Fire");	
+					playerPointer.Rotation = player1.ShootingDirection;
+					playerPointer.Position = player1.Position;
+				
 					player1.Update(dt);
 					player2.UpdateAI(dt, player1);
-					
-					counter -= 0.02; //will be made more intricate
-					lblTimer.Text = "Time Left: " + (int)counter;
 					
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
 		
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
-						Console.WriteLine("Player 1 got hit");
+						player1.TakeDamage(10);
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
-						Console.WriteLine("Player 2 got hit");
+						player2.TakeDamage(10);
 		
 		
 					for(int i = 0; i < Tile.Collisions.Count; i++)
@@ -301,20 +277,13 @@ namespace TheATeam
 							if(t.Key == 'A')
 								t.Key = 'E';
 						}
-						ItemManager.Instance.initElements();
-						//ItemManager.Instance.initFlags();
+						ItemManager.Instance.initElements(this);
 					}
 					
 				}
 				
 			}
-
-
-			
-
 		}
-
-	}
 }
 
 
