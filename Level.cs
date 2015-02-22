@@ -25,7 +25,8 @@ namespace TheATeam
 		Label lblTopLeft;
 		System.Timers.Timer timerA;
 		Label lblTimer;
-		int countSecs = 300; //5  mins = 300 // convert to have mins:secs 
+		int countMins = 5; //minutes
+		int countSecs = 00; //seconds 
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -170,12 +171,20 @@ namespace TheATeam
 			if(levelStage == LevelStage.CombatStage)
 			{
 				countSecs --;
-				lblTimer.Text = "Time Left: " + countSecs;
-				if(countSecs == 0)
+				//countSecs get seconds to round to 2 figures ie 01, 09
+				lblTimer.Text = "Time Left: " + countMins + ":" + countSecs.ToString().PadLeft(2, '0');
+				
+				if(countSecs < 0 && countMins == 0)
 				{
 					lblTimer.Text = "Game Over";
 					timerA.Stop();
 				}	
+				
+				if (countSecs < 0)
+				{
+					countSecs = 59;
+					countMins = countMins - 1;
+				}
 			}
 		}
 		
@@ -206,7 +215,7 @@ namespace TheATeam
 					player2.UpdateAI(dt, player1);
 				
 					if(timerA.Enabled == true)
-						lblTimer.Text = "Time Left: " + countSecs;
+						lblTimer.Text = "Time Left: " + countMins + ":" + countSecs.ToString().PadLeft(2, '0');
 				
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);
