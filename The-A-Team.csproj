@@ -59,6 +59,7 @@
     <Compile Include="TwoPlayer.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="MultiplayerLevel.cs" />
+    <Compile Include="GameOver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -110,5 +111,6 @@
     <Content Include="assets\health.png" />
     <Content Include="assets\mana.png" />
     <Content Include="assets\pointer.png" />
+    <Content Include="assets\Game Over.png" />
   </ItemGroup>
 </Project>

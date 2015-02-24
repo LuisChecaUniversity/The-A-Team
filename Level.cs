@@ -9,6 +9,7 @@ using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
 using System.Timers;
+
 namespace TheATeam
 {
 	enum LevelStage
@@ -25,7 +26,7 @@ namespace TheATeam
 		Label lblTopLeft;
 		System.Timers.Timer timerA;
 		Label lblTimer;
-		int countSecs = 300; //5  mins = 300 // convert to have mins:secs 
+		int countSecs = 3; //5  mins = 300 // convert to have mins:secs 
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -51,7 +52,7 @@ namespace TheATeam
 		
 		private SpriteUV playerPointer;
 		private TextureInfo pointerTex;
-		
+		private bool isGameOver = false;
 		
 		public Level(): base()
 		{
@@ -68,7 +69,7 @@ namespace TheATeam
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
 
-
+		 	
 			AddChild(new Background());
 			
 			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
@@ -162,6 +163,8 @@ namespace TheATeam
 			timerA.Enabled = true;
 			//bool timer.enable used for pausing
 			
+			
+			
 			Camera2D.SetViewFromViewport();
 		}
 		
@@ -174,7 +177,9 @@ namespace TheATeam
 				if(countSecs == 0)
 				{
 					lblTimer.Text = "Game Over";
+					isGameOver = true;
 					timerA.Stop();
+					
 				}	
 			}
 		}
@@ -190,9 +195,17 @@ namespace TheATeam
 		public override void Update(float dt)
 		{
 			base.Update(dt);
-
+			
+				if(isGameOver)
+				{
+					//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
+					GameOver go = new GameOver();
+					GameSceneManager.currentScene = go;
+					Director.Instance.ReplaceScene(go);	
+				}	
 				if(levelStage == LevelStage.CombatStage)
 				{		
+					
 					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
 					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
 				
@@ -207,6 +220,7 @@ namespace TheATeam
 				
 					if(timerA.Enabled == true)
 						lblTimer.Text = "Time Left: " + countSecs;
+				
 				
 					// handle bullet update and collision
 					ProjectileManager.Instance.Update(dt);

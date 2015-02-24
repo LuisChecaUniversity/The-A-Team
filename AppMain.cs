@@ -27,15 +27,15 @@ namespace TheATeam
 		private static GameSceneManager 	gsm;
 		public static LocalTCPConnection 	client;
 		private static Timer 				timer;
-		public static Button button;
-		public static Button buttonHost;
-		public static Button buttonClient;
-		public static Button buttonMulti;
-		public static EditableText textbox;
-		private static float prevTime;
+		public static Button 				button;
+		public static Button 				buttonHost;
+		public static Button 				buttonClient;
+		public static Button 				buttonMulti;		
+		public static EditableText 			textbox;
+		private static float 				prevTime;
 		private static State 				state = State.ChooseTypeGame;
 		private static bool 				runningDirector = false;
-		private static GraphicsContext graphics;
+		private static GraphicsContext 		graphics;
 		
 		public static void Main(string[] args)
 		{
