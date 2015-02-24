@@ -49,6 +49,8 @@ namespace TheATeam
 		public static int Height { get { return 64; } }
 
 		public static int Width { get { return 64; } }
+		
+		public Vector2 Center { get { return Position + Quad.Center; } }
 
 		public bool IsCollidable { get; set; }
 
