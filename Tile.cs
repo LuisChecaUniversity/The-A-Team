@@ -11,23 +11,32 @@ namespace TheATeam
 {
 	public struct TileType
 	{
-		public char Key;
-		public Vector2i TileIndex2D;
-		public bool IsCollidable;
+		public char key;
+		public Vector2i tileIndex2D;
+		public bool isCollidable;
 	}
 	
 	public class Stats
 	{
-		public int MaxHealth = 1;
-		public int MaxLives = 3;
-		public int Health = 1;
-		public int Lives = 3;
+		public int maxHealth, maxMana;
+		public int health, mana;
+		public int manaCost = 30;
+		public int manaRecharge = 20;
+		
+		public Stats(int maxHealth=30, int maxMana=100)
+		{
+			this.maxHealth = maxHealth;
+			this.maxMana = maxMana;
+			
+			health = maxHealth;
+			mana = maxMana;
+		}
 	}
 
 	public class Tile: SpriteTile
 	{
 		private static Dictionary<char, TileType> _types = XMLTypeLoader();
-		private Stats _stats = new Stats();
+		protected Stats _stats = new Stats();
 		private char _key;
 
 		private bool _isWall { get { return Elements.Contains(_key); } }
@@ -40,12 +49,14 @@ namespace TheATeam
 		public static int Height { get { return 64; } }
 
 		public static int Width { get { return 64; } }
+		
+		public Vector2 Center { get { return Position + Quad.Center; } }
 
 		public bool IsCollidable { get; set; }
 
 		public char Key { get { return _key; } set { LoadTileProperties(value); } }
 		
-		public bool IsAlive { get { return _stats.Lives > 0; } }
+		public bool IsAlive { get { return _stats.health > 0; } }
 
 		public Tile(Vector2 position): base()
 		{
@@ -66,8 +77,8 @@ namespace TheATeam
 			TileType tt = new TileType();
 			if (_types.TryGetValue(loadKey, out tt))
 			{
-				TileIndex2D = tt.TileIndex2D;
-				IsCollidable = tt.IsCollidable;
+				TileIndex2D = tt.tileIndex2D;
+				IsCollidable = tt.isCollidable;
 			}
 		}
 		
@@ -78,19 +89,12 @@ namespace TheATeam
 			
 			if (IsAlive)
 			{
-				if (_stats.Health > _stats.MaxHealth && _stats.Lives < _stats.MaxLives)
+				if (_stats.health > _stats.maxHealth)
 				{
-					_stats.Lives++;
-					_stats.Health = _stats.MaxHealth;
+					_stats.health = _stats.maxHealth;
 				}
 				
-				if (_stats.Health <= 0)
-				{
-					_stats.Lives--;
-					_stats.Health = _stats.MaxHealth;
-				}
-				
-				int newTileIndex = _stats.MaxLives - _stats.Lives;
+				int newTileIndex = (_stats.maxHealth - _stats.health) / 10;
 				if (newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
 				{
 					TileIndex2D.X = newTileIndex;
@@ -104,11 +108,11 @@ namespace TheATeam
 			return false;
 		}
 		
-		public void TakeDamage(char element='N', int damage=1)
+		public void TakeDamage(char element='N', int damage=10)
 		{
 			if (IsAlive && _isWall)
 			{
-				_stats.Health += damage * (element == Key ? 1 : -1);
+				_stats.health += damage * (element == Key ? 1 : -1);
 			}
 		}
 
@@ -132,7 +136,7 @@ namespace TheATeam
 			TileType tt = new TileType();
 			if (_types.TryGetValue(loadkey, out tt))
 			{
-				return tt.TileIndex2D;
+				return tt.tileIndex2D;
 			}
 			return new Vector2i();
 		}
@@ -145,9 +149,9 @@ namespace TheATeam
 			Dictionary<char, TileType> types = doc.Descendants("tiletype").ToDictionary(
 				desc => char.Parse(desc.Attribute("k").Value.ToUpper()), 
                 desc => new TileType {
-						TileIndex2D = new Vector2i((int)desc.Attribute("tx"), (int)desc.Attribute("ty")),
-						Key = char.Parse(desc.Attribute("k").Value.ToUpper()),
-						IsCollidable = (bool)desc.Attribute("c")
+						tileIndex2D = new Vector2i((int)desc.Attribute("tx"), (int)desc.Attribute("ty")),
+						key = char.Parse(desc.Attribute("k").Value.ToUpper()),
+						isCollidable = (bool)desc.Attribute("c")
 					}
 				);
 			return types;

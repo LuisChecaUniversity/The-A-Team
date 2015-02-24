@@ -334,7 +334,7 @@ namespace TheATeam
 				
 				if(fromLeft && fromRight && fromTop && fromBottom)
 				{
-					if(!positionDelta.IsZero() && t.IsCollidable && t.Key != Element)
+					if(!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
 					{
 						if(fromLeft && positionDelta.X > 0)
 						{
