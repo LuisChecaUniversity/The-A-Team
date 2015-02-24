@@ -26,7 +26,7 @@ namespace TheATeam
 		Label lblTopLeft;
 		System.Timers.Timer timerA;
 		Label lblTimer;
-		int countSecs = 3; //5  mins = 300 // convert to have mins:secs 
+		int countSecs = 300; //5  mins = 300 // convert to have mins:secs 
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;

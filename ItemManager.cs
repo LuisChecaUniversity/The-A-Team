@@ -27,16 +27,23 @@ namespace TheATeam
 		private static Vector2i fireIndex = Tile.LoadSpriteIndex('R');
 		private static Vector2i waterIndex =  Tile.LoadSpriteIndex('B');
 		
+		public Vector2 FirstFlag;
+		public Vector2 SecondFlag;
+		
 		private ItemManager ()
 		{			
 			items = new List<Item>();
 		}
 		public void initFlags(Scene curScene)
 		{
-			Vector2 pos1 = new Vector2(100,290);
+			
+			
+			Vector2 pos1 = new Vector2(30,290);
+			FirstFlag = pos1;
 			leftFlag = new Item(curScene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
 			Vector2 pos2 = new Vector2(864,290);
+			SecondFlag = pos2;
 			rightFlag = new Item(curScene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
 		}
@@ -127,6 +134,9 @@ namespace TheATeam
 							p1.Element = 'F';
 							break;
 						case "Player1Flag":
+							item.ResetOwnFlag();
+							item.iSprite.Visible = true;
+							item.collided = false;
 							break;
 						case "Player2Flag":
 							break;
@@ -179,6 +189,16 @@ namespace TheATeam
 //					redItem.collided = true;
 			
 			//Grabbed();
+		}
+		
+		public void ResetItems()
+		{
+			foreach(Item item in items)
+			
+		{
+		  item.iSprite.Visible = true;
+		  item.collided = false;
+		}
 		}
 		public Item GetItem(ItemType type, string name)
 		{

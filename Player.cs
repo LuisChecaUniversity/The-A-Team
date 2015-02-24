@@ -27,6 +27,7 @@ namespace TheATeam
 		private static float UISize = 32;
 		private bool canShoot = true;
 		private bool keyboardTest = true;
+		public bool PlayerAlive = true;
 		private Vector2 Direction;
 		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
@@ -469,9 +470,12 @@ namespace TheATeam
 				health-= dmg;
 			else  
 			{
+			    ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				health = 100;
 				mana = 100;
+				Element = 'N';
+				
 			}
 		}
 		public void updateMana(float dt)

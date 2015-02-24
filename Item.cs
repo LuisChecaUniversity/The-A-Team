@@ -82,6 +82,10 @@ namespace TheATeam
 			iSprite.Position = position;
 		}
 		
+		public void ResetOwnFlag()
+		{
+			position = ItemManager.Instance.FirstFlag;
+		}
 		public bool hasCollided(Vector2 objectPosition, Vector2 objectSize)
 		{
 			// Collision for objects that are centred
