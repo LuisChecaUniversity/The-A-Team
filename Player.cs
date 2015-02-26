@@ -28,7 +28,7 @@ namespace TheATeam
 		private bool canShoot = true;
 		private bool keyboardTest = true;
 		public bool PlayerAlive = true;
-		private Vector2 Direction;
+		protected Vector2 Direction;
 		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		private PlayerState playerState;
@@ -280,7 +280,7 @@ namespace TheATeam
 				
 		}
 		
-		private void HandleDirectionAnimation()
+		protected void HandleDirectionAnimation()
 		{
 			// Convert direction into angle
 			if(!Direction.IsZero())

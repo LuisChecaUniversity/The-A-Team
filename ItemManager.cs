@@ -12,7 +12,7 @@ namespace TheATeam
 	{
 		flag,
 		element,
-		fire,
+		fire, // remove fire and water??
 		water,
 	}
 	public class ItemManager

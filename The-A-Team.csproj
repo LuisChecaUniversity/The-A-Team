@@ -60,6 +60,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="MultiplayerLevel.cs" />
     <Compile Include="GameOver.cs" />
+    <Compile Include="AIPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

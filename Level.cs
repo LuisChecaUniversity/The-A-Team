@@ -94,7 +94,7 @@ namespace TheATeam
 				}
 			
 			player1 = new Player(player1Pos, true,player1Tiles);
-			player2 = new Player(player2Pos, false,player2Tiles);
+			player2 = new AIPlayer(player2Pos, false,player2Tiles, player1);
 			
 			blockedAreaTexInfo = new TextureInfo("/Application/assets/BlockedArea.png");
 			
@@ -216,7 +216,7 @@ namespace TheATeam
 					playerPointer.Position = player1.Position;
 				
 					player1.Update(dt);
-					player2.UpdateAI(dt, player1);
+					player2.Update(dt);
 				
 					if(timerA.Enabled == true)
 						lblTimer.Text = "Time Left: " + countSecs;
