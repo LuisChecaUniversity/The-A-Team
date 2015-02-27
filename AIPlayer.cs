@@ -5,20 +5,21 @@ using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
+
 namespace TheATeam
 {
+	
 	public class AIPlayer: Player
 	{
 		private Player player1;
 		private Vector2 velocity, prevVel;
 		private Vector2 target;
-		private float maxSpeed = 0.5f;
+		private float maxSpeed = 1.5f;
 		private float rotationAngle = 0.0f;
 		private float prevAng = 0.0f;
-		
-		
+		private PathFinder pathfinder;
+			
 
-		
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
 		{
 			this.player1 = player1;
@@ -26,6 +27,7 @@ namespace TheATeam
 			prevVel = new Vector2(0.0f, 0.0f);
 			Position = new Vector2(400.0f, 300.0f);
 			target = Position;
+			pathfinder = new PathFinder(this);
 		}
 		
 		override public void Update(float dt)
@@ -40,23 +42,18 @@ namespace TheATeam
 			{
 				float xPos = (data.X +0.5f) * 960.0f;
 				float yPos = 544.0f -((data.Y +0.5f) * 544.0f);
-				target = new Vector2(xPos, yPos);
+				
+				if(new Vector2(xPos, yPos) != target)
+				{
+					target = new Vector2(xPos, yPos);
+					pathfinder.FindPath(target);
+				}
 			}
-			
-			if(Rotation == velocity)
-				prevVel = velocity;
-			
+
 			MoveInHeadingDirection(dt);
-			RotateToFacePosition(target);
-			
-			//Rotation = Vec2DNormalize( new Vector2(velocity.X * rotationAngle *dt, velocity.Y * rotationAngle * dt));
-			//Rotation = Vec2DNormalize(prevVel).Slerp(Vec2DNormalize(velocity), 1.0f);// Vec2DNormalize(velocity).Lerp(Vec2DNormalize(prevVel), 0.000001f);
-			Rotate(rotationAngle);
-			
-			//Console.WriteLine(Rotation);
-			//rotationAngle = 0.0f;
-//			base.Direction = Vec2DNormalize(velocity);
-//			base.HandleDirectionAnimation();
+			HandleCollision();
+			base.Direction = Vec2DNormalize(velocity);
+			base.HandleDirectionAnimation();
 		}
 		void RotateToFacePosition(Vector2 target)
 		{
@@ -90,7 +87,7 @@ namespace TheATeam
 			else
 				return;
 
-			rotationAngle = angle;// FMath.Degrees(angle)*sign;
+			rotationAngle = FMath.Degrees(angle)*sign;
 			
 		}
 		private void MoveInHeadingDirection(float dt)
@@ -99,11 +96,12 @@ namespace TheATeam
 			//Vector2 force = Seek(target);
 			
 			
-			Vector2 acceleration = obstacleAvoidance();
-			if(acceleration.Length() < maxSpeed)
-			{
-				acceleration += Seek (target);
-			}
+			Vector2 acceleration = Seek (pathfinder.GetTarget());
+//			if(acceleration.Length() < maxSpeed)
+//			{
+//
+//				acceleration += Seek (pathfinder.GetTarget());
+//			}
 		
 			// a = (v - u)/t  -> v = u + at calculate velocity
 			velocity += acceleration * dt;
@@ -148,7 +146,7 @@ namespace TheATeam
 		private Vector2 obstacleAvoidance()
 		{
 			// distance to project infront of tank (faster tank projects further)
-			float detectionDist = 60.0f *( velocity.Length() / maxSpeed);
+			float detectionDist = 50.0f *( velocity.Length() / maxSpeed);
 		
 			// create 2 vectors to determine collision infront of tank (max and half dist infront)
 			Vector2 ahead = new Vector2(Center.X + Vec2DNormalize(velocity).X * detectionDist, Center.Y + Vec2DNormalize(velocity).Y * detectionDist);
@@ -217,8 +215,8 @@ namespace TheATeam
 			//float oWidth = obstacle.Quad.Bounds2().Point11.X;
 			//float oHeight = obstacle.Quad.Bounds2().Point11.Y;
 			
-			float oWidth = 18.0f ;
-			float oHeight = 50.0f;
+			float oWidth = 36.0f ;
+			float oHeight = 64.0f;
 		
 			if (ahead.X + width/2 < obstacle.Center.X - oWidth/ 2.0)
 				return false;
@@ -233,6 +231,9 @@ namespace TheATeam
 				return true;
 			}
 		}
+		
+		
+		
 	}
 }
 

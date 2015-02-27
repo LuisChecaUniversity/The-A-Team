@@ -61,6 +61,7 @@
     <Compile Include="MultiplayerLevel.cs" />
     <Compile Include="GameOver.cs" />
     <Compile Include="AIPlayer.cs" />
+    <Compile Include="PathFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

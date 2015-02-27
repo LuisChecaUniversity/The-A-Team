@@ -293,7 +293,7 @@ namespace TheATeam
 				TileIndex2D.X = animationRangeX.X;
 		}
 		
-		private void HandleCollision()
+		protected void HandleCollision()
 		{
 			Vector2 nextPos = Position + positionDelta;
 			float screenWidth = Director.Instance.GL.Context.Screen.Width;
