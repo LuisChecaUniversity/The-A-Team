@@ -41,6 +41,10 @@ namespace TheATeam
 		int maxDeployed = 10;
 		int player1Depolyed = 0;
 		
+		private SpriteUV p1baseSprite;
+		private SpriteUV p2baseSprite;
+		private TextureInfo baseTexInfo;
+		
 		private SpriteUV p1HealthSprite;
 		private TextureInfo p1HealthTexInfo;
 		private SpriteUV p2HealthSprite;
@@ -112,6 +116,18 @@ namespace TheATeam
 			lblTopRight.FontMap = debugFont;
 			lblTopRight.Text = "Press Start to Continue";
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+			
+			baseTexInfo = new TextureInfo("/Application/assets/base.png");
+			p1baseSprite = new SpriteUV(baseTexInfo); //have 2 spawn
+			
+			p1baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
+			p1baseSprite.Position = new Vector2(0, (screenHeight - 32)/2);
+			p2baseSprite = new SpriteUV(baseTexInfo);
+			p2baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
+			p2baseSprite.Position = new Vector2(screenWidth - 64, (screenHeight - 32)/2);
+			
+			this.AddChild(p1baseSprite);
+			this.AddChild(p2baseSprite);
 			
 			this.AddChild(player1);
 			this.AddChild(player2);
