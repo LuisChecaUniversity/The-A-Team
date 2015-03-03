@@ -138,6 +138,23 @@ namespace TheATeam
 			if(null != p)
 				FindPath(p.tile);
 			// if path is null, get connections of p and find path again ect
+			if(path.Count <= 0)
+			{
+				int connection = 0;
+				while(path.Count == 0)
+				{
+					float width = p.tile.Quad.Point11.X;
+					float height = p.tile.Quad.Point11.Y;
+				
+					Waypoint right = FindWaypoint(new Vector2(p.tile.Center.X + width, p.tile.Center.Y));	
+					if(right != null)
+					{
+						FindPath (right.tile.Center);
+					}
+					
+				}
+			}
+
 		}
 		
 		private void FindPath(Tile target)
@@ -155,7 +172,7 @@ namespace TheATeam
 			
 		
 			while (open.Count > 0)
-			{
+			{		
 				float smallestF = open[0].F;
 				int smallestPos = 0;
 
