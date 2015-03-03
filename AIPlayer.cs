@@ -51,15 +51,13 @@ namespace TheATeam
 
 			MoveInHeadingDirection(dt);
 			HandleCollision();
-			if(Position.Distance(target) > 10.0f)
+			if(Position.Distance(pathfinder.GetTarget()) > 5.0f)
 			{
 				base.Direction = Vec2DNormalize(velocity);
 			}
 			else
 			{
 				base.Direction = Vec2DNormalize(player1.Position - Position);
-				Console.WriteLine("method1: " + Vec2DNormalize(player1.Center - Position));
-				Console.WriteLine("method2: " + Vec2DNormalize(player1.Position - Position));
 			}
 			base.HandleDirectionAnimation();
 		}
@@ -81,7 +79,6 @@ namespace TheATeam
 				sign = 1;
 				
 			}
-	
 			
 			if(angle <= 0.0001)
 				return;
@@ -105,7 +102,7 @@ namespace TheATeam
 			
 			
 			Vector2 acceleration = Arrive(pathfinder.GetTarget());
-
+			
 			// a = (v - u)/t  -> v = u + at calculate velocity
 			velocity += acceleration * dt;
 
@@ -141,19 +138,21 @@ namespace TheATeam
 			
 			Vector2 force = new Vector2(0.0f, 0.0f);
 			
-			if(target.Distance(Position) < 64.0f && target.Distance(Position) > 0.0f)
+			if(target.Distance(Position) < 64.0f && target.Distance(Position) > 0.0f && distance > 0.0)
 			{
 				// scale dist by factor 10 otherwise force returned is too small (very slow movement)
 				float speed = distance * 10 / maxSpeed;
 				force = new Vector2 ((toTarget.X * speed / distance) - velocity.X,(toTarget.Y * speed / distance) - velocity.Y);
+	
 				return force;
 				
 			}
-			else if( target.Distance(Position) > 0.0f)
+			else if( target.Distance(Position) > 0.0f && distance > 0.0)
 			{
 				float speed = maxSpeed;
 				
 				force = new Vector2 ((toTarget.X * speed / distance) - velocity.X,(toTarget.Y * speed / distance) - velocity.Y);
+			
 				return force;
 			}
 			
