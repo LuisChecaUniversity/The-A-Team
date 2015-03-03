@@ -111,6 +111,7 @@
     <Content Include="assets\mana.png" />
     <Content Include="assets\pointer.png" />
     <Content Include="assets\Game Over.png" />
+    <Content Include="assets\Base.png" />
     <Content Include="assets\PlayerSpriteSheet.png" />
     <Content Include="assets\ElementSpriteSheet.png" />
   </ItemGroup>
