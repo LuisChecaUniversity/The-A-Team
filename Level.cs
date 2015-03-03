@@ -26,7 +26,8 @@ namespace TheATeam
 		Label lblTopLeft;
 		System.Timers.Timer timerA;
 		Label lblTimer;
-		int countSecs = 300; //5  mins = 300 // convert to have mins:secs 
+		int countMins = 5; //minutes
+		int countSecs = 00; //seconds 
 		private Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
@@ -119,24 +120,24 @@ namespace TheATeam
 			p1HealthTexInfo = new TextureInfo("/Application/assets/health.png");
 			p1HealthSprite = new SpriteUV(p1HealthTexInfo);
 			
-			p1HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
-			p1HealthSprite.Position = new Vector2(200, screenHeight -30);
+			p1HealthSprite.Quad.S = new Vector2(124.0f,30.0f);
+			p1HealthSprite.Position = new Vector2(194, screenHeight -31);
 			
 			p2HealthTexInfo = new TextureInfo("/Application/assets/health.png");
 			p2HealthSprite = new SpriteUV(p2HealthTexInfo);
 			
-			p2HealthSprite.Quad.S = new Vector2(100.0f,30.0f);
-			p2HealthSprite.Position = new Vector2(600, screenHeight -30);
+			p2HealthSprite.Quad.S = new Vector2(124.0f,30.0f);
+			p2HealthSprite.Position = new Vector2(642, screenHeight -31);
 			//
 			p1ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
 			p1ManaSprite = new SpriteUV(p1ManaTexInfo);
-			p1ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
-			p1ManaSprite.Position = new Vector2(50, screenHeight -30);
+			p1ManaSprite.Quad.S = new Vector2(124.0f,30.0f);
+			p1ManaSprite.Position = new Vector2(66, screenHeight -31);
 			
 			p2ManaTexInfo = new TextureInfo("/Application/assets/mana.png");
 			p2ManaSprite = new SpriteUV(p2ManaTexInfo);
-			p2ManaSprite.Quad.S = new Vector2(100.0f,30.0f);
-			p2ManaSprite.Position = new Vector2(750, screenHeight -30);
+			p2ManaSprite.Quad.S = new Vector2(124.0f,30.0f);
+			p2ManaSprite.Position = new Vector2(770, screenHeight -31);
 			
 			pointerTex = new TextureInfo("/Application/assets/pointer.png");
 			playerPointer = new SpriteUV(pointerTex);
@@ -152,7 +153,7 @@ namespace TheATeam
 			lblTimer = new Label();
 			lblTimer.FontMap = debugFont;
 			lblTimer.Text = ""; // might be worth having a ui to separate class
-			lblTimer.Position = new Vector2((screenWidth/2) - 80, screenHeight - 30);
+			lblTimer.Position = new Vector2((screenWidth/2) - 100, screenHeight - 30);
 					
 			this.AddChild(lblTimer);
 			
@@ -173,14 +174,22 @@ namespace TheATeam
 			if(levelStage == LevelStage.CombatStage)
 			{
 				countSecs --;
-				lblTimer.Text = "Time Left: " + countSecs;
-				if(countSecs == 0)
+				//countSecs get seconds to round to 2 figures ie 01, 09
+				lblTimer.Text = "Time Left: " + countMins + ":" + countSecs.ToString().PadLeft(2, '0');
+				
+				if(countSecs < 0 && countMins == 0)
 				{
 					lblTimer.Text = "Game Over";
 					isGameOver = true;
 					timerA.Stop();
 					
 				}	
+				
+				if (countSecs < 0)
+				{
+					countSecs = 59;
+					countMins = countMins - 1;
+				}
 			}
 		}
 		
@@ -206,11 +215,11 @@ namespace TheATeam
 				if(levelStage == LevelStage.CombatStage)
 				{		
 					
-					p1HealthSprite.Quad.S = new Vector2(player1.health,30.0f);
-					p2HealthSprite.Quad.S = new Vector2(player2.health,30.0f);
+					p1HealthSprite.Quad.S = new Vector2(player1.health,31.0f);
+					p2HealthSprite.Quad.S = new Vector2(player2.health,31.0f);
 				
-					p1ManaSprite.Quad.S = new Vector2(player1.mana,30.0f);
-					p2ManaSprite.Quad.S = new Vector2(player2.mana,30.0f);
+					p1ManaSprite.Quad.S = new Vector2(player1.mana,31.0f);
+					p2ManaSprite.Quad.S = new Vector2(player2.mana,31.0f);
 					
 					playerPointer.Rotation = player1.ShootingDirection;
 					playerPointer.Position = player1.Position;
@@ -219,7 +228,7 @@ namespace TheATeam
 					player2.Update(dt);
 				
 					if(timerA.Enabled == true)
-						lblTimer.Text = "Time Left: " + countSecs;
+						lblTimer.Text = "Time Left: " + countMins + ":" + countSecs.ToString().PadLeft(2, '0');
 				
 				
 					// handle bullet update and collision
