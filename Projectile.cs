@@ -22,8 +22,9 @@ namespace TheATeam
 		private Vector2 rotation;
 		public bool collided;
 		private Type bulletType;
+		private float bulletSpeed = 0.5f;
 
-		public Projectile (Scene scene, TextureInfo tex, Vector2 pos, Vector2 vel)
+		public Projectile (TextureInfo tex, Vector2 pos, Vector2 vel)
 		{
 			//bulletTex = new TextureInfo("/Application/Assets/bullet.png");
 			bulletSprite = new SpriteUV(tex);
@@ -37,15 +38,15 @@ namespace TheATeam
 			else
 				offset = 77.0f;
 			
+//			if(bulletType == Type.Fire && second type  == air)
+//				bulletSpeed = 0.7f;
 			
-			rotation = vel.Normalize();
-			velocity = vel;
+			
+			velocity = vel * bulletSpeed;
 			position = new Vector2(pos.X + rotation.X * offset, pos.Y + rotation.Y * offset); 
 			collided = false;
-			
-			
-			
-			scene.AddChild(bulletSprite);
+
+			ProjectileManager.Instance.GetScene().AddChild(bulletSprite);
 		}
 		public void Dispose()
 		{
