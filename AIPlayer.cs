@@ -12,9 +12,9 @@ namespace TheATeam
 	public class AIPlayer: Player
 	{
 		private Player player1;
-		private Vector2 velocity, prevVel;
+		private Vector2 velocity;
 		private Vector2 target;
-		private float maxSpeed = 1.5f;
+		private float maxSpeed = 20.0f;
 		private float rotationAngle = 0.0f;
 		private float prevAng = 0.0f;
 		private PathFinder pathfinder;
@@ -24,7 +24,6 @@ namespace TheATeam
 		{
 			this.player1 = player1;
 			velocity = new Vector2(0.0f, 0.0f);
-			prevVel = new Vector2(0.0f, 0.0f);
 			Position = new Vector2(400.0f, 300.0f);
 			target = Position;
 			pathfinder = new PathFinder(this);
@@ -52,7 +51,16 @@ namespace TheATeam
 
 			MoveInHeadingDirection(dt);
 			HandleCollision();
-			base.Direction = Vec2DNormalize(velocity);
+			if(Position.Distance(target) > 10.0f)
+			{
+				base.Direction = Vec2DNormalize(velocity);
+			}
+			else
+			{
+				base.Direction = Vec2DNormalize(player1.Position - Position);
+				Console.WriteLine("method1: " + Vec2DNormalize(player1.Center - Position));
+				Console.WriteLine("method2: " + Vec2DNormalize(player1.Position - Position));
+			}
 			base.HandleDirectionAnimation();
 		}
 		void RotateToFacePosition(Vector2 target)
@@ -92,17 +100,12 @@ namespace TheATeam
 		}
 		private void MoveInHeadingDirection(float dt)
 		{
-			dt /= 10.0f;
+			dt /= 100.0f;
 			//Vector2 force = Seek(target);
 			
 			
-			Vector2 acceleration = Seek (pathfinder.GetTarget());
-//			if(acceleration.Length() < maxSpeed)
-//			{
-//
-//				acceleration += Seek (pathfinder.GetTarget());
-//			}
-		
+			Vector2 acceleration = Arrive(pathfinder.GetTarget());
+
 			// a = (v - u)/t  -> v = u + at calculate velocity
 			velocity += acceleration * dt;
 
@@ -125,9 +128,36 @@ namespace TheATeam
 			force.X *= maxSpeed;
 			force.Y *= maxSpeed;
 			
-			//force -= velocity;
+			force -= velocity;
 			
 			return force;
+		}
+		private Vector2 Arrive(Vector2 arriveLocation)
+		{
+			// travel to next pathfind location (arriveLocation) while checking distance to final target (target)
+			Vector2 toTarget = arriveLocation - Position;
+				
+			float distance = toTarget.Length();
+			
+			Vector2 force = new Vector2(0.0f, 0.0f);
+			
+			if(target.Distance(Position) < 64.0f && target.Distance(Position) > 0.0f)
+			{
+				// scale dist by factor 10 otherwise force returned is too small (very slow movement)
+				float speed = distance * 10 / maxSpeed;
+				force = new Vector2 ((toTarget.X * speed / distance) - velocity.X,(toTarget.Y * speed / distance) - velocity.Y);
+				return force;
+				
+			}
+			else if( target.Distance(Position) > 0.0f)
+			{
+				float speed = maxSpeed;
+				
+				force = new Vector2 ((toTarget.X * speed / distance) - velocity.X,(toTarget.Y * speed / distance) - velocity.Y);
+				return force;
+			}
+			
+			return new Vector2(0.0f, 0.0f);
 		}
 		private Vector2 Vec2DNormalize(Vector2 v)
 		{

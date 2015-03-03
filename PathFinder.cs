@@ -90,7 +90,7 @@ namespace TheATeam
 		private Waypoint FindNearestWaypoint(Vector2 target)
 		{
 			float smallestDistance = target.Distance(waypoints[0].tile.Center);
-			Waypoint toReturn; toReturn = null;
+			Waypoint toReturn = waypoints[0];
 			foreach(Waypoint w in waypoints)
 			{
 				float dist = target.Distance(w.tile.Center);
@@ -130,13 +130,14 @@ namespace TheATeam
 		{
 			if (null != n.parent)
 				outputPath(n.parent);
-			path.Add(n);//.push_back(n->waypoint->GetID());
+			path.Add(n);
 		}
 		public void FindPath(Vector2 target)
 		{
 			Waypoint p = FindNearestWaypoint(target);
 			if(null != p)
-				FindPath(FindNearestWaypoint(target).tile);
+				FindPath(p.tile);
+			// if path is null, get connections of p and find path again ect
 		}
 		
 		private void FindPath(Tile target)
