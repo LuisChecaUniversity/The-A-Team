@@ -29,6 +29,8 @@ namespace TheATeam
 		
 		public Vector2 FirstFlag;
 		public Vector2 SecondFlag;
+		public static bool Player1HoldingFlag = false;
+		public static bool Player2HoldingFlag = false;
 		
 		private ItemManager ()
 		{			
@@ -73,6 +75,9 @@ namespace TheATeam
 			{
 				item.Update(dt);
 			}
+			
+			
+			
 		}
 		
 		public void Grabbed()
@@ -134,11 +139,12 @@ namespace TheATeam
 							p1.Element = 'F';
 							break;
 						case "Player1Flag":
-							item.ResetOwnFlag();
+							item.ResetPlayer1Flag();
 							item.iSprite.Visible = true;
 							item.collided = false;
 							break;
 						case "Player2Flag":
+							Player1HoldingFlag = true;
 							break;
 						default:
 							break;
@@ -173,8 +179,12 @@ namespace TheATeam
 							p2.Element = 'F';
 							break;
 						case "Player1Flag":
+							Player2HoldingFlag = true;
 							break;
 						case "Player2Flag":
+							item.ResetPlayer2Flag();
+							item.iSprite.Visible = true;
+							item.collided = false;
 							break;
 						default:
 							break;
@@ -200,6 +210,20 @@ namespace TheATeam
 		  item.collided = false;
 		}
 		}
+		
+		public void ScoreGameOver(Player p1,Player p2)
+		{
+			if (Player1HoldingFlag)
+			{
+				p1.Player1Score();
+			}
+			
+			else if (Player2HoldingFlag)
+			{
+				p2.Player2Score();
+			}
+		}
+		
 		public Item GetItem(ItemType type, string name)
 		{
 			Item toReturn = null;
