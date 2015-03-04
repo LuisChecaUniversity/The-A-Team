@@ -41,7 +41,7 @@ namespace TheATeam
 //			if(bulletType == Type.Fire && second type  == air)
 //				bulletSpeed = 0.7f;
 			
-			
+			rotation = vel.Normalize();
 			velocity = vel * bulletSpeed;
 			position = new Vector2(pos.X + rotation.X * offset, pos.Y + rotation.Y * offset); 
 			collided = false;
