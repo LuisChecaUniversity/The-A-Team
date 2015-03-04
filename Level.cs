@@ -52,7 +52,7 @@ namespace TheATeam
 		
 		private SpriteUV playerPointer;
 		private TextureInfo pointerTex;
-		private bool isGameOver = false;
+		public static bool isGameOver = false;
 		
 		public Level(): base()
 		{
@@ -184,6 +184,8 @@ namespace TheATeam
 			}
 		}
 		
+		
+		
 		public override void OnEnter()
 		{
 			base.OnEnter();			
@@ -250,8 +252,7 @@ namespace TheATeam
 					
 					ItemManager.Instance.Update(dt);
 					ItemManager.Instance.ItemCollision(player1, player2);
-					
-						
+					ItemManager.Instance.ScoreGameOver(player1, player2);
 				}
 				else if(levelStage == LevelStage.BuildDefence)
 				{

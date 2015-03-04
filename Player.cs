@@ -155,6 +155,8 @@ namespace TheATeam
 	
 			// Make camera follow the player
 			Info.CameraCenter = Position;
+			
+			
 		}
 		
 		private void HandleInput(float dt)
@@ -491,5 +493,20 @@ namespace TheATeam
 			}
 		}
 		
+		public void Player1Score()  
+		{
+		  	if(Position == ItemManager.Instance.FirstFlag)
+			{
+				Level.isGameOver = true;
+			}
+		}
+		
+		public void Player2Score() 
+		{
+			if(Position == ItemManager.Instance.SecondFlag)
+			{
+				Level.isGameOver = true;
+			}
+		}
 	}
 }
