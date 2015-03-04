@@ -60,6 +60,8 @@
     <Compile Include="Background.cs" />
     <Compile Include="MultiplayerLevel.cs" />
     <Compile Include="GameOver.cs" />
+    <Compile Include="AIPlayer.cs" />
+    <Compile Include="PathFinder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -76,7 +78,6 @@
     <Folder Include="assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\dungeon_objects.png" />
     <Content Include="assets\Vita_Circle.png" />
     <Content Include="assets\Vita_Cross.png" />
     <Content Include="assets\Vita_L.png" />
@@ -87,8 +88,6 @@
     </Content>
     <Content Include="assets\bullet.png" />
     <Content Include="assets\tiles.xml" />
-    <Content Include="assets\tiles.png" />
-    <Content Include="assets\dungeon_tiles.png" />
     <Content Include="assets\MainMenu.png" />
     <Content Include="assets\selectIcon.png" />
     <Content Include="assets\SplashScreen.png" />
@@ -112,5 +111,6 @@
     <Content Include="assets\mana.png" />
     <Content Include="assets\pointer.png" />
     <Content Include="assets\Game Over.png" />
+    <Content Include="assets\Base.png" />
   </ItemGroup>
 </Project>

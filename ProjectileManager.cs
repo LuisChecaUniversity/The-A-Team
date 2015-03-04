@@ -14,7 +14,7 @@ namespace TheATeam
 		private static List<Projectile> projectiles;
 		private Scene scene;
 
-		private float bulletSpeed = 0.5f;
+		
 
 		private static TextureInfo fireTex = new TextureInfo("/Application/assets/FireBullet.png");
 		private static TextureInfo waterTex = new TextureInfo("/Application/assets/WaterBullet.png");
@@ -31,26 +31,30 @@ namespace TheATeam
 		{
 			get{return instance;}
 		}
+		public Scene GetScene()
+		{
+			return scene;
+		}
 		
 		public void Shoot(Vector2 playerPos, Vector2 direction, char type)
 		{
-			Vector2 Velocity = new Vector2(direction.X * bulletSpeed, direction.Y * bulletSpeed);
+			Vector2 Velocity = new Vector2(direction.X, direction.Y);
 			Projectile newProjectile;
 			if(type == 'N')
 			{
-				newProjectile = new Projectile(scene, neutralTex, playerPos, Velocity);
+				newProjectile = new Projectile(neutralTex, playerPos, Velocity);
 				newProjectile.setType(Type.Neutral);
 				projectiles.Add(newProjectile);
 			}
 			else if(type == 'F')
 			{
-				newProjectile = new Projectile(scene, fireTex, playerPos, Velocity);
+				newProjectile = new Projectile(fireTex, playerPos, Velocity);
 				newProjectile.setType(Type.Fire);
 				projectiles.Add(newProjectile);
 			}
 			else if(type == 'W')
 			{
-				newProjectile = new Projectile(scene, waterTex, playerPos, Velocity);
+				newProjectile = new Projectile(waterTex, playerPos, Velocity);
 				newProjectile.setType(Type.Water);
 				projectiles.Add(newProjectile);
 			}
