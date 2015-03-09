@@ -67,10 +67,15 @@ namespace TheATeam
 		public static bool Initialise()
 		{
 			// Load and store textures
-			AddAsset("tiles", "SpriteSheetMaster-Recovered.png", new Vector2i(4, 8));
 			AddAsset("background", "Background.png");
-			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,6));
+			AddAsset("base", "base.png");
+			AddAsset("blockedArea", "BlockedArea.png");
+			AddAsset("health", "health.png");
 			AddAsset("items", "ItemSpriteSheet.png", new Vector2i(1, 6));
+			AddAsset("mana", "mana.png");
+			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,6));
+			AddAsset("pointer", "pointer.png");
+			AddAsset("tiles", "SpriteSheetMaster-Recovered.png", new Vector2i(4, 8));
 			return true;
 		}
 	}

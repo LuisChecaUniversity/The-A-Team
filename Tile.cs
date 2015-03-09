@@ -32,6 +32,26 @@ namespace TheATeam
 			mana = maxMana;
 		}
 	}
+	
+	public enum Sides
+	{
+		None = 0,
+		Top = 1,
+		Left = 2,
+		TopLeft = 3,
+		Right = 4,
+		TopRight = 5,
+		LeftRight = 6,
+		TopLeftRight = 7,
+		Bottom = 8,
+		TopBottom = 9,
+		BottomLeft = 10,
+		BottomTopLeft = 11,
+		BottomRight = 12,
+		BottomTopRight = 13,
+		BottomLeftRight = 14,
+		All = 15
+	}
 
 	public class Tile: SpriteTile
 	{
@@ -57,6 +77,20 @@ namespace TheATeam
 		public char Key { get { return _key; } set { LoadTileProperties(value); } }
 		
 		public bool IsAlive { get { return _stats.health > 0; } }
+		
+		public Sides Sides { get; set; }
+		
+		public Bounds2 WorldBounds
+		{ 
+			get
+			{
+				Vector2 boundsScale = new Vector2(0.95f);
+				Bounds2 thisBounds = this.GetlContentLocalBounds();
+				this.GetContentWorldBounds(ref thisBounds);
+				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
+				return thisBounds;
+			}
+		}
 
 		public Tile(Vector2 position): base()
 		{
@@ -85,7 +119,9 @@ namespace TheATeam
 		public bool WallDamage()
 		{			
 			if (!_isWall)
+			{
 				return false;
+			}
 			
 			if (IsAlive)
 			{
@@ -115,30 +151,33 @@ namespace TheATeam
 				_stats.health += damage * (element == Key ? 1 : -1);
 			}
 		}
+		
+		public bool Overlaps(Bounds2 otherBounds)
+		{
+			return WorldBounds.Overlaps(otherBounds);
+		}
+		
+		public bool Overlaps(Vector2 point)
+		{
+			Bounds2 otherBounds = new Bounds2(point);
+			return Overlaps(otherBounds);
+		}
 
 		public bool Overlaps(SpriteBase sprite)
 		{
-			Vector2 boundsScale = new Vector2(0.95f);
-			
-			Bounds2 thisBounds = this.GetlContentLocalBounds();
 			Bounds2 otherBounds = sprite.GetlContentLocalBounds();
-			this.GetContentWorldBounds(ref thisBounds);
 			sprite.GetContentWorldBounds(ref otherBounds);
-			thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
-			return thisBounds.Overlaps(otherBounds);
+			return Overlaps(otherBounds);
 		}
 		
-		public static Vector2i LoadSpriteIndex(char loadkey)
+		public static Vector2i GetSpriteIndex(char loadkey)
 		{
-			if (_types.Count < 1)
-				XMLTypeLoader();
-			
 			TileType tt = new TileType();
 			if (_types.TryGetValue(loadkey, out tt))
 			{
 				return tt.tileIndex2D;
 			}
-			return new Vector2i();
+			return new Vector2i(-1, -1);
 		}
 		
 		private static Dictionary<char, TileType> XMLTypeLoader(string filepath="/Application/assets/tiles.xml")
@@ -161,9 +200,8 @@ namespace TheATeam
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
-			// Load types if empty
-			if (_types.Count < 1)
-				XMLTypeLoader();
+			// Clear Grid list
+			Grid.Clear();
 			// Clear collision list
 			Collisions.Clear();
 			// Read whole level files to lines
@@ -190,15 +228,21 @@ namespace TheATeam
 
 					// If has collision add to collisions checklist
 					if (t.IsCollidable)
+					{
 						Collisions.Add(t);
+					}
 
 					// Player 1 start position
 					if (c == '1')
+					{
 						player1Pos = pos;
+					}
 					
 					// Player 2 start
 					if (c == '2')
+					{
 						player2Pos = pos;
+					}
 
 					// End col: Move to next tile "grid"
 					pos.X += Width;

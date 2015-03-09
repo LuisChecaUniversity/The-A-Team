@@ -184,7 +184,7 @@ namespace TheATeam
 					ItemManager.Instance.Update(dt);
 					ItemManager.Instance.ItemCollision(player1, player2);
 				}
-				else if(levelStage == LevelStage.BuildDefence)
+				else if(levelStage == LevelStage.BuildStage)
 				{
 					AppMain.client.DataExchange();
 					
