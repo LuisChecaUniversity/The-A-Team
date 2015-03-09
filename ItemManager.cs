@@ -41,9 +41,11 @@ namespace TheATeam
 		{
 			FirstFlag = new Vector2(30, 290);
 			leftFlag = new Item(curScene, FirstFlag, flagIndex, ItemType.flag, "Player1Flag");
-			items.Add(leftFlag);
 			SecondFlag = new Vector2(926, 290);
 			rightFlag = new Item(curScene, SecondFlag, flagIndex, ItemType.flag, "Player2Flag");
+			
+			items.Clear();
+			items.Add(leftFlag);
 			items.Add(rightFlag);
 		}
 
@@ -74,7 +76,6 @@ namespace TheATeam
 			{
 				item.Update(dt);
 			}
-
 		}
 		
 		public void Grabbed()
