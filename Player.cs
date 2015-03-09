@@ -500,7 +500,7 @@ namespace TheATeam
 			
 		  	if(nextPos1.X < 35 && nextPos1.X > 25 && nextPos1.Y < 295 && nextPos1.Y > 285)
 			{
-				Level.isGameOver = true;
+				Info.IsGameOver = true;
 			}
 		}
 		
@@ -510,7 +510,7 @@ namespace TheATeam
 			
 			if(nextPos2.X < 931 && nextPos2.X > 921 && nextPos2.Y < 295 && nextPos2.Y > 285)
 			{
-				Level.isGameOver = true;
+				Info.IsGameOver = true;
 			}
 		}
 	}

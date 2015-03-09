@@ -48,7 +48,6 @@ namespace TheATeam
 				{
 				case 1:					
 					Info.TotalGameTime = 0f;
-					Info.LevelNumber = 1;
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = level;
@@ -65,7 +64,6 @@ namespace TheATeam
 					
 				case 3:
 					Info.TotalGameTime = 0f;
-					Info.LevelNumber = 1;
 					Level placingTest = new Level();
 					placingTest.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = placingTest;

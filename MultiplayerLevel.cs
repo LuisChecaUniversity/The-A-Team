@@ -49,7 +49,7 @@ namespace TheATeam
 
 			// Reload the font becuase FontMap disposes of it
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
-			Info.LevelClear = false;
+			Info.IsGameOver = false;
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
 			

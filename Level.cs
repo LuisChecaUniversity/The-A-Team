@@ -57,11 +57,10 @@ namespace TheATeam
 		
 		private SpriteUV playerPointer;
 		private TextureInfo pointerTex;
-		public static bool isGameOver = false;
 		
 		public Level(): base()
 		{
-
+			Info.IsGameOver = false;
 			screenWidth = Director.Instance.GL.Context.Screen.Width;
 			screenHeight = Director.Instance.GL.Context.Screen.Height;
 
@@ -70,7 +69,6 @@ namespace TheATeam
 
 			// Reload the font becuase FontMap disposes of it
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
-			Info.LevelClear = false;
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
 
@@ -196,7 +194,7 @@ namespace TheATeam
 				if(countSecs < 0 && countMins == 0)
 				{
 					lblTimer.Text = "Game Over";
-					isGameOver = true;
+					Info.IsGameOver = true;
 					timerA.Stop();
 					
 				}	
@@ -217,13 +215,13 @@ namespace TheATeam
 			ItemManager.Instance.initFlags(this);
 			this.AddChild(blockedAreaSprite);
 			this.AddChild(lblTopLeft);
-				this.AddChild(lblTopRight);
+			this.AddChild(lblTopRight);
 		}
 		public override void Update(float dt)
 		{
 			base.Update(dt);
 			
-				if(isGameOver)
+				if (Info.IsGameOver)
 				{
 					//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
 					GameOver go = new GameOver();

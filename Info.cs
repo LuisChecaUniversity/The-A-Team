@@ -16,10 +16,7 @@ namespace TheATeam
 		
 		public static Sce.PlayStation.Core.Vector2 CameraCenter { get; set; }
 		
-		public static bool LevelClear { get; set; }
+		public static bool IsGameOver { get; set; }
 
-		public static int LevelNumber { get; set; }
-
-		public static int MaxLevels { get { return 3; } }
 	}
 }

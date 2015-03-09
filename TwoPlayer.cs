@@ -1013,7 +1013,6 @@ namespace TheATeam
 					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
 					
 					Info.TotalGameTime = 0f;
-					Info.LevelNumber = 1;
 					
 					MultiplayerLevel level = new MultiplayerLevel();
 					level.Camera.SetViewFromViewport();
