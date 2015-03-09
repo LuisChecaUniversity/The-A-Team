@@ -496,7 +496,9 @@ namespace TheATeam
 		
 		public void Player1Score()  
 		{
-		  	if(Position == ItemManager.Instance.FirstFlag)
+			Vector2 nextPos1 = Position + positionDelta;
+			
+		  	if(nextPos1.X < 35 && nextPos1.X > 25 && nextPos1.Y < 295 && nextPos1.Y > 285)
 			{
 				Level.isGameOver = true;
 			}
@@ -504,7 +506,9 @@ namespace TheATeam
 		
 		public void Player2Score() 
 		{
-			if(Position == ItemManager.Instance.SecondFlag)
+			Vector2 nextPos2 = Position + positionDelta;
+			
+			if(nextPos2.X < 931 && nextPos2.X > 921 && nextPos2.Y < 295 && nextPos2.Y > 285)
 			{
 				Level.isGameOver = true;
 			}
