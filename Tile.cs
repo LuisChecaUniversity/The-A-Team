@@ -42,13 +42,13 @@ namespace TheATeam
 		private bool _isWall { get { return Elements.Contains(_key); } }
 		
 		public static TextureInfo TexInfo = TextureManager.Get("tiles");
-		public static List<char> Elements = new List<char> {'N', 'W', 'F'};
+		public static List<char> Elements = new List<char> {'N', 'W', 'F', 'E', 'A', 'L'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
 
-		public static int Height { get { return 64; } }
+		public static int Height { get { return (int)TexInfo.TileSizeInPixelsf.Y; } }
 
-		public static int Width { get { return 64; } }
+		public static int Width { get { return (int)TexInfo.TileSizeInPixelsf.X; } }
 		
 		public Vector2 Center { get { return Position + Quad.Center; } }
 

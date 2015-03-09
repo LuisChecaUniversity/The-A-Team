@@ -69,7 +69,7 @@ namespace TheATeam
 			// Load and store textures
 			AddAsset("tiles", "SpriteSheetMaster-Recovered.png", new Vector2i(4, 8));
 			AddAsset("background", "Background.png");
-			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,5));
+			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,6));
 			AddAsset("elements", "ElementSpriteSheet.png", new Vector2i(1, 5));
 			return true;
 		}

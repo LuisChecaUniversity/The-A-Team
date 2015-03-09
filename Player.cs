@@ -21,7 +21,7 @@ namespace TheATeam
 
 	public class Player: Tile
 	{
-		private static int Y_INDEX = 4;
+		private static int Y_INDEX = 5;
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
 		private static float UISize = 32;
@@ -65,6 +65,7 @@ namespace TheATeam
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
 		{
+			TextureInfo = TextureManager.Get("players");
 			// Assign variables
 			this.animationRangeX = animationRangeX;
 			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
