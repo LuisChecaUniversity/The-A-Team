@@ -498,7 +498,7 @@ namespace TheATeam
 		{
 			Vector2 nextPos1 = Position + positionDelta;
 			
-		  	if(nextPos1.X < 35 && nextPos1.X > 25 && nextPos1.Y < 295 && nextPos1.Y > 285)
+		  	if(nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
 			{
 				Info.IsGameOver = true;
 			}
@@ -508,7 +508,7 @@ namespace TheATeam
 		{
 			Vector2 nextPos2 = Position + positionDelta;
 			
-			if(nextPos2.X < 931 && nextPos2.X > 921 && nextPos2.Y < 295 && nextPos2.Y > 285)
+			if(nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
 			{
 				Info.IsGameOver = true;
 			}
