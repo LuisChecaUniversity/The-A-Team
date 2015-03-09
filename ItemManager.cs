@@ -44,7 +44,7 @@ namespace TheATeam
 			FirstFlag = pos1;
 			leftFlag = new Item(curScene, pos1, flagIndex, ItemType.flag, "Player1Flag");
 			items.Add(leftFlag);
-			Vector2 pos2 = new Vector2(864,290);
+			Vector2 pos2 = new Vector2(926,290);
 			SecondFlag = pos2;
 			rightFlag = new Item(curScene, pos2, flagIndex, ItemType.flag, "Player2Flag");
 			items.Add(rightFlag);
