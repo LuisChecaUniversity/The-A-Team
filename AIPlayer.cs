@@ -30,6 +30,7 @@ namespace TheATeam
 		private float attackTime = 6.0f;
 		private float attackTimer = 0.0f;
 		private Random rand = new Random();
+		
 			
 
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
@@ -60,6 +61,49 @@ namespace TheATeam
 					pathfinder.FindPath(target);
 				}
 			}
+			
+			updateBehaviours(dt);
+			
+			MoveInHeadingDirection(dt);
+			HandleCollision();
+			if(Position.Distance(pathfinder.GetTarget()) > 5.0f)
+			{
+				base.Direction = Vec2DNormalize(velocity);
+			}
+			else
+			{
+				base.Direction = Vec2DNormalize(player1.Position - Position);
+			}
+			
+			ShootingDirection = Direction;
+			
+			base.HandleDirectionAnimation();
+			base.updateMana(dt);
+		}
+		
+		void updateBehaviours(float dt)
+		{
+//			if(!!ItemManager.Player2HoldingFlag && ItemManager.Player1HoldingFlag && player1.Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Director.Instance.GL.Context.GetViewport().Width)
+//			{
+//				ChangeBehaviour(Behaviour.CollectFlag);
+//			}
+//			else 
+			if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.Attacking);
+			}
+			else if( Element != 'N' && attackTimer == 0.0f)
+			{
+				ChangeBehaviour( Behaviour.CollectFlag);
+			}
+			else if(attackTimer == 0.0f)
+			{
+				ChangeBehaviour(Behaviour.SeekElement);
+			}
+			
+			if(havePath && pathfinder.PathLength() <= 0)
+				havePath = false;
+			
 			switch(behaviour)
 			{
 			case Behaviour.CollectFlag:
@@ -78,38 +122,6 @@ namespace TheATeam
 				AttackPlayer();
 				break;
 			}
-			
-			if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
-			{
-				ChangeBehaviour(Behaviour.Attacking);
-			}
-			else if( Element != 'N' && attackTimer == 0.0f)
-			{
-				ChangeBehaviour( Behaviour.CollectFlag);
-			}
-			else if(attackTimer == 0.0f)
-			{
-				ChangeBehaviour(Behaviour.SeekElement);
-			}
-			
-			if(havePath && pathfinder.PathLength() <= 0)
-				havePath = false;
-
-			MoveInHeadingDirection(dt);
-			HandleCollision();
-			if(Position.Distance(pathfinder.GetTarget()) > 5.0f)
-			{
-				base.Direction = Vec2DNormalize(velocity);
-			}
-			else
-			{
-				base.Direction = Vec2DNormalize(player1.Position - Position);
-			}
-			
-			ShootingDirection = Direction;
-			
-			base.HandleDirectionAnimation();
-			base.updateMana(dt);
 		}
 		
 		void ChangeBehaviour(Behaviour b)
