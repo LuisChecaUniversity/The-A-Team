@@ -74,9 +74,7 @@ namespace TheATeam
 			{
 				item.Update(dt);
 			}
-			
-			
-			
+
 		}
 		
 		public void Grabbed()
@@ -200,6 +198,11 @@ namespace TheATeam
 				}
 			}
 			return toReturn;
+		}
+		// For ai to evaluate all the items
+		public List<Item> GetAllItems()
+		{
+			return items;
 		}
 	}
 }

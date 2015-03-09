@@ -8,7 +8,12 @@ using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
 namespace TheATeam
 {
-	
+	enum Behaviour
+	{
+		Attacking,
+		SeekElement,
+		CollectFlag,
+	}
 	public class AIPlayer: Player
 	{
 		private Player player1;
@@ -18,13 +23,20 @@ namespace TheATeam
 		private float rotationAngle = 0.0f;
 		private float prevAng = 0.0f;
 		private PathFinder pathfinder;
+		private bool seekingElement = false; 
+		private bool havePath = false;
+		private Behaviour behaviour = Behaviour.SeekElement;
+		private float attackDistance = 200.0f;
+		private float attackTime = 6.0f;
+		private float attackTimer = 0.0f;
+		private Random rand = new Random();
 			
 
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
 		{
 			this.player1 = player1;
 			velocity = new Vector2(0.0f, 0.0f);
-			Position = new Vector2(400.0f, 300.0f);
+			//Position = new Vector2(400.0f, 300.0f);
 			target = Position;
 			pathfinder = new PathFinder(this);
 		}
@@ -48,6 +60,40 @@ namespace TheATeam
 					pathfinder.FindPath(target);
 				}
 			}
+			switch(behaviour)
+			{
+			case Behaviour.CollectFlag:
+				if(ItemManager.Player2HoldingFlag)
+					ReturnFlag();
+				else
+					CollectFlag();
+				break;
+			case Behaviour.SeekElement:
+			SeekElement();
+				break;
+			case Behaviour.Attacking:
+				attackTimer += dt/1000;
+				if(attackTimer >= attackTime && player1.Position.Distance(Position) > attackDistance)
+					attackTimer = 0.0f;
+				AttackPlayer();
+				break;
+			}
+			
+			if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.Attacking);
+			}
+			else if( Element != 'N' && attackTimer == 0.0f)
+			{
+				ChangeBehaviour( Behaviour.CollectFlag);
+			}
+			else if(attackTimer == 0.0f)
+			{
+				ChangeBehaviour(Behaviour.SeekElement);
+			}
+			
+			if(havePath && pathfinder.PathLength() <= 0)
+				havePath = false;
 
 			MoveInHeadingDirection(dt);
 			HandleCollision();
@@ -59,42 +105,165 @@ namespace TheATeam
 			{
 				base.Direction = Vec2DNormalize(player1.Position - Position);
 			}
+			
+			ShootingDirection = Direction;
+			
 			base.HandleDirectionAnimation();
+			base.updateMana(dt);
 		}
-		void RotateToFacePosition(Vector2 target)
+		
+		void ChangeBehaviour(Behaviour b)
 		{
-			Vector2 toTarget = Vec2DNormalize(Center - target);
-			
-			Vector2 heading = Vec2DNormalize(velocity);
-			float angle = FMath.Acos(heading.Dot(toTarget));
-			
-			int sign = 1;
-			// sign
-			if (heading.Y*toTarget.X > heading.X*toTarget.Y)
-			{
-				sign = -1;
-			}
-			else 
-			{
-				sign = 1;
-				
-			}
-			
-			if(angle <= 0.0001)
+			if(behaviour == b)
 				return;
-			
-			prevAng = angle;
-			float maxTurnRate = 0.0099f;
-			if(angle > maxTurnRate)
-				angle = maxTurnRate;
-			else if(angle < -maxTurnRate)
-				angle = - maxTurnRate;
 			else
-				return;
+			{
+				behaviour = b;
+				havePath = false;
+			}
+		}
+		void AttackPlayer()
+		{
+			if(!ItemManager.Player1HoldingFlag || !ItemManager.Player2HoldingFlag)
+			{
+				if(Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Position.Distance(player1.Position))
+				{
+					ChangeBehaviour(Behaviour.CollectFlag);
+					attackTimer = 0.0f;
+					return;
+				}
+			}
+			if(!havePath)
+			{
+				Vector2 pos = player1.Position; 
+				if(ItemManager.Player1HoldingFlag)
+					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position - player1.Position) * rand.Next(250,450);
+				else
+					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position - player1.Position) * rand.Next(250,450);
+				
+				if(pos.X > Director.Instance.GL.Context.GetViewport().Width || pos.Y > Director.Instance.GL.Context.GetViewport().Height)
+					return;
+//				if(pos.X > Director.Instance.GL.Context.GetViewport().Width)
+//				{
+//					pos.X = pos.X - (pos.X - Director.Instance.GL.Context.GetViewport().Width);
+//				}
+//				if(pos.Y > Director.Instance.GL.Context.GetViewport().Height)
+//				{
+//					pos.Y = pos.Y - (pos.Y - Director.Instance.GL.Context.GetViewport().Height);
+//				}
+				
+				FindPath(pos);
+			}
+			ShootingDirection = Vec2DNormalize(player1.Position - Position);
+			Shoot ();
+		}
+		void CollectFlag()
+		{
+			// want to know when to shoot P1 tiles...maybe mark for attack when pathfinding?
+			if(Element != 'N')
+			{
+				Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
+				if(target != flag.position)
+				{
+					if(!havePath)
+						FindPath(flag.position);
+//					pathfinder.FindPath(flag.position);
+//					target = pathfinder.GetTarget();
+				}
 
-			rotationAngle = FMath.Degrees(angle)*sign;
+				if(pathfinder.PathLength() <= 0 && target != flag.position)
+				{
+					ShootingDirection = Vec2DNormalize(flag.position - Position);
+					Shoot ();
+				}
+			}
+		}
+		void ReturnFlag()
+		{
+			Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
+			if(target != flag.position && !havePath)
+			{
+				FindPath(flag.position);
+			}
+//			if(pathfinder.PathLength() <= 0 && target != flag.position)
+//			{
+//				Shoot ();
+//			}
+		}
+		void FindPath(Vector2 pos)
+		{
+			pathfinder.FindPath(pos);
+			target = pathfinder.GetTarget();
+			havePath = true;
+		}
+		void SeekElement()
+		{
+			// need to know which item im targeting so if it gets collected can swap
+			// need to check if AI dies, reseeks element
+			// seperate this into 2 parts. 1 find path, 2 carry out checks
+			if(Element == 'N')
+			{
+				if(!havePath)
+				{
+					int shortestDistance = 100;
+					Item element = ItemManager.Instance.GetItem(ItemType.element, "Fire");
+					foreach (Item item in ItemManager.Instance.GetAllItems())
+					{
+						if(item.Type == ItemType.element && !item.collided)
+						{
+							int distance;
+							pathfinder.FindPath(item.position);
+							distance = pathfinder.PathLength();
+							if (distance < shortestDistance)
+							{
+								shortestDistance = distance;
+								element = item;
+							}
+						}
+					}
+					
+					FindPath(element.position);
+				}
+			}
+			else
+				ChangeBehaviour(Behaviour.CollectFlag);
 			
 		}
+		
+//		void RotateToFacePosition(Vector2 target)
+//		{
+//			Vector2 toTarget = Vec2DNormalize(Center - target);
+//			
+//			Vector2 heading = Vec2DNormalize(velocity);
+//			float angle = FMath.Acos(heading.Dot(toTarget));
+//			
+//			int sign = 1;
+//			// sign
+//			if (heading.Y*toTarget.X > heading.X*toTarget.Y)
+//			{
+//				sign = -1;
+//			}
+//			else 
+//			{
+//				sign = 1;
+//				
+//			}
+//			
+//			if(angle <= 0.0001)
+//				return;
+//			
+//			prevAng = angle;
+//			float maxTurnRate = 0.0099f;
+//			if(angle > maxTurnRate)
+//				angle = maxTurnRate;
+//			else if(angle < -maxTurnRate)
+//				angle = - maxTurnRate;
+//			else
+//				return;
+//
+//			rotationAngle = FMath.Degrees(angle)*sign;
+//			
+//		}
 		private void MoveInHeadingDirection(float dt)
 		{
 			dt /= 100.0f;
@@ -260,6 +429,7 @@ namespace TheATeam
 				return true;
 			}
 		}
+	
 		
 		
 		

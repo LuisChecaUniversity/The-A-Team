@@ -48,6 +48,7 @@ namespace TheATeam
 			InitWaypoints();
 			target = player.Center;
 		}
+
 		public Vector2 GetTarget()
 		{
 			if (path.Count > 0)
@@ -63,7 +64,13 @@ namespace TheATeam
 				return target;
 			}
 		}
-		
+		public int PathLength()
+		{
+			if(path != null)
+				return path.Count;
+			else
+				return 0;
+		}
 		private void InitWaypoints()
 		{
 			int i = 0;
