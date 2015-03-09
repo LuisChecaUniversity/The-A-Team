@@ -61,6 +61,7 @@ namespace TheATeam
 			iSprite.TextureInfo = TextureManager.Get("items");
 			iSprite.Quad.S = iSprite.TextureInfo.TileSizeInPixelsf;
 			iSprite.TileIndex2D = spriteIndex2D;
+			iSprite.Position = pos;
 			iSprite.CenterSprite();
 			
 			initialPosition = position = pos;
