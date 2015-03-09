@@ -5,19 +5,43 @@ namespace TheATeam
 {
 	public class TextureManager: AssetManager<TextureInfo>
 	{
-		new public static void RemoveAsset(string key)
+		private const string BASE_PATH = "/Application/assets/";
+		
+		new public static bool RemoveAsset(string key)
 		{
-			if(!IsAssetLoaded(key))
-				return;
-			resourceMap[key].Dispose();
-			AssetManager<TextureInfo>.RemoveAsset(key);
+			if(IsAssetLoaded(key))
+			{
+				resourceMap[key].Dispose();
+				AssetManager<TextureInfo>.RemoveAsset(key);
+			}
+			
+			return !IsAssetLoaded(key);
 		}
 
-		new public static void AddAsset(string key, TextureInfo asset)
+		new public static bool AddAsset(string key, TextureInfo asset)
 		{
-			AssetManager<TextureInfo>.AddAsset(key, asset);
-			if(IsAssetLoaded(key))
+			if(!IsAssetLoaded(key))
+			{
+				AssetManager<TextureInfo>.AddAsset(key, asset);
+			}
+			bool loaded = IsAssetLoaded(key);
+			if(loaded)
+			{
 				resourceMap[key].Texture.SetFilter(Sce.PlayStation.Core.Graphics.TextureFilterMode.Disabled);
+			}
+			
+			return loaded;
+		}
+		
+		public static bool AddAsset(string key, string filename)
+		{
+			return AddAsset(key, new TextureInfo(BASE_PATH + filename));
+		}
+		
+		public static bool AddAsset(string key, string filename, Vector2i numTiles)
+		{
+			Texture2D t = new Texture2D(BASE_PATH + filename, true);
+			return AddAsset(key, new TextureInfo(t, numTiles));
 		}
 		
 		new public static TextureInfo Get(string key)
@@ -43,9 +67,10 @@ namespace TheATeam
 		public static bool Initialise()
 		{
 			// Load and store textures
-			TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-	                                                 new Vector2i(4, 8)));
-			TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
+			AddAsset("tiles", "SpriteSheetMaster-Recovered.png", new Vector2i(4, 8));
+			AddAsset("background", "Background.png");
+			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,5));
+			AddAsset("elements", "ElementSpriteSheet.png", new Vector2i(1, 5));
 			return true;
 		}
 	}
