@@ -113,6 +113,6 @@
     <Content Include="assets\Game Over.png" />
     <Content Include="assets\Base.png" />
     <Content Include="assets\PlayerSpriteSheet.png" />
-    <Content Include="assets\ElementSpriteSheet.png" />
+    <Content Include="assets\ItemSpriteSheet.png" />
   </ItemGroup>
 </Project>

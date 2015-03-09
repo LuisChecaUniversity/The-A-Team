@@ -3,10 +3,7 @@
     <tiletype k='N' tx='0'  ty='7' c='1' />
     <tiletype k='W' tx='0'  ty='6' c='1' />
     <tiletype k='F' tx='0'  ty='5' c='1' />
-    <tiletype k='B' tx='0'  ty='1' c='1' />
-    <tiletype k='R' tx='1'  ty='1' c='1' />
     <tiletype k='I' tx='2'  ty='1' c='1' />
-    <tiletype k='~' tx='3'  ty='1' c='1' />
     <tiletype k='1' tx='0'  ty='0' c='0' />
     <tiletype k='2' tx='0'  ty='0' c='0' />
     <tiletype k='E' tx='0'  ty='0' c='0' />
