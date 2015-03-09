@@ -48,23 +48,24 @@ namespace TheATeam
 
 	public class Item
 	{
-		private ItemType type;
-		private string name;
+		public ItemType Type { get; private set; }
+		public string Name { get; private set; }
 		public SpriteTile iSprite;
 		public Vector2 position;
+		private Vector2 initialPosition;
 		public bool collided;
 		
 		public Item (Scene scene, Vector2 pos, Vector2i spriteIndex2D, ItemType type, string name)
 		{
 			iSprite = new SpriteTile();
-			iSprite.TextureInfo = TextureManager.Get("tiles");
+			iSprite.TextureInfo = TextureManager.Get("items");
 			iSprite.Quad.S = iSprite.TextureInfo.TileSizeInPixelsf;
 			iSprite.TileIndex2D = spriteIndex2D;
 			iSprite.CenterSprite();
 			
-			position = pos;
-			this.type = type;
-			this.name = name;
+			initialPosition = position = pos;
+			Type = type;
+			Name = name;
 			collided = false;
 			iSprite.Visible = true;
 			scene.AddChild(iSprite);
@@ -78,27 +79,15 @@ namespace TheATeam
 		
 		public void Update(float dt)
 		{
-			position = new Vector2(position.X, position.Y);
 			iSprite.Position = position;
 		}
-		
-		public void ResetPlayer1Flag()
+		public void ResetFlag()
 		{
-			if(position != ItemManager.Instance.FirstFlag)
+			if(position != initialPosition && Type == ItemType.flag)
 			{
-				position = ItemManager.Instance.FirstFlag;
-			}
-			
-		}
-		
-		public void ResetPlayer2Flag()
-		{
-			if(position != ItemManager.Instance.SecondFlag)
-			{
-				position = ItemManager.Instance.SecondFlag;
+				position = initialPosition;
 			}
 		}
-		
 		
 		public bool hasCollided(Vector2 objectPosition, Vector2 objectSize)
 		{
@@ -133,11 +122,7 @@ namespace TheATeam
 			else 
 				return true;
 			
-		}
-		
-		public ItemType GetType(){return type;}
-		public string GetName(){return name;}
-	
+		}	
 	}
 	
 

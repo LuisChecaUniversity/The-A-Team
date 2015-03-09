@@ -6,16 +6,23 @@ namespace TheATeam
 	{
 		protected static Dictionary<string, T> resourceMap = new Dictionary<string, T>();
 		
-		public static void AddAsset(string key, T asset)
+		public static bool AddAsset(string key, T asset)
 		{
 			if(!IsAssetLoaded(key))
+			{
 				resourceMap.Add(key, asset);
+			}	
+			return IsAssetLoaded(key);
 		}
 		
-		public static void RemoveAsset(string key)
+		public static bool RemoveAsset(string key)
 		{
 			if(IsAssetLoaded(key))
+			{
 				resourceMap.Remove(key);
+			}
+			
+			return !IsAssetLoaded(key);
 		}
 		
 		public static bool IsAssetLoaded(string key)
