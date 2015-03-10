@@ -40,23 +40,27 @@ namespace TheATeam
 		{
 			Vector2 Velocity = new Vector2(direction.X, direction.Y);
 			Projectile newProjectile;
-			if(type == 'N')
-			{
-				newProjectile = new Projectile(neutralTex, playerPos, Velocity);
-				newProjectile.setType(Type.Neutral);
-				projectiles.Add(newProjectile);
-			}
-			else if(type == 'F')
+//			if(type == 'N')
+//			{
+//				newProjectile = new Projectile(neutralTex, playerPos, Velocity);
+//				newProjectile.setType(Type.Neutral);
+//				projectiles.Add(newProjectile);
+//			}
+			if(type == 'F')
 			{
 				newProjectile = new Projectile(fireTex, playerPos, Velocity);
 				newProjectile.setType(Type.Fire);
 				projectiles.Add(newProjectile);
 			}
-			else if(type == 'W')
+			else //if(type == 'W')
 			{
-				newProjectile = new Projectile(waterTex, playerPos, Velocity);
-				newProjectile.setType(Type.Water);
+				newProjectile = new Projectile(neutralTex, playerPos, Velocity);
+				newProjectile.setType(Type.Neutral);
 				projectiles.Add(newProjectile);
+				
+//				newProjectile = new Projectile(waterTex, playerPos, Velocity);
+//				newProjectile.setType(Type.Water);
+//				projectiles.Add(newProjectile);
 			}
 		}
 		
