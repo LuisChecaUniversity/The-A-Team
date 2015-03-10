@@ -56,7 +56,8 @@ namespace TheATeam
 		public char Element
 		{
 			get { return _element; }
-			set {
+			set
+			{
 				_element = value;
 				TileIndex2D.Y = Y_INDEX - Tile.Elements.IndexOf(value);
 			}
@@ -73,7 +74,7 @@ namespace TheATeam
 			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
 			// Attach custom animation function
 			ScheduleInterval((dt) => {
-				if(IsAlive)
+				if (IsAlive)
 				{
 					int newTileIndex = TileIndex2D.X < animationRangeX.Y ? TileIndex2D.X + 1 : animationRangeX.X;
 					TileIndex2D.X = newTileIndex;
@@ -110,7 +111,7 @@ namespace TheATeam
 			base.Update(dt);
 			updateMana(dt);
 			
-			switch(AppMain.TYPEOFGAME)
+			switch (AppMain.TYPEOFGAME)
 			{
 			case "DUAL":
 			case "SINGLE":
@@ -123,7 +124,7 @@ namespace TheATeam
 				break;
 				
 			case "MULTIPLAYER":
-				if(AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
+				if (AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
 				{
 					// Handle movement/attacks
 					HandleInput(dt);
@@ -140,7 +141,7 @@ namespace TheATeam
 					//set position and direction from the network positions of enemy
 					Position = AppMain.client.networkPosition;
 					Direction = AppMain.client.NetworkDirection;
-					if(AppMain.client.HasShot)
+					if (AppMain.client.HasShot)
 					{
 						Shoot();	
 						AppMain.client.SetHasShot(false);	
@@ -181,33 +182,30 @@ namespace TheATeam
 				break;
 			}
 			
-			if(keyboardTest)
+			if (keyboardTest)
 			{
-				
-				
-				if(Input2.GamePad0.Left.Down)
+				if (Input2.GamePad0.Left.Down)
 				{
-					positionDelta.X = -MoveDelta;
+					positionDelta.X = -MoveDelta * _stats.moveSpeed;
 				}
 	
-				if(Input2.GamePad0.Right.Down)
+				if (Input2.GamePad0.Right.Down)
 				{
-					positionDelta.X = MoveDelta;	
+					positionDelta.X = MoveDelta * _stats.moveSpeed;	
 				}
 				
-				if(Input2.GamePad0.Up.Down)
+				if (Input2.GamePad0.Up.Down)
 				{
-					positionDelta.Y = MoveDelta;	
+					positionDelta.Y = MoveDelta * _stats.moveSpeed;	
 				}
 				
-				if(Input2.GamePad0.Down.Down)
+				if (Input2.GamePad0.Down.Down)
 				{
-					positionDelta.Y = -MoveDelta;	
+					positionDelta.Y = -MoveDelta * _stats.moveSpeed;	
 				}
-
 			}
 			
-			if(!positionDelta.IsZero())
+			if (!positionDelta.IsZero())
 			{
 				Direction = positionDelta.Normalize();
 				ShootingDirection = Direction;
@@ -216,87 +214,106 @@ namespace TheATeam
 		
 		private void SingleUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
 			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
 			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
-			if(ShootingDirection.IsZero())
+			if (ShootingDirection.IsZero())
 			{
 				ShootingDirection = Direction;
 			}
-			if(!positionDelta.IsZero())
+			if (!positionDelta.IsZero())
 			{
 				Direction = positionDelta.Normalize();
 			}
-			if(Input2.GamePad0.R.Down)
+			if (Input2.GamePad0.R.Down)
 			{
-				if(canShoot)
+				if (canShoot)
+				{
 					Shoot();
+				}
 			}
-			if(Input2.GamePad0.R.Release)
+			if (Input2.GamePad0.R.Release)
+			{
 				canShoot = true;
+			}
 		}
 		
 		private void MultiplayerUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f;
-			if(positionDelta.IsZero())
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			if (positionDelta.IsZero())
+			{
 				AppMain.client.SetActionMessage('I');
+			}
 			else
 			{
 				AppMain.client.SetActionMessage('M');
 				Direction = positionDelta;
 				AppMain.client.SetMyDirection(Direction.X, Direction.Y);
 			}			
-			if(Input2.GamePad0.R.Down)
+			if (Input2.GamePad0.R.Down)
 			{
-				if(canShoot)
+				if (canShoot)
+				{
 					Shoot();
+				}
 			
 			}
-			if(Input2.GamePad0.R.Release)
+			if (Input2.GamePad0.R.Release)
+			{
 				canShoot = true;
+			}
 		}
 		
 		private void DualUpdate(float dt)
 		{
-			
 			//no movement for dual player - Didnt think we continuing with this feature
-			if(whichPlayer == PlayerIndex.PlayerOne)
+			if (whichPlayer == PlayerIndex.PlayerOne)
+			{
+				if (Input2.GamePad0.Up.Down)
 				{
-					if(Input2.GamePad0.Up.Down )
+					if (canShoot)
 					{
-						if(canShoot)
-							Shoot();
+						Shoot();
 					}
-					if(Input2.GamePad0.Up.Release)
-						canShoot = true;
 				}
-				else
+				if (Input2.GamePad0.Up.Release)
 				{
-					if(Input2.GamePad0.Triangle.Down)
-					{
-						if(canShoot)
-							Shoot();
-					}
-					if(Input2.GamePad0.Triangle.Release)
-						canShoot = true;
+					canShoot = true;
 				}
+			}
+			else
+			{
+				if (Input2.GamePad0.Triangle.Down)
+				{
+					if (canShoot)
+					{
+						Shoot();
+					}
+				}
+				if (Input2.GamePad0.Triangle.Release)
+				{
+					canShoot = true;
+				}
+			}
 				
 		}
 		
 		protected void HandleDirectionAnimation()
 		{
 			// Convert direction into angle
-			if(!Direction.IsZero())
+			if (!Direction.IsZero())
 			{
 				RotationNormalize = Direction;
 			}
 			
 			// Set frame to start of animation range if outside of range
-			if(TileIndex2D.X < animationRangeX.X || TileIndex2D.X > animationRangeX.Y)
+			if (TileIndex2D.X < animationRangeX.X || TileIndex2D.X > animationRangeX.Y)
+			{
 				TileIndex2D.X = animationRangeX.X;
+			}
 		}
 		
 		protected void HandleCollision()
@@ -306,23 +323,23 @@ namespace TheATeam
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
 			
 			
-			if(nextPos.X + PlayerSize > screenWidth + 50)
+			if (nextPos.X + PlayerSize > screenWidth + 50)
 			{
 				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
 			}
 			
 
-			if(nextPos.X < 18)
+			if (nextPos.X < 18)
 			{
 				Position = new Vector2(18, Position.Y);
 			}
 			
-			if(nextPos.Y < 18)
+			if (nextPos.Y < 18)
 			{
 				Position = new Vector2(Position.X, 18);
 			}
 
-			if(nextPos.Y + PlayerSize > screenHeight + 50)
+			if (nextPos.Y + PlayerSize > screenHeight + 50)
 			{
 				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
 			}
@@ -330,7 +347,7 @@ namespace TheATeam
 			
 			
 			// Loop through tiles
-			foreach(Tile t in Tile.Collisions)
+			foreach (Tile t in Tile.Collisions)
 			{
 
 				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
@@ -338,23 +355,23 @@ namespace TheATeam
 				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
 				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
 				
-				if(fromLeft && fromRight && fromTop && fromBottom)
+				if (fromLeft && fromRight && fromTop && fromBottom)
 				{
-					if(!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
+					if (!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
 					{
-						if(fromLeft && positionDelta.X > 0)
+						if (fromLeft && positionDelta.X > 0)
 						{
 							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
 						}
-						else if(fromRight && positionDelta.X < 0)
+						else if (fromRight && positionDelta.X < 0)
 						{
 							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
 						}
-						else if(fromTop && positionDelta.Y < 0)
+						else if (fromTop && positionDelta.Y < 0)
 						{
 							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
 						}
-						else if(fromBottom && positionDelta.Y > 0)
+						else if (fromBottom && positionDelta.Y > 0)
 						{
 							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
 						}
@@ -366,13 +383,15 @@ namespace TheATeam
 		
 		public void Shoot()
 		{
-			if(mana >= manaCost)
+			if (mana >= manaCost)
 			{
 				mana -= manaCost;
-				if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				if (AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				{
 					AppMain.client.SetActionMessage('S');
+				}
 				playerState = PlayerState.Shooting;
-				Vector2 pos = new Vector2(Position.X, Position.Y );
+				Vector2 pos = new Vector2(Position.X, Position.Y);
 				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(pos, ShootingDirection, _element);
 				canShoot = false;
@@ -386,22 +405,24 @@ namespace TheATeam
 			HandleCollision();
 			updateMana(dt);
 			
-			if(goingForElement)
+			if (goingForElement)
 			{
-				Vector2 dir = new Vector2(470.0f,380.0f);
-				Vector2 newDir = new Vector2(dir.X - Position.X  ,dir.Y- Position.Y );
+				Vector2 dir = new Vector2(470.0f, 380.0f);
+				Vector2 newDir = new Vector2(dir.X - Position.X, dir.Y - Position.Y);
 				positionDelta = newDir * 0.009f;
 				Position += positionDelta;
-						Direction = positionDelta;
-				if(Position.X - 480.0f < 40.0f && 
+				Direction = positionDelta;
+				if (Position.X - 480.0f < 40.0f && 
 				   Position.Y - 390.0f < 40.0f)
-				goingForElement = false;
-			}
-			else if(!isChasing && !goingForElement)
-			{
-				if(movingLeft)
 				{
-					if(Position.X > 240)
+					goingForElement = false;
+				}
+			}
+			else if (!isChasing && !goingForElement)
+			{
+				if (movingLeft)
+				{
+					if (Position.X > 240)
 					{
 						positionDelta = new Vector2(-0.05f * dt, 0.0f);
 						Position += positionDelta;
@@ -414,7 +435,7 @@ namespace TheATeam
 				}
 				else
 				{
-					if(Position.X < 930)
+					if (Position.X < 930)
 					{
 						positionDelta = new Vector2(0.05f * dt, 0.0f);
 						Position += positionDelta;
@@ -427,10 +448,10 @@ namespace TheATeam
 				}
 				
 				float dist = Vector2.Distance(p.Position, Position);	
-				if(dist < 300)
+				if (dist < 300)
 				{
 					curTime += dt;
-					if(curTime > fireRate)
+					if (curTime > fireRate)
 					{
 						Direction = p.Position - Position;
 						Direction = Direction.Normalize();
@@ -439,79 +460,107 @@ namespace TheATeam
 						curTime = 0.0f;	
 					}
 				}
-				if(dist < 50)
+				if (dist < 50)
+				{
 					isChasing = true;
+				}
 			}
 			else
 			{
-			if(!positionDelta.IsZero())	
-				Position = Vector2.Lerp(Position,p.Position,0.01f);
+				if (!positionDelta.IsZero())
+				{
+					Position = Vector2.Lerp(Position, p.Position, 0.01f);
+				}
 			}
 		}
 		
 		public void ChangeTiles(string type)
 		{
-			if(type.Equals("Fire"))
+			foreach (Tile t in playerTiles)
 			{
-				foreach(Tile t in playerTiles)
+				if (t.Key == 'N')
 				{
-					if(t.Key == 'N')
-						t.Key = 'F';
+					t.Key = type[0];
+				}
+				// Reset tiles before resetting element
+				else if (type == "Neutral" & t.Key == Element)
+				{
+					t.Key = 'N';
 				}
 			}
-			else if(type.Equals("Water"))
+		}
+		
+		public void ElementBuff(string element)
+		{
+			switch (element)
 			{
-				
-				foreach(Tile t in playerTiles)
-				{
-					if(t.Key == 'N')
-						t.Key = 'W';
-				}
+			case "Neutral":
+				// reset all buffs
+				break;
+			case "Earth":
+				// More health tiles
+				break;
+			case "Fire":
+				// More
+				break;
+			case "Water":
+				// Shield
+				break;
+			case "Air":
+				// Speed boost
+				break;
+			case "Lightning":
+				// Inc. mana regen
+				break;
 			}
 		}
 		
 		public void TakeDamage(int dmg)
 		{
-			if(health > 0 +dmg)
-				health-= dmg;
-			else  
+			if (health > 0 + dmg)
 			{
-			    ItemManager.Instance.ResetItems();
+				health -= dmg;
+			}
+			else
+			{
+				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				health = 124;
 				mana = 124;
+				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
 			}
 		}
+
 		public void updateMana(float dt)
 		{
-			if(mana < 124)
+			if (mana < 124)
 			{
 				manaTimer += dt;
 			}
-			if(manaTimer >= manaRechargeRate)
+			if (manaTimer >= manaRechargeRate)
 			{
 				mana++;
 				manaTimer = 0.0f;
 			}
 		}
 		
-		public void Player1Score()  
+		public void Player1Score()
 		{
 			Vector2 nextPos1 = Position + positionDelta;
 			
-		  	if(nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
+			if (nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
 			{
 				Info.IsGameOver = true;
 			}
 		}
 		
-		public void Player2Score() 
+		public void Player2Score()
 		{
 			Vector2 nextPos2 = Position + positionDelta;
 			
-			if(nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
+			if (nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
 			{
 				Info.IsGameOver = true;
 			}

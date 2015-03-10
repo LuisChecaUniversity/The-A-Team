@@ -22,6 +22,7 @@ namespace TheATeam
 		public int health, mana;
 		public int manaCost = 30;
 		public int manaRecharge = 20;
+		public float moveSpeed = 1f;
 		
 		public Stats(int maxHealth=30, int maxMana=100)
 		{
