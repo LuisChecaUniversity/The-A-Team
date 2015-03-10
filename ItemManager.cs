@@ -39,6 +39,8 @@ namespace TheATeam
 
 		public void initFlags(Scene curScene)
 		{
+			Player1HoldingFlag = false;
+			Player2HoldingFlag = false;
 			FirstFlag = new Vector2(30, 290);
 			leftFlag = new Item(curScene, FirstFlag, flagIndex, ItemType.flag, "Player1Flag");
 			SecondFlag = new Vector2(926, 290);
@@ -155,15 +157,19 @@ namespace TheATeam
 		
 		private void ElementCollision(Player p, Item item)
 		{
-			if (p.Element != 'N')
+			if (p.Element != 'N' && p.Element2 != 'N')
 			{
 				item.iSprite.Visible = true;
 				item.collided = false;
 			}
-			else
+			else if (p.Element == 'N')
 			{
 				p.ChangeTiles(item.Name);
 				p.Element = item.Name[0];
+			}
+			else if (p.Element2 == 'N')
+			{
+				p.Element2 = item.Name[0];
 			}
 		}
 		

@@ -61,6 +61,8 @@ namespace TheATeam
 				TileIndex2D.Y = Y_INDEX - Tile.Elements.IndexOf(value);
 			}
 		}
+		
+		public char Element2 { get; set; }
 
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
@@ -89,6 +91,7 @@ namespace TheATeam
 		{
 			startingPosition = position;
 			Element = 'N';
+			Element2 = 'N';
 
 			CenterSprite();
 
@@ -478,7 +481,7 @@ namespace TheATeam
 				health = 124;
 				mana = 124;
 				Element = 'N';
-				
+				Element2 = 'N';
 			}
 		}
 		public void updateMana(float dt)
