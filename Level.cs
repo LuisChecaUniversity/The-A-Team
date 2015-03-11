@@ -46,6 +46,7 @@ namespace TheATeam
 		private SpriteUV p1ManaSprite;
 		private SpriteUV p2ManaSprite;
 		private SpriteUV playerPointer;
+		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
 		
 		public Level(): base()
@@ -168,6 +169,8 @@ namespace TheATeam
 			AddChild(p2ManaSprite);
 			AddChild(playerPointer);
 			
+			InitUIElements();
+			
 			//Timer Stuff
 			lblTimer = new Label();
 			lblTimer.FontMap = debugFont;
@@ -182,7 +185,27 @@ namespace TheATeam
 			timerA.Enabled = true;
 			//bool timer.enabled used for pausing
 		}
-		
+		private void InitUIElements()
+		{
+			UIElements = new SpriteTile[4];
+			for (int i = 0; i < 4; i++) 
+			{
+				UIElements[i] = new SpriteTile();
+				UIElements[i].TextureInfo = TextureManager.Get("items");
+				UIElements[i].Quad.S = new Vector2(28.0f, 28.0f);
+				UIElements[i].TileIndex2D = new Vector2i(0, 0);
+				UIElements[i].Color = new Vector4(1.0f, 1.0f, 1.0f, 0.0f);
+				UIElements[i].CenterSprite();
+
+				AddChild(UIElements[i]);
+			}
+			
+			UIElements[0].Position = new Vector2(18, screenHeight - 15);
+			UIElements[1].Position = new Vector2(48, screenHeight - 15);
+			UIElements[2].Position = new Vector2(912, screenHeight - 15);
+			UIElements[3].Position = new Vector2(942, screenHeight - 15);
+
+		}
 		private void tickDown(object sender, EventArgs e)
 		{
 			if (levelStage == LevelStage.CombatStage)
@@ -285,12 +308,12 @@ namespace TheATeam
 					i--;
 				}
 			}
-
+			UpdateUIElements();
 			ItemManager.Instance.Update(dt);
 			ItemManager.Instance.ItemCollision(player1, player2);
 			ItemManager.Instance.ScoreGameOver(player1, player2);
 		}
-		
+
 		private void BuildStage(float dt)
 		{
 			var testtouches = Touch.GetData(0);
@@ -407,6 +430,61 @@ namespace TheATeam
 			}
 			
 			ItemManager.Instance.initElements(this);
+		}
+		void UpdateUIElements()
+		{
+			if(player1.Element != 'N')
+			{
+				UIElements[0].TileIndex2D = ElementIndex(player1.Element);
+				UIElements[0].Color = new Vector4(1.0f);
+			}
+			else
+				UIElements[0].Color = new Vector4(0.0f);
+			if(player1.Element2 != 'N')
+			{
+				UIElements[1].TileIndex2D = ElementIndex(player1.Element2);
+				UIElements[1].Color = new Vector4(1.0f);
+			}
+			else
+				UIElements[1].Color = new Vector4(0.0f);
+			if(player2.Element != 'N')
+			{
+				UIElements[3].TileIndex2D = ElementIndex(player2.Element);
+				UIElements[3].Color = new Vector4(1.0f);
+			}
+			else
+				UIElements[3].Color = new Vector4(0.0f);
+			if(player2.Element2 != 'N')
+			{
+				UIElements[2].TileIndex2D = ElementIndex(player2.Element2);
+				UIElements[2].Color = new Vector4(1.0f);
+			}
+			else
+				UIElements[2].Color = new Vector4(0.0f);
+		}
+		
+		private Vector2i ElementIndex(char c)
+		{
+			switch(c)
+			{
+			case 'L':
+				return new Vector2i(0, 1);
+				break;
+			case'F':
+				return new Vector2i(0, 4);
+				break;
+			case 'W':
+				return new Vector2i(0, 5);
+				break;
+			case 'E':
+				return new Vector2i(0, 3);
+				break;
+			case 'A':
+				return new Vector2i(0, 2);
+				break;
+			default:
+				return new Vector2i();
+			}
 		}
 	}
 }

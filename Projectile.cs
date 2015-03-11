@@ -58,8 +58,9 @@ namespace TheATeam
 			velocity = player.GetShootingDirection() * bulletSpeed;
 			position = new Vector2(player.Position.X + rotation.X * offset, player.Position.Y + rotation.Y * offset); 
 			collided = false;
-
-			ProjectileManager.Instance.GetScene().AddChild(bulletSprite);
+			
+			Director.Instance.CurrentScene.AddChild(bulletSprite);
+			//GameSceneManager.currentScene.AddChild(bulletSprite);
 		}
 		public void Dispose()
 		{
