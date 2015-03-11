@@ -393,7 +393,7 @@ namespace TheATeam
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
 				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
-				ProjectileManager.Instance.Shoot(pos, ShootingDirection, _element);
+				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
 			}
 			
@@ -564,6 +564,10 @@ namespace TheATeam
 			{
 				Info.IsGameOver = true;
 			}
+		}
+		public Vector2 GetDirection()
+		{
+			return Direction;
 		}
 	}
 }

@@ -250,24 +250,33 @@ namespace TheATeam
 			
 			// handle bullet update and collision
 			ProjectileManager.Instance.Update(dt);
-				
-			if (ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
+			Projectile collidingProjectile = ProjectileManager.Instance.ProjectileCollision(player1);
+			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player1))//.Position, player1.Quad.Bounds2()))
 			{
-				player1.TakeDamage(10);
+				player1.TakeDamage(collidingProjectile.bulletDamage);
 			}
-			if (ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
+			collidingProjectile = ProjectileManager.Instance.ProjectileCollision(player2);
+			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player2))//.Position, player2.Quad.Bounds2()))
 			{
-				player2.TakeDamage(10);
+				player2.TakeDamage(collidingProjectile.bulletDamage);
 			}
 
 			for (int i = 0; i < Tile.Collisions.Count; i++)
 			{
 				Tile t = Tile.Collisions[i];
-				char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
-				if (collisionType != 'X')
+				collidingProjectile = ProjectileManager.Instance.ProjectileCollision(t);
+				if(collidingProjectile != null)
 				{
-					Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
-					t.TakeDamage(collisionType);
+					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
+					t.TakeDamage(collidingProjectile.GetPlayer().Element);
+					
+//					char collisionType = collidingProjectile.GetPlayer().Element;//ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
+//					
+//					if (collisionType != 'X')
+//					{
+//						Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
+//						t.TakeDamage(collidingProjectile.bulletDamage);
+//					}
 				}
 				// Remove from collisions if true
 				if (t.WallDamage())

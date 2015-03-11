@@ -149,9 +149,9 @@ namespace TheATeam
 			{
 				Vector2 pos = player1.Position; 
 				if(ItemManager.Player1HoldingFlag)
-					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position - player1.Position) * rand.Next(250,450);
+					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position - player1.Position) * 250;
 				else
-					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position - player1.Position) * rand.Next(250,450);
+					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position - player1.Position) * 250;
 				
 				if(pos.X > Director.Instance.GL.Context.GetViewport().Width || pos.Y > Director.Instance.GL.Context.GetViewport().Height)
 					return;

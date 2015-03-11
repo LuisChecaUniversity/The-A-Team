@@ -23,27 +23,40 @@ namespace TheATeam
 		public bool collided;
 		private Type bulletType;
 		private float bulletSpeed = 0.5f;
+		private Player player;
+		public int bulletDamage = 10;
 
-		public Projectile (TextureInfo tex, Vector2 pos, Vector2 vel)
+		public Projectile (Player player)
 		{
 			//bulletTex = new TextureInfo("/Application/Assets/bullet.png");
-			bulletSprite = new SpriteUV(tex);
-			bulletSprite.Quad.S = tex.TextureSizef;
+			if(player.Element == 'F' ||  player.Element2 == 'F')
+			{
+				bulletSprite = new SpriteUV(ProjectileManager.fireTex);
+				bulletSprite.Quad.S = ProjectileManager.fireTex.TextureSizef;
+				bulletDamage = 50;
+			}
+			else
+			{
+				bulletSprite = new SpriteUV(ProjectileManager.neutralTex);
+				bulletSprite.Quad.S = ProjectileManager.neutralTex.TextureSizef;
+				bulletDamage = 10;
+			}
 			bulletSprite.CenterSprite();
+			this.player = player;
 
 			
 			float offset = 0.0f;
-			if(vel.X == 0.0f || vel.Y == 0.0f)
-				offset = 50.0f;
-			else
-				offset = 77.0f;
+//			if(player.GetDirection().X == 0.0f || player.GetDirection().Y == 0.0f)
+//				offset = 50.0f;
+//			else
+//				offset = 77.0f;
 			
 //			if(bulletType == Type.Fire && second type  == air)
 //				bulletSpeed = 0.7f;
 			
-			rotation = vel.Normalize();
-			velocity = vel * bulletSpeed;
-			position = new Vector2(pos.X + rotation.X * offset, pos.Y + rotation.Y * offset); 
+			rotation = player.GetDirection().Normalize();
+			velocity = player.GetDirection() * bulletSpeed;
+			position = new Vector2(player.Position.X + rotation.X * offset, player.Position.Y + rotation.Y * offset); 
 			collided = false;
 
 			ProjectileManager.Instance.GetScene().AddChild(bulletSprite);
@@ -116,6 +129,7 @@ namespace TheATeam
 		}
 		public void setType(Type t){bulletType = t;}
 		public Type getType(){return bulletType;}
+		public Player GetPlayer() { return player;}
 		
 	}
 }
