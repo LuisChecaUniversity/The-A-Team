@@ -32,8 +32,8 @@ namespace TheATeam
 		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		protected PlayerState playerState;
-		public int health = 124;
-		public int mana = 124;
+		public int health = 122;
+		public int mana = 122;
 		public float manaTimer;
 		protected int manaCost = 30;
 		private int manaRechargeRate = 20;
@@ -525,8 +525,8 @@ namespace TheATeam
 			{
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
-				health = 124;
-				mana = 124;
+				health = 122;
+				mana = 122;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
@@ -535,7 +535,7 @@ namespace TheATeam
 
 		public void updateMana(float dt)
 		{
-			if (mana < 124)
+			if (mana < 122)
 			{
 				manaTimer += dt;
 			}

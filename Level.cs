@@ -142,20 +142,20 @@ namespace TheATeam
 			hudBar.Position = new Vector2(0, 0);
 			
 			p1HealthSprite = new SpriteUV(TextureManager.Get("health"));			
-			p1HealthSprite.Quad.S = new Vector2(124.0f, 30.0f);
-			p1HealthSprite.Position = new Vector2(194, screenHeight - 31);
+			p1HealthSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p1HealthSprite.Position = new Vector2(195, screenHeight - 29);
 			
 			p2HealthSprite = new SpriteUV(TextureManager.Get("health"));
-			p2HealthSprite.Quad.S = new Vector2(124.0f, 30.0f);
-			p2HealthSprite.Position = new Vector2(642, screenHeight - 31);
+			p2HealthSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p2HealthSprite.Position = new Vector2(643, screenHeight - 29);
 			
 			p1ManaSprite = new SpriteUV(TextureManager.Get("mana"));
-			p1ManaSprite.Quad.S = new Vector2(124.0f, 30.0f);
-			p1ManaSprite.Position = new Vector2(66, screenHeight - 31);
+			p1ManaSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p1ManaSprite.Position = new Vector2(67, screenHeight - 29);
 			
 			p2ManaSprite = new SpriteUV(TextureManager.Get("mana"));
-			p2ManaSprite.Quad.S = new Vector2(124.0f, 30.0f);
-			p2ManaSprite.Position = new Vector2(770, screenHeight - 31);
+			p2ManaSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p2ManaSprite.Position = new Vector2(771, screenHeight - 29);
 			
 			playerPointer = new SpriteUV(TextureManager.Get("pointer"));
 			playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
@@ -231,11 +231,11 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
-			p1HealthSprite.Quad.S = new Vector2(player1.health, 31.0f);
-			p2HealthSprite.Quad.S = new Vector2(player2.health, 31.0f);
+			p1HealthSprite.Quad.S = new Vector2(player1.health, 26.0f);
+			p2HealthSprite.Quad.S = new Vector2(player2.health, 26.0f);
 			
-			p1ManaSprite.Quad.S = new Vector2(player1.mana, 31.0f);
-			p2ManaSprite.Quad.S = new Vector2(player2.mana, 31.0f);
+			p1ManaSprite.Quad.S = new Vector2(player1.mana, 26.0f);
+			p2ManaSprite.Quad.S = new Vector2(player2.mana, 26.0f);
 				
 			playerPointer.Rotation = player1.ShootingDirection;
 			playerPointer.Position = player1.Position;
