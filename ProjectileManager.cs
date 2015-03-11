@@ -99,7 +99,6 @@ namespace TheATeam
 					return projectile;
 					//collision = true;
 				}
-				
 			}
 			return p;
 			//return collision;

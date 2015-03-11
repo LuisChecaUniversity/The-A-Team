@@ -19,18 +19,18 @@ namespace TheATeam
 		private Player player1;
 		private Vector2 velocity;
 		private Vector2 target;
-		private float maxSpeed = 20.0f;
-		private float rotationAngle = 0.0f;
-		private float prevAng = 0.0f;
+		private float maxSpeed = 30.0f;
 		private PathFinder pathfinder;
-		private bool seekingElement = false; 
 		private bool havePath = false;
 		private Behaviour behaviour = Behaviour.SeekElement;
 		private float attackDistance = 200.0f;
 		private float attackTime = 6.0f;
 		private float attackTimer = 0.0f;
 		private Random rand = new Random();
-		
+		private float maxFireRate = 600.0f;
+		private float shootTimer = 0.0f;
+		private Item player1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
+		private Item player2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 			
 
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
@@ -49,18 +49,18 @@ namespace TheATeam
 //				target = ItemManager.Instance.GetItem(ItemType.element, "Water").position;
 //			else if(Element == 'N')
 //				target = ItemManager.Instance.GetItem(ItemType.element, "Fire").position;
-			List<TouchData> touches = Touch.GetData(0);
-			foreach(TouchData data in touches)
-			{
-				float xPos = (data.X +0.5f) * 960.0f;
-				float yPos = 544.0f -((data.Y +0.5f) * 544.0f);
-				
-				if(new Vector2(xPos, yPos) != target)
-				{
-					target = new Vector2(xPos, yPos);
-					pathfinder.FindPath(target);
-				}
-			}
+//			List<TouchData> touches = Touch.GetData(0);
+//			foreach(TouchData data in touches)
+//			{
+//				float xPos = (data.X +0.5f) * 960.0f;
+//				float yPos = 544.0f -((data.Y +0.5f) * 544.0f);
+//				
+//				if(new Vector2(xPos, yPos) != target)
+//				{
+//					target = new Vector2(xPos, yPos);
+//					pathfinder.FindPath(target);
+//				}
+//			}
 			
 			updateBehaviours(dt);
 			
@@ -75,7 +75,8 @@ namespace TheATeam
 				base.Direction = Vec2DNormalize(player1.Position - Position);
 			}
 			
-			ShootingDirection = Direction;
+			ShootingDirection = Vec2DNormalize(player1.Position - Position);
+			shootTimer += dt;
 			
 			base.HandleDirectionAnimation();
 			base.updateMana(dt);
@@ -83,12 +84,16 @@ namespace TheATeam
 		
 		void updateBehaviours(float dt)
 		{
-//			if(!!ItemManager.Player2HoldingFlag && ItemManager.Player1HoldingFlag && player1.Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Director.Instance.GL.Context.GetViewport().Width)
-//			{
-//				ChangeBehaviour(Behaviour.CollectFlag);
-//			}
-//			else 
-			if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
+			// if have flag and low hp avoid player + return flag
+			// if low mana and attack player greater distance
+			// if low hp only attack player when player mana low
+			
+			if(!ItemManager.Player2HoldingFlag && ItemManager.Player1HoldingFlag && player1.Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Director.Instance.GL.Context.GetViewport().Width / 2)
+			{
+				ChangeBehaviour(Behaviour.CollectFlag);
+			}
+			//else if(player1.Position.Distance(
+			else if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
 			{
 				ChangeBehaviour(Behaviour.Attacking);
 			}
@@ -443,7 +448,27 @@ namespace TheATeam
 		}
 	
 		
-		
+		override public void Shoot()
+		{
+			if (mana >= manaCost)
+			{
+				if(shootTimer > maxFireRate)
+				{
+					mana -= manaCost;
+					if (AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+					{
+						AppMain.client.SetActionMessage('S');
+					}
+					playerState = PlayerState.Shooting;
+					
+					ProjectileManager.Instance.Shoot(this);
+					canShoot = false;
+					shootTimer = 0.0f;
+				}
+			}
+			
+		}
+
 		
 	}
 }

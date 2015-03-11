@@ -54,8 +54,8 @@ namespace TheATeam
 //			if(bulletType == Type.Fire && second type  == air)
 //				bulletSpeed = 0.7f;
 			
-			rotation = player.GetDirection().Normalize();
-			velocity = player.GetDirection() * bulletSpeed;
+			rotation = player.GetShootingDirection().Normalize();
+			velocity = player.GetShootingDirection() * bulletSpeed;
 			position = new Vector2(player.Position.X + rotation.X * offset, player.Position.Y + rotation.Y * offset); 
 			collided = false;
 

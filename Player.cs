@@ -25,17 +25,17 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
 		private static float UISize = 32;
-		private bool canShoot = true;
+		protected bool canShoot = true;
 		private bool keyboardTest = true;
 		public bool PlayerAlive = true;
 		protected Vector2 Direction;
 		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
-		private PlayerState playerState;
+		protected PlayerState playerState;
 		public int health = 124;
 		public int mana = 124;
 		public float manaTimer;
-		private int manaCost = 30;
+		protected int manaCost = 30;
 		private int manaRechargeRate = 20;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
@@ -381,7 +381,7 @@ namespace TheATeam
 			}
 		}
 		
-		public void Shoot()
+		virtual public void Shoot()
 		{
 			if (mana >= manaCost)
 			{
@@ -565,9 +565,9 @@ namespace TheATeam
 				Info.IsGameOver = true;
 			}
 		}
-		public Vector2 GetDirection()
+		public Vector2 GetShootingDirection()
 		{
-			return Direction;
+			return ShootingDirection;
 		}
 	}
 }
