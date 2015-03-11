@@ -114,5 +114,6 @@
     <Content Include="assets\Base.png" />
     <Content Include="assets\PlayerSpriteSheet.png" />
     <Content Include="assets\ItemSpriteSheet.png" />
+    <Content Include="assets\HUDBar.png" />
   </ItemGroup>
 </Project>

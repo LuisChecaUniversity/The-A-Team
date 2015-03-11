@@ -46,6 +46,7 @@ namespace TheATeam
 		private SpriteUV p1ManaSprite;
 		private SpriteUV p2ManaSprite;
 		private SpriteUV playerPointer;
+		private SpriteUV hudBar;
 		
 		public Level(): base()
 		{
@@ -136,6 +137,10 @@ namespace TheATeam
 
 		private void InitUI()
 		{
+			hudBar = new SpriteUV(TextureManager.Get("hudbar"));			
+			hudBar.Quad.S = hudBar.TextureInfo.TextureSizef;
+			hudBar.Position = new Vector2(0, 0);
+			
 			p1HealthSprite = new SpriteUV(TextureManager.Get("health"));			
 			p1HealthSprite.Quad.S = new Vector2(124.0f, 30.0f);
 			p1HealthSprite.Position = new Vector2(194, screenHeight - 31);
@@ -156,6 +161,7 @@ namespace TheATeam
 			playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
 			playerPointer.CenterSprite();
 			
+			AddChild(hudBar);
 			AddChild(p1HealthSprite);
 			AddChild(p2HealthSprite);
 			AddChild(p1ManaSprite);

@@ -68,6 +68,7 @@ namespace TheATeam
 		{
 			// Load and store textures
 			AddAsset("background", "Background.png");
+			AddAsset("hudbar", "HUDBar.png");
 			AddAsset("base", "base.png");
 			AddAsset("blockedArea", "BlockedArea.png");
 			AddAsset("health", "health.png");
