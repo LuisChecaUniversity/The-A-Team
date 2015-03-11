@@ -26,6 +26,10 @@ namespace TheATeam
 			scene = GameSceneManager.currentScene;
 			projectiles = new List<Projectile>();
 		}
+		public void reset()
+		{
+			projectiles.Clear ();
+		}
 		
 		public static ProjectileManager Instance
 		{
@@ -93,7 +97,7 @@ namespace TheATeam
 			{
 				if(projectile.GetPlayer() == player)
 					return null;
-				if(projectile.hasCollided(player.Position, size))
+				if(projectile.hasCollided(player.Position, size) && !projectile.collided)
 				{
 					projectile.collided = true;
 					return projectile;

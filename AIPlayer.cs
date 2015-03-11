@@ -26,7 +26,6 @@ namespace TheATeam
 		private float attackDistance = 200.0f;
 		private float attackTime = 6.0f;
 		private float attackTimer = 0.0f;
-		private Random rand = new Random();
 		private float maxFireRate = 600.0f;
 		private float shootTimer = 0.0f;
 		private Item player1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
