@@ -78,11 +78,6 @@
     <Folder Include="assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\Vita_Circle.png" />
-    <Content Include="assets\Vita_Cross.png" />
-    <Content Include="assets\Vita_L.png" />
-    <Content Include="assets\Vita_Square.png" />
-    <Content Include="assets\Vita_Triangle.png" />
     <Content Include="assets\level1.txt">
       <PSM-Content-Protection>Plain</PSM-Content-Protection>
     </Content>
@@ -98,15 +93,11 @@
     <Content Include="assets\level3.txt" />
     <Content Include="assets\level4.txt" />
     <Content Include="assets\level5.txt" />
-    <Content Include="assets\FlagTemp.png" />
-    <Content Include="assets\FireElement.png" />
-    <Content Include="assets\WaterElement.png" />
     <Content Include="assets\Background.png" />
     <Content Include="assets\ATeam.png" />
     <Content Include="assets\TheATeam.png" />
     <Content Include="assets\WhiteBG.png" />
     <Content Include="assets\BlockedArea.png" />
-    <Content Include="assets\SpriteSheetMaster-Recovered.png" />
     <Content Include="assets\health.png" />
     <Content Include="assets\mana.png" />
     <Content Include="assets\pointer.png" />
@@ -115,5 +106,6 @@
     <Content Include="assets\PlayerSpriteSheet.png" />
     <Content Include="assets\ItemSpriteSheet.png" />
     <Content Include="assets\HUDBar.png" />
+    <Content Include="assets\WallSpriteSheet.png" />
   </ItemGroup>
 </Project>
