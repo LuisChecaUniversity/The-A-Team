@@ -498,6 +498,10 @@ namespace TheATeam
 				// reset all buffs
 				break;
 			case "Earth":
+				foreach (Tile t in playerTiles)
+				{
+				 	_stats.maxHealth = 50;
+				}	
 				// More health tiles
 				break;
 			case "Fire":
@@ -507,7 +511,7 @@ namespace TheATeam
 				// Shield
 				break;
 			case "Air":
-				// Speed boost
+				_stats.moveSpeed = 2f;// Speed boost
 				break;
 			case "Lightning":
 				// Inc. mana regen
@@ -523,10 +527,15 @@ namespace TheATeam
 			}
 			else
 			{
+				foreach (Tile t in playerTiles)
+				{
+					_stats.maxHealth = 30;
+				}
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				health = 122;
 				mana = 122;
+				_stats.moveSpeed = 1f;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
