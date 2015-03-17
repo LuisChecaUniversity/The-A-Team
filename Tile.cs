@@ -18,19 +18,48 @@ namespace TheATeam
 	
 	public class Stats
 	{
-		public int maxHealth, maxMana;
-		public int health, mana;
+		private int _maxHealth, _maxMana, _maxShield;
+
+		public int MaxHealth
+		{
+			get{ return _maxHealth; }
+			set
+			{
+				_maxHealth = value;
+				health = value;
+			}
+		}
+
+		public int MaxMana
+		{
+			get{ return _maxMana; }
+			set
+			{
+				_maxMana = value;
+				mana = value;
+			}
+		}
+
+		public int MaxShield
+		{
+			get{ return _maxShield; }
+			set
+			{
+				_maxShield = value;
+				shield = value;
+			}
+		}
+
+		public int health, mana, shield;
 		public int manaCost = 30;
 		public int manaRecharge = 20;
 		public float moveSpeed = 1f;
 		
-		public Stats(int maxHealth=30, int maxMana=100)
+		public Stats(int maxHealth=30, int maxMana=100, int maxShield=0)
 		{
-			this.maxHealth = maxHealth;
-			this.maxMana = maxMana;
-			
-			health = maxHealth;
-			mana = maxMana;
+			MaxHealth = maxHealth;
+			MaxMana = maxMana;
+			MaxShield = maxShield;
 		}
 	}
 	
@@ -115,6 +144,11 @@ namespace TheATeam
 				TileIndex2D = tt.tileIndex2D;
 				IsCollidable = tt.isCollidable;
 			}
+			// Earth buffs tiles health
+			if (loadKey == 'E')
+			{
+				_stats.MaxHealth = 50;
+			}
 		}
 		
 		public bool WallDamage()
@@ -126,12 +160,12 @@ namespace TheATeam
 			
 			if (IsAlive)
 			{
-				if (_stats.health > _stats.maxHealth)
+				if (_stats.health > _stats.MaxHealth)
 				{
-					_stats.health = _stats.maxHealth;
+					_stats.health = _stats.MaxHealth;
 				}
 				
-				int newTileIndex = (_stats.maxHealth - _stats.health) / 10;
+				int newTileIndex = (_stats.MaxHealth - _stats.health) / 10;
 				if (newTileIndex != TileIndex2D.X && newTileIndex < TextureInfo.NumTiles.X)
 				{
 					TileIndex2D.X = newTileIndex;
@@ -139,7 +173,7 @@ namespace TheATeam
 			}
 			else
 			{
-				Key = 'E';
+				Key = '_';
 				return true;
 			}
 			return false;

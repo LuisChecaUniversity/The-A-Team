@@ -76,7 +76,7 @@ namespace TheATeam
 			AddAsset("mana", "mana.png");
 			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,6));
 			AddAsset("pointer", "pointer.png");
-			AddAsset("tiles", "SpriteSheetMaster-Recovered.png", new Vector2i(4, 8));
+			AddAsset("tiles", "WallSpriteSheet.png", new Vector2i(4, 7));
 			return true;
 		}
 	}

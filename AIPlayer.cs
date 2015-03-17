@@ -449,11 +449,11 @@ namespace TheATeam
 		
 		override public void Shoot()
 		{
-			if (mana >= manaCost)
+			if (_stats.mana >= _stats.manaCost)
 			{
 				if(shootTimer > maxFireRate)
 				{
-					mana -= manaCost;
+					_stats.mana -= _stats.manaCost;
 					if (AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 					{
 						AppMain.client.SetActionMessage('S');

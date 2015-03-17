@@ -32,11 +32,12 @@ namespace TheATeam
 		public Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		protected PlayerState playerState;
-		public int health = 122;
-		public int mana = 122;
-		public float manaTimer;
-		protected int manaCost = 30;
-		private int manaRechargeRate = 20;
+
+		public int Health { get { return _stats.health; } }
+
+		public int Mana { get { return _stats.mana; } }
+
+		public float manaTimer, shieldTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -47,8 +48,8 @@ namespace TheATeam
 		private float fireRate = 600.0f;
 		private float curTime = 0.0f;
 		private char _element;
-		bool isChasing = false;
-		bool goingForElement = true;
+		private bool isChasing = false;
+		private bool goingForElement = true;
 		
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
@@ -72,6 +73,7 @@ namespace TheATeam
 			// Assign variables
 			this.animationRangeX = animationRangeX;
 			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
+			
 			// Attach custom animation function
 			ScheduleInterval((dt) => {
 				if (IsAlive)
@@ -90,6 +92,7 @@ namespace TheATeam
 		public Player(Vector2 position, bool isPlayer1, List<Tile> tiles):
 			this(Y_INDEX, position, new Vector2i(0, 3))
 		{
+			_stats = new Stats(122, 122);
 			startingPosition = position;
 			Element = 'N';
 			Element2 = 'N';
@@ -106,10 +109,9 @@ namespace TheATeam
 		
 		override public void Update(float dt)
 		{
-	
-			// Handle battle
 			base.Update(dt);
 			updateMana(dt);
+			updateShield(dt);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -160,13 +162,10 @@ namespace TheATeam
 	
 			// Make camera follow the player
 			Info.CameraCenter = Position;
-			
-			
 		}
 		
 		private void HandleInput(float dt)
 		{
-
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "SINGLE":
@@ -298,7 +297,6 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-				
 		}
 		
 		protected void HandleDirectionAnimation()
@@ -321,13 +319,11 @@ namespace TheATeam
 			Vector2 nextPos = Position + positionDelta;
 			float screenWidth = Director.Instance.GL.Context.Screen.Width;
 			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
-			
-			
+
 			if (nextPos.X + PlayerSize > screenWidth + 50)
 			{
 				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
 			}
-			
 
 			if (nextPos.X < 18)
 			{
@@ -344,12 +340,9 @@ namespace TheATeam
 				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
 			}
 
-			
-			
 			// Loop through tiles
 			foreach (Tile t in Tile.Collisions)
 			{
-
 				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
 				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
 				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
@@ -383,9 +376,9 @@ namespace TheATeam
 		
 		virtual public void Shoot()
 		{
-			if (mana >= manaCost)
+			if (_stats.mana >= _stats.manaCost)
 			{
-				mana -= manaCost;
+				_stats.mana -= _stats.manaCost;
 				if (AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 				{
 					AppMain.client.SetActionMessage('S');
@@ -396,7 +389,6 @@ namespace TheATeam
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
 			}
-			
 		}
 		
 		public void UpdateAI(float dt, Player p)
@@ -498,16 +490,18 @@ namespace TheATeam
 				// reset all buffs
 				break;
 			case "Earth":
-				// More health tiles
+				// More health tiles, implemented in LoadTileProperties()
 				break;
 			case "Fire":
 				// More
 				break;
 			case "Water":
 				// Shield
+				_stats.MaxShield = _stats.MaxHealth;
 				break;
 			case "Air":
 				// Speed boost
+				_stats.moveSpeed = 2f;
 				break;
 			case "Lightning":
 				// Inc. mana regen
@@ -517,16 +511,21 @@ namespace TheATeam
 		
 		public void TakeDamage(int dmg)
 		{
-			if (health > 0 + dmg)
+			if (_stats.shield > 0)
 			{
-				health -= dmg;
+				_stats.shield -= dmg;
+			}
+			else if (_stats.health > 0 + dmg)
+			{
+				_stats.health -= dmg;
 			}
 			else
 			{
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
-				health = 122;
-				mana = 122;
+				_stats.health = _stats.MaxHealth;
+				_stats.mana = _stats.MaxMana;
+				_stats.moveSpeed = 1f;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
@@ -535,14 +534,27 @@ namespace TheATeam
 
 		public void updateMana(float dt)
 		{
-			if (mana < 122)
+			if (_stats.mana < _stats.MaxMana)
 			{
 				manaTimer += dt;
 			}
-			if (manaTimer >= manaRechargeRate)
+			if (manaTimer >= _stats.manaRecharge)
 			{
-				mana++;
+				_stats.mana++;
 				manaTimer = 0.0f;
+			}
+		}
+		
+		public void updateShield(float dt)
+		{
+			if (_stats.shield < _stats.MaxShield)
+			{
+				shieldTimer += dt;
+			}
+			if (shieldTimer >= _stats.manaRecharge)
+			{
+				_stats.shield++;
+				shieldTimer = 0.0f;
 			}
 		}
 		
@@ -565,6 +577,7 @@ namespace TheATeam
 				Info.IsGameOver = true;
 			}
 		}
+
 		public Vector2 GetShootingDirection()
 		{
 			return ShootingDirection;

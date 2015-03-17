@@ -83,9 +83,9 @@ namespace TheATeam
 				{
 					if (j < maxCols / 3)
 					{
-						if (Tile.Grid[i][j].Key == 'E')
+						if (Tile.Grid[i][j].Key == '_')
 						{
-							Tile.Grid[i][j].Key = 'A';
+							Tile.Grid[i][j].Key = 'B';
 						}
 						player1Tiles.Add(Tile.Grid[i][j]);
 					}
@@ -185,10 +185,11 @@ namespace TheATeam
 			timerA.Enabled = true;
 			//bool timer.enabled used for pausing
 		}
+
 		private void InitUIElements()
 		{
 			UIElements = new SpriteTile[4];
-			for (int i = 0; i < 4; i++) 
+			for (int i = 0; i < 4; i++)
 			{
 				UIElements[i] = new SpriteTile();
 				UIElements[i].TextureInfo = TextureManager.Get("items");
@@ -206,6 +207,7 @@ namespace TheATeam
 			UIElements[3].Position = new Vector2(942, screenHeight - 15);
 
 		}
+
 		private void tickDown(object sender, EventArgs e)
 		{
 			if (levelStage == LevelStage.CombatStage)
@@ -254,11 +256,11 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
-			p1HealthSprite.Quad.S = new Vector2(player1.health, 26.0f);
-			p2HealthSprite.Quad.S = new Vector2(player2.health, 26.0f);
+			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
+			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
 			
-			p1ManaSprite.Quad.S = new Vector2(player1.mana, 26.0f);
-			p2ManaSprite.Quad.S = new Vector2(player2.mana, 26.0f);
+			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
+			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
 				
 			playerPointer.Rotation = player1.ShootingDirection;
 			playerPointer.Position = player1.Position;
@@ -288,7 +290,7 @@ namespace TheATeam
 			{
 				Tile t = Tile.Collisions[i];
 				collidingProjectile = ProjectileManager.Instance.ProjectileCollision(t);
-				if(collidingProjectile != null)
+				if (collidingProjectile != null)
 				{
 					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
 					t.TakeDamage(collidingProjectile.GetPlayer().Element);
@@ -343,9 +345,9 @@ namespace TheATeam
 					
 					foreach (Tile t in player1Tiles)
 					{
-						if (t.Key == 'E')
+						if (t.Key == '_')
 						{
-							t.Key = 'A';
+							t.Key = 'B';
 						}
 
 						if (t.Overlaps(touchVec))
@@ -362,7 +364,7 @@ namespace TheATeam
 							}
 							else if (t.Key == 'N')
 							{
-								t.Key = 'A';
+								t.Key = 'B';
 								Tile.Collisions.Remove(t);
 								player1Deployed--;
 							}
@@ -391,9 +393,9 @@ namespace TheATeam
 				for (int j = 0; j < Tile.Grid[i].Count; j++)
 				{
 					Tile t = Tile.Grid[i][j];
-					if (t.Key == 'A')
+					if (t.Key == 'B')
 					{
-						t.Key = 'E';
+						t.Key = '_';
 					}
 					else if (t.Key == 'N')
 					{
@@ -431,59 +433,25 @@ namespace TheATeam
 			
 			ItemManager.Instance.initElements(this);
 		}
-		void UpdateUIElements()
+
+		private void UpdateUIElements()
 		{
-			if(player1.Element != 'N')
-			{
-				UIElements[0].TileIndex2D = ElementIndex(player1.Element);
-				UIElements[0].Color = new Vector4(1.0f);
-			}
-			else
-				UIElements[0].Color = new Vector4(0.0f);
-			if(player1.Element2 != 'N')
-			{
-				UIElements[1].TileIndex2D = ElementIndex(player1.Element2);
-				UIElements[1].Color = new Vector4(1.0f);
-			}
-			else
-				UIElements[1].Color = new Vector4(0.0f);
-			if(player2.Element != 'N')
-			{
-				UIElements[3].TileIndex2D = ElementIndex(player2.Element);
-				UIElements[3].Color = new Vector4(1.0f);
-			}
-			else
-				UIElements[3].Color = new Vector4(0.0f);
-			if(player2.Element2 != 'N')
-			{
-				UIElements[2].TileIndex2D = ElementIndex(player2.Element2);
-				UIElements[2].Color = new Vector4(1.0f);
-			}
-			else
-				UIElements[2].Color = new Vector4(0.0f);
+			UpdateUIElement(0, player1.Element);
+			UpdateUIElement(1, player1.Element2);
+			UpdateUIElement(2, player2.Element);
+			UpdateUIElement(3, player2.Element2);
 		}
 		
-		private Vector2i ElementIndex(char c)
+		private void UpdateUIElement(int index, char c)
 		{
-			switch(c)
+			if (c != 'N')
 			{
-			case 'L':
-				return new Vector2i(0, 1);
-				break;
-			case'F':
-				return new Vector2i(0, 4);
-				break;
-			case 'W':
-				return new Vector2i(0, 5);
-				break;
-			case 'E':
-				return new Vector2i(0, 3);
-				break;
-			case 'A':
-				return new Vector2i(0, 2);
-				break;
-			default:
-				return new Vector2i();
+				UIElements[index].TileIndex2D.Y = Tile.Elements.Count - Tile.Elements.IndexOf(c);
+				UIElements[index].Color = new Vector4(1.0f);
+			}
+			else
+			{
+				UIElements[index].Color = new Vector4(0.0f);
 			}
 		}
 	}
