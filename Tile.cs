@@ -144,6 +144,11 @@ namespace TheATeam
 				TileIndex2D = tt.tileIndex2D;
 				IsCollidable = tt.isCollidable;
 			}
+			// Earth buffs tiles health
+			if (loadKey == 'E')
+			{
+				_stats.MaxHealth = 50;
+			}
 		}
 		
 		public bool WallDamage()

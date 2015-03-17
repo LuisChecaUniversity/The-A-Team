@@ -490,17 +490,18 @@ namespace TheATeam
 				// reset all buffs
 				break;
 			case "Earth":
-				// More health tiles
+				// More health tiles, implemented in LoadTileProperties()
 				break;
 			case "Fire":
 				// More
 				break;
 			case "Water":
 				// Shield
-				_stats.MaxShield = 122;
+				_stats.MaxShield = _stats.MaxHealth;
 				break;
 			case "Air":
 				// Speed boost
+				_stats.moveSpeed = 2f;
 				break;
 			case "Lightning":
 				// Inc. mana regen
@@ -524,6 +525,7 @@ namespace TheATeam
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
 				_stats.mana = _stats.MaxMana;
+				_stats.moveSpeed = 1f;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
