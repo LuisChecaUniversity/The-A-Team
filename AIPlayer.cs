@@ -449,7 +449,7 @@ namespace TheATeam
 		
 		override public void Shoot()
 		{
-			if (_stats.mana >= manaCost)
+			if (_stats.mana >= _stats.manaCost)
 			{
 				if(shootTimer > maxFireRate)
 				{
