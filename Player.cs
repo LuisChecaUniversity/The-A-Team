@@ -505,6 +505,7 @@ namespace TheATeam
 				break;
 			case "Lightning":
 				// Inc. mana regen
+				_stats.manaRecharge = 15;
 				break;
 			}
 		}
