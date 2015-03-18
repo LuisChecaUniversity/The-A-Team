@@ -50,6 +50,8 @@ namespace TheATeam
 		private char _element;
 		private bool isChasing = false;
 		private bool goingForElement = true;
+		protected bool slowed = false;
+		protected float slowTimer = 0.0f;
 		
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
@@ -112,6 +114,7 @@ namespace TheATeam
 			base.Update(dt);
 			updateMana(dt);
 			updateShield(dt);
+			SlowEffect(dt);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -582,6 +585,25 @@ namespace TheATeam
 		public Vector2 GetShootingDirection()
 		{
 			return ShootingDirection;
+		}
+		
+		public void isSlowed(bool b){slowed = b;}
+		
+		protected void SlowEffect(float dt)
+		{
+			if(slowed)
+			{
+				slowTimer += dt/1000;
+				//Console.WriteLine("slowed " + slowTimer);
+				_stats.moveSpeed = 0.3f;
+				
+				if(slowTimer > 2.0f)
+				{
+					slowed = false;
+					slowTimer = 0.0f;
+					_stats.moveSpeed = 1.0f;
+				}
+			}
 		}
 	}
 }

@@ -279,11 +279,16 @@ namespace TheATeam
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player1))//.Position, player1.Quad.Bounds2()))
 			{
 				player1.TakeDamage(collidingProjectile.bulletDamage);
+				if(collidingProjectile.getType() == Type.FireAir)
+					player1.isSlowed(true);
 			}
+			
 			collidingProjectile = ProjectileManager.Instance.ProjectileCollision(player2);
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player2))//.Position, player2.Quad.Bounds2()))
 			{
 				player2.TakeDamage(collidingProjectile.bulletDamage);
+				if(collidingProjectile.getType() == Type.FireAir)
+					player2.isSlowed(true);
 			}
 
 			for (int i = 0; i < Tile.Collisions.Count; i++)

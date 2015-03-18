@@ -80,7 +80,9 @@ namespace TheATeam
 				{
 					Waypoint newPoint = new Waypoint(t);
 					newPoint.ID = i;
-					waypoints.Add(newPoint);
+					// dont add the tiles behind the UI
+					if(t.Center.Y != 544)
+						waypoints.Add(newPoint);
 					i++;
 				}
 			}

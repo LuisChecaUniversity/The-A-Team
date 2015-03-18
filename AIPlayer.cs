@@ -19,7 +19,7 @@ namespace TheATeam
 		private Player player1;
 		private Vector2 velocity;
 		private Vector2 target;
-		private float maxSpeed = 30.0f;
+		private float maxSpeed = 20.0f;
 		private PathFinder pathfinder;
 		private bool havePath = false;
 		private Behaviour behaviour = Behaviour.SeekElement;
@@ -79,6 +79,8 @@ namespace TheATeam
 			
 			base.HandleDirectionAnimation();
 			base.updateMana(dt);
+			base.updateShield(dt);
+			base.SlowEffect(dt);
 		}
 		
 		void updateBehaviours(float dt)
@@ -86,7 +88,7 @@ namespace TheATeam
 			// if have flag and low hp avoid player + return flag
 			// if low mana and attack player greater distance
 			// if low hp only attack player when player mana low
-			
+
 			if(!ItemManager.Player2HoldingFlag && ItemManager.Player1HoldingFlag && player1.Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Director.Instance.GL.Context.GetViewport().Width / 2)
 			{
 				ChangeBehaviour(Behaviour.CollectFlag);
@@ -176,23 +178,17 @@ namespace TheATeam
 		void CollectFlag()
 		{
 			// want to know when to shoot P1 tiles...maybe mark for attack when pathfinding?
-			if(Element != 'N')
+			Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
+			if(target != flag.position)
 			{
-				Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
-				if(target != flag.position)
-				{
-					if(!havePath)
-						FindPath(flag.position);
-//					pathfinder.FindPath(flag.position);
-//					target = pathfinder.GetTarget();
-				}
-
-				if(pathfinder.PathLength() <= 0 && target != flag.position)
-				{
-					ShootingDirection = Vec2DNormalize(flag.position - Position);
-					Shoot ();
-				}
+				if(!havePath)
+					FindPath(flag.position);
 			}
+			if(pathfinder.PathLength() <= 0 && target != flag.position)
+			{
+				ShootingDirection = Vec2DNormalize(flag.position - Position);
+				Shoot ();
+			}			
 		}
 		void ReturnFlag()
 		{
@@ -297,9 +293,8 @@ namespace TheATeam
 				velocity.X *= maxSpeed;
 				velocity.Y *= maxSpeed;
 			}
-		
 			// s = s + vt calculate position
-			Position = new Vector2(Position.X + velocity.X * dt, Position.Y + velocity.Y *dt);
+			Position = new Vector2(Position.X + velocity.X * _stats.moveSpeed * dt, Position.Y + velocity.Y * _stats.moveSpeed * dt);
 
 		}
 		
