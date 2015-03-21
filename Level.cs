@@ -173,9 +173,12 @@ namespace TheATeam
 			
 			//Timer Stuff
 			lblTimer = new Label();
-			lblTimer.FontMap = debugFont;
+			
+			FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
+			lblTimer.FontMap = fontl;
+			lblTimer.Color = Colors.Grey80;
 			lblTimer.Text = ""; // might be worth having a ui to separate class
-			lblTimer.Position = new Vector2((screenWidth / 2) - 100, screenHeight - 30);
+			lblTimer.Position = new Vector2((screenWidth / 2) - 100, screenHeight - 32);
 			AddChild(lblTimer);
 			
 			timerA = new System.Timers.Timer();
