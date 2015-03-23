@@ -530,6 +530,7 @@ namespace TheATeam
 				_stats.health = _stats.MaxHealth;
 				_stats.mana = _stats.MaxMana;
 				_stats.moveSpeed = 1f;
+				_stats.manaRecharge = 25;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
