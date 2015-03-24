@@ -37,7 +37,7 @@ namespace TheATeam
 
 		public int Mana { get { return _stats.mana; } }
 
-		public float manaTimer, shieldTimer;
+		public float manaTimer,healthTimer, shieldTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -113,6 +113,7 @@ namespace TheATeam
 		{
 			base.Update(dt);
 			updateMana(dt);
+			regenHealth(dt);
 			updateShield(dt);
 			SlowEffect(dt);
 			
@@ -398,6 +399,7 @@ namespace TheATeam
 		{
 			HandleDirectionAnimation();
 			HandleCollision();
+			regenHealth(dt);
 			updateMana(dt);
 			
 			if (goingForElement)
@@ -536,7 +538,24 @@ namespace TheATeam
 				Element2 = 'N';
 			}
 		}
-
+		
+		public void regenHealth(float dt)
+		{
+			if ((Element == 'A' && Element2 == 'L') || (Element2 == 'A' && Element == 'L'))
+			{
+				if (_stats.health < _stats.MaxHealth)
+				{
+					healthTimer += dt;
+					//_stats.health += _stats.healthRecharge;
+				}
+				if (healthTimer >= _stats.healthRecharge)
+				{
+					_stats.health++;
+					healthTimer = 0.0f;
+				}
+			}
+		}
+		
 		public void updateMana(float dt)
 		{
 			if (_stats.mana < _stats.MaxMana)
