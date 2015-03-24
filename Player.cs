@@ -34,7 +34,7 @@ namespace TheATeam
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }
-
+		public int Shieldhp { get { return _stats.shield; } }
 		public int Mana { get { return _stats.mana; } }
 
 		public float manaTimer,healthTimer, shieldTimer;
@@ -489,6 +489,8 @@ namespace TheATeam
 		
 		public void ElementBuff(string element)
 		{
+			
+			
 			switch (element)
 			{
 			case "Neutral":
@@ -519,7 +521,7 @@ namespace TheATeam
 		{
 			if (_stats.shield > 0)
 			{
-				_stats.shield -= dmg;
+				_stats.shield -= dmg * 2;
 			}
 			else if (_stats.health > 0 + dmg)
 			{
@@ -530,9 +532,11 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
+				//_stats.shield = _stats.MaxShield;
 				_stats.mana = _stats.MaxMana;
 				_stats.moveSpeed = 1f;
 				_stats.manaRecharge = 25;
+				_stats.shieldRecharge = 85;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
@@ -571,11 +575,18 @@ namespace TheATeam
 		
 		public void updateShield(float dt)
 		{
+			if ((Element == 'W' && Element2 == 'L') || (Element2 == 'W' && Element == 'L'))
+			{
+				_stats.shieldRecharge = 45;
+			}
+			else
+				_stats.shieldRecharge = 85;
+
 			if (_stats.shield < _stats.MaxShield)
 			{
 				shieldTimer += dt;
 			}
-			if (shieldTimer >= _stats.manaRecharge)
+			if (shieldTimer >= _stats.shieldRecharge)
 			{
 				_stats.shield++;
 				shieldTimer = 0.0f;

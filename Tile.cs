@@ -52,6 +52,8 @@ namespace TheATeam
 
 		public int health, mana, shield;
 		public int manaCost = 30;
+		
+		public int shieldRecharge = 85;
 		public int manaRecharge = 25;
 		public int healthRecharge = 180;
 		public float moveSpeed = 1f;

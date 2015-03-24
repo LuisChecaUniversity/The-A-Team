@@ -42,6 +42,8 @@ namespace TheATeam
 		private SpriteUV p1baseSprite;
 		private SpriteUV p2baseSprite;
 		private SpriteUV p1HealthSprite;
+		private SpriteUV p1ShieldhpSprite;
+		private SpriteUV p2ShieldhpSprite;
 		private SpriteUV p2HealthSprite;
 		private SpriteUV p1ManaSprite;
 		private SpriteUV p2ManaSprite;
@@ -150,6 +152,16 @@ namespace TheATeam
 			p2HealthSprite.Quad.S = new Vector2(122.0f, 26.0f);
 			p2HealthSprite.Position = new Vector2(643, screenHeight - 29);
 			
+			p1ShieldhpSprite = new SpriteUV(TextureManager.Get("shieldhp"));			
+			p1ShieldhpSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p1ShieldhpSprite.Position = new Vector2(195, screenHeight - 29);
+			p1ShieldhpSprite.Visible = false;
+			
+			p2ShieldhpSprite = new SpriteUV(TextureManager.Get("shieldhp"));
+			p2ShieldhpSprite.Quad.S = new Vector2(122.0f, 26.0f);
+			p2ShieldhpSprite.Position = new Vector2(643, screenHeight - 29);
+			p2ShieldhpSprite.Visible = false;
+			
 			p1ManaSprite = new SpriteUV(TextureManager.Get("mana"));
 			p1ManaSprite.Quad.S = new Vector2(122.0f, 26.0f);
 			p1ManaSprite.Position = new Vector2(67, screenHeight - 29);
@@ -165,6 +177,8 @@ namespace TheATeam
 			AddChild(hudBar);
 			AddChild(p1HealthSprite);
 			AddChild(p2HealthSprite);
+			AddChild(p1ShieldhpSprite);
+			AddChild(p2ShieldhpSprite);
 			AddChild(p1ManaSprite);
 			AddChild(p2ManaSprite);
 			AddChild(playerPointer);
@@ -261,6 +275,11 @@ namespace TheATeam
 		{
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
+			
+			p1ShieldhpSprite.Visible = true;
+			p2ShieldhpSprite.Visible = true;
+			p1ShieldhpSprite.Quad.S = new Vector2(player1.Shieldhp, 26.0f);
+			p2ShieldhpSprite.Quad.S = new Vector2(player2.Shieldhp, 26.0f);
 			
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);

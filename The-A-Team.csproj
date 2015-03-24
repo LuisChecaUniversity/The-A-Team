@@ -108,5 +108,6 @@
     <Content Include="assets\HUDBar.png" />
     <Content Include="assets\WallSpriteSheet.png" />
     <Content Include="assets\LaSegunda.ttf" />
+    <Content Include="assets\shieldhp.png" />
   </ItemGroup>
 </Project>
