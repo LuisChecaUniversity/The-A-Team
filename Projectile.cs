@@ -11,7 +11,7 @@ namespace TheATeam
 	{
 		Neutral = 0,
 		Fire = 1,
-		Water = 2,
+		FireAir = 2,
 	};
 	public class Projectile
 	{
@@ -33,13 +33,23 @@ namespace TheATeam
 			{
 				bulletSprite = new SpriteUV(ProjectileManager.fireTex);
 				bulletSprite.Quad.S = ProjectileManager.fireTex.TextureSizef;
-				bulletDamage = 50;
+				
+				if(player.Element == 'L' ||  player.Element2 == 'L')
+					bulletDamage = 122;
+				else
+					bulletDamage = 35;
+				
+				if(player.Element == 'A' ||  player.Element2 == 'A')
+					bulletType = Type.FireAir;
+				else
+					bulletType = Type.Fire;
 			}
 			else
 			{
 				bulletSprite = new SpriteUV(ProjectileManager.neutralTex);
 				bulletSprite.Quad.S = ProjectileManager.neutralTex.TextureSizef;
-				bulletDamage = 10;
+				bulletDamage = 25;
+				bulletType = Type.Neutral;
 			}
 			bulletSprite.CenterSprite();
 			this.player = player;
@@ -51,9 +61,7 @@ namespace TheATeam
 //			else
 //				offset = 77.0f;
 			
-//			if(bulletType == Type.Fire && second type  == air)
-//				bulletSpeed = 0.7f;
-			
+
 			rotation = player.GetShootingDirection().Normalize();
 			velocity = player.GetShootingDirection() * bulletSpeed;
 			position = new Vector2(player.Position.X + rotation.X * offset, player.Position.Y + rotation.Y * offset); 

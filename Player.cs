@@ -35,10 +35,10 @@ namespace TheATeam
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }
-
+		public int Shieldhp { get { return _stats.shield; } }
 		public int Mana { get { return _stats.mana; } }
 
-		public float manaTimer, shieldTimer;
+		public float manaTimer,healthTimer, shieldTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -50,6 +50,8 @@ namespace TheATeam
 		private float curTime = 0.0f;
 		private bool isChasing = false;
 		private bool goingForElement = true;
+		protected bool slowed = false;
+		protected float slowTimer = 0.0f;
 		
 		//Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
@@ -112,6 +114,8 @@ namespace TheATeam
 			base.Update(dt);
 			UpdateMana(dt);
 			UpdateShield(dt);
+			regenHealth(dt);
+			SlowEffect(dt);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -409,6 +413,8 @@ namespace TheATeam
 		
 		public void ElementBuff(string element)
 		{
+			
+			
 			switch (element)
 			{
 			case "Neutral":
@@ -439,7 +445,7 @@ namespace TheATeam
 		{
 			if (_stats.shield > 0)
 			{
-				_stats.shield -= dmg;
+				_stats.shield -= dmg * 2;
 			}
 			else if (_stats.health > 0 + dmg)
 			{
@@ -450,14 +456,34 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
+				//_stats.shield = _stats.MaxShield;
 				_stats.mana = _stats.MaxMana;
 				_stats.moveSpeed = 1f;
+				_stats.manaRecharge = 25;
+				_stats.shieldRecharge = 85;
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
 			}
 		}
-
+		
+		public void RegenHealth(float dt)
+		{
+			if ((Element == 'A' && Element2 == 'L') || (Element2 == 'A' && Element == 'L'))
+			{
+				if (_stats.health < _stats.MaxHealth)
+				{
+					healthTimer += dt;
+					//_stats.health += _stats.healthRecharge;
+				}
+				if (healthTimer >= _stats.healthRecharge)
+				{
+					_stats.health++;
+					healthTimer = 0.0f;
+				}
+			}
+		}
+		
 		public void UpdateMana(float dt)
 		{
 			if (_stats.mana < _stats.MaxMana)
@@ -473,11 +499,18 @@ namespace TheATeam
 		
 		public void UpdateShield(float dt)
 		{
+			if ((Element == 'W' && Element2 == 'L') || (Element2 == 'W' && Element == 'L'))
+			{
+				_stats.shieldRecharge = 45;
+			}
+			else
+				_stats.shieldRecharge = 85;
+
 			if (_stats.shield < _stats.MaxShield)
 			{
 				shieldTimer += dt;
 			}
-			if (shieldTimer >= _stats.manaRecharge)
+			if (shieldTimer >= _stats.shieldRecharge)
 			{
 				_stats.shield++;
 				shieldTimer = 0.0f;
@@ -507,6 +540,25 @@ namespace TheATeam
 		public Vector2 GetShootingDirection()
 		{
 			return ShootingDirection;
+		}
+		
+		public void isSlowed(bool b){slowed = b;}
+		
+		protected void SlowEffect(float dt)
+		{
+			if(slowed)
+			{
+				slowTimer += dt/1000;
+				//Console.WriteLine("slowed " + slowTimer);
+				_stats.moveSpeed = 0.3f;
+				
+				if(slowTimer > 2.0f)
+				{
+					slowed = false;
+					slowTimer = 0.0f;
+					_stats.moveSpeed = 1.0f;
+				}
+			}
 		}
 	}
 }
