@@ -28,8 +28,9 @@ namespace TheATeam
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
 		public bool PlayerAlive = true;
+		private char _element;
 		protected Vector2 Direction;
-		public Vector2 ShootingDirection;
+		protected Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
 		protected PlayerState playerState;
 
@@ -47,7 +48,6 @@ namespace TheATeam
 		private bool shooting = false;
 		private float fireRate = 600.0f;
 		private float curTime = 0.0f;
-		private char _element;
 		private bool isChasing = false;
 		private bool goingForElement = true;
 		
@@ -110,8 +110,8 @@ namespace TheATeam
 		override public void Update(float dt)
 		{
 			base.Update(dt);
-			updateMana(dt);
-			updateShield(dt);
+			UpdateMana(dt);
+			UpdateShield(dt);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -391,81 +391,6 @@ namespace TheATeam
 			}
 		}
 		
-		public void UpdateAI(float dt, Player p)
-		{
-			HandleDirectionAnimation();
-			HandleCollision();
-			updateMana(dt);
-			
-			if (goingForElement)
-			{
-				Vector2 dir = new Vector2(470.0f, 380.0f);
-				Vector2 newDir = new Vector2(dir.X - Position.X, dir.Y - Position.Y);
-				positionDelta = newDir * 0.009f;
-				Position += positionDelta;
-				Direction = positionDelta;
-				if (Position.X - 480.0f < 40.0f && 
-				   Position.Y - 390.0f < 40.0f)
-				{
-					goingForElement = false;
-				}
-			}
-			else if (!isChasing && !goingForElement)
-			{
-				if (movingLeft)
-				{
-					if (Position.X > 240)
-					{
-						positionDelta = new Vector2(-0.05f * dt, 0.0f);
-						Position += positionDelta;
-						Direction = positionDelta;
-					}
-					else
-					{
-						movingLeft = false;	
-					}
-				}
-				else
-				{
-					if (Position.X < 930)
-					{
-						positionDelta = new Vector2(0.05f * dt, 0.0f);
-						Position += positionDelta;
-						Direction = positionDelta;
-					}
-					else
-					{
-						movingLeft = true;	
-					}
-				}
-				
-				float dist = Vector2.Distance(p.Position, Position);	
-				if (dist < 300)
-				{
-					curTime += dt;
-					if (curTime > fireRate)
-					{
-						Direction = p.Position - Position;
-						Direction = Direction.Normalize();
-						ShootingDirection = Direction;
-						Shoot();
-						curTime = 0.0f;	
-					}
-				}
-				if (dist < 50)
-				{
-					isChasing = true;
-				}
-			}
-			else
-			{
-				if (!positionDelta.IsZero())
-				{
-					Position = Vector2.Lerp(Position, p.Position, 0.01f);
-				}
-			}
-		}
-		
 		public void ChangeTiles(string type)
 		{
 			foreach (Tile t in playerTiles)
@@ -533,7 +458,7 @@ namespace TheATeam
 			}
 		}
 
-		public void updateMana(float dt)
+		public void UpdateMana(float dt)
 		{
 			if (_stats.mana < _stats.MaxMana)
 			{
@@ -546,7 +471,7 @@ namespace TheATeam
 			}
 		}
 		
-		public void updateShield(float dt)
+		public void UpdateShield(float dt)
 		{
 			if (_stats.shield < _stats.MaxShield)
 			{

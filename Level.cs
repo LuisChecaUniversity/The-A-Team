@@ -262,7 +262,7 @@ namespace TheATeam
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
 				
-			playerPointer.Rotation = player1.ShootingDirection;
+			playerPointer.Rotation = player1.GetShootingDirection();
 			playerPointer.Position = player1.Position;
 			
 			player1.Update(dt);

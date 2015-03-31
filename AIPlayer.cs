@@ -78,7 +78,7 @@ namespace TheATeam
 			shootTimer += dt;
 			
 			base.HandleDirectionAnimation();
-			base.updateMana(dt);
+			base.UpdateMana(dt);
 		}
 		
 		void updateBehaviours(float dt)
