@@ -79,6 +79,7 @@ namespace TheATeam
 			AddAsset("pointer", "pointer.png");
 			AddAsset("tiles", "WallSpriteSheet.png", new Vector2i(4, 7));
 			AddAsset("shields", "ShieldSpriteSheet.png", new Vector2i(1, 3));
+			AddAsset("rings", "RingSpriteSheet.png", new Vector2i(1, 6));
 			return true;
 		}
 	}

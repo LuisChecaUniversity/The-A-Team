@@ -48,8 +48,6 @@ namespace TheATeam
 		private SpriteUV p1ManaSprite;
 		private SpriteUV p2ManaSprite;
 		private SpriteUV playerPointer;
-		private SpriteTile p1Shield;
-		private SpriteTile p2Shield;
 		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
 		
@@ -176,18 +174,6 @@ namespace TheATeam
 			playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
 			playerPointer.CenterSprite();
 			
-			p1Shield = new SpriteTile(TextureManager.Get("shields"));
-			p1Shield.Quad.S = p1Shield.TextureInfo.TileSizeInPixelsf;
-			p1Shield.TileIndex2D.Y = 2;
-			p1Shield.Visible = false;
-			p1Shield.CenterSprite();
-			
-			p2Shield = new SpriteTile(TextureManager.Get("shields"));
-			p2Shield.Quad.S = p2Shield.TextureInfo.TileSizeInPixelsf;
-			p2Shield.TileIndex2D.Y = 2;
-			p2Shield.Visible = false;
-			p2Shield.CenterSprite();
-			
 			AddChild(hudBar);
 			AddChild(p1HealthSprite);
 			AddChild(p2HealthSprite);
@@ -196,8 +182,6 @@ namespace TheATeam
 			AddChild(p1ManaSprite);
 			AddChild(p2ManaSprite);
 			AddChild(playerPointer);
-			AddChild(p1Shield);
-			AddChild(p2Shield);
 			
 			InitUIElements();
 			
@@ -299,14 +283,6 @@ namespace TheATeam
 			
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
-			
-			p1Shield.Visible = player1.ShieldVisible;
-			p1Shield.Scale = new Vector2(player1.ShieldScale);
-			p1Shield.Position = player1.Position;
-			
-			p2Shield.Visible = player2.ShieldVisible;
-			p2Shield.Scale = new Vector2(player2.ShieldScale);
-			p2Shield.Position = player2.Position;
 				
 			playerPointer.Rotation = player1.GetShootingDirection();
 			playerPointer.Position = player1.Position;

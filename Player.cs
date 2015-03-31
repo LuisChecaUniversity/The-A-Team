@@ -28,7 +28,7 @@ namespace TheATeam
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
 		public bool PlayerAlive = true;
-		private char _element;
+		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
 		private PlayerIndex whichPlayer;
@@ -40,19 +40,27 @@ namespace TheATeam
 
 		public int Mana { get { return _stats.mana; } }
 		
-		public bool ShieldVisible { get; protected set; }
-		
-		public float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / _stats.MaxShield : 1f; } }
+		private float shieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
 
-		public float manaTimer, healthTimer, shieldTimer;
+		private float manaTimer, healthTimer, shieldTimer, slowTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
 		protected bool slowed = false;
-		protected float slowTimer = 0.0f;
+		private SpriteTile elementRing = null;
+		private SpriteTile elementShield = null;
 		
-		//Player Tiles
+		// Player Tiles
 		public List<Tile> playerTiles = new List<Tile>();
+		
+		public bool ShieldVisible
+		{
+			get { return (elementShield != null) ? elementShield.Visible : false; }
+			protected set { if (elementShield != null)
+				{
+					elementShield.Visible = value;
+				} }
+		}
 		
 		public char Element
 		{
@@ -64,7 +72,15 @@ namespace TheATeam
 			}
 		}
 		
-		public char Element2 { get; set; }
+		public char Element2
+		{
+			get { return _element2; }
+			set
+			{
+				_element2 = value;
+				elementRing.TileIndex2D.Y = 5 - Tile.Elements.IndexOf(value);
+			}
+		}
 
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
@@ -88,6 +104,20 @@ namespace TheATeam
 					UnscheduleUpdate();
 				}
 			}, interval);
+			
+			// Second element ring sprite
+			elementRing = new SpriteTile(TextureManager.Get("rings"));
+			elementRing.Quad.S = elementRing.TextureInfo.TileSizeInPixelsf;
+			elementRing.CenterSprite();			
+			// Shield aura sprite
+			elementShield = new SpriteTile(TextureManager.Get("shields"));
+			elementShield.Quad.S = elementShield.TextureInfo.TileSizeInPixelsf;
+			elementShield.TileIndex2D.Y = elementShield.TextureInfo.NumTiles.Y - 1;
+			elementShield.Visible = false;
+			elementShield.CenterSprite();
+			
+			AddChild(elementRing);
+			AddChild(elementShield);
 		}
 		
 		public Player(Vector2 position, bool isPlayer1, List<Tile> tiles):
@@ -99,7 +129,7 @@ namespace TheATeam
 			Element2 = 'N';
 			ShieldVisible = false;
 
-			CenterSprite();
+			CenterSprite();	
 
 			whichPlayer = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
 			
@@ -518,6 +548,8 @@ namespace TheATeam
 				_stats.shield++;
 				shieldTimer = 0.0f;
 			}
+			// Element shield size
+			elementShield.Scale = new Vector2(shieldScale);
 		}
 		
 		public void Player1Score()
