@@ -165,13 +165,13 @@ namespace TheATeam
 			else if (p.Element == 'N')
 			{
 				p.ChangeTiles(item.Name);
-				p.ElementBuff(item.Name);
 				p.Element = item.Name[0];
+				p.ElementBuff(item.Name);
 			}
 			else if (p.Element2 == 'N')
 			{
-				p.ElementBuff(item.Name);
 				p.Element2 = item.Name[0];
+				p.ElementBuff(item.Name);
 			}
 		}
 		

@@ -19,6 +19,7 @@ namespace TheATeam
 	public class Stats
 	{
 		private int _maxHealth, _maxMana, _maxShield;
+		private Stats initialStats = null;
 
 		public int MaxHealth
 		{
@@ -52,7 +53,6 @@ namespace TheATeam
 
 		public int health, mana, shield;
 		public int manaCost = 30;
-		
 		public int shieldRecharge = 85;
 		public int manaRecharge = 25;
 		public int healthRecharge = 180;
@@ -63,6 +63,19 @@ namespace TheATeam
 			MaxHealth = maxHealth;
 			MaxMana = maxMana;
 			MaxShield = maxShield;
+			initialStats = (Stats)this.MemberwiseClone();
+		}
+		
+		public void Reset()
+		{
+			MaxHealth = initialStats.MaxHealth;
+			MaxMana = initialStats.MaxMana;
+			MaxShield = initialStats.MaxShield;
+			manaCost = initialStats.manaCost;
+			shieldRecharge = initialStats.shieldRecharge;
+			manaRecharge = initialStats.manaRecharge;
+			healthRecharge = initialStats.healthRecharge;
+			moveSpeed = initialStats.moveSpeed;
 		}
 	}
 	

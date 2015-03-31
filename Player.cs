@@ -18,6 +18,8 @@ namespace TheATeam
 		Moving,
 		Shooting,
 	}
+	
+	public enum ShieldEffect { None = 2, Damage = 1, KnockBack = 0 }
 
 	public class Player: Tile
 	{
@@ -27,7 +29,6 @@ namespace TheATeam
 		private static float UISize = 32;
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
-		public bool PlayerAlive = true;
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
@@ -36,12 +37,10 @@ namespace TheATeam
 
 		public int Health { get { return _stats.health; } }
 
-		public int Shieldhp { get { return _stats.shield; } }
+		public int Shield { get { return _stats.shield; } }
 
 		public int Mana { get { return _stats.mana; } }
 		
-		private float shieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
-
 		private float manaTimer, healthTimer, shieldTimer, slowTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
@@ -50,16 +49,22 @@ namespace TheATeam
 		private SpriteTile elementRing = null;
 		private SpriteTile elementShield = null;
 		
-		// Player Tiles
-		public List<Tile> playerTiles = new List<Tile>();
+		private bool ShieldCollidable { get { return elementShield.TileIndex2D.Y < (int)ShieldEffect.None; } }
 		
-		public bool ShieldVisible
+		private ShieldEffect ShieldEffect { get { return (ShieldEffect)elementShield.TileIndex2D.Y; } }
+		
+		private float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
+		
+		private bool ShieldVisible
 		{
 			get { return (elementShield != null) ? elementShield.Visible : false; }
-			protected set { if (elementShield != null)
+			set
+			{ 
+				if (elementShield != null)
 				{
 					elementShield.Visible = value;
-				} }
+				}
+			}
 		}
 		
 		public char Element
@@ -81,6 +86,8 @@ namespace TheATeam
 				elementRing.TileIndex2D.Y = 5 - Tile.Elements.IndexOf(value);
 			}
 		}
+		
+		public List<Tile> playerTiles = new List<Tile>();
 
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
@@ -112,7 +119,7 @@ namespace TheATeam
 			// Shield aura sprite
 			elementShield = new SpriteTile(TextureManager.Get("shields"));
 			elementShield.Quad.S = elementShield.TextureInfo.TileSizeInPixelsf;
-			elementShield.TileIndex2D.Y = elementShield.TextureInfo.NumTiles.Y - 1;
+			elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
 			elementShield.Visible = false;
 			elementShield.CenterSprite();
 			
@@ -443,24 +450,22 @@ namespace TheATeam
 		
 		public void ElementBuff(string element)
 		{
+			// Single Element buffs
 			switch (element)
 			{
 			case "Neutral":
 				// reset all buffs
-				_stats.MaxShield = 0;
-				_stats.moveSpeed = 1f;
-				_stats.manaRecharge = 25;
-				_stats.shieldRecharge = 85;
+				_stats.Reset();
 				ShieldVisible = false;
 				break;
 			case "Earth":
 				// More health tiles, implemented in LoadTileProperties()
 				break;
 			case "Fire":
-				// More
+				// More bullet damage, implemented in Projectile.BulletDamage
 				break;
 			case "Water":
-				// Shield
+				// Adds a shield
 				_stats.MaxShield = _stats.MaxHealth;
 				ShieldVisible = true;
 				break;
@@ -469,9 +474,32 @@ namespace TheATeam
 				_stats.moveSpeed = 2f;
 				break;
 			case "Lightning":
-				// Inc. mana regen
+				// Increased mana regen
 				_stats.manaRecharge = 15;
 				break;
+			}
+			// Combined Elements buffs
+			
+			// Water + Fire -> Damaging shield
+			if ((Element == 'W' && Element2 == 'F') || (Element == 'F' && Element2 == 'W'))
+			{
+				elementShield.TileIndex2D.Y = (int)ShieldEffect.Damage;
+			}
+			// Water + Earth -> Stronger shield
+			if ((Element == 'W' && Element2 == 'E') || (Element == 'E' && Element2 == 'W'))
+			{
+				_stats.MaxShield = _stats.MaxHealth * 2;
+				elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
+			}
+			// Water + Air -> KnockBack shield
+			if ((Element == 'W' && Element2 == 'A') || (Element == 'A' && Element2 == 'W'))
+			{
+				elementShield.TileIndex2D.Y = (int)ShieldEffect.KnockBack;
+			}
+			// Water + Lightning -> Increased shield regen
+			if ((Element == 'W' && Element2 == 'L') || (Element2 == 'W' && Element == 'L'))
+			{
+				_stats.shieldRecharge = 45;
 			}
 		}
 		
@@ -529,16 +557,7 @@ namespace TheATeam
 		}
 		
 		public void UpdateShield(float dt)
-		{
-			if ((Element == 'W' && Element2 == 'L') || (Element2 == 'W' && Element == 'L'))
-			{
-				_stats.shieldRecharge = 45;
-			}
-			else
-			{
-				_stats.shieldRecharge = 85;
-			}
-			
+		{			
 			if (_stats.shield < _stats.MaxShield)
 			{
 				shieldTimer += dt;
@@ -549,7 +568,7 @@ namespace TheATeam
 				shieldTimer = 0.0f;
 			}
 			// Element shield size
-			elementShield.Scale = new Vector2(shieldScale);
+			elementShield.Scale = new Vector2(ShieldScale);
 		}
 		
 		public void Player1Score()
@@ -595,6 +614,28 @@ namespace TheATeam
 					slowed = false;
 					slowTimer = 0.0f;
 					_stats.moveSpeed = 1.0f;
+				}
+			}
+		}
+		
+		public void ShieldCollision(Player p)
+		{
+			if (ShieldCollidable)
+			{
+				if (p.Overlaps(elementShield))
+				{
+					switch (ShieldEffect)
+					{
+					case ShieldEffect.Damage:
+						p.TakeDamage(50);
+						break;
+					case ShieldEffect.KnockBack:
+						p.Position = p.Position - (new Vector2(50) * p.Direction);
+						break;						
+					case ShieldEffect.None:
+					default:
+						break;
+					}
 				}
 			}
 		}
