@@ -35,21 +35,19 @@ namespace TheATeam
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }
-		public int Shieldhp { get { return _stats.shield; } }
-		public int Mana { get { return _stats.mana; } }
 
-		public float manaTimer,healthTimer, shieldTimer;
+		public int Shieldhp { get { return _stats.shield; } }
+
+		public int Mana { get { return _stats.mana; } }
+		
+		public bool ShieldVisible { get; protected set; }
+		
+		public float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / _stats.MaxShield : 1f; } }
+
+		public float manaTimer, healthTimer, shieldTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
-		
-		//AI variables
-		private bool movingLeft = true;
-		private bool shooting = false;
-		private float fireRate = 600.0f;
-		private float curTime = 0.0f;
-		private bool isChasing = false;
-		private bool goingForElement = true;
 		protected bool slowed = false;
 		protected float slowTimer = 0.0f;
 		
@@ -72,6 +70,7 @@ namespace TheATeam
 			base(position)
 		{
 			TextureInfo = TextureManager.Get("players");
+			
 			// Assign variables
 			this.animationRangeX = animationRangeX;
 			TileIndex2D = new Vector2i(animationRangeX.X, spriteIndexY);
@@ -98,6 +97,7 @@ namespace TheATeam
 			startingPosition = position;
 			Element = 'N';
 			Element2 = 'N';
+			ShieldVisible = false;
 
 			CenterSprite();
 
@@ -114,7 +114,7 @@ namespace TheATeam
 			base.Update(dt);
 			UpdateMana(dt);
 			UpdateShield(dt);
-			regenHealth(dt);
+			RegenHealth(dt);
 			SlowEffect(dt);
 			
 			switch (AppMain.TYPEOFGAME)
@@ -413,12 +413,15 @@ namespace TheATeam
 		
 		public void ElementBuff(string element)
 		{
-			
-			
 			switch (element)
 			{
 			case "Neutral":
 				// reset all buffs
+				_stats.MaxShield = 0;
+				_stats.moveSpeed = 1f;
+				_stats.manaRecharge = 25;
+				_stats.shieldRecharge = 85;
+				ShieldVisible = false;
 				break;
 			case "Earth":
 				// More health tiles, implemented in LoadTileProperties()
@@ -429,6 +432,7 @@ namespace TheATeam
 			case "Water":
 				// Shield
 				_stats.MaxShield = _stats.MaxHealth;
+				ShieldVisible = true;
 				break;
 			case "Air":
 				// Speed boost
@@ -456,11 +460,8 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems();
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
-				//_stats.shield = _stats.MaxShield;
 				_stats.mana = _stats.MaxMana;
-				_stats.moveSpeed = 1f;
-				_stats.manaRecharge = 25;
-				_stats.shieldRecharge = 85;
+				ElementBuff("Neutral");
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
@@ -504,8 +505,10 @@ namespace TheATeam
 				_stats.shieldRecharge = 45;
 			}
 			else
+			{
 				_stats.shieldRecharge = 85;
-
+			}
+			
 			if (_stats.shield < _stats.MaxShield)
 			{
 				shieldTimer += dt;
@@ -542,17 +545,20 @@ namespace TheATeam
 			return ShootingDirection;
 		}
 		
-		public void isSlowed(bool b){slowed = b;}
+		public void isSlowed(bool b)
+		{
+			slowed = b;
+		}
 		
 		protected void SlowEffect(float dt)
 		{
-			if(slowed)
+			if (slowed)
 			{
-				slowTimer += dt/1000;
+				slowTimer += dt / 1000;
 				//Console.WriteLine("slowed " + slowTimer);
 				_stats.moveSpeed = 0.3f;
 				
-				if(slowTimer > 2.0f)
+				if (slowTimer > 2.0f)
 				{
 					slowed = false;
 					slowTimer = 0.0f;

@@ -109,5 +109,6 @@
     <Content Include="assets\WallSpriteSheet.png" />
     <Content Include="assets\LaSegunda.ttf" />
     <Content Include="assets\shieldhp.png" />
+    <Content Include="assets\ShieldSpriteSheet.png" />
   </ItemGroup>
 </Project>
