@@ -22,7 +22,7 @@ namespace TheATeam
 		}
 		public float Cost(Waypoint n)
 		{
-			return tile.Center.Distance(n.tile.Center);
+			return tile.Center.Distance(n.tile.Center) ;
 		}
 		public float CalculateHCost(Tile t)
 		{
@@ -48,7 +48,8 @@ namespace TheATeam
 			InitWaypoints();
 			target = player.Center;
 		}
-
+		
+		// --------------- To Delete ------------------ //
 		public Vector2 GetTarget()
 		{
 			if (path.Count > 0)
@@ -64,6 +65,7 @@ namespace TheATeam
 				return target;
 			}
 		}
+		// --------------- To Delete ------------------ //
 		public int PathLength()
 		{
 			if(path != null)
@@ -123,13 +125,13 @@ namespace TheATeam
 			left = FindWaypoint(new Vector2(point.tile.Center.X - width, point.tile.Center.Y));
 			right = FindWaypoint(new Vector2(point.tile.Center.X + width, point.tile.Center.Y));
 			
-			if(null != top && ((top.tile.IsCollidable && top.tile.Key == player.Element) || !top.tile.IsCollidable))
+			if(null != top )//&& ((top.tile.IsCollidable && top.tile.Key == player.Element) || !top.tile.IsCollidable))
 				connections.Add(top); 
-			if(null != bottom && ((bottom.tile.IsCollidable && bottom.tile.Key == player.Element) || !bottom.tile.IsCollidable))
+			if(null != bottom)// && ((bottom.tile.IsCollidable && bottom.tile.Key == player.Element) || !bottom.tile.IsCollidable))
 				connections.Add(bottom); 
-			if(null != left && ((left.tile.IsCollidable && left.tile.Key == player.Element) || !left.tile.IsCollidable))
+			if(null != left)// && ((left.tile.IsCollidable && left.tile.Key == player.Element) || !left.tile.IsCollidable))
 				connections.Add(left); 
-			if(null != right && ((right.tile.IsCollidable && right.tile.Key == player.Element) || !right.tile.IsCollidable))
+			if(null != right)// && ((right.tile.IsCollidable && right.tile.Key == player.Element) || !right.tile.IsCollidable))
 				connections.Add(right);
 			
 			return connections;
@@ -141,32 +143,33 @@ namespace TheATeam
 				outputPath(n.parent);
 			path.Add(n);
 		}
-		public void FindPath(Vector2 target)
-		{
-			Waypoint p = FindNearestWaypoint(target);
-			if(null != p)
-				FindPath(p.tile);
-			// if path is null, get connections of p and find path again ect
-			if(path.Count <= 0)
-			{
-				int connection = 0;
-				while(path.Count == 0)
-				{
-					float width = p.tile.Quad.Point11.X;
-					float height = p.tile.Quad.Point11.Y;
-				
-					Waypoint right = FindWaypoint(new Vector2(p.tile.Center.X + width, p.tile.Center.Y));	
-					if(right != null)
-					{
-						FindPath (right.tile.Center);
-					}
-					
-				}
-			}
-
-		}
+		// --------------- To Delete ------------------ //
+//		public void FindPath(Vector2 target)
+//		{
+//			Waypoint p = FindNearestWaypoint(target);
+//			if(null != p)
+//				FindPath(p.tile);
+//			// if path is null, get connections of p and find path again ect
+//			if(path.Count <= 0)
+//			{
+//				int connection = 0;
+//				while(path.Count == 0)
+//				{
+//					float width = p.tile.Quad.Point11.X;
+//					float height = p.tile.Quad.Point11.Y;
+//				
+//					Waypoint right = FindWaypoint(new Vector2(p.tile.Center.X + width, p.tile.Center.Y));	
+//					if(right != null)
+//					{
+//						FindPath (right.tile.Center);
+//					}
+//					
+//				}
+//			}
+//
+//		}
 		
-		private void FindPath(Tile target)
+		public List<Waypoint> FindPath(Vector2 destination)
 		{
 			path.Clear();
 			List<Waypoint> open = new List<Waypoint>();
@@ -174,6 +177,7 @@ namespace TheATeam
 			float G, H, F;
 		
 			Waypoint current = FindNearestWaypoint(player.Center);
+			Waypoint target = FindNearestWaypoint(destination);
 			current.parent = null;
 			//origin->SetValues(0.0, Origin->CalcHCost(Target));
 			open.Add(current);
@@ -197,12 +201,13 @@ namespace TheATeam
 				open.Remove(open[smallestPos]); // remove the smallest from the open list (will be added to closed list)
 
 				// have we reached target
-				if (current.tile.Center == target.Center)
+				if (current.tile.Center == target.tile.Center)
 				{
+					
 					open.Clear();
 					closed.Add(current);
 					outputPath(current);//outputPath(FindNode(target));
-					return;
+					return path;
 				}
 		
 		
@@ -214,7 +219,12 @@ namespace TheATeam
 					Waypoint successor = connections[i];
 		
 					G = current.G + successor.Cost(current);
-					H = successor.CalculateHCost(target);
+					// naughty
+					if(successor.tile.IsCollidable && successor.tile.Key != player.Element)
+					{
+						G *= 1.1f;
+					}
+					H = successor.CalculateHCost(target.tile);
 					F = G + H;
 					if (open.Contains(successor))//open.Find(x => x.ID == successor.ID)) //if node is in open list already
 					{
@@ -258,6 +268,8 @@ namespace TheATeam
 				}
 				closed.Add(current);
 			}
+			
+			return null;
 		}
 		
 	}
