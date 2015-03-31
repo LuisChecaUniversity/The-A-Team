@@ -50,29 +50,29 @@ namespace TheATeam
 		}
 		
 		// --------------- To Delete ------------------ //
-		public Vector2 GetTarget()
-		{
-			if (path.Count > 0)
-			{
-				target = path[0].tile.Center;
-				if (player.Center.Distance(path[0].tile.Center) <= 30.0f)
-					path.RemoveAt(0);
-		
-				return target;
-			}
-			else
-			{
-				return target;
-			}
-		}
+//		public Vector2 GetTarget()
+//		{
+//			if (path.Count > 0)
+//			{
+//				target = path[0].tile.Center;
+//				if (player.Center.Distance(path[0].tile.Center) <= 30.0f)
+//					path.RemoveAt(0);
+//		
+//				return target;
+//			}
+//			else
+//			{
+//				return target;
+//			}
+//		}
 		// --------------- To Delete ------------------ //
-		public int PathLength()
-		{
-			if(path != null)
-				return path.Count;
-			else
-				return 0;
-		}
+//		public int PathLength()
+//		{
+//			if(path != null)
+//				return path.Count;
+//			else
+//				return 0;
+//		}
 		private void InitWaypoints()
 		{
 			int i = 0;
@@ -219,27 +219,21 @@ namespace TheATeam
 					Waypoint successor = connections[i];
 		
 					G = current.G + successor.Cost(current);
-					// naughty
-					if(successor.tile.IsCollidable && successor.tile.Key != player.Element)
+					// adds cost for going through walls that will have to be shot down
+					if(successor.tile.IsCollidable) 
 					{
-						G *= 1.1f;
+						if(successor.tile.Key != player.Element)
+							G *= 1.1f;
+						else if(player.Element == 'N' && successor.tile.Key == player.Element)
+							G *= 1.1f;
 					}
+					
 					H = successor.CalculateHCost(target.tile);
 					F = G + H;
-					if (open.Contains(successor))//open.Find(x => x.ID == successor.ID)) //if node is in open list already
+					if (open.Contains(successor))
 					{
-						if (closed.Contains(successor))
-						{
-							if (F < successor.F) // possibly dont need this ??
-							{
-								/*closed.erase(find(open.begin(), open.end(), connections[i].Connected));
-								connections[i].Connected->SetValues(G, H);
-								connections[i].Connected->SetParent(currentNode);
-								open.push_back(connections[i].Connected);*/
-							}
-						}
-						else
-						{
+						if (!closed.Contains(successor))
+						{					
 							if (F < successor.F)
 							{
 								open.Remove(successor);
@@ -248,22 +242,17 @@ namespace TheATeam
 								open.Add(successor);
 							}
 						}
+						
 					}
 					else
 					{
-						if (closed.Contains(successor)) // possibly dont need this ??
-						{
-							/*closed.erase(find(open.begin(), open.end(), connections[i].Connected));
-							connections[i].Connected->SetValues(G, H);
-							connections[i].Connected->SetParent(currentNode);
-							open.push_back(connections[i].Connected);*/
-						}
-						else
+						if (!closed.Contains(successor))
 						{
 							successor.SetValues(G, H);
 							successor.parent = current;
 							open.Add(successor);
 						}
+
 					}
 				}
 				closed.Add(current);

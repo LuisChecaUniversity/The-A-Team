@@ -35,7 +35,7 @@ namespace TheATeam
 				bulletSprite.Quad.S = ProjectileManager.fireTex.TextureSizef;
 				
 				if(player.Element == 'L' ||  player.Element2 == 'L')
-					bulletDamage = 122;
+					bulletDamage = 45;
 				else
 					bulletDamage = 35;
 				

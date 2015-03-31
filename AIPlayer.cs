@@ -12,7 +12,8 @@ namespace TheATeam
 	{
 		Attacking,
 		SeekElement,
-		CollectFlag,
+		GetFlag,
+		ReturnFlag,
 	}
 	public class AIPlayer: Player
 	{
@@ -20,7 +21,7 @@ namespace TheATeam
 		private Vector2 velocity;
 		private Vector2 target, finalTarget;
 		private Waypoint targetWP;
-		private float maxSpeed = 20.0f;
+		private float maxSpeed = 10.0f;
 		private PathFinder pathfinder;
 		private bool havePath = false;
 		private Behaviour behaviour = Behaviour.SeekElement;
@@ -32,6 +33,7 @@ namespace TheATeam
 		private Item player1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
 		private Item player2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 		private List<Waypoint> path;
+		private Item elementTarget;
 			
 
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
@@ -106,6 +108,20 @@ namespace TheATeam
 						Shoot (targetWP.tile.Center);
 				}
 			}
+			
+			switch(behaviour)
+			{
+			case Behaviour.GetFlag:
+				GetFlag();
+				break;
+			case Behaviour.ReturnFlag:
+				ReturnFlag();
+				break;
+			case Behaviour.SeekElement:
+				SeekElement();
+				break;
+			}
+			
 //			// if have flag and low hp avoid player + return flag
 //			// if low mana and attack player greater distance
 //			// if low hp only attack player when player mana low
@@ -151,7 +167,118 @@ namespace TheATeam
 //			}
 		}
 		
-		void ChangeBehaviour(Behaviour b)
+		private void CheckPlayer()
+		{
+			// if player is in range
+				// if player has more hp
+					// if player is low on mana
+			
+				// if player has equal or less
+					// if ai is low on mana
+			
+			// if player is out of range
+				// does player have flag
+					// is player closer to our flag
+			
+			if(player1.Center.Distance(Center) > attackDistance)
+			{
+				if(player1.Health >= Health *1.5f)
+				{}
+				else if(player1.Health <= Health * 0.5f)
+				{}
+				else
+				{}
+			}
+			else
+			{
+				if(ItemManager.Player1HoldingFlag)
+				{
+					if(Center.X > Director.Instance.GL.Context.GetViewport().Width / 2)
+					{
+						// player has flag and AI is in his half of the map - attack the player
+					}
+					else
+					{
+						// grab flag
+						ChangeBehaviour(Behaviour.GetFlag);
+					}
+				}
+			}
+		}
+		
+		private void GetFlag()
+		{
+			if(!havePath)
+			{
+				finalTarget = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position;
+				FindPath(finalTarget);
+			}
+			
+			if(ItemManager.Player2HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.ReturnFlag);
+			}
+		}
+		
+		private void ReturnFlag()
+		{
+			if(!havePath)
+			{
+				finalTarget = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position;
+				FindPath(finalTarget);
+			}
+		}
+		private void SeekElement()
+		{
+			if(Element == 'N' || Element2 == 'N')
+			{
+				if(!havePath)
+				{
+					Item closest = ClosestItem();
+				
+					if(elementTarget != closest)
+						elementTarget = closest;
+					
+					finalTarget = elementTarget.position;
+					FindPath(finalTarget);
+				}
+				
+				if(elementTarget.collided)
+					havePath = false;
+			}
+			else
+			{
+				ChangeBehaviour(Behaviour.GetFlag);
+			}
+			
+		}
+		
+		private Item ClosestItem()
+		{
+			int shortestDistance = 100;
+			Item element = ItemManager.Instance.GetItem(ItemType.element, "Fire");
+			
+			List<Waypoint> route = new List<Waypoint>();
+			
+			foreach (Item item in ItemManager.Instance.GetAllItems())
+			{
+				if(item.Type == ItemType.element && !item.collided)
+				{
+					int distance;
+					route = pathfinder.FindPath(item.position);
+					distance = route.Count;
+					if (distance < shortestDistance)
+					{
+						shortestDistance = distance;
+						element = item;
+					}
+				}
+			}
+			
+			return element;
+		}
+		
+		private void ChangeBehaviour(Behaviour b)
 		{
 			if(behaviour == b)
 				return;
@@ -223,12 +350,11 @@ namespace TheATeam
 ////				Shoot ();
 ////			}
 //		}
-//		void FindPath(Vector2 pos)
-//		{
-//			pathfinder.FindPath(pos);
-//			target = pathfinder.GetTarget();
-//			havePath = true;
-//		}
+		void FindPath(Vector2 pos)
+		{
+			path = pathfinder.FindPath(pos);
+			havePath = true;
+		}
 //		void SeekElement()
 //		{
 //			// need to know which item im targeting so if it gets collected can swap
