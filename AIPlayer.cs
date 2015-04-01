@@ -183,11 +183,22 @@ namespace TheATeam
 			if(player1.Center.Distance(Center) > attackDistance)
 			{
 				if(player1.Health >= Health *1.5f)
-				{}
-				else if(player1.Health <= Health * 0.5f)
-				{}
+				{
+					if(player1.Mana < 30)
+					{
+						// not enough mana to shoot - attack
+					}
+					else
+					{
+						// retreat
+					}
+				}
 				else
-				{}
+				{
+					// player similar or low hp - attack
+					
+					
+				}
 			}
 			else
 			{
