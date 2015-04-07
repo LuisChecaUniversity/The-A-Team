@@ -32,7 +32,7 @@ namespace TheATeam
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
-		private PlayerIndex whichPlayer;
+		public PlayerIndex whichPlayer;
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }

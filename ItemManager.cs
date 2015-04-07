@@ -177,12 +177,22 @@ namespace TheATeam
 		
 		public void ResetItems(Player p)
 		{
+			if (p.whichPlayer == PlayerIndex.PlayerOne)
+			{
+				Player1HoldingFlag = false;
+			}
+			else if (p.whichPlayer ==PlayerIndex.PlayerTwo)
+			{
+				Player2HoldingFlag = false;
+			}
+			       
 			foreach (Item item in items)
 			{
 				if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
 				 {
-				item.iSprite.Visible = true;
-				item.collided = false;
+					item.iSprite.Visible = true;
+					item.collided = false;
+					
 				}
 			}
 		}
