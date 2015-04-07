@@ -47,9 +47,10 @@ namespace TheATeam
 		private SpriteUV p2HealthSprite;
 		private SpriteUV p1ManaSprite;
 		private SpriteUV p2ManaSprite;
-		//private SpriteUV playerPointer;
+		private SpriteUV playerPointer;
 		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
+		private bool pointerOn = true;
 		
 		public Level(): base()
 		{
@@ -110,7 +111,10 @@ namespace TheATeam
 			AddChild(p2baseSprite);
 			
 			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
-			Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
+			if(AppMain.TYPEOFGAME == "SINGLE")
+				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
+			else if(AppMain.TYPEOFGAME == "DUAL")
+				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);	
 			
 			AddChild(player1);
 			AddChild(player2);
@@ -170,9 +174,7 @@ namespace TheATeam
 			p2ManaSprite.Quad.S = new Vector2(122.0f, 26.0f);
 			p2ManaSprite.Position = new Vector2(771, screenHeight - 29);
 			
-//			playerPointer = new SpriteUV(TextureManager.Get("pointer"));
-//			playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
-//			playerPointer.CenterSprite();
+			
 			
 			AddChild(hudBar);
 			AddChild(p1HealthSprite);
@@ -181,7 +183,14 @@ namespace TheATeam
 			AddChild(p2ShieldhpSprite);
 			AddChild(p1ManaSprite);
 			AddChild(p2ManaSprite);
-			//AddChild(playerPointer);
+			
+			if(pointerOn)
+			{
+				playerPointer = new SpriteUV(TextureManager.Get("pointer"));
+				playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
+				playerPointer.CenterSprite();
+				AddChild(playerPointer);
+			}
 			
 			InitUIElements();
 			
@@ -283,9 +292,12 @@ namespace TheATeam
 			
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
-				
-//			playerPointer.Rotation = player1.GetShootingDirection();
-//			playerPointer.Position = player1.Position;
+			
+			if(pointerOn)
+			{
+				playerPointer.Rotation = player1.GetShootingDirection();
+				playerPointer.Position = player1.Position;
+			}
 			
 			player1.Update(dt);
 			player2.Update(dt);

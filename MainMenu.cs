@@ -46,7 +46,8 @@ namespace TheATeam
 			{
 				switch(option)
 				{
-				case 1:					
+				case 1:	
+					//AppMain.TYPEOFGAME = "DUAL";
 					Info.TotalGameTime = 0f;
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();

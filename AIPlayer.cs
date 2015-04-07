@@ -107,7 +107,7 @@ namespace TheATeam
 			
 			canShoot = CanShoot();
 
-			Console.WriteLine("behav " + behaviour);
+			//Console.WriteLine("behav " + behaviour);
 			
 			switch(behaviour)
 			{
@@ -215,7 +215,7 @@ namespace TheATeam
 				return;
 			}
 			attackTimer += dt / 1000;
-			Console.WriteLine(attackTimer);
+			//Console.WriteLine(attackTimer);
 			if(attackTimer < attackTime)
 			{
 				if(ItemManager.Player2HoldingFlag && !ItemManager.Player1HoldingFlag) // while holding p1 flag (if killed player and they drop flag) - return flag
@@ -270,55 +270,55 @@ namespace TheATeam
 			
 			return p;
 		}
-		private void CheckPlayer()
-		{
-			// if player is in range
-				// if player has more hp
-					// if player is low on mana
-			
-				// if player has equal or less
-					// if ai is low on mana
-			
-			// if player is out of range
-				// does player have flag
-					// is player closer to our flag
-			
-			if(player1.Center.Distance(Center) < attackDistance)
-			{
-				if(player1.Health >= Health *1.5f)
-				{
-					if(player1.Mana < 30)
-					{
-						// not enough mana to shoot - attack
-					}
-					else
-					{
-						// retreat
-					}
-				}
-				else
-				{
-					// player similar or low hp - attack
-					
-					
-				}
-			}
-			else
-			{
-				if(ItemManager.Player1HoldingFlag)
-				{
-					if(Center.X > Director.Instance.GL.Context.GetViewport().Width / 2)
-					{
-						// player has flag and AI is in his half of the map - attack the player
-					}
-					else
-					{
-						// grab flag
-						ChangeBehaviour(Behaviour.GetFlag);
-					}
-				}
-			}
-		}
+//		private void CheckPlayer()
+//		{
+//			// if player is in range
+//				// if player has more hp
+//					// if player is low on mana
+//			
+//				// if player has equal or less
+//					// if ai is low on mana
+//			
+//			// if player is out of range
+//				// does player have flag
+//					// is player closer to our flag
+//			
+//			if(player1.Center.Distance(Center) < attackDistance)
+//			{
+//				if(player1.Health >= Health *1.5f)
+//				{
+//					if(player1.Mana < 30)
+//					{
+//						// not enough mana to shoot - attack
+//					}
+//					else
+//					{
+//						// retreat
+//					}
+//				}
+//				else
+//				{
+//					// player similar or low hp - attack
+//					
+//					
+//				}
+//			}
+//			else
+//			{
+//				if(ItemManager.Player1HoldingFlag)
+//				{
+//					if(Center.X > Director.Instance.GL.Context.GetViewport().Width / 2)
+//					{
+//						// player has flag and AI is in his half of the map - attack the player
+//					}
+//					else
+//					{
+//						// grab flag
+//						ChangeBehaviour(Behaviour.GetFlag);
+//					}
+//				}
+//			}
+//		}
 		
 		private void GetFlag()
 		{

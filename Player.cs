@@ -154,16 +154,20 @@ namespace TheATeam
 			RegenHealth(dt);
 			SlowEffect(dt);
 			
+			Position = Position + positionDelta;
+			
 			switch (AppMain.TYPEOFGAME)
 			{
 			case "DUAL":
+				HandleInput(dt);
+				break;
 			case "SINGLE":
 				
 				// Handle movement/attacks
 				HandleInput(dt);
 					
 				// Apply the movement
-				Position = Position + positionDelta;			
+							
 				break;
 				
 			case "MULTIPLAYER":
@@ -309,24 +313,21 @@ namespace TheATeam
 		
 		private void DualUpdate(float dt)
 		{
-			//no movement for dual player - Didnt think we continuing with this feature
-			if (whichPlayer == PlayerIndex.PlayerOne)
+			if(whichPlayer == PlayerIndex.PlayerOne)
 			{
-				if (Input2.GamePad0.Up.Down)
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+//				ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
+//				ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+				if (ShootingDirection.IsZero())
 				{
-					if (canShoot)
-					{
-						Shoot();
-					}
+					ShootingDirection = Direction;
 				}
-				if (Input2.GamePad0.Up.Release)
+				if (!positionDelta.IsZero())
 				{
-					canShoot = true;
+					Direction = positionDelta.Normalize();
 				}
-			}
-			else
-			{
-				if (Input2.GamePad0.Triangle.Down)
+				if (Input2.GamePad0.Triangle.Down)// .R.Down)
 				{
 					if (canShoot)
 					{
@@ -338,6 +339,62 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
+			else if(whichPlayer == PlayerIndex.PlayerTwo)
+			{
+				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
+//				ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
+//				ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+				if (ShootingDirection.IsZero())
+				{
+					ShootingDirection = Direction;
+				}
+				if (!positionDelta.IsZero())
+				{
+					Direction = positionDelta.Normalize();
+				}
+				if (Input2.GamePad0.Up.Down)// .R.Down)
+				{
+					if (canShoot)
+					{
+						Shoot();
+					}
+				}
+				if (Input2.GamePad0.Up.Release)
+				{
+					canShoot = true;
+				}
+			}
+			
+			//no movement for dual player - Didnt think we continuing with this feature
+//			if (whichPlayer == PlayerIndex.PlayerOne)
+//			{
+//				if (Input2.GamePad0.Up.Down)
+//				{
+//					if (canShoot)
+//					{
+//						Shoot();
+//					}
+//				}
+//				if (Input2.GamePad0.Up.Release)
+//				{
+//					canShoot = true;
+//				}
+//			}
+//			else
+//			{
+//				if (Input2.GamePad0.Triangle.Down)
+//				{
+//					if (canShoot)
+//					{
+//						Shoot();
+//					}
+//				}
+//				if (Input2.GamePad0.Triangle.Release)
+//				{
+//					canShoot = true;
+//				}
+//			}
 		}
 		
 		protected void HandleDirectionAnimation()
