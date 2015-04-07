@@ -199,11 +199,11 @@ namespace TheATeam
 		
 		public void ScoreGameOver(Player p1, Player p2)
 		{
-			if (Player1HoldingFlag)
+			if (Player1HoldingFlag && !Player2HoldingFlag)
 			{
 				p1.Player1Score();
 			}
-			else if (Player2HoldingFlag)
+			else if (Player2HoldingFlag && !Player1HoldingFlag)
 			{
 				p2.Player2Score();
 			}
