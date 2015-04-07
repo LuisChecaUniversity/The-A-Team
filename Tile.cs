@@ -171,7 +171,7 @@ namespace TheATeam
 			IsRegenerative = false;
 		}
 		
-		public bool WallDamage()
+		public bool WallDamage(float dt)
 		{			
 			if (!_isWall)
 			{
@@ -180,6 +180,7 @@ namespace TheATeam
 			
 			if (IsAlive)
 			{
+				RegenTile(dt);
 				if (_stats.health > _stats.MaxHealth)
 				{
 					_stats.health = _stats.MaxHealth;

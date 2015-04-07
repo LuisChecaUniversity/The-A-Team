@@ -410,13 +410,18 @@ namespace TheATeam
 							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
-						
-						// Fire + Earth -> Collsion with Walls cause damage
-						Player p = Info.P1 == this ? Info.P2 : Info.P1;
-						if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
-						{
-							_stats.health -= 10;
-						}
+					}
+				}
+			}
+			Player p = Info.P1 == this ? Info.P2 : Info.P1;
+			foreach (Tile t in p.playerTiles)
+			{
+				if (t.Key != '_' && t.Overlaps(this))
+				{
+					// Fire + Earth -> Collsion with Walls cause damage
+					if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
+					{
+						TakeDamage(1);
 					}
 				}
 			}
@@ -478,7 +483,7 @@ namespace TheATeam
 				break;
 			case "Air":
 				// Speed boost
-				_stats.moveSpeed = 2f;
+				_stats.moveSpeed = 1.5f;
 				break;
 			case "Lightning":
 				// Increased mana regen
@@ -508,7 +513,7 @@ namespace TheATeam
 			{
 				_stats.shieldRecharge = 45;
 			}
-			// Earth + Lightening -> Wall HP Regen
+			// Earth + Lightning -> Wall HP Regen
 			if ((Element == 'E' && Element2 == 'L') || (Element2 == 'E' && Element == 'L'))
 			{
 				foreach (Tile t in Tile.Collisions)

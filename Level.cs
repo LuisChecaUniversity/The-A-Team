@@ -331,7 +331,7 @@ namespace TheATeam
 //					}
 				}
 				// Remove from collisions if true
-				if (t.WallDamage())
+				if (t.WallDamage(dt))
 				{
 					Tile.Collisions.RemoveAt(i);
 					i--;
