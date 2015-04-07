@@ -21,15 +21,16 @@ namespace TheATeam
 			
 			this.AddChild(backgroundSprite);
 			
-			Font font = new Font(FontAlias.System, 25, FontStyle.Bold);
-			FontMap debugFont = new FontMap(font, 25);
+			//Font font = new Font(FontAlias.System, 25, FontStyle.Bold);
+			//FontMap debugFont = new FontMap(font, 25);
 			
-			Label lblPressto = new Label();
-			lblPressto.FontMap = debugFont;
-			lblPressto.Text = "Press Start to return to main menu";
-			lblPressto.Color = Colors.Black;
-			lblPressto.Position = new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f - 220.0f,Director.Instance.GL.Context.GetViewport().Height*0.23f);
-			this.AddChild(lblPressto);
+			//Label lblPressto = new Label();
+			//FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 48);
+			//lblPressto.FontMap = fontl;
+			//lblPressto.Text = "Press Start to return to main menu";
+			//lblPressto.Color = Colors.White;
+			//lblPressto.Position = new Vector2(Director.Instance.GL.Context.GetViewport().Width*0.5f - 220.0f,Director.Instance.GL.Context.GetViewport().Height-50.0f);
+			//this.AddChild(lblPressto);
 			
 			Camera2D.SetViewFromViewport();
 			ScheduleUpdate();

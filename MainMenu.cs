@@ -27,7 +27,7 @@ namespace TheATeam
 				
 				if(option > 4)
 					option = 1;
-				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
+				selectIcon.Position = new Vector2(340.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
 
 			}
 				
@@ -38,7 +38,7 @@ namespace TheATeam
 				
 				if(option < 1)
 					option = 4;	
-				selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
+				selectIcon.Position = new Vector2(340.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[option - 1]);
 			}
 				
 			
@@ -92,15 +92,15 @@ namespace TheATeam
 			selectTexture = new TextureInfo("/Application/assets/selectIcon.png");
 			option = 1;
 	
-			optionsPos[0] = 240.5f; 
-			optionsPos[1] = 312.0f;
-			optionsPos[2] = 384.0f;
-			optionsPos[3] = 452.0f;
+			optionsPos[0] = 222.0f; 
+			optionsPos[1] = 298.0f;
+			optionsPos[2] = 374.0f;
+			optionsPos[3] = 450.0f;
 			
 			selectIcon = new SpriteUV(selectTexture);
 			selectIcon.Quad.S = selectTexture.TextureSizef;
 			selectIcon.Scale = new Vector2(1.0f, 1.0f);
-			selectIcon.Position = new Vector2(280.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[0]);
+			selectIcon.Position = new Vector2(340.0f, Director.Instance.GL.Context.GetViewport().Height - optionsPos[0]);
 			
 			this.AddChild(sprite);
 			this.AddChild(selectIcon);
