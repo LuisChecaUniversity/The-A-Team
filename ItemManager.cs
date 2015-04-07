@@ -180,6 +180,7 @@ namespace TheATeam
 			if (p.whichPlayer == PlayerIndex.PlayerOne)
 			{
 				Player1HoldingFlag = false;
+				
 			}
 			else if (p.whichPlayer ==PlayerIndex.PlayerTwo)
 			{
@@ -194,6 +195,21 @@ namespace TheATeam
 					item.collided = false;
 					
 				}
+				if(item.Name == "Player2Flag" 
+				&& p.whichPlayer == PlayerIndex.PlayerOne)
+					{
+						Player1HoldingFlag = false;
+						item.iSprite.Visible = true;
+						item.collided = false;
+						
+					}
+				else if (item.Name == "Player1Flag" 
+				&& p.whichPlayer ==PlayerIndex.PlayerTwo)
+					{
+						Player2HoldingFlag = false;
+						item.iSprite.Visible = true;
+						item.collided = false;
+					}
 			}
 		}
 		
