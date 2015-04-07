@@ -109,8 +109,8 @@ namespace TheATeam
 			AddChild(p1baseSprite);
 			AddChild(p2baseSprite);
 			
-			player1 = new Player(player1Pos, true, player1Tiles);
-			player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
+			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
+			Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
 			
 			AddChild(player1);
 			AddChild(player2);
@@ -278,8 +278,8 @@ namespace TheATeam
 			
 			p1ShieldhpSprite.Visible = true;
 			p2ShieldhpSprite.Visible = true;
-			p1ShieldhpSprite.Quad.S = new Vector2(player1.Shieldhp, 26.0f);
-			p2ShieldhpSprite.Quad.S = new Vector2(player2.Shieldhp, 26.0f);
+			p1ShieldhpSprite.Quad.S = new Vector2(player1.Shield, 26.0f);
+			p2ShieldhpSprite.Quad.S = new Vector2(player2.Shield, 26.0f);
 			
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
@@ -331,12 +331,17 @@ namespace TheATeam
 //					}
 				}
 				// Remove from collisions if true
-				if (t.WallDamage())
+				if (t.WallDamage(dt))
 				{
 					Tile.Collisions.RemoveAt(i);
 					i--;
 				}
 			}
+			
+			// Handle player shield collision effect
+			player1.ShieldCollision(player2);
+			player2.ShieldCollision(player1);
+			
 			UpdateUIElements();
 			ItemManager.Instance.Update(dt);
 			ItemManager.Instance.ItemCollision(player1, player2);

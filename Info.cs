@@ -17,6 +17,9 @@ namespace TheATeam
 		public static Sce.PlayStation.Core.Vector2 CameraCenter { get; set; }
 		
 		public static bool IsGameOver { get; set; }
-
+		
+		public static Player P1 { get; set;}
+		
+		public static Player P2 { get; set; }
 	}
 }

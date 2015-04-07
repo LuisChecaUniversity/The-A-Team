@@ -19,6 +19,7 @@ namespace TheATeam
 	public class Stats
 	{
 		private int _maxHealth, _maxMana, _maxShield;
+		private Stats initialStats = null;
 
 		public int MaxHealth
 		{
@@ -52,7 +53,6 @@ namespace TheATeam
 
 		public int health, mana, shield;
 		public int manaCost = 30;
-		
 		public int shieldRecharge = 85;
 		public int manaRecharge = 25;
 		public int healthRecharge = 180;
@@ -63,6 +63,19 @@ namespace TheATeam
 			MaxHealth = maxHealth;
 			MaxMana = maxMana;
 			MaxShield = maxShield;
+			initialStats = (Stats)this.MemberwiseClone();
+		}
+		
+		public void Reset()
+		{
+			MaxHealth = initialStats.MaxHealth;
+			MaxMana = initialStats.MaxMana;
+			MaxShield = initialStats.MaxShield;
+			manaCost = initialStats.manaCost;
+			shieldRecharge = initialStats.shieldRecharge;
+			manaRecharge = initialStats.manaRecharge;
+			healthRecharge = initialStats.healthRecharge;
+			moveSpeed = initialStats.moveSpeed;
 		}
 	}
 	
@@ -91,6 +104,7 @@ namespace TheATeam
 		private static Dictionary<char, TileType> _types = XMLTypeLoader();
 		protected Stats _stats = new Stats();
 		private char _key;
+		private float healthTimer = 0.0f;
 
 		private bool _isWall { get { return Elements.Contains(_key); } }
 		
@@ -106,6 +120,8 @@ namespace TheATeam
 		public Vector2 Center { get { return Position + Quad.Center; } }
 
 		public bool IsCollidable { get; set; }
+		
+		public bool IsRegenerative { get; set; }
 
 		public char Key { get { return _key; } set { LoadTileProperties(value); } }
 		
@@ -152,9 +168,10 @@ namespace TheATeam
 			{
 				_stats.MaxHealth = 50;
 			}
+			IsRegenerative = false;
 		}
 		
-		public bool WallDamage()
+		public bool WallDamage(float dt)
 		{			
 			if (!_isWall)
 			{
@@ -163,6 +180,7 @@ namespace TheATeam
 			
 			if (IsAlive)
 			{
+				RegenTile(dt);
 				if (_stats.health > _stats.MaxHealth)
 				{
 					_stats.health = _stats.MaxHealth;
@@ -182,6 +200,22 @@ namespace TheATeam
 			return false;
 		}
 		
+		public void RegenTile(float dt)
+		{
+			if (IsRegenerative)
+			{
+				if (_stats.health < _stats.MaxHealth)
+				{
+					healthTimer += dt;
+					//_stats.health += _stats.healthRecharge;
+				}
+				if (healthTimer >= _stats.healthRecharge)
+				{
+					_stats.health++;
+					healthTimer = 0.0f;
+				}
+			}
+		}
 		public void TakeDamage(char element='N', int damage=10)
 		{
 			if (IsAlive && _isWall)

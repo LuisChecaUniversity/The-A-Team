@@ -165,32 +165,61 @@ namespace TheATeam
 			else if (p.Element == 'N')
 			{
 				p.ChangeTiles(item.Name);
-				p.ElementBuff(item.Name);
 				p.Element = item.Name[0];
+				p.ElementBuff(item.Name);
 			}
 			else if (p.Element2 == 'N')
 			{
-				p.ElementBuff(item.Name);
 				p.Element2 = item.Name[0];
+				p.ElementBuff(item.Name);
 			}
 		}
 		
-		public void ResetItems()
+		public void ResetItems(Player p)
 		{
+			if (p.whichPlayer == PlayerIndex.PlayerOne)
+			{
+				Player1HoldingFlag = false;
+				
+			}
+			else if (p.whichPlayer ==PlayerIndex.PlayerTwo)
+			{
+				Player2HoldingFlag = false;
+			}
+			       
 			foreach (Item item in items)
 			{
-				item.iSprite.Visible = true;
-				item.collided = false;
+				if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
+				 {
+					item.iSprite.Visible = true;
+					item.collided = false;
+					
+				}
+				if(item.Name == "Player2Flag" 
+				&& p.whichPlayer == PlayerIndex.PlayerOne)
+					{
+						Player1HoldingFlag = false;
+						item.iSprite.Visible = true;
+						item.collided = false;
+						
+					}
+				else if (item.Name == "Player1Flag" 
+				&& p.whichPlayer ==PlayerIndex.PlayerTwo)
+					{
+						Player2HoldingFlag = false;
+						item.iSprite.Visible = true;
+						item.collided = false;
+					}
 			}
 		}
 		
 		public void ScoreGameOver(Player p1, Player p2)
 		{
-			if (Player1HoldingFlag)
+			if (Player1HoldingFlag && !Player2HoldingFlag)
 			{
 				p1.Player1Score();
 			}
-			else if (Player2HoldingFlag)
+			else if (Player2HoldingFlag && !Player1HoldingFlag)
 			{
 				p2.Player2Score();
 			}
