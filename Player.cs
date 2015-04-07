@@ -412,10 +412,11 @@ namespace TheATeam
 						positionDelta = Vector2.Zero;
 						
 						// Fire + Earth -> Collsion with Walls cause damage
-						if ((Element == 'F' && Element2 == 'E') || (Element2 == 'F' && Element == 'E'))
-							{
-								_stats.health -= 10;
-							}
+						Player p = Info.P1 == this ? Info.P2 : Info.P1;
+						if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
+						{
+							_stats.health -= 10;
+						}
 					}
 				}
 			}
@@ -507,12 +508,15 @@ namespace TheATeam
 			{
 				_stats.shieldRecharge = 45;
 			}
-			// Electric + Lightening -> Wall HP Regen
+			// Earth + Lightening -> Wall HP Regen
 			if ((Element == 'E' && Element2 == 'L') || (Element2 == 'E' && Element == 'L'))
 			{
-				_stats.healthRecharge = 120;
+				foreach (Tile t in Tile.Collisions)
+				{ 
+					t.IsRegenerative = true;
+				}
 			}
-			// Electric + Air -> Tiles Grant Speed Boost
+			// Earth + Air -> Tiles Grant Speed Boost
 			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
 			{
 				_stats.moveSpeed = 2f;

@@ -109,8 +109,8 @@ namespace TheATeam
 			AddChild(p1baseSprite);
 			AddChild(p2baseSprite);
 			
-			player1 = new Player(player1Pos, true, player1Tiles);
-			player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
+			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
+			Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
 			
 			AddChild(player1);
 			AddChild(player2);

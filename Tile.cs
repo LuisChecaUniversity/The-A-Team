@@ -104,6 +104,7 @@ namespace TheATeam
 		private static Dictionary<char, TileType> _types = XMLTypeLoader();
 		protected Stats _stats = new Stats();
 		private char _key;
+		private float healthTimer = 0.0f;
 
 		private bool _isWall { get { return Elements.Contains(_key); } }
 		
@@ -119,6 +120,8 @@ namespace TheATeam
 		public Vector2 Center { get { return Position + Quad.Center; } }
 
 		public bool IsCollidable { get; set; }
+		
+		public bool IsRegenerative { get; set; }
 
 		public char Key { get { return _key; } set { LoadTileProperties(value); } }
 		
@@ -165,6 +168,7 @@ namespace TheATeam
 			{
 				_stats.MaxHealth = 50;
 			}
+			IsRegenerative = false;
 		}
 		
 		public bool WallDamage()
@@ -195,6 +199,22 @@ namespace TheATeam
 			return false;
 		}
 		
+		public void RegenTile(float dt)
+		{
+			if (IsRegenerative)
+			{
+				if (_stats.health < _stats.MaxHealth)
+				{
+					healthTimer += dt;
+					//_stats.health += _stats.healthRecharge;
+				}
+				if (healthTimer >= _stats.healthRecharge)
+				{
+					_stats.health++;
+					healthTimer = 0.0f;
+				}
+			}
+		}
 		public void TakeDamage(char element='N', int damage=10)
 		{
 			if (IsAlive && _isWall)
