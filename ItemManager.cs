@@ -53,11 +53,11 @@ namespace TheATeam
 
 		public void initElements(Scene curScene)
 		{
-			Vector2 pos1 = new Vector2(480, 50);
-			Vector2 pos2 = new Vector2(480, 150);
+			Vector2 pos1 = new Vector2(400, 50);
+			Vector2 pos2 = new Vector2(560, 150);
 			Vector2 pos3 = new Vector2(480, 250);
-			Vector2 pos4 = new Vector2(480, 350);
-			Vector2 pos5 = new Vector2(480, 450);
+			Vector2 pos4 = new Vector2(400, 350);
+			Vector2 pos5 = new Vector2(560, 450);
 			
 			lightningElement = new Item(curScene, pos1, lightningIndex, ItemType.element, "Lightning");
 			airElement = new Item(curScene, pos2, airIndex, ItemType.element, "Air");

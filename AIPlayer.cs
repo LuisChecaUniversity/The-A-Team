@@ -21,12 +21,12 @@ namespace TheATeam
 		private Vector2 velocity;
 		private Vector2 target, finalTarget;
 		private Waypoint targetWP;
-		private float maxSpeed = 15.0f;
+		private float maxSpeed = 20.0f;
 		private PathFinder pathfinder;
 		private bool havePath = false;
-		private Behaviour behaviour = Behaviour.Attacking;
+		private Behaviour behaviour = Behaviour.SeekElement;
 		private float attackDistance = 200.0f;
-		private float attackTime = 6.0f;
+		private float attackTime = 2.5f;
 		private float attackTimer = 0.0f;
 		private float attackAngle;
 		private float maxFireRate = 600.0f;
@@ -104,31 +104,10 @@ namespace TheATeam
 		
 		void updateBehaviours(float dt)
 		{
-			// if player is in range attack them
-			Vector2 toPlayer = player1.Center - Center;
-			Vector2 ahead = new Vector2(Center.X + Vec2DNormalize(toPlayer).X * attackDistance* 2/3, Center.Y + Vec2DNormalize(toPlayer).Y * attackDistance* 2/3);
-			Vector2 ahead2 = new Vector2(Center.X + Vec2DNormalize(toPlayer).X * attackDistance* 1/3, Center.Y + Vec2DNormalize(toPlayer).Y * attackDistance * 1/3);
 			
-			if(player1.Center.Distance(Center) < attackDistance)
-			{
-				foreach(Tile t in Tile.Collisions)
-				{
-					if(!LineIntersectsTile(ahead, t) && !LineIntersectsTile(ahead2, t))
-					{
-						Shoot(player1.Center);
-					}
-				}
-			}
-			
-			if(targetWP != null)
-			{
-				if(targetWP.tile.IsCollidable && targetWP.tile.Key != Element)
-				{
-					if(_stats.mana > _stats.MaxMana/2)
-						Shoot (targetWP.tile.Center);
-				}
-			}
-			
+			canShoot = CanShoot();
+
+			Console.WriteLine("behav " + behaviour);
 			
 			switch(behaviour)
 			{
@@ -142,8 +121,20 @@ namespace TheATeam
 				SeekElement();
 				break;
 			case Behaviour.Attacking:
-					Attack ();
+					Attack (dt);
 				break;
+			}
+			
+			if(canShoot)
+				Shoot(player1.Center);
+			
+			if(targetWP != null)
+			{
+				if(targetWP.tile.IsCollidable && targetWP.tile.Key != Element)
+				{
+					if(_stats.mana > _stats.MaxMana/2)
+						Shoot (targetWP.tile.Center);
+				}
 			}
 			
 //			// if have flag and low hp avoid player + return flag
@@ -190,38 +181,90 @@ namespace TheATeam
 //				break;
 //			}
 		}
-		private void Attack()
+		private bool CanShoot()
 		{
-			if(!havePath)
+			Vector2 toPlayer = player1.Center - Center;
+			Vector2 ahead = new Vector2(Center.X + Vec2DNormalize(toPlayer).X * attackDistance* 2/3, Center.Y + Vec2DNormalize(toPlayer).Y * attackDistance* 2/3);
+			Vector2 ahead2 = new Vector2(Center.X + Vec2DNormalize(toPlayer).X * attackDistance* 1/3, Center.Y + Vec2DNormalize(toPlayer).Y * attackDistance * 1/3);
+			
+			if(player1.Center.Distance(Center) < attackDistance)
 			{
-				finalTarget = attackPosition();
-				FindPath(finalTarget);
+				foreach(Tile t in Tile.Collisions)
+				{
+					if(!LineIntersectsTile(ahead, t) && !LineIntersectsTile(ahead2, t))
+					{
+						return true;
+					}
+				}
 			}
-			if(Center.Distance(finalTarget) < 30.0)
+			return false;
+		}
+		
+		private void Attack(float dt)
+		{
+			if(ItemManager.Player1HoldingFlag && !ItemManager.Player2HoldingFlag) // if p1 has flag and AI doesnt - rush flag
 			{
-				Vector2 point;
-				if(ItemManager.Player1HoldingFlag)
-					point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * 250.0f;
-				else
-					point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * 250.0f;
-				Vector2 p = new Vector2(point.X * FMath.Cos(attackAngle) + point.Y * FMath.Sin(attackAngle), point.X * -FMath.Sin(attackAngle) + point.Y * FMath.Cos(attackAngle)); 
-				if(p.Distance(finalTarget) > 75.0f)
-					havePath = false;
-				
+				ChangeBehaviour(Behaviour.GetFlag);
+				attackTimer = 0.0f;
+				return;
+			}
+			else if(!ItemManager.Player2HoldingFlag && Center.Distance(player1.Center) > Center.Distance(player1Flag.position)) // if flag is closer then the player - grab flag
+			{
+				ChangeBehaviour(Behaviour.GetFlag);
+				attackTimer = 0.0f;
+				return;
+			}
+			attackTimer += dt / 1000;
+			Console.WriteLine(attackTimer);
+			if(attackTimer < attackTime)
+			{
+				if(ItemManager.Player2HoldingFlag && !ItemManager.Player1HoldingFlag) // while holding p1 flag (if killed player and they drop flag) - return flag
+				{
+					ChangeBehaviour(Behaviour.ReturnFlag);
+					return;
+				}
+				if(!havePath)
+				{
+					finalTarget = attackPosition();
+					FindPath(finalTarget);
+				}
+				if(Center.Distance(finalTarget) < 30.0)
+				{
+					Vector2 point;
+					if(ItemManager.Player1HoldingFlag)
+						point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * 250.0f;
+					else
+						point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * 250.0f;
+					Vector2 p = new Vector2(point.X * FMath.Cos(attackAngle) + point.Y * FMath.Sin(attackAngle), point.X * -FMath.Sin(attackAngle) + point.Y * FMath.Cos(attackAngle)); 
+					if(p.Distance(finalTarget) > 75.0f || (p.Distance(finalTarget) < 75.0f && !canShoot))
+						havePath = false;
+				}
+			}
+			else if(player1.Center.Distance(Center) < attackDistance)
+			{
+				attackTimer = 0.0f;
+			}
+			else
+			{
+				ChangeBehaviour(Behaviour.GetFlag);
+				attackTimer = 0.0f;
 			}
 		}
 		private Vector2 attackPosition()
 		{
+			float attackGap = 250.0f;
+			if(!canShoot)
+				attackGap = Info.Rnd.Next(-10, 250);
 			Vector2 point;
-			if(ItemManager.Player1HoldingFlag)
-				point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * 250.0f;
+			if(ItemManager.Player1HoldingFlag || player1.Center.X > Director.Instance.GL.Context.GetViewport().Width * 0.66f)
+				point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * attackGap;
 			else
-				point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * 250.0f;
+				point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * attackGap;
 			attackAngle = FMath.Radians(Info.Rnd.Next(-10, 10));
 			
 			//(x cos alpha + y sin alpha, -x sin alpha + y cos alpha)
 			Vector2 p = new Vector2(point.X * FMath.Cos(attackAngle) + point.Y * FMath.Sin(attackAngle), point.X * -FMath.Sin(attackAngle) + point.Y * FMath.Cos(attackAngle)); 
-			Console.WriteLine("AP " + p);
+			
 			if(p.X > Director.Instance.GL.Context.GetViewport().Width || p.Y > Director.Instance.GL.Context.GetViewport().Height || p.X < 0 || p.Y < 0)
 				p = attackPosition();
 			
@@ -279,36 +322,112 @@ namespace TheATeam
 		
 		private void GetFlag()
 		{
+			if(!ItemManager.Player1HoldingFlag)
+			{
+				if(ItemManager.Player2HoldingFlag)
+				{
+					ChangeBehaviour(Behaviour.ReturnFlag);
+					return;
+				}
+				else if(Element == 'N')
+				{
+					ChangeBehaviour(Behaviour.SeekElement);
+					return;
+				}
+				else if(player1.Center.Distance(Center) < attackDistance)
+				{
+					if(Center.Distance(player1.Center) < Center.Distance(player1Flag.position))
+					{
+						ChangeBehaviour(Behaviour.Attacking);
+						return;
+					}
+				}
+			}
+			else if(ItemManager.Player2HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.ReturnFlag);
+				return;
+			}
+//			
+//			if(Element == 'N' && !ItemManager.Player1HoldingFlag)
+//			{
+//				ChangeBehaviour(Behaviour.SeekElement);
+//				return;
+//			}
+//			if(ItemManager.Player2HoldingFlag && !ItemManager.Player1HoldingFlag)
+//			{
+//				ChangeBehaviour(Behaviour.ReturnFlag);
+//			}
+//			else if(player1.Center.Distance(Center) < attackDistance)
+//			{
+//				if(Center.Distance(player1.Center) < Center.Distance(player1Flag.position))
+//				{
+//					ChangeBehaviour(Behaviour.Attacking);
+//				}
+//			}
+
+			
 			if(!havePath)
 			{
 				finalTarget = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position;
 				FindPath(finalTarget);
 			}
 			
-			if(ItemManager.Player2HoldingFlag)
-			{
-				ChangeBehaviour(Behaviour.ReturnFlag);
-			}
 		}
 		
 		private void ReturnFlag()
 		{
+			if(ItemManager.Player1HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.Attacking);
+				return;
+			}
 			if(!havePath)
 			{
 				finalTarget = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position;
 				FindPath(finalTarget);
 			}
+	
+			
 		}
 		private void SeekElement()
 		{
 			if(Element == 'N' || Element2 == 'N')
 			{
+				if(player1.Element == 'N' && player1.Center.Distance(Center) < attackDistance)
+				{
+					ChangeBehaviour(Behaviour.Attacking);
+					return;
+				}
+				
 				if(!havePath)
 				{
-					Item closest = ClosestItem();
-				
-					if(elementTarget != closest)
-						elementTarget = closest;
+					switch(Info.Rnd.Next(1,5))
+					{
+						case 1:
+						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Fire");
+						break;
+						case 2:
+						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Water");
+						break;
+						case 3:
+						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Earth");
+						break;
+						case 4:
+						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Air");
+						break;
+						case 5:
+						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Lightning");
+						break;
+					}
+					if(elementTarget.collided)
+					{
+						elementTarget = ClosestItem();
+					}
+//					Item closest = ClosestItem();
+//				
+//					if(elementTarget != closest)
+//						elementTarget = closest;
 					
 					finalTarget = elementTarget.position;
 					FindPath(finalTarget);
@@ -316,6 +435,8 @@ namespace TheATeam
 				
 				if(elementTarget.collided)
 					havePath = false;
+				
+				
 			}
 			else
 			{

@@ -49,30 +49,6 @@ namespace TheATeam
 			target = player.Center;
 		}
 		
-		// --------------- To Delete ------------------ //
-//		public Vector2 GetTarget()
-//		{
-//			if (path.Count > 0)
-//			{
-//				target = path[0].tile.Center;
-//				if (player.Center.Distance(path[0].tile.Center) <= 30.0f)
-//					path.RemoveAt(0);
-//		
-//				return target;
-//			}
-//			else
-//			{
-//				return target;
-//			}
-//		}
-		// --------------- To Delete ------------------ //
-//		public int PathLength()
-//		{
-//			if(path != null)
-//				return path.Count;
-//			else
-//				return 0;
-//		}
 		private void InitWaypoints()
 		{
 			int i = 0;
@@ -143,31 +119,7 @@ namespace TheATeam
 				outputPath(n.parent);
 			path.Add(n);
 		}
-		// --------------- To Delete ------------------ //
-//		public void FindPath(Vector2 target)
-//		{
-//			Waypoint p = FindNearestWaypoint(target);
-//			if(null != p)
-//				FindPath(p.tile);
-//			// if path is null, get connections of p and find path again ect
-//			if(path.Count <= 0)
-//			{
-//				int connection = 0;
-//				while(path.Count == 0)
-//				{
-//					float width = p.tile.Quad.Point11.X;
-//					float height = p.tile.Quad.Point11.Y;
-//				
-//					Waypoint right = FindWaypoint(new Vector2(p.tile.Center.X + width, p.tile.Center.Y));	
-//					if(right != null)
-//					{
-//						FindPath (right.tile.Center);
-//					}
-//					
-//				}
-//			}
-//
-//		}
+
 		
 		public List<Waypoint> FindPath(Vector2 destination)
 		{
@@ -179,7 +131,7 @@ namespace TheATeam
 			Waypoint current = FindNearestWaypoint(player.Center);
 			Waypoint target = FindNearestWaypoint(destination);
 			current.parent = null;
-			//origin->SetValues(0.0, Origin->CalcHCost(Target));
+
 			open.Add(current);
 		
 			
@@ -203,7 +155,6 @@ namespace TheATeam
 				// have we reached target
 				if (current.tile.Center == target.tile.Center)
 				{
-					
 					open.Clear();
 					closed.Add(current);
 					outputPath(current);//outputPath(FindNode(target));
