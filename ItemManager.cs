@@ -175,12 +175,15 @@ namespace TheATeam
 			}
 		}
 		
-		public void ResetItems()
+		public void ResetItems(Player p)
 		{
 			foreach (Item item in items)
 			{
+				if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
+				 {
 				item.iSprite.Visible = true;
 				item.collided = false;
+				}
 			}
 		}
 		

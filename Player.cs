@@ -410,6 +410,12 @@ namespace TheATeam
 							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
 						}
 						positionDelta = Vector2.Zero;
+						
+						// Fire + Earth -> Collsion with Walls cause damage
+						if ((Element == 'F' && Element2 == 'E') || (Element2 == 'F' && Element == 'E'))
+							{
+								_stats.health -= 10;
+							}
 					}
 				}
 			}
@@ -501,6 +507,18 @@ namespace TheATeam
 			{
 				_stats.shieldRecharge = 45;
 			}
+			// Electric + Lightening -> Wall HP Regen
+			if ((Element == 'E' && Element2 == 'L') || (Element2 == 'E' && Element == 'L'))
+			{
+				_stats.healthRecharge = 120;
+			}
+			// Electric + Air -> Tiles Grant Speed Boost
+			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+			{
+				_stats.moveSpeed = 2f;
+			}
+			// Fire + Earth -> Collsion with Walls cause damage, implemented in Handle Collisions()
+			
 		}
 		
 		public void TakeDamage(int dmg)
@@ -515,7 +533,8 @@ namespace TheATeam
 			}
 			else
 			{
-				ItemManager.Instance.ResetItems();
+				
+				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
 				_stats.mana = _stats.MaxMana;
