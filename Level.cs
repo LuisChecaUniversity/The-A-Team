@@ -50,7 +50,7 @@ namespace TheATeam
 		private SpriteUV playerPointer;
 		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
-		private bool pointerOn = true;
+		private bool pointerOn = false;
 		
 		public Level(): base()
 		{

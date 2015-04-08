@@ -230,13 +230,17 @@ namespace TheATeam
 				}
 				if(Center.Distance(finalTarget) < 30.0)
 				{
+					float attackGap = 250.0f;
+					if(!canShoot)
+						attackGap = Info.Rnd.Next(-10, 250);
+					
 					Vector2 point;
 					if(ItemManager.Player1HoldingFlag)
-						point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * 250.0f;
+						point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * attackGap;
 					else
-						point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * 250.0f;
+						point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * attackGap;
 					Vector2 p = new Vector2(point.X * FMath.Cos(attackAngle) + point.Y * FMath.Sin(attackAngle), point.X * -FMath.Sin(attackAngle) + point.Y * FMath.Cos(attackAngle)); 
-					if(p.Distance(finalTarget) > 75.0f || (p.Distance(finalTarget) < 75.0f && !canShoot))
+					if(p.Distance(finalTarget) > 75.0f)// || (p.Distance(finalTarget) < 75.0f && !canShoot))
 						havePath = false;
 				}
 			}

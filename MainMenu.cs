@@ -64,6 +64,7 @@ namespace TheATeam
 					break;
 					
 				case 3:
+					AppMain.TYPEOFGAME = "DUAL";
 					Info.TotalGameTime = 0f;
 					Level placingTest = new Level();
 					placingTest.Camera.SetViewFromViewport();
