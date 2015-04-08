@@ -604,6 +604,7 @@ namespace TheATeam
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
 				_stats.mana = _stats.MaxMana;
+				_stats.moveSpeed = 1.0f;
 				ElementBuff("Neutral");
 				ChangeTiles("Neutral");
 				Element = 'N';

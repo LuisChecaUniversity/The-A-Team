@@ -174,9 +174,9 @@ namespace TheATeam
 					if(successor.tile.IsCollidable) 
 					{
 						if(successor.tile.Key != player.Element)
-							G *= 1.1f;
+							G *= 1.3f;
 						else if(player.Element == 'N' && successor.tile.Key == player.Element)
-							G *= 1.1f;
+							G *= 5.0f;
 					}
 					
 					H = successor.CalculateHCost(target.tile);
