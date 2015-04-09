@@ -317,8 +317,7 @@ namespace TheATeam
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
-//				ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
-//				ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+
 				if (ShootingDirection.IsZero())
 				{
 					ShootingDirection = Direction;
@@ -343,8 +342,7 @@ namespace TheATeam
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
-//				ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
-//				ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+
 				if (ShootingDirection.IsZero())
 				{
 					ShootingDirection = Direction;
@@ -495,6 +493,7 @@ namespace TheATeam
 				}
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
+				ShootingDirection.Normalize();
 				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
@@ -713,7 +712,7 @@ namespace TheATeam
 					switch (ShieldEffect)
 					{
 					case ShieldEffect.Damage:
-						p.TakeDamage(50);
+						p.TakeDamage(1);
 						break;
 					case ShieldEffect.KnockBack:
 						p.Position = p.Position - (new Vector2(50) * p.Direction);

@@ -355,7 +355,6 @@ namespace TheATeam
 			player2.ShieldCollision(player1);
 			
 			UpdateUIElements();
-			ItemManager.Instance.Update(dt);
 			ItemManager.Instance.ItemCollision(player1, player2);
 			ItemManager.Instance.ScoreGameOver(player1, player2);
 		}

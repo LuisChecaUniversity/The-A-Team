@@ -130,7 +130,6 @@ namespace TheATeam
 					//check player 2 with items
 					if (item.hasCollided(p2.Position, p2Size))
 					{
-						//Console.WriteLine("Collided with " + item.Name);
 						item.iSprite.Visible = false;
 						item.collided = true;
 						if (item.Type == ItemType.element)
@@ -189,27 +188,29 @@ namespace TheATeam
 			       
 			foreach (Item item in items)
 			{
-				if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
-				 {
-					item.iSprite.Visible = true;
-					item.collided = false;
-					
-				}
-				if(item.Name == "Player2Flag" 
-				&& p.whichPlayer == PlayerIndex.PlayerOne)
+				if(item.collided)
+				{
+					if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
+					 {
+						item.iSprite.Visible = true;
+						item.collided = false;
+						
+					}
+					if(item.Name == "Player2Flag" && p.whichPlayer == PlayerIndex.PlayerOne)
 					{
 						Player1HoldingFlag = false;
 						item.iSprite.Visible = true;
 						item.collided = false;
 						
 					}
-				else if (item.Name == "Player1Flag" 
-				&& p.whichPlayer ==PlayerIndex.PlayerTwo)
+					else if (item.Name == "Player1Flag" && p.whichPlayer ==PlayerIndex.PlayerTwo)
 					{
+						Console.WriteLine("Reset " + item.Name);	
 						Player2HoldingFlag = false;
 						item.iSprite.Visible = true;
 						item.collided = false;
 					}
+				}
 			}
 		}
 		

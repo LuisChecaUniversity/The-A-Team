@@ -99,6 +99,7 @@ namespace TheATeam
 			base.UpdateShield(dt);
 			base.SlowEffect(dt);
 			base.RegenHealth(dt);
+			//Console.WriteLine("after");
 
 		}
 		
@@ -107,7 +108,7 @@ namespace TheATeam
 			
 			canShoot = CanShoot();
 
-			//Console.WriteLine("behav " + behaviour);
+			//Console.WriteLine(ItemManager.Instance.GetAllItems().Count);
 			
 			switch(behaviour)
 			{
@@ -349,7 +350,9 @@ namespace TheATeam
 			}
 			else if(ItemManager.Player2HoldingFlag)
 			{
+				
 				ChangeBehaviour(Behaviour.ReturnFlag);
+				
 				return;
 			}
 //			
@@ -381,6 +384,11 @@ namespace TheATeam
 		
 		private void ReturnFlag()
 		{
+			if(!ItemManager.Player2HoldingFlag)
+			{
+				ChangeBehaviour(Behaviour.GetFlag);
+				return;
+			}
 			if(ItemManager.Player1HoldingFlag)
 			{
 				ChangeBehaviour(Behaviour.Attacking);
