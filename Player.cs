@@ -326,14 +326,14 @@ namespace TheATeam
 				{
 					Direction = positionDelta.Normalize();
 				}
-				if (Input2.GamePad0.Triangle.Down)// .R.Down)
+				if (Input2.GamePad0.Up.Down)// .R.Down)
 				{
 					if (canShoot)
 					{
 						Shoot();
 					}
 				}
-				if (Input2.GamePad0.Triangle.Release)
+				if (Input2.GamePad0.Up.Release)
 				{
 					canShoot = true;
 				}
@@ -351,14 +351,14 @@ namespace TheATeam
 				{
 					Direction = positionDelta.Normalize();
 				}
-				if (Input2.GamePad0.Up.Down)// .R.Down)
+				if (Input2.GamePad0.Triangle.Down)// .R.Down)
 				{
 					if (canShoot)
 					{
 						Shoot();
 					}
 				}
-				if (Input2.GamePad0.Up.Release)
+				if (Input2.GamePad0.Triangle.Release)
 				{
 					canShoot = true;
 				}
