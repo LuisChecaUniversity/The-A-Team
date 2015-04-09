@@ -782,13 +782,17 @@ namespace TheATeam
 			#endregion
 			
 			#region Assign label values
+//			lblTopLeft.FontMap = debugFont;
+//			lblTopLeft.Text = "Player 1";
+//			lblTopLeft.Position = new Vector2 (100, screenHeight - 200);
+			
 			lblTopLeft.FontMap = debugFont;
-			lblTopLeft.Text = "Player 1";
-			lblTopLeft.Position = new Vector2 (100, screenHeight - 200);
+			lblTopLeft.Text = "My Details";
+			lblTopLeft.Position = new Vector2 (100, screenHeight - 100);
 			
 			lblTopRight.FontMap = debugFont;
-			lblTopRight.Text = "Player 2";
-			lblTopRight.Position = new Vector2(screenWidth - 200, screenHeight - 200);
+			lblTopRight.Text = "Available Players";
+			lblTopRight.Position = new Vector2(screenWidth - 300, screenHeight - 100);
 			
 			lblBottomLeft.FontMap = debugFont;
 			lblBottomLeft.Text = "Waiting";
@@ -798,13 +802,13 @@ namespace TheATeam
 			lblBottomRight.Text = "Waiting";
 			lblBottomRight.Position = new Vector2(screenWidth -200, 300);
 			
-			lblDebugLeft.FontMap = debugFont;
-			lblDebugLeft.Text = "Waiting for both connections";
-			lblDebugLeft.Position = new Vector2(430, 200);
+//			lblDebugLeft.FontMap = debugFont;
+//			lblDebugLeft.Text = "Waiting for both connections";
+//			lblDebugLeft.Position = new Vector2(430, 200);
 			
-			lblDebugCenter.FontMap = debugFont;
-			lblDebugCenter.Text = "----";
-			lblDebugCenter.Position = new Vector2(430, 100);
+//			lblDebugCenter.FontMap = debugFont;
+//			lblDebugCenter.Text = "----";
+//			lblDebugCenter.Position = new Vector2(430, 100);
 			
 			
 			

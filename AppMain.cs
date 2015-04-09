@@ -126,10 +126,10 @@ namespace TheATeam
 				uiScene.RootWidget.AddChildFirst(button);
 				uiScene.RootWidget.AddChildFirst(buttonMulti);
 			
-			TYPEOFGAME = "SINGLE";
-							graphics.Dispose();
-							runningDirector = true;
-							InitDirector();
+			//TYPEOFGAME = "SINGLE";
+							//graphics.Dispose();
+							//runningDirector = true;
+							//dInitDirector();
 
 		}
 		
