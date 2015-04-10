@@ -8,6 +8,8 @@
     <tiletype k='L' tx='0'  ty='1' c='1' />
     <tiletype k='1' tx='0'  ty='0' c='0' />
     <tiletype k='2' tx='0'  ty='0' c='0' />
+	<tiletype k='3' tx='0'  ty='0' c='0' />
+	<tiletype k='4' tx='0'  ty='0' c='0' />
     <tiletype k='_' tx='0'  ty='0' c='0' />
     <tiletype k='B' tx='3'  ty='0' c='0' />
 </tiletypes>

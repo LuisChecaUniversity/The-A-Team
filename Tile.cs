@@ -271,7 +271,8 @@ namespace TheATeam
 			return types;
 		}
 		
-		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, Scene scene)
+		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, 
+		                          ref Vector2 p1Flag, ref Vector2 p2Flag, Scene scene)
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
@@ -317,6 +318,14 @@ namespace TheATeam
 					if (c == '2')
 					{
 						player2Pos = new Vector2(pos.X + Width, pos.Y);
+					}
+					if(c== '3')
+					{
+						p1Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
+					}
+					if(c== '4')
+					{
+						p2Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
 					}
 
 					// End col: Move to next tile "grid"

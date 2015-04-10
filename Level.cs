@@ -78,10 +78,13 @@ namespace TheATeam
 						
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
-			string level = "/Application/assets/level" + /*Info.Rnd.Next(2,6)*/4 + ".txt";
+			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
+			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
+			
+			string level = "/Application/assets/level" + Info.Rnd.Next(2,6) + ".txt";
 			if(AppMain.TYPEOFGAME == "DUAL")
 				level = "/Application/assets/level1.txt";
-			Tile.Loader(level, ref player1Pos, ref player2Pos, this);
+			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
 			{
@@ -105,12 +108,12 @@ namespace TheATeam
 			
 			p1baseSprite = new SpriteUV(TextureManager.Get("base"));
 			p1baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
-			p1baseSprite.Position = new Vector2(p1baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			p1baseSprite.Position = p1Flag;//new Vector2(p1baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
 			p1baseSprite.CenterSprite();
 			
 			p2baseSprite = new SpriteUV(TextureManager.Get("base"));
 			p2baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
-			p2baseSprite.Position = new Vector2(screenWidth - p2baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			p2baseSprite.Position = p2Flag;//new Vector2(screenWidth - p2baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
 			p2baseSprite.CenterSprite();
 			
 			AddChild(p1baseSprite);
@@ -149,7 +152,7 @@ namespace TheATeam
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
 			ItemManager.Instance.initFlags(this, p1baseSprite.Position, p2baseSprite.Position);
-			//ItemManager.Instance.initFlags(this, new Vector2(30, 290), new Vector2(926, 290));
+			
 			AddChild(blockedAreaSprite);
 			AddChild(lblTopLeft);
 			AddChild(lblTopRight);
@@ -481,7 +484,7 @@ namespace TheATeam
 							if (t.Key != 'N' && playerDeployed < maxDeployed)
 							{
 								// returns player 1 flag and checks if touch pos collides with it
-								if (!t.Overlaps(p1baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
+								if (!t.Overlaps(p1baseSprite) || !t.Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
 								{
 									t.Key = 'N';
 									Tile.Collisions.Add(t);

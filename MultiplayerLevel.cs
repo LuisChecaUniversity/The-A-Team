@@ -52,10 +52,12 @@ namespace TheATeam
 			Info.IsGameOver = false;
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
+			Vector2 p1Flag = Vector2.Zero;//new Vector2(p1baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			Vector2 p2Flag = Vector2.Zero; //new Vector2(screenWidth - p2baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
 			
             AddChild(new Background());
 			
-			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
+			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos,ref p1Flag, ref p2Flag, this);
 			for (int i = 0; i < 8; i++) 
 				{
 					for (int j = 0; j < 5; j++) 
