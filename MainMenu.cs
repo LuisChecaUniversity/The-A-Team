@@ -42,7 +42,7 @@ namespace TheATeam
 			}
 				
 			
-			if(Input2.GamePad0.Square.Press)
+			if(Input2.GamePad0.Cross.Press)
 			{
 				switch(option)
 				{

@@ -41,7 +41,6 @@ namespace TheATeam
 		{
 			this.player1 = player1;
 			velocity = new Vector2(0.0f, 0.0f);
-			//Position = new Vector2(400.0f, 300.0f);
 			target = Position;
 			finalTarget = Position;
 			pathfinder = new PathFinder(this);
@@ -58,10 +57,6 @@ namespace TheATeam
 			if(player2Flag == null)
 				player2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 
-//			if(!ItemManager.Instance.GetItem(ItemType.element, "Water").collided && Element == 'N')
-//				target = ItemManager.Instance.GetItem(ItemType.element, "Water").position;
-//			else if(Element == 'N')
-//				target = ItemManager.Instance.GetItem(ItemType.element, "Fire").position;
 			List<TouchData> touches = Touch.GetData(0);
 			foreach(TouchData data in touches)
 			{
@@ -78,17 +73,7 @@ namespace TheATeam
 			updateBehaviours(dt);
 			
 			MoveInHeadingDirection(dt);
-			HandleCollision();
-			
-//			if(Position.Distance(target) > 5.0f)
-//			{
-//				base.Direction = Vec2DNormalize(velocity);
-//			}
-//			else
-//			{
-//				base.Direction = Vec2DNormalize(player1.Position - Position);
-//			}
-			
+			HandleCollision();			
 			
 			shootTimer += dt;
 			
@@ -99,16 +84,12 @@ namespace TheATeam
 			base.UpdateShield(dt);
 			base.SlowEffect(dt);
 			base.RegenHealth(dt);
-			//Console.WriteLine("after");
-
 		}
 		
 		void updateBehaviours(float dt)
 		{
 			
 			canShoot = CanShoot();
-
-			//Console.WriteLine(ItemManager.Instance.GetAllItems().Count);
 			
 			switch(behaviour)
 			{
@@ -138,49 +119,6 @@ namespace TheATeam
 				}
 			}
 			
-//			// if have flag and low hp avoid player + return flag
-//			// if low mana and attack player greater distance
-//			// if low hp only attack player when player mana low
-//
-//			if(!ItemManager.Player2HoldingFlag && ItemManager.Player1HoldingFlag && player1.Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Director.Instance.GL.Context.GetViewport().Width / 2)
-//			{
-//				ChangeBehaviour(Behaviour.CollectFlag);
-//			}
-//			//else if(player1.Position.Distance(
-//			else if(player1.Position.Distance(Position) < attackDistance  || ItemManager.Player1HoldingFlag)
-//			{
-//				ChangeBehaviour(Behaviour.Attacking);
-//			}
-//			else if( Element != 'N' && attackTimer == 0.0f)
-//			{
-//				ChangeBehaviour( Behaviour.CollectFlag);
-//			}
-//			else if(attackTimer == 0.0f)
-//			{
-//				ChangeBehaviour(Behaviour.SeekElement);
-//			}
-//			
-//			if(havePath && pathfinder.PathLength() <= 0)
-//				havePath = false;
-//			
-//			switch(behaviour)
-//			{
-//			case Behaviour.CollectFlag:
-//				if(ItemManager.Player2HoldingFlag)
-//					ReturnFlag();
-//				else
-//					CollectFlag();
-//				break;
-//			case Behaviour.SeekElement:
-//			SeekElement();
-//				break;
-//			case Behaviour.Attacking:
-//				attackTimer += dt/1000;
-//				if(attackTimer >= attackTime && player1.Position.Distance(Position) > attackDistance)
-//					attackTimer = 0.0f;
-//				AttackPlayer();
-//				break;
-//			}
 		}
 		private bool CanShoot()
 		{
@@ -275,55 +213,6 @@ namespace TheATeam
 			
 			return p;
 		}
-//		private void CheckPlayer()
-//		{
-//			// if player is in range
-//				// if player has more hp
-//					// if player is low on mana
-//			
-//				// if player has equal or less
-//					// if ai is low on mana
-//			
-//			// if player is out of range
-//				// does player have flag
-//					// is player closer to our flag
-//			
-//			if(player1.Center.Distance(Center) < attackDistance)
-//			{
-//				if(player1.Health >= Health *1.5f)
-//				{
-//					if(player1.Mana < 30)
-//					{
-//						// not enough mana to shoot - attack
-//					}
-//					else
-//					{
-//						// retreat
-//					}
-//				}
-//				else
-//				{
-//					// player similar or low hp - attack
-//					
-//					
-//				}
-//			}
-//			else
-//			{
-//				if(ItemManager.Player1HoldingFlag)
-//				{
-//					if(Center.X > Director.Instance.GL.Context.GetViewport().Width / 2)
-//					{
-//						// player has flag and AI is in his half of the map - attack the player
-//					}
-//					else
-//					{
-//						// grab flag
-//						ChangeBehaviour(Behaviour.GetFlag);
-//					}
-//				}
-//			}
-//		}
 		
 		private void GetFlag()
 		{
@@ -355,23 +244,6 @@ namespace TheATeam
 				
 				return;
 			}
-//			
-//			if(Element == 'N' && !ItemManager.Player1HoldingFlag)
-//			{
-//				ChangeBehaviour(Behaviour.SeekElement);
-//				return;
-//			}
-//			if(ItemManager.Player2HoldingFlag && !ItemManager.Player1HoldingFlag)
-//			{
-//				ChangeBehaviour(Behaviour.ReturnFlag);
-//			}
-//			else if(player1.Center.Distance(Center) < attackDistance)
-//			{
-//				if(Center.Distance(player1.Center) < Center.Distance(player1Flag.position))
-//				{
-//					ChangeBehaviour(Behaviour.Attacking);
-//				}
-//			}
 
 			
 			if(!havePath)
@@ -414,7 +286,7 @@ namespace TheATeam
 				
 				if(!havePath)
 				{
-					switch(Info.Rnd.Next(1,5))
+					switch(Info.Rnd.Next(1,6))
 					{
 						case 1:
 						elementTarget = ItemManager.Instance.GetItem(ItemType.element, "Fire");
@@ -436,10 +308,6 @@ namespace TheATeam
 					{
 						elementTarget = ClosestItem();
 					}
-//					Item closest = ClosestItem();
-//				
-//					if(elementTarget != closest)
-//						elementTarget = closest;
 					
 					finalTarget = elementTarget.position;
 					FindPath(finalTarget);
@@ -492,106 +360,12 @@ namespace TheATeam
 				havePath = false;
 			}
 		}
-//		void AttackPlayer()
-//		{
-//			if(!ItemManager.Player1HoldingFlag || !ItemManager.Player2HoldingFlag)
-//			{
-//				if(Position.Distance(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position) < Position.Distance(player1.Position))
-//				{
-//					ChangeBehaviour(Behaviour.CollectFlag);
-//					attackTimer = 0.0f;
-//					return;
-//				}
-//			}
-//			if(!havePath)
-//			{
-//				Vector2 pos = player1.Position; 
-//				if(ItemManager.Player1HoldingFlag)
-//					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag").position - player1.Position) * 250;
-//				else
-//					pos += Vec2DNormalize(ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag").position - player1.Position) * 250;
-//				
-//				if(pos.X > Director.Instance.GL.Context.GetViewport().Width || pos.Y > Director.Instance.GL.Context.GetViewport().Height)
-//					return;
-////				if(pos.X > Director.Instance.GL.Context.GetViewport().Width)
-////				{
-////					pos.X = pos.X - (pos.X - Director.Instance.GL.Context.GetViewport().Width);
-////				}
-////				if(pos.Y > Director.Instance.GL.Context.GetViewport().Height)
-////				{
-////					pos.Y = pos.Y - (pos.Y - Director.Instance.GL.Context.GetViewport().Height);
-////				}
-//				
-//				FindPath(pos);
-//			}
-//			ShootingDirection = Vec2DNormalize(player1.Position - Position);
-//			Shoot ();
-//		}
-//		void CollectFlag()
-//		{
-//			// want to know when to shoot P1 tiles...maybe mark for attack when pathfinding?
-//			Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
-//			if(target != flag.position)
-//			{
-//				if(!havePath)
-//					FindPath(flag.position);
-//			}
-//			if(pathfinder.PathLength() <= 0 && target != flag.position)
-//			{
-//				ShootingDirection = Vec2DNormalize(flag.position - Position);
-//				Shoot ();
-//			}			
-//		}
-//		void ReturnFlag()
-//		{
-//			Item flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
-//			if(target != flag.position && !havePath)
-//			{
-//				FindPath(flag.position);
-//			}
-////			if(pathfinder.PathLength() <= 0 && target != flag.position)
-////			{
-////				Shoot ();
-////			}
-//		}
+
 		void FindPath(Vector2 pos)
 		{
 			path = pathfinder.FindPath(pos);
 			havePath = true;
 		}
-//		void SeekElement()
-//		{
-//			// need to know which item im targeting so if it gets collected can swap
-//			// need to check if AI dies, reseeks element
-//			// seperate this into 2 parts. 1 find path, 2 carry out checks
-//			if(Element == 'N')
-//			{
-//				if(!havePath)
-//				{
-//					int shortestDistance = 100;
-//					Item element = ItemManager.Instance.GetItem(ItemType.element, "Fire");
-//					foreach (Item item in ItemManager.Instance.GetAllItems())
-//					{
-//						if(item.Type == ItemType.element && !item.collided)
-//						{
-//							int distance;
-//							pathfinder.FindPath(item.position);
-//							distance = pathfinder.PathLength();
-//							if (distance < shortestDistance)
-//							{
-//								shortestDistance = distance;
-//								element = item;
-//							}
-//						}
-//					}
-//					
-//					FindPath(element.position);
-//				}
-//			}
-//			else
-//				ChangeBehaviour(Behaviour.CollectFlag);
-//			
-//		}
 		
 		private void UpdateTarget()
 		{
@@ -816,8 +590,6 @@ namespace TheATeam
 			}
 			
 		}
-
-		
 	}
 }
 
