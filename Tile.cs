@@ -220,7 +220,10 @@ namespace TheATeam
 		{
 			if (IsAlive && _isWall)
 			{
-				_stats.health += damage * (element == Key ? 1 : -1);
+				if(element == 'N')
+					_stats.health -= damage;
+				else
+					_stats.health += damage * (element == Key ? 1 : -1);
 			}
 		}
 		
@@ -313,7 +316,7 @@ namespace TheATeam
 					// Player 2 start
 					if (c == '2')
 					{
-						player2Pos = pos;
+						player2Pos = new Vector2(pos.X + Width, pos.Y);
 					}
 
 					// End col: Move to next tile "grid"

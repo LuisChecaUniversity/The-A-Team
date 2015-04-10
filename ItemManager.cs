@@ -37,13 +37,13 @@ namespace TheATeam
 			items = new List<Item>();
 		}
 
-		public void initFlags(Scene curScene)
+		public void initFlags(Scene curScene, Vector2 p1Flag, Vector2 p2Flag)
 		{
 			Player1HoldingFlag = false;
 			Player2HoldingFlag = false;
-			FirstFlag = new Vector2(30, 290);
+			FirstFlag = p1Flag;//new Vector2(30, 290);
+			SecondFlag = p2Flag;//new Vector2(926, 290);
 			leftFlag = new Item(curScene, FirstFlag, flagIndex, ItemType.flag, "Player1Flag");
-			SecondFlag = new Vector2(926, 290);
 			rightFlag = new Item(curScene, SecondFlag, flagIndex, ItemType.flag, "Player2Flag");
 			
 			items.Clear();
@@ -54,9 +54,9 @@ namespace TheATeam
 		public void initElements(Scene curScene)
 		{
 			Vector2 pos1 = new Vector2(400, 50);
-			Vector2 pos2 = new Vector2(560, 150);
+			Vector2 pos2 = new Vector2(570, 140);
 			Vector2 pos3 = new Vector2(480, 250);
-			Vector2 pos4 = new Vector2(400, 350);
+			Vector2 pos4 = new Vector2(390, 370);
 			Vector2 pos5 = new Vector2(560, 450);
 			
 			lightningElement = new Item(curScene, pos1, lightningIndex, ItemType.element, "Lightning");

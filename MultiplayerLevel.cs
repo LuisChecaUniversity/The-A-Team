@@ -109,7 +109,7 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 
-			ItemManager.Instance.initFlags(this);
+			ItemManager.Instance.initFlags(this, new Vector2(30, 290), new Vector2(926, 290));
 			ItemManager.Instance.initElements(this);
 
 			//this.AddChild(blockedAreaSprite);

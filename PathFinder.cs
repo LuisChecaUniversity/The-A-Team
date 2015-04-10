@@ -11,13 +11,13 @@ namespace TheATeam
 	{
 		public Tile tile;
 		public int ID;
-		public float F, G, H, cumulativeCost;
+		public float F, G, H, cumulativeCost, extraCost;
 		public Waypoint parent;
 		
 		public Waypoint(Tile t)
 		{
 			tile = t;
-			F = 0.0f; G = 0.0f; H = 0.0f; cumulativeCost = 0.0f;
+			F = 0.0f; G = 0.0f; H = 0.0f; cumulativeCost = 0.0f; extraCost = 1.0f;
 			parent = null;
 		}
 		public float Cost(Waypoint n)
@@ -52,12 +52,19 @@ namespace TheATeam
 		private void InitWaypoints()
 		{
 			int i = 0;
+			//List<Item> items = ItemManager.Instance.GetAllItems();
 			foreach(List<Tile> l in Tile.Grid)
 			{
 				foreach(Tile t in l)
 				{
 					Waypoint newPoint = new Waypoint(t);
 					newPoint.ID = i;
+					// cost for going over items - stop accidental collisions
+//					foreach(Item item in items)
+//					{
+//						if(t.Overlaps(item.position))
+//						   newPoint.extraCost = 1.1f;
+//					}
 					// dont add the tiles behind the UI
 					if(t.Center.Y != 544)
 						waypoints.Add(newPoint);
@@ -174,10 +181,11 @@ namespace TheATeam
 					if(successor.tile.IsCollidable) 
 					{
 						if(successor.tile.Key != player.Element)
-							G *= 1.3f;
-						else if(player.Element == 'N' && successor.tile.Key == player.Element)
-							G *= 5.0f;
+							G *= 1.5f;
+						else if(player.Element == 'N' && successor.tile.Key == 'N')
+							G *= 10.0f;
 					}
+					
 					
 					H = successor.CalculateHCost(target.tile);
 					F = G + H;

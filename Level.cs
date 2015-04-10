@@ -38,6 +38,8 @@ namespace TheATeam
 		List<Tile> player2Tiles = new List<Tile>();
 		int maxDeployed = 10;
 		int player1Deployed = 0;
+		int player2Deployed = 0;
+		bool player1Turn = true;
 		private SpriteUV blockedAreaSprite;
 		private SpriteUV p1baseSprite;
 		private SpriteUV p2baseSprite;
@@ -76,8 +78,10 @@ namespace TheATeam
 						
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
-
-			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
+			string level = "/Application/assets/level" + /*Info.Rnd.Next(2,6)*/4 + ".txt";
+			if(AppMain.TYPEOFGAME == "DUAL")
+				level = "/Application/assets/level1.txt";
+			Tile.Loader(level, ref player1Pos, ref player2Pos, this);
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
 			{
@@ -101,11 +105,13 @@ namespace TheATeam
 			
 			p1baseSprite = new SpriteUV(TextureManager.Get("base"));
 			p1baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
-			p1baseSprite.Position = new Vector2(0, (screenHeight - 32) / 2);
+			p1baseSprite.Position = new Vector2(p1baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			p1baseSprite.CenterSprite();
 			
 			p2baseSprite = new SpriteUV(TextureManager.Get("base"));
 			p2baseSprite.Quad.S = p1baseSprite.TextureInfo.TextureSizef;
-			p2baseSprite.Position = new Vector2(screenWidth - 64, (screenHeight - 32) / 2);
+			p2baseSprite.Position = new Vector2(screenWidth - p2baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			p2baseSprite.CenterSprite();
 			
 			AddChild(p1baseSprite);
 			AddChild(p2baseSprite);
@@ -114,7 +120,13 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME == "SINGLE")
 				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
 			else if(AppMain.TYPEOFGAME == "DUAL")
-				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);	
+			{
+				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
+				player2.Update(0.0f);
+			}
+			
+			player1.Update(0.0f);
+			
 			
 			AddChild(player1);
 			AddChild(player2);
@@ -134,9 +146,10 @@ namespace TheATeam
 			lblTopRight = new Label();
 			lblTopRight.FontMap = debugFont;
 			lblTopRight.Text = "Press Start to Continue";
-			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);			
-			ItemManager.Instance.initFlags(this);
+			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
+			ItemManager.Instance.initFlags(this, p1baseSprite.Position, p2baseSprite.Position);
+			//ItemManager.Instance.initFlags(this, new Vector2(30, 290), new Vector2(926, 290));
 			AddChild(blockedAreaSprite);
 			AddChild(lblTopLeft);
 			AddChild(lblTopRight);
@@ -361,18 +374,87 @@ namespace TheATeam
 
 		private void BuildStage(float dt)
 		{
+			if(AppMain.TYPEOFGAME == "SINGLE")
+			{
+				if (player1Deployed == maxDeployed)
+				{
+					lblTopLeft.Text = "Maximum Deployed";
+				}
+				else
+				{
+					lblTopLeft.Text = "Objects Left: " + (maxDeployed - player1Deployed);
+				}
+				
+				PlaceDefence(player1);
+				
+	
+				if (Input2.GamePad0.Start.Down)
+				{
+					PostBuildStage();
+				}
+			}
+			else if(AppMain.TYPEOFGAME == "DUAL")
+			{
+				if(player1Turn)
+				{
+					lblTopRight.Text = "Press Square for Player 2\n          Deployment";
+					if (player1Deployed == maxDeployed)
+					{
+						lblTopLeft.Text = "Maximum Deployed";
+					}
+					else
+					{
+						lblTopLeft.Text = "Objects Left: " + (maxDeployed - player1Deployed);
+					}
+					PlaceDefence(player1);
+		
+					if (Input2.GamePad0.Square.Down)
+					{
+						player1Turn = false;
+					}
+				}
+				else
+				{
+					blockedAreaSprite.Position = new Vector2(0.0f, 0.0f);			
+					lblTopLeft.Position = new Vector2(140, screenHeight / 2 + 50);					
+					lblTopRight.Position = new Vector2(100, screenHeight / 2 - 150);
+					lblTopRight.Text = "Press Start to Continue";
+					
+					if (player2Deployed == maxDeployed)
+					{
+						lblTopLeft.Text = "Maximum Deployed";
+					}
+					else
+					{
+						lblTopLeft.Text = "Objects Left: " + (maxDeployed - player2Deployed);
+					}
+					PlaceDefence(player2);
+		
+					if (Input2.GamePad0.Start.Down)
+					{
+						PostBuildStage();
+					}
+				}
+				
+				
+			}
+		}
+		private void PlaceDefence(Player player)
+		{
 			var testtouches = Touch.GetData(0);
-			var p1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
+			List<Tile> playerTiles = new List<Tile>();
+			int playerDeployed = 0;
+			if(player == player1)
+			{
+				playerTiles = player1Tiles;
+				playerDeployed = player1Deployed;
+			}
+			else if(player == player2)
+			{
+				playerTiles = player2Tiles;
+				playerDeployed = player2Deployed;
+			}
 			
-			if (player1Deployed == maxDeployed)
-			{
-				lblTopLeft.Text = "";
-			}
-			else
-			{
-				lblTopLeft.Text = "Objects Left: " + (maxDeployed - player1Deployed);
-			}
-
 			if (testtouches.Count > 0)
 			{
 				float screenheight = Director.Instance.GL.Context.GetViewport().Height;
@@ -386,7 +468,8 @@ namespace TheATeam
 					Console.WriteLine("Touched" + touchVec);
 					Console.WriteLine(player1Tiles[0].Position);
 					
-					foreach (Tile t in player1Tiles)
+					
+					foreach (Tile t in playerTiles)
 					{
 						if (t.Key == '_')
 						{
@@ -395,32 +478,36 @@ namespace TheATeam
 
 						if (t.Overlaps(touchVec))
 						{
-							if (t.Key != 'N' && player1Deployed < maxDeployed)
+							if (t.Key != 'N' && playerDeployed < maxDeployed)
 							{
 								// returns player 1 flag and checks if touch pos collides with it
-								if (!p1Flag.hasCollided(touchVec, new Vector2(5, 5)))
+								if (!t.Overlaps(p1baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
 								{
 									t.Key = 'N';
 									Tile.Collisions.Add(t);
-									player1Deployed++;
+									playerDeployed++;
 								}
 							}
 							else if (t.Key == 'N')
 							{
 								t.Key = 'B';
 								Tile.Collisions.Remove(t);
-								player1Deployed--;
+								playerDeployed--;
 							}
 						}
 					}
 				}
-
-				ItemManager.Instance.Update(dt);
 			}
-
-			if (Input2.GamePad0.Start.Down)
+			
+			if(player == player1)
 			{
-				PostBuildStage();
+				player1Tiles = playerTiles;
+				player1Deployed = playerDeployed;
+			}
+			else if(player == player2)
+			{
+				player2Tiles = playerTiles;
+				player2Deployed = playerDeployed;
 			}
 		}
 		
