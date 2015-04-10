@@ -36,7 +36,7 @@ namespace TheATeam
 		// players tiles
 		List<Tile> player1Tiles = new List<Tile>();
 		List<Tile> player2Tiles = new List<Tile>();
-		int maxDeployed = 10;
+		int maxDeployed = 15;
 		int player1Deployed = 0;
 		int player2Deployed = 0;
 		bool player1Turn = true;
