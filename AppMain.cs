@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Net;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
@@ -8,6 +8,8 @@ using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.HighLevel.UI;
 using Sce.PlayStation.Core.Input;
+using System.Text;
+using System.IO;
 
 namespace TheATeam
 {
@@ -23,6 +25,7 @@ namespace TheATeam
 		public static bool 					ISHOST = false;
 		public static string 				IPADDRESS;
 		public static string 				WHEREWIFI = "PHONE";
+		public static string 				PLAYERNAME ;
 		public static bool 					QUITGAME = false;
 		private static GameSceneManager 	gsm;
 		public static LocalTCPConnection 	client;
@@ -36,6 +39,7 @@ namespace TheATeam
 		private static State 				state = State.ChooseTypeGame;
 		private static bool 				runningDirector = false;
 		private static GraphicsContext 		graphics;
+		public static bool 					doesHaveUI = false;
 		
 		public static void Main(string[] args)
 		{
@@ -59,8 +63,9 @@ namespace TheATeam
 				else
 				{
 					Update(dt);
+					
 					Director.Instance.Update();
-				
+					
 					Director.Instance.Render();
 				
 					Director.Instance.GL.Context.SwapBuffers(); // Swap between back and front buffer
@@ -103,7 +108,7 @@ namespace TheATeam
 				buttonClient = new Button();
 				buttonClient.SetPosition(630.0f,250.0f);
 				buttonClient.SetSize(200.0f,100.0f);
-				buttonClient.Text = "Duo Play";
+				buttonClient.Text = "Continue";
 			
 				buttonMulti = new Button();
 				buttonMulti.SetPosition(360.0f,350.0f);
@@ -112,7 +117,7 @@ namespace TheATeam
 			
 			 	textbox = new EditableText();
 				textbox.SetPosition(300.0f,250.0f);
-				textbox.Text = "10.54.153.20";//"192.168.43.133"; //vita13 //144
+				textbox.Text = "Enter Name";//"192.168.43.133"; //vita13 //144
 				textbox.Visible = false;	
 			
 				button = new Button();
@@ -125,6 +130,8 @@ namespace TheATeam
 				uiScene.RootWidget.AddChildFirst(textbox);
 				uiScene.RootWidget.AddChildFirst(button);
 				uiScene.RootWidget.AddChildFirst(buttonMulti);
+			
+				
 			
 			//TYPEOFGAME = "SINGLE";
 							//graphics.Dispose();
@@ -176,9 +183,12 @@ namespace TheATeam
 						Console.WriteLine("MultiPlayer");
 							TYPEOFGAME = "MULTIPLAYER";
 							buttonMulti.Visible = false;
-							buttonHost.Text = "Host";
-							buttonClient.Text = "Client";
-							state = State.ChooseHostClient;
+//							buttonHost.Text = "Host";
+//							buttonClient.Text = "Client";
+							textbox.Visible = true;
+						buttonHost.Visible = false;
+						buttonClient.SetPosition(360.0f,350.0f);
+							state = State.ClientSide;
 					}
 						break;
 					case State.ChooseHostClient:
@@ -208,8 +218,8 @@ namespace TheATeam
 							
 							if(textbox.Text.Length > 0)
 							{
-								graphics.Dispose();
-								AppMain.IPADDRESS = textbox.Text;
+								//graphics.Dispose();
+								AppMain.PLAYERNAME = textbox.Text;
 								runningDirector = true;
 								InitDirector();	
 							}
@@ -228,7 +238,7 @@ namespace TheATeam
 		
 		public static void Render()
 		{
-			if(runningDirector)
+			if(runningDirector && !doesHaveUI)
 				return;
 			graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
             graphics.Clear ();

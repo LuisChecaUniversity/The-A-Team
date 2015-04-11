@@ -1,4 +1,8 @@
 using System;
+using System.Net;
+
+
+using System.Collections.Generic;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
@@ -9,7 +13,11 @@ using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.Core.Audio;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
-
+using Sce.PlayStation.HighLevel.UI;
+using System.Json;
+using System.Text;
+using System.IO;
+using System.Web;
 //using System.Net;
 //using System.Net.Sockets;
 //using System.IO;
@@ -678,8 +686,9 @@ namespace TheATeam
 ////			Console.WriteLine("OnSend");
 //		}
 //	};
-	public class TwoPlayer : Scene
+	public class TwoPlayer : Sce.PlayStation.HighLevel.GameEngine2D.Scene
 	{
+		
 		bool isHost = AppMain.ISHOST;
 		string homeIP = "192.168.0.10";
 		string uniIP = "10.54.152.214";
@@ -700,12 +709,12 @@ namespace TheATeam
 		public bool             isConnected;
 		public bool             readyToSend;
 		#region Member Properties - Labels
-		private Label lblTopLeft;
-		private Label lblTopRight;
-		private Label lblBottomLeft;
-		private Label lblBottomRight;
-		private Label lblDebugLeft;
-		private Label lblDebugCenter;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblTopLeft;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblTopRight;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblBottomLeft;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblBottomRight;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblDebugLeft;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblDebugCenter;
 		#endregion
 		#region Screen dimensions
 		private int screenWidth;
@@ -726,13 +735,22 @@ namespace TheATeam
 		bool p1FadeDown = true;
 		bool p2FadeDown = true;
 		
+		public static Button 				buttonClient;
+		public static EditableText 			textbox;
 		private static SpriteUV 	sprite;
 		private static TextureInfo	textureInfo;
 		
 		private static SpriteUV 	sprite2;
 		private static TextureInfo	texture2Info;
+			private static GraphicsContext 		graphics;
 		public TwoPlayer ()
 		{
+			
+			UISystem.Initialize(Director.Instance.GL.Context);
+			
+				Sce.PlayStation.HighLevel.UI.Scene uiScene = new Sce.PlayStation.HighLevel.UI.Scene();
+				UISystem.SetScene(uiScene);
+			AppMain.doesHaveUI = true;
 //			IPAddress ipAddress = null;
 //			if(isHost)
 //			{
@@ -772,13 +790,13 @@ namespace TheATeam
 			font = new Font(FontAlias.System, 25, FontStyle.Bold);
 			#endregion
 			#region Instantiate label objects
-			lblTopLeft = new Label();
+			lblTopLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			
-			lblTopRight = new Label();
-			lblBottomLeft = new Label();
-			lblBottomRight = new Label();
-			lblDebugLeft = new Label();
-			lblDebugCenter = new Label();
+			lblTopRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+			lblBottomLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+			lblBottomRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+			lblDebugLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+			lblDebugCenter = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			#endregion
 			
 			#region Assign label values
@@ -786,21 +804,21 @@ namespace TheATeam
 //			lblTopLeft.Text = "Player 1";
 //			lblTopLeft.Position = new Vector2 (100, screenHeight - 200);
 			
-			lblTopLeft.FontMap = debugFont;
-			lblTopLeft.Text = "My Details";
-			lblTopLeft.Position = new Vector2 (100, screenHeight - 100);
-			
-			lblTopRight.FontMap = debugFont;
-			lblTopRight.Text = "Available Players";
-			lblTopRight.Position = new Vector2(screenWidth - 300, screenHeight - 100);
-			
-			lblBottomLeft.FontMap = debugFont;
-			lblBottomLeft.Text = "Waiting";
-			lblBottomLeft.Position = new Vector2(100, 300);
-			
-			lblBottomRight.FontMap = debugFont;
-			lblBottomRight.Text = "Waiting";
-			lblBottomRight.Position = new Vector2(screenWidth -200, 300);
+//			lblTopLeft.FontMap = debugFont;
+//			lblTopLeft.Text = "My Details";
+//			lblTopLeft.Position = new Vector2 (100, screenHeight - 100);
+//			
+//			lblTopRight.FontMap = debugFont;
+//			lblTopRight.Text = "Available Players";
+//			lblTopRight.Position = new Vector2(screenWidth - 300, screenHeight - 100);
+//			
+//			lblBottomLeft.FontMap = debugFont;
+//			lblBottomLeft.Text = "Waiting";
+//			lblBottomLeft.Position = new Vector2(100, 300);
+//			
+//			lblBottomRight.FontMap = debugFont;
+//			lblBottomRight.Text = "Waiting";
+//			lblBottomRight.Position = new Vector2(screenWidth -200, 300);
 			
 //			lblDebugLeft.FontMap = debugFont;
 //			lblDebugLeft.Text = "Waiting for both connections";
@@ -809,6 +827,11 @@ namespace TheATeam
 //			lblDebugCenter.FontMap = debugFont;
 //			lblDebugCenter.Text = "----";
 //			lblDebugCenter.Position = new Vector2(430, 100);
+			
+			buttonClient = new Button();
+				buttonClient.SetPosition(630.0f,250.0f);
+				buttonClient.SetSize(200.0f,100.0f);
+				buttonClient.Text = "Duo Play";
 			
 			
 			
@@ -832,6 +855,7 @@ namespace TheATeam
 			Sce.PlayStation.HighLevel.UI.EditableText text= new Sce.PlayStation.HighLevel.UI.EditableText();
 				text.Text = "Input IP";
 				text.SetPosition(300,300);
+			
 			#region Add labels to scene (Debug Overlay)
 			this.AddChild(lblTopLeft);
 			this.AddChild(lblTopRight);
@@ -841,7 +865,9 @@ namespace TheATeam
 			this.AddChild(lblDebugCenter);
 			this.AddChild(sprite);
 			this.AddChild(sprite2);
-			
+		
+			uiScene.RootWidget.AddChildFirst(buttonClient);
+			uiScene.RootWidget.AddChildFirst(text);
 			
 			#endregion
 			
@@ -850,43 +876,66 @@ namespace TheATeam
 			Director.Instance.DebugFlags = Director.Instance.DebugFlags | DebugFlags.DrawGrid;
 			this.DrawGridStep = 20.0f;
 			
-			if(testing)
-			{
-				if(isHost)
-				{
-					AppMain.client = new LocalTCPConnection(true,11000);
-					//server = new LocalTCPConnection(true, 11000);
-					if(AppMain.client.Listen())
-					{
-						Console.WriteLine("working ");
-						lblBottomLeft.Text = "Ready";
-						isPlayer1Ready = true;
-						lblDebugCenter.Text = "IP Address = " + AppMain.client.GetIP ;	
-					}
-					else
-					{
-						Console.WriteLine("Fucked ");
-					}
-				}
-				else
-				{
-					AppMain.client = new LocalTCPConnection(false,11000);
-					AppMain.client.SetIPAddress(AppMain.IPADDRESS);
-					//client = new LocalTCPConnection(false, 11000);
-					lblDebugCenter.Text = "Client";
-				}
-				
-			}
+//			var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/newemployee");
+//			
+//			var postData = "firstname=" +AppMain.PLAYERNAME;
+//			postData += "&surname=Smith";
+//			postData += "&email=danda@sfsndf.com";
+//			var data = Encoding.ASCII.GetBytes(postData);
+//			
+//			request.Method = "POST";
+//			request.ContentType = "application/x-www-form-urlencoded";
+//			request.ContentLength = data.Length;
+//
+//			using (var stream = request.GetRequestStream())
+//			{
+//			    stream.Write(data, 0, data.Length);
+//			}
+//			
+//			var response = (HttpWebResponse)request.GetResponse();
+//			
+//			var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+//				
+			
+//			if(testing)
+//			{
+//				if(isHost)
+//				{
+//					AppMain.client = new LocalTCPConnection(true,11000);
+//					//server = new LocalTCPConnection(true, 11000);
+//					if(AppMain.client.Listen())
+//					{
+//						Console.WriteLine("working ");
+//						lblBottomLeft.Text = "Ready";
+//						isPlayer1Ready = true;
+//						lblDebugCenter.Text = "IP Address = " + AppMain.client.GetIP ;	
+//					}
+//					else
+//					{
+//						Console.WriteLine("Fucked ");
+//					}
+//				}
+//				else
+//				{
+//					AppMain.client = new LocalTCPConnection(false,11000);
+//					AppMain.client.SetIPAddress(AppMain.IPADDRESS);
+//					//client = new LocalTCPConnection(false, 11000);
+//					lblDebugCenter.Text = "Client";
+//				}
+//				
+//			}
 		}
 		
 		public override void Draw ()
 		{
 			
 			base.Draw ();
+			
 		}
 		
 		public override void Update (float dt)
 		{
+		
 			base.Update (dt);
 //			if(Type.Equals("SERVER"))
 //				RunServer();
@@ -965,68 +1014,134 @@ namespace TheATeam
 			{
 				
 				
-				if(isHost)
+				if(Input2.GamePad0.Triangle.Press)
 				{
-					
-					if(AppMain.client.IsConnect)
-					{
-						lblBottomRight.Text = "Ready";
-						isPlayer2Ready = true;
-					}
-					
-				}
-				else
-				{
-					lblDebugCenter.Text = AppMain.client.GetIP;
-					if(Input2.GamePad0.Circle.Press)
-					{
-						AppMain.client.Connect();
-						lblBottomRight.Text = "Ready";
-						isPlayer2Ready = true;
-					}
-					
-//				
-					if(AppMain.client.IsConnect)
-					{
-						lblBottomLeft.Text = "Ready";
-						isPlayer1Ready = true;
-					}
-				}
+					var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/newplayer");
 				
-				if(isPlayer1Ready && isPlayer2Ready)
-				{
-					//sprite.Visible = true;
-					//sprite2.Visible = true;
-					lblBottomLeft.Visible = false;
-					lblBottomRight.Visible = false;
-					lblTopLeft.Visible = false;
-					lblTopRight.Visible = false;
-					lblDebugLeft.Visible = false;
-					lblDebugCenter.Visible = false;
+					var postData = "firstname=" +AppMain.PLAYERNAME;
+//					postData += "&surname=Smith";
+					postData += "&ipaddress=HELLO";
+					var data = Encoding.ASCII.GetBytes(postData);
+				
+					request.Method = "POST";
+					request.ContentType = "application/x-www-form-urlencoded";
+					request.ContentLength = data.Length;
+	
+					using (var stream = request.GetRequestStream())
+					{
+					    stream.Write(data, 0, data.Length);
+					}
 					
-//					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-//			                                                 new Vector2i(10, 3)));
+					var response = (HttpWebResponse)request.GetResponse();
+					
+					var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();	
+				}
+				if(Input2.GamePad0.Cross.Press)
+				{
+				var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/playerlist");
+
+				var response = (HttpWebResponse)request.GetResponse();
+
+				var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();	
+				
+					Console.WriteLine(responseString);
+					int getIndex = responseString.IndexOf("employeelist");
+					responseString = responseString.Substring(getIndex);
+					Console.WriteLine(responseString);
+//					foreach (char item in responseString) 
+//					{
+//						Console.WriteLine(item);
+//					}
+					
+					
+					
+				}
+				 
+				
+//				float screenheight = 544.0f;
+//					float screenwidth = 960.0f;
+//				
+//				List<TouchData> touchDataList = Touch.GetData(0);
+//			UISystem.Update(touchDataList);
+//				//UISystem.Render();
+//			
+//				if(touchDataList.Count > 0)
+//				{
+//					float screenx = (touchDataList[0].X +0.5f) * screenwidth;
+//					float screenY = (touchDataList[0].Y +0.5f) * screenheight;
+//				if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
+//						{
+//							
+//							if(textbox.Text.Length > 0)
+//							{
+//								
+//								
+//							}
+//							
+//						}
+//				}
+//				if(isHost)
+//				{
+//					
+//					if(AppMain.client.IsConnect)
+//					{
+//						lblBottomRight.Text = "Ready";
+//						isPlayer2Ready = true;
+//					}
+//					
+//				}
+//				else
+//				{
+//					lblDebugCenter.Text = AppMain.client.GetIP;
+//					if(Input2.GamePad0.Circle.Press)
+//					{
+//						AppMain.client.Connect();
+//						lblBottomRight.Text = "Ready";
+//						isPlayer2Ready = true;
+//					}
+//					
+////				
+//					if(AppMain.client.IsConnect)
+//					{
+//						lblBottomLeft.Text = "Ready";
+//						isPlayer1Ready = true;
+//					}
+//				}
+//				
+//				if(isPlayer1Ready && isPlayer2Ready)
+//				{
+//					//sprite.Visible = true;
+//					//sprite2.Visible = true;
+//					lblBottomLeft.Visible = false;
+//					lblBottomRight.Visible = false;
+//					lblTopLeft.Visible = false;
+//					lblTopRight.Visible = false;
+//					lblDebugLeft.Visible = false;
+//					lblDebugCenter.Visible = false;
+//					
+////					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
+////			                                                 new Vector2i(10, 3)));
+////					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+////			                                                 new Vector2i(9, 14)));
+////					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
+//					
+//					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
+//			                                                 new Vector2i(4, 8)));
 //					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
 //			                                                 new Vector2i(9, 14)));
 //					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-					
-					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-			                                                 new Vector2i(4, 8)));
-					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
-					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-					
-					Info.TotalGameTime = 0f;
-					
-					MultiplayerLevel level = new MultiplayerLevel();
-					level.Camera.SetViewFromViewport();
-					GameSceneManager.currentScene = level;
-					Director.Instance.ReplaceScene(level);
-				}
+//					
+//					Info.TotalGameTime = 0f;
+//					
+//					MultiplayerLevel level = new MultiplayerLevel();
+//					level.Camera.SetViewFromViewport();
+//					GameSceneManager.currentScene = level;
+//					Director.Instance.ReplaceScene(level);
+//				}
 			}
 		}
 		
-		private void FadeText(float dt,Label l,int player , bool fadeUp, bool fadeDown)
+		private void FadeText(float dt,Sce.PlayStation.HighLevel.GameEngine2D.Label l,int player , bool fadeUp, bool fadeDown)
 		{
 			
 					if(!fadeUp && fadeDown)

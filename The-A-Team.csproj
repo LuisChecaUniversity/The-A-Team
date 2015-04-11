@@ -37,6 +37,8 @@
     <Reference Include="Sce.PlayStation.HighLevel.GameEngine2D" />
     <Reference Include="Sce.PlayStation.HighLevel.UI" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Json" />
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMain.cs" />
