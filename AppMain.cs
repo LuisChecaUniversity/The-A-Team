@@ -68,6 +68,8 @@ namespace TheATeam
 					
 					Director.Instance.Render();
 				
+					if(doesHaveUI)
+						UISystem.Render ();
 					Director.Instance.GL.Context.SwapBuffers(); // Swap between back and front buffer
 					Director.Instance.PostSwap(); // Must be called after swap buffers - not 100% sure, imagine it resets back buffer to black/white, unallocates tied resources for next swap
 				}

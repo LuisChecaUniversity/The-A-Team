@@ -747,10 +747,9 @@ namespace TheATeam
 		{
 			
 			UISystem.Initialize(Director.Instance.GL.Context);
-			
+//			
 				Sce.PlayStation.HighLevel.UI.Scene uiScene = new Sce.PlayStation.HighLevel.UI.Scene();
 				UISystem.SetScene(uiScene);
-			AppMain.doesHaveUI = true;
 //			IPAddress ipAddress = null;
 //			if(isHost)
 //			{
