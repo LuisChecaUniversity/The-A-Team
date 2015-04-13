@@ -4,11 +4,14 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.Core.Imaging;
 using Sce.PlayStation.Core.Input;
+using Sce.PlayStation.Core.Graphics;
+using Sce.PlayStation.HighLevel.UI;
+using ECUI;
 
 
 namespace TheATeam
 {
-	public class GameOver : Scene
+	public class GameOver : Sce.PlayStation.HighLevel.GameEngine2D.Scene
 	{
 		SpriteUV backgroundSprite;
 		TextureInfo backgroundTexinfo;
@@ -39,10 +42,24 @@ namespace TheATeam
 		{
 			if(Input2.GamePad0.Start.Press)
 			{
-				MainMenu mainMenu = new MainMenu();
-				mainMenu.Camera.SetViewFromViewport();
-				GameSceneManager.currentScene = mainMenu;
-				Director.Instance.ReplaceScene(mainMenu);	
+//				MainMenu mainMenu = new MainMenu();
+//				mainMenu.Camera.SetViewFromViewport();
+//				GameSceneManager.currentScene = mainMenu;
+//				Director.Instance.ReplaceScene(mainMenu);	
+//				TitleScreen titleScreen = new TitleScreen();
+//				titleScreen.Camera.SetViewFromViewport();
+//				GameSceneManager.currentScene = titleScreen;
+//				
+//				Director.Instance.ReplaceScene(titleScreen);
+				
+				Director.Instance.Dispose();
+				AppMain.runningDirector = false;
+				AppMain.graphics = new GraphicsContext();
+				
+				UISystem.Initialize(AppMain.graphics);
+				UISystem.SetScene(new ECUIMainMenu());
+				
+				
 			}
 		}
 	}

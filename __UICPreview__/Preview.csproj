@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{23B57BC9-0B58-46FE-8316-5B6412BA156A}</ProjectGuid>
+    <ProjectTypeGuids>{69878862-DA7D-4DC6-B0A1-50D8FAB4242F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Preview</RootNamespace>
+    <AssemblyName>Preview</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="__DummyProgram.cs" />
+    <Compile Include="ECUI.composer.cs" />
+    <Compile Include="ECUI.cs" />
+    <Compile Include="UIStringTable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\\assets\ATeam.png" >
+      <Link>assets\ATeam.png</Link>
+    </Content>
+    <Content Include="..\\assets\Background.png" >
+      <Link>assets\Background.png</Link>
+    </Content>
+    <Content Include="..\\assets\Backgroundx.png" >
+      <Link>assets\Backgroundx.png</Link>
+    </Content>
+    <Content Include="..\\assets\Base.png" >
+      <Link>assets\Base.png</Link>
+    </Content>
+    <Content Include="..\\assets\BGMainMenu.png" >
+      <Link>assets\BGMainMenu.png</Link>
+    </Content>
+    <Content Include="..\\assets\BlockedArea.png" >
+      <Link>assets\BlockedArea.png</Link>
+    </Content>
+    <Content Include="..\\assets\bullet.png" >
+      <Link>assets\bullet.png</Link>
+    </Content>
+    <Content Include="..\\assets\DualButton.png" >
+      <Link>assets\DualButton.png</Link>
+    </Content>
+    <Content Include="..\\assets\FireBullet.png" >
+      <Link>assets\FireBullet.png</Link>
+    </Content>
+    <Content Include="..\\assets\Game Over.png" >
+      <Link>assets\Game Over.png</Link>
+    </Content>
+    <Content Include="..\\assets\Game-Over.png" >
+      <Link>assets\Game-Over.png</Link>
+    </Content>
+    <Content Include="..\\assets\health.png" >
+      <Link>assets\health.png</Link>
+    </Content>
+    <Content Include="..\\assets\HUDBar.png" >
+      <Link>assets\HUDBar.png</Link>
+    </Content>
+    <Content Include="..\\assets\ItemSpriteSheet.png" >
+      <Link>assets\ItemSpriteSheet.png</Link>
+    </Content>
+    <Content Include="..\\assets\LaSegunda.ttf" >
+      <Link>assets\LaSegunda.ttf</Link>
+    </Content>
+    <Content Include="..\\assets\level1.txt" >
+      <Link>assets\level1.txt</Link>
+    </Content>
+    <Content Include="..\\assets\level2.txt" >
+      <Link>assets\level2.txt</Link>
+    </Content>
+    <Content Include="..\\assets\level3.txt" >
+      <Link>assets\level3.txt</Link>
+    </Content>
+    <Content Include="..\\assets\level4.txt" >
+      <Link>assets\level4.txt</Link>
+    </Content>
+    <Content Include="..\\assets\level5.txt" >
+      <Link>assets\level5.txt</Link>
+    </Content>
+    <Content Include="..\\assets\MainMenu.png" >
+      <Link>assets\MainMenu.png</Link>
+    </Content>
+    <Content Include="..\\assets\MainSplash.png" >
+      <Link>assets\MainSplash.png</Link>
+    </Content>
+    <Content Include="..\\assets\mana.png" >
+      <Link>assets\mana.png</Link>
+    </Content>
+    <Content Include="..\\assets\OnlineButton.png" >
+      <Link>assets\OnlineButton.png</Link>
+    </Content>
+    <Content Include="..\\assets\PlayerSpriteSheet+.png" >
+      <Link>assets\PlayerSpriteSheet+.png</Link>
+    </Content>
+    <Content Include="..\\assets\PlayerSpriteSheet.png" >
+      <Link>assets\PlayerSpriteSheet.png</Link>
+    </Content>
+    <Content Include="..\\assets\PlayerSpriteSheetTest.png" >
+      <Link>assets\PlayerSpriteSheetTest.png</Link>
+    </Content>
+    <Content Include="..\\assets\pointer.png" >
+      <Link>assets\pointer.png</Link>
+    </Content>
+    <Content Include="..\\assets\QuitButton.png" >
+      <Link>assets\QuitButton.png</Link>
+    </Content>
+    <Content Include="..\\assets\RingSpriteSheet.png" >
+      <Link>assets\RingSpriteSheet.png</Link>
+    </Content>
+    <Content Include="..\\assets\RingSpriteSheetv1.png" >
+      <Link>assets\RingSpriteSheetv1.png</Link>
+    </Content>
+    <Content Include="..\\assets\selectIcon.png" >
+      <Link>assets\selectIcon.png</Link>
+    </Content>
+    <Content Include="..\\assets\selectIcon1.png" >
+      <Link>assets\selectIcon1.png</Link>
+    </Content>
+    <Content Include="..\\assets\shieldhp.png" >
+      <Link>assets\shieldhp.png</Link>
+    </Content>
+    <Content Include="..\\assets\ShieldSpriteSheet-.png" >
+      <Link>assets\ShieldSpriteSheet-.png</Link>
+    </Content>
+    <Content Include="..\\assets\ShieldSpriteSheet.png" >
+      <Link>assets\ShieldSpriteSheet.png</Link>
+    </Content>
+    <Content Include="..\\assets\SoloButton.png" >
+      <Link>assets\SoloButton.png</Link>
+    </Content>
+    <Content Include="..\\assets\SplashScreen.png" >
+      <Link>assets\SplashScreen.png</Link>
+    </Content>
+    <Content Include="..\\assets\TheATeam.png" >
+      <Link>assets\TheATeam.png</Link>
+    </Content>
+    <Content Include="..\\assets\tiles.xml" >
+      <Link>assets\tiles.xml</Link>
+    </Content>
+    <Content Include="..\\assets\TitleScreen.png" >
+      <Link>assets\TitleScreen.png</Link>
+    </Content>
+    <Content Include="..\\assets\TitleScreenTemp.png" >
+      <Link>assets\TitleScreenTemp.png</Link>
+    </Content>
+    <Content Include="..\\assets\WallSpriteSheet.png" >
+      <Link>assets\WallSpriteSheet.png</Link>
+    </Content>
+    <Content Include="..\\assets\WaterBullet.png" >
+      <Link>assets\WaterBullet.png</Link>
+    </Content>
+    <Content Include="..\\assets\WhiteBG.png" >
+      <Link>assets\WhiteBG.png</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Sce.PlayStation.Core" />
+    <Reference Include="Sce.PlayStation.HighLevel.UI" />
+  </ItemGroup>
+  <ItemGroup>
+    <PsmMetadata Include="app.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Psm.CSharp.targets" />
+</Project>

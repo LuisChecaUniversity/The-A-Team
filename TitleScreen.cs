@@ -6,9 +6,10 @@ using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
 using Sce.PlayStation.Core.Audio;
-
+using Sce.PlayStation.HighLevel.UI;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
+using ECUI;
 
 
 namespace TheATeam
@@ -35,10 +36,16 @@ namespace TheATeam
 			
 			if(Input2.GamePad0.Start.Press)
 			{
-				MainMenu mainMenu = new MainMenu();
-				mainMenu.Camera.SetViewFromViewport();
-				GameSceneManager.currentScene = mainMenu;
-				Director.Instance.ReplaceScene(mainMenu);
+//				MainMenu mainMenu = new MainMenu();
+//				mainMenu.Camera.SetViewFromViewport();
+//				GameSceneManager.currentScene = mainMenu;
+//				Director.Instance.ReplaceScene(mainMenu);
+				Director.Instance.Dispose();
+				AppMain.runningDirector = false;
+				AppMain.graphics = new GraphicsContext();
+				UISystem.Initialize(AppMain.graphics);
+				UISystem.SetScene(new ECUIMainMenu());
+				
 			}
 		}
 		
