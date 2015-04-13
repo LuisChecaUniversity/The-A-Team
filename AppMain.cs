@@ -88,15 +88,15 @@ namespace TheATeam
 		{
 			
 			timer = new Timer();
-			
-			graphics = new GraphicsContext();
-			
+			runningDirector=true;
+			//graphics = new GraphicsContext();
+			Director.Initialize();
 //			if(ISHOST)
 //			{
 //				runningDirector = true;
 //					InitDirector();
 //			}
-				UISystem.Initialize(graphics);
+				UISystem.Initialize(Director.Instance.GL.Context);
 			
 				Sce.PlayStation.HighLevel.UI.Scene uiScene = new Sce.PlayStation.HighLevel.UI.Scene();
 				UISystem.SetScene(uiScene);
@@ -146,6 +146,7 @@ namespace TheATeam
 		{
 			if(runningDirector)
 			{
+				if(gsm != null)
 				gsm.Update(dt);
 			}
 			else
@@ -242,20 +243,20 @@ namespace TheATeam
 		{
 			if(runningDirector && !doesHaveUI)
 				return;
-			graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-            graphics.Clear ();
+			//graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+           // graphics.Clear ();
             
             // Render UI Toolkit
             UISystem.Render ();
             
             // Present the screen
-            graphics.SwapBuffers ();	
+          //  graphics.SwapBuffers ();	
 		}
 		
 		private static void InitDirector()
 		{
-			graphics.Dispose();
-			Director.Initialize();
+			//graphics.Dispose();
+			
 			
 			gsm = new GameSceneManager();
 			
