@@ -9,13 +9,13 @@ using Sce.PlayStation.HighLevel.UI;
 
 namespace Preview
 {
-    partial class ECUI
+    partial class ECUIMainMenu
     {
         ImageBox ImageBox_1;
         Button btnSolo;
-        Button Button_1;
-        Button Button_2;
-        Button Button_3;
+        Button btnOnline;
+        Button btnDual;
+        Button btnQuit;
 
         private void InitializeWidget()
         {
@@ -28,19 +28,19 @@ namespace Preview
             ImageBox_1.Name = "ImageBox_1";
             btnSolo = new Button();
             btnSolo.Name = "btnSolo";
-            Button_1 = new Button();
-            Button_1.Name = "Button_1";
-            Button_2 = new Button();
-            Button_2.Name = "Button_2";
-            Button_3 = new Button();
-            Button_3.Name = "Button_3";
+            btnOnline = new Button();
+            btnOnline.Name = "btnOnline";
+            btnDual = new Button();
+            btnDual.Name = "btnDual";
+            btnQuit = new Button();
+            btnQuit.Name = "btnQuit";
 
-            // ECUI
+            // ECUIMainMenu
             this.RootWidget.AddChildLast(ImageBox_1);
             this.RootWidget.AddChildLast(btnSolo);
-            this.RootWidget.AddChildLast(Button_1);
-            this.RootWidget.AddChildLast(Button_2);
-            this.RootWidget.AddChildLast(Button_3);
+            this.RootWidget.AddChildLast(btnOnline);
+            this.RootWidget.AddChildLast(btnDual);
+            this.RootWidget.AddChildLast(btnQuit);
 
             // ImageBox_1
             ImageBox_1.Image = new ImageAsset("/Application/assets/BGMainMenu.png");
@@ -58,10 +58,10 @@ namespace Preview
             };
             btnSolo.BackgroundFilterColor = new UIColor(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
 
-            // Button_1
-            Button_1.IconImage = null;
-            Button_1.Style = ButtonStyle.Custom;
-            Button_1.CustomImage = new CustomButtonImageSettings()
+            // btnOnline
+            btnOnline.IconImage = null;
+            btnOnline.Style = ButtonStyle.Custom;
+            btnOnline.CustomImage = new CustomButtonImageSettings()
             {
                 BackgroundNormalImage = new ImageAsset("/Application/assets/OnlineButton.png"),
                 BackgroundPressedImage = new ImageAsset("/Application/assets/OnlineButton.png"),
@@ -69,10 +69,10 @@ namespace Preview
                 BackgroundNinePatchMargin = new NinePatchMargin(42, 27, 42, 27),
             };
 
-            // Button_2
-            Button_2.IconImage = null;
-            Button_2.Style = ButtonStyle.Custom;
-            Button_2.CustomImage = new CustomButtonImageSettings()
+            // btnDual
+            btnDual.IconImage = null;
+            btnDual.Style = ButtonStyle.Custom;
+            btnDual.CustomImage = new CustomButtonImageSettings()
             {
                 BackgroundNormalImage = new ImageAsset("/Application/assets/DualButton.png"),
                 BackgroundPressedImage = new ImageAsset("/Application/assets/DualButton.png"),
@@ -80,10 +80,10 @@ namespace Preview
                 BackgroundNinePatchMargin = new NinePatchMargin(42, 27, 42, 27),
             };
 
-            // Button_3
-            Button_3.IconImage = null;
-            Button_3.Style = ButtonStyle.Custom;
-            Button_3.CustomImage = new CustomButtonImageSettings()
+            // btnQuit
+            btnQuit.IconImage = null;
+            btnQuit.Style = ButtonStyle.Custom;
+            btnQuit.CustomImage = new CustomButtonImageSettings()
             {
                 BackgroundNormalImage = new ImageAsset("/Application/assets/QuitButton.png"),
                 BackgroundPressedImage = new ImageAsset("/Application/assets/QuitButton.png"),
@@ -115,20 +115,20 @@ namespace Preview
                     btnSolo.Anchors = Anchors.None;
                     btnSolo.Visible = true;
 
-                    Button_1.SetPosition(366, 242);
-                    Button_1.SetSize(214, 56);
-                    Button_1.Anchors = Anchors.None;
-                    Button_1.Visible = true;
+                    btnOnline.SetPosition(366, 242);
+                    btnOnline.SetSize(214, 56);
+                    btnOnline.Anchors = Anchors.None;
+                    btnOnline.Visible = true;
 
-                    Button_2.SetPosition(366, 242);
-                    Button_2.SetSize(214, 56);
-                    Button_2.Anchors = Anchors.None;
-                    Button_2.Visible = true;
+                    btnDual.SetPosition(366, 242);
+                    btnDual.SetSize(214, 56);
+                    btnDual.Anchors = Anchors.None;
+                    btnDual.Visible = true;
 
-                    Button_3.SetPosition(366, 242);
-                    Button_3.SetSize(214, 56);
-                    Button_3.Anchors = Anchors.None;
-                    Button_3.Visible = true;
+                    btnQuit.SetPosition(366, 242);
+                    btnQuit.SetSize(214, 56);
+                    btnQuit.Anchors = Anchors.None;
+                    btnQuit.Visible = true;
 
                     break;
 
@@ -141,25 +141,25 @@ namespace Preview
                     ImageBox_1.Anchors = Anchors.None;
                     ImageBox_1.Visible = true;
 
-                    btnSolo.SetPosition(345, 200);
-                    btnSolo.SetSize(269, 74);
+                    btnSolo.SetPosition(320, 200);
+                    btnSolo.SetSize(320, 74);
                     btnSolo.Anchors = Anchors.None;
                     btnSolo.Visible = true;
 
-                    Button_1.SetPosition(345, 274);
-                    Button_1.SetSize(269, 74);
-                    Button_1.Anchors = Anchors.None;
-                    Button_1.Visible = true;
+                    btnOnline.SetPosition(320, 274);
+                    btnOnline.SetSize(320, 74);
+                    btnOnline.Anchors = Anchors.None;
+                    btnOnline.Visible = true;
 
-                    Button_2.SetPosition(345, 348);
-                    Button_2.SetSize(269, 74);
-                    Button_2.Anchors = Anchors.None;
-                    Button_2.Visible = true;
+                    btnDual.SetPosition(320, 348);
+                    btnDual.SetSize(320, 74);
+                    btnDual.Anchors = Anchors.None;
+                    btnDual.Visible = true;
 
-                    Button_3.SetPosition(345, 422);
-                    Button_3.SetSize(269, 74);
-                    Button_3.Anchors = Anchors.None;
-                    Button_3.Visible = true;
+                    btnQuit.SetPosition(320, 422);
+                    btnQuit.SetSize(320, 84);
+                    btnQuit.Anchors = Anchors.None;
+                    btnQuit.Visible = true;
 
                     break;
             }

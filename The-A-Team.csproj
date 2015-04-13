@@ -72,6 +72,12 @@
     </Compile>
     <Compile Include="ECUIMainMenu.composer.cs" />
     <Compile Include="ECUIMainMenu.cs" />
+    <Compile Include="OnlineName.cs" />
+    <Compile Include="OnlineName.composer.cs" />
+    <Compile Include="OnlineHostJoin.composer.cs" />
+    <Compile Include="OnlineHostJoin.cs" />
+    <Compile Include="LobbyUI.composer.cs" />
+    <Compile Include="LobbyUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -126,5 +132,6 @@
     <Content Include="assets\OnlineButton.png" />
     <Content Include="assets\QuitButton.png" />
     <Content Include="assets\SoloButton.png" />
+    <Content Include="assets\BGPlain.png" />
   </ItemGroup>
 </Project>

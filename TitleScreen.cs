@@ -40,11 +40,12 @@ namespace TheATeam
 //				mainMenu.Camera.SetViewFromViewport();
 //				GameSceneManager.currentScene = mainMenu;
 //				Director.Instance.ReplaceScene(mainMenu);
-				Director.Instance.Dispose();
+				//Director.Instance.Dispose();
 				AppMain.runningDirector = false;
-				AppMain.graphics = new GraphicsContext();
-				UISystem.Initialize(AppMain.graphics);
-				UISystem.SetScene(new ECUIMainMenu());
+//				AppMain.graphics = new GraphicsContext();
+//				UISystem.Initialize(AppMain.graphics);
+				AppMain.mainMenuUI = new ECUIMainMenu();
+				UISystem.SetScene(AppMain.mainMenuUI);
 				
 			}
 		}

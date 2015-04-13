@@ -41,7 +41,6 @@ namespace TheATeam
             this.RootWidget.AddChildLast(btnOnline);
             this.RootWidget.AddChildLast(btnDual);
             this.RootWidget.AddChildLast(btnQuit);
-			
 
             // ImageBox_1
             ImageBox_1.Image = new ImageAsset("/Application/assets/BGMainMenu.png");
@@ -194,7 +193,6 @@ namespace TheATeam
                     break;
             }
         }
-		
 
     }
 }

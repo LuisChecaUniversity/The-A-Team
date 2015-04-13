@@ -40,6 +40,8 @@ namespace TheATeam
 		public static bool 				runningDirector = false;
 		public static GraphicsContext 		graphics;
 		
+		public static ECUIMainMenu			mainMenuUI;
+		
 		
 		public static void Main(string[] args)
 		{
@@ -53,25 +55,25 @@ namespace TheATeam
 		
 			
 				SystemEvents.CheckEvents();	// We check system events (such as pressing PS button, pressing power button to sleep, major and unknown crash!!)				
-				if(!runningDirector)
-				{
+//				if(!runningDirector)
+//				{
+//					Update(dt);
+//					Render();
+//				}
+//				else
+//				{
 					Update(dt);
-					Render();
-				}
-				else
-				{
-					Update(dt);
-					if(runningDirector)
-					{
+//					if(runningDirector)
+//					{
 					Director.Instance.Update();
 					
 					Director.Instance.Render();
-				
+					UISystem.Render();
 					
 					Director.Instance.GL.Context.SwapBuffers(); // Swap between back and front buffer
 					Director.Instance.PostSwap(); // Must be called after swap buffers - not 100% sure, imagine it resets back buffer to black/white, unallocates tied resources for next swap
-					}
-				}
+					//}
+				//}
 				
 				prevTime = curTime;
 				
@@ -145,9 +147,9 @@ namespace TheATeam
 			}
 			else
 			{
-			List<TouchData> touchDataList = Touch.GetData(0);
-			UISystem.Update(touchDataList);
-			
+				List<TouchData> touchDataList = Touch.GetData(0);
+					UISystem.Update(touchDataList);
+				
 				//if(touchDataList.Count > 0)
 //				{
 //					float screenheight = 544.0f;
@@ -249,6 +251,7 @@ namespace TheATeam
 		private static void InitDirector()
 		{
 			Director.Initialize();
+			UISystem.Initialize(Director.Instance.GL.Context);
 			runningDirector = true;
 			gsm = new GameSceneManager();
 			
@@ -268,20 +271,24 @@ namespace TheATeam
 			switch (typeOfGame)
 			{
 			case "Solo":
-				Console.WriteLine("Single Player");
+				//Console.WriteLine("Single Player");
 				TYPEOFGAME = "SINGLE";
-				graphics.Dispose();
 				runningDirector = true;
-				Director.Initialize();
-				
 				Info.TotalGameTime = 0f;
 				Level level = new Level();
-				level.Camera.SetViewFromViewport();
 				GameSceneManager.currentScene = level;
-				Director.Instance.RunWithScene(level, true);
+				Director.Instance.ReplaceScene(level);
+				
+				
 				break;
 			case "Dual":
-				
+				TYPEOFGAME = "DUAL";
+				Info.TotalGameTime = 0f;
+				runningDirector = true;
+				Level placingTest = new Level();
+				placingTest.Camera.SetViewFromViewport();
+				GameSceneManager.currentScene = placingTest;
+				Director.Instance.ReplaceScene(placingTest);
 				break;
 			default:
 				break;

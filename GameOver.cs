@@ -51,12 +51,12 @@ namespace TheATeam
 //				GameSceneManager.currentScene = titleScreen;
 //				
 //				Director.Instance.ReplaceScene(titleScreen);
-				
-				Director.Instance.Dispose();
+				//UISystem.Terminate();
+				//Director.Instance.Dispose();
 				AppMain.runningDirector = false;
-				AppMain.graphics = new GraphicsContext();
-				
-				UISystem.Initialize(AppMain.graphics);
+				//AppMain.graphics = new GraphicsContext();
+				//UISystem.Initialize(AppMain.graphics);
+				//AppMain.mainMenuUI = new ECUIMainMenu();
 				UISystem.SetScene(new ECUIMainMenu());
 				
 				

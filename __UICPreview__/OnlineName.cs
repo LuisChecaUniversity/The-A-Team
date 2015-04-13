@@ -7,9 +7,9 @@ using Sce.PlayStation.HighLevel.UI;
 
 namespace Preview
 {
-    public partial class ECUI : Scene
+    public partial class OnlineName : Scene
     {
-        public ECUI()
+        public OnlineName()
         {
             InitializeWidget(LayoutOrientation.Horizontal);
         }

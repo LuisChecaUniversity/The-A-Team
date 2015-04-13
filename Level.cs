@@ -9,26 +9,28 @@ using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
 using System.Timers;
+using Sce.PlayStation.HighLevel.UI;
 
 namespace TheATeam
 {
 	enum LevelStage
 	{
 		BuildStage,
-		CombatStage
+		CombatStage,
+		None
 	}
 
-	public class Level: Scene
+	public class Level: Sce.PlayStation.HighLevel.GameEngine2D.Scene
 	{
 		private LevelStage levelStage = LevelStage.BuildStage;
 		Player player1;
 		Player player2;
-		Label lblTopLeft;
+		Sce.PlayStation.HighLevel.GameEngine2D.Label lblTopLeft;
 		System.Timers.Timer timerA;
-		Label lblTimer;
+		Sce.PlayStation.HighLevel.GameEngine2D.Label lblTimer;
 		int countMins = 5; //minutes
 		int countSecs = 00; //seconds 
-		private Label lblTopRight;
+		private Sce.PlayStation.HighLevel.GameEngine2D.Label lblTopRight;
 		private int screenWidth;
 		private int screenHeight;
 		Font font;
@@ -54,6 +56,7 @@ namespace TheATeam
 		
 		public Level(): base()
 		{
+			
 			Info.IsGameOver = false;
 			screenWidth = Director.Instance.GL.Context.Screen.Width;
 			screenHeight = Director.Instance.GL.Context.Screen.Height;
@@ -126,12 +129,12 @@ namespace TheATeam
 			blockedAreaSprite.Quad.S = blockedAreaSprite.TextureInfo.TextureSizef;
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 
-			lblTopLeft = new Label();
+			lblTopLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			lblTopLeft.FontMap = debugFont;
 			lblTopLeft.Text = "";
 			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
-			lblTopRight = new Label();
+			lblTopRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			lblTopRight.FontMap = debugFont;
 			lblTopRight.Text = "Press Start to Continue";
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);			
@@ -195,7 +198,7 @@ namespace TheATeam
 			InitUIElements();
 			
 			//Timer Stuff
-			lblTimer = new Label();
+			lblTimer = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			
 			FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
 			lblTimer.FontMap = fontl;
@@ -265,9 +268,14 @@ namespace TheATeam
 			if (Info.IsGameOver)
 			{
 				//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
+				
+				//this.RemoveAllChildren(true);
+				
 				GameOver go = new GameOver();
 				GameSceneManager.currentScene = go;
 				Director.Instance.ReplaceScene(go);	
+			
+				
 			}
 			
 			if (levelStage == LevelStage.CombatStage)

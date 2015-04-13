@@ -31,8 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="__DummyProgram.cs" />
-    <Compile Include="ECUI.composer.cs" />
-    <Compile Include="ECUI.cs" />
+    <Compile Include="LobbyUI.composer.cs" />
+    <Compile Include="LobbyUI.cs" />
     <Compile Include="UIStringTable.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +50,9 @@
     </Content>
     <Content Include="..\\assets\BGMainMenu.png" >
       <Link>assets\BGMainMenu.png</Link>
+    </Content>
+    <Content Include="..\\assets\BGPlain.png" >
+      <Link>assets\BGPlain.png</Link>
     </Content>
     <Content Include="..\\assets\BlockedArea.png" >
       <Link>assets\BlockedArea.png</Link>
