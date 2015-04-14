@@ -689,7 +689,7 @@ namespace TheATeam
 //	};
 	public class TwoPlayer : Sce.PlayStation.HighLevel.GameEngine2D.Scene
 	{
-		
+		string whichInternet= "Uni";
 		bool isHost = AppMain.ISHOST;
 		string homeIP = "192.168.0.10";
 		string uniIP = "10.54.152.214";
@@ -938,22 +938,22 @@ namespace TheATeam
 				{
 					lobbychat2dot = false;
 					lobbychat3dot = true;
-//					string lob = lobbyUI.lblLobbyChat.Text;
-//					lob += " .";
-//					lobbyUI.lblLobbyChat.Text = lob;
+					string lob = lobbyUI.LblLobbyChat.Text;
+					lob += " .";
+					lobbyUI.LblLobbyChat.Text = lob;
 				}
 				if(chatlobbyRefreshTimer.Milliseconds() > 3000 && lobbychat3dot )
 				{
 					lobbychat3dot = false;
 					
-//					string lob = lobbyUI.lblLobbyChat.Text;
-//					lob += " .";
-//					lobbyUI.lblLobbyChat.Text = lob;
+					string lob = lobbyUI.LblLobbyChat.Text;
+					lob += " .";
+					lobbyUI.LblLobbyChat.Text = lob;
 				}
 				if(chatlobbyRefreshTimer.Milliseconds() > 4000)
 				{
 					lobbychat1dot=true;
-					//lobbyUI.lblLobbyChat.Text = lobbyUI.lblLobbyChat.Text.Substring(0,lobbyUI.lblLobbyChat.Text.Length -6);//
+					lobbyUI.LblLobbyChat.Text = lobbyUI.LblLobbyChat.Text.Substring(0,lobbyUI.LblLobbyChat.Text.Length -6);//
 				chatlobbyRefreshTimer.Reset();	
 				}
 				//Console.WriteLine(refreshTimer.Milliseconds());
@@ -981,6 +981,21 @@ namespace TheATeam
 					}
 					
 					refreshTimer.Reset();
+				}
+				
+				if(AppMain.ISHOST)
+				{
+					if(AppMain.client.IsConnect)
+					{
+						Console.WriteLine("Player 2 Ready");	
+					}
+				}
+				else
+				{
+//					if(AppMain.client.IsConnect)
+//					{
+//						Console.WriteLine("Player 1 Ready");	
+//					}
 				}
 			}
 			#region notTesting
@@ -1047,17 +1062,6 @@ namespace TheATeam
 			{
 				
 				
-				if(Input2.GamePad0.Triangle.Press)
-				{
-					PostRequest();
-				}
-				if(Input2.GamePad0.Cross.Press)
-				{
-				GetRequest();
-					
-					
-					
-				}
 				 
 				
 //				float screenheight = 544.0f;
@@ -1287,7 +1291,16 @@ namespace TheATeam
 		
 		public void PostRequest()
 		{
-			var request = (HttpWebRequest)WebRequest.Create("http://192.168.0.23:3000/adduser");
+			string LocalIP ="";
+			if(whichInternet == "Uni")
+				LocalIP = "http://10.54.152.187:3000/adduser";
+			else if(whichInternet == "Mobile")
+				LocalIP = "http://192.168.43.40:3000/adduser";
+			else if(whichInternet == "Home")
+				LocalIP = "http://192.168.0.23:3000/adduser";
+			
+				var request = (HttpWebRequest)WebRequest.Create(LocalIP);
+			
 				
 					var postData = "username=" +AppMain.PLAYERNAME;
 					postData += "&ipaddress=" + AppMain.IPADDRESS;
@@ -1310,7 +1323,15 @@ namespace TheATeam
 		
 		public void GetRequest()
 		{
-			var request = (HttpWebRequest)WebRequest.Create("http://192.168.0.23:3000/userlist");
+			string LocalIP ="";
+			if(whichInternet == "Uni")
+				LocalIP = "http://10.54.152.187:3000/userlist";
+			else if(whichInternet == "Mobile")
+				LocalIP = "http://192.168.43.40:3000/userlist";
+			else if(whichInternet == "Home")
+				LocalIP = "http://192.168.0.23:3000/userlist";
+			
+			var request = (HttpWebRequest)WebRequest.Create(LocalIP);
 
 				var response = (HttpWebResponse)request.GetResponse();
 
