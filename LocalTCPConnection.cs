@@ -494,7 +494,7 @@ namespace TheATeam
 //					}
 //					AppMain.IPADDRESS = ipAddress.ToString();
 				
-				IPEndPoint EP = new IPEndPoint(ipAddress, port);
+				IPEndPoint EP = new IPEndPoint(ipAdd, port);
 				socket.BeginConnect(EP, new AsyncCallback(SocketEventCallback.ConnectCallback), this);
 			}
 			finally

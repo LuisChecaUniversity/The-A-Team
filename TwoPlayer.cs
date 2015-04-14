@@ -919,9 +919,21 @@ namespace TheATeam
 			
 			
 			
-			if(isPlayer1Ready && isPlayer2Ready)
+			if(lobbyUI.p1Ready && lobbyUI.p2Ready)
 			{
-				Console.WriteLine("Players READY");	
+				TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
+			                                                 new Vector2i(4, 8)));
+					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
+			                                                 new Vector2i(9, 14)));
+					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
+					
+					Info.TotalGameTime = 0f;
+					
+					
+					MultiplayerLevel level = new MultiplayerLevel();
+					level.Camera.SetViewFromViewport();
+					GameSceneManager.currentScene = level;
+					Director.Instance.ReplaceScene(level);
 			}
 			else
 			{
