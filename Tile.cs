@@ -129,11 +129,12 @@ namespace TheATeam
 		
 		public Sides Sides { get; set; }
 		
+		protected static Vector2 boundsScale = new Vector2(0.71f, 0.97f);
+		
 		public Bounds2 WorldBounds
-		{ 
+		{
 			get
 			{
-				Vector2 boundsScale = new Vector2(0.72f, 1f);
 				Bounds2 thisBounds = this.GetlContentLocalBounds();
 				this.GetContentWorldBounds(ref thisBounds);
 				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);

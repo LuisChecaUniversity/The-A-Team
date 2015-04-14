@@ -27,6 +27,7 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
 		private static float UISize = 32;
+		new static Vector2 boundsScale = new Vector2(1f);
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
 		private char _element, _element2;
