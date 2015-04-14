@@ -131,8 +131,8 @@ namespace TheATeam
 		
 		public void ItemCollision(Player p1, Player p2)
 		{
-			Vector2 p1Size = new Vector2(p1.Quad.Bounds2().Point11.X, p1.Quad.Bounds2().Point11.Y);
-			Vector2 p2Size = new Vector2(p2.Quad.Bounds2().Point11.X, p2.Quad.Bounds2().Point11.Y);
+			Vector2 p1Size = new Vector2(42.0f, 32.0f);//new Vector2(p1.Quad.Bounds2().Point11.X, p1.Quad.Bounds2().Point11.Y);
+			Vector2 p2Size = new Vector2(42.0f, 32.0f);//new Vector2(p2.Quad.Bounds2().Point11.X, p2.Quad.Bounds2().Point11.Y);
 			// Will need to check this against every tile + player positions
 			
 			foreach (Item item in items)

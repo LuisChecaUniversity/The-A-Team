@@ -90,16 +90,16 @@ namespace TheATeam
 			}
 		}
 		
-		public bool hasCollided(Vector2 objectPosition, Vector2 objectSize)
+		public bool hasCollided(Vector2 playerPosition, Vector2 playerSize)
 		{
 			// Collision for objects that are centred
 			
 			Bounds2 iBounds = iSprite.Quad.Bounds2();
-			float iWidth = iBounds.Point11.X;
-			float iHeight = iBounds.Point11.Y;
-			
-			float objectWidth = objectSize.X;
-			float objectHeight = objectSize.Y;
+			float iWidth = 32.0f /2 ;//iBounds.Point11.X;
+			float iHeight = 24.0f /2;// iBounds.Point11.Y;
+			Console.WriteLine(iBounds.Point11);
+			float objectWidth = playerSize.X/2;
+			float objectHeight = playerSize.Y/2;
 //			
 //			if((position.X) < objectPosition.X - objectWidth)
 //				return false;
@@ -112,13 +112,13 @@ namespace TheATeam
 //			else 
 //				return true;
 			
-			if(position.X - iWidth> objectPosition.X + objectWidth)
+			if(position.X - iWidth> playerPosition.X + objectWidth)
 				return false;
-			else if(position.X + iHeight < objectPosition.X )
+			else if(position.X + iHeight < playerPosition.X - objectWidth)
 				return false;
-			else if(position.Y - iWidth > objectPosition.Y + objectHeight)
+			else if(position.Y - iWidth > playerPosition.Y + objectHeight)
 				return false;
-			else if(position.Y + iHeight < objectPosition.Y )
+			else if(position.Y + iHeight < playerPosition.Y - objectHeight)
 				return false;
 			else 
 				return true;
