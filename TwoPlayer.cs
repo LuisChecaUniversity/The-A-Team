@@ -734,17 +734,25 @@ namespace TheATeam
 		public LobbyUI lobbyUI;
 		
 		public Timer refreshTimer;
+		private Timer chatlobbyRefreshTimer;
+		public Dictionary<string,string> activePlayers = new Dictionary<string, string>();
+		private int activePlayerCount = 0;
+		
+		//chat lobby ... update
+		bool lobbychat1dot = true;
+		bool lobbychat2dot;
+		bool lobbychat3dot;
 		public TwoPlayer ()
 		{
 			
 			
 			PushTransition push = new PushTransition();
 			push.MoveDirection = FourWayDirection.Up;
-			lobbyUI = new LobbyUI();
+			lobbyUI = new LobbyUI(this);
 			UISystem.SetScene(lobbyUI, push);
 
-		//refreshTimer = new Timer();
-		
+		refreshTimer = new Timer();
+		chatlobbyRefreshTimer = new Timer();
 //			if(!testing)
 //				ip = accomIP;
 			this.Camera.SetViewFromViewport();	// Check documentation - defines a 2D view that matches the viewport(viewport == display region, in our case, the vita screen)
@@ -844,6 +852,8 @@ namespace TheATeam
 			Director.Instance.DebugFlags = Director.Instance.DebugFlags | DebugFlags.DrawGrid;
 			this.DrawGridStep = 20.0f;
 			
+			
+			
 //			var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/newemployee");
 //			
 //			var postData = "firstname=" +AppMain.PLAYERNAME;
@@ -906,19 +916,73 @@ namespace TheATeam
 		
 			base.Update (dt);
 			
+			
+			
+			
 			if(isPlayer1Ready && isPlayer2Ready)
 			{
 				Console.WriteLine("Players READY");	
 			}
-			
-			//Console.WriteLine(refreshTimer.Milliseconds());
-//			if( refreshTimer.Milliseconds() > 3000)
-//			{
-//				Console.WriteLine("REFRESHED");
-//				GetRequest();
-//				refreshTimer.Reset();
-//			}
-
+			else
+			{
+				if(chatlobbyRefreshTimer.Milliseconds() > 1000 && lobbychat1dot )
+				{
+					lobbychat1dot = false;
+					lobbychat2dot = true;
+					string lob = lobbyUI.LblLobbyChat.Text;
+					//string lob = lobbyUI.lblLobbyChat.Text;
+					lob += " .";
+					lobbyUI.LblLobbyChat.Text = lob;
+				}
+				if(chatlobbyRefreshTimer.Milliseconds() > 2000 && lobbychat2dot )
+				{
+					lobbychat2dot = false;
+					lobbychat3dot = true;
+//					string lob = lobbyUI.lblLobbyChat.Text;
+//					lob += " .";
+//					lobbyUI.lblLobbyChat.Text = lob;
+				}
+				if(chatlobbyRefreshTimer.Milliseconds() > 3000 && lobbychat3dot )
+				{
+					lobbychat3dot = false;
+					
+//					string lob = lobbyUI.lblLobbyChat.Text;
+//					lob += " .";
+//					lobbyUI.lblLobbyChat.Text = lob;
+				}
+				if(chatlobbyRefreshTimer.Milliseconds() > 4000)
+				{
+					lobbychat1dot=true;
+					//lobbyUI.lblLobbyChat.Text = lobbyUI.lblLobbyChat.Text.Substring(0,lobbyUI.lblLobbyChat.Text.Length -6);//
+				chatlobbyRefreshTimer.Reset();	
+				}
+				//Console.WriteLine(refreshTimer.Milliseconds());
+				if( refreshTimer.Milliseconds() > 3000)
+				{
+					Console.WriteLine("REFRESHED \n Checking Players : P1 =" + lobbyUI.p1Ready + " AND P2 = " + lobbyUI.p2Ready);
+					GetRequest();
+					if(activePlayers.Count > activePlayerCount)
+					{
+						int i = 1;
+					 	foreach( var item in activePlayers)
+						{
+							if(!item.Value.Equals(AppMain.PLAYERNAME) && !item.Key.Equals(AppMain.IPADDRESS))
+							{
+								Button button = new Button();
+								button.SetPosition(80,70 * i);
+								button.Text = item.Value;
+								button.TouchEventReceived += HandleButtonTouchEventReceived;
+								i++;
+								lobbyUI.PnlActivePlayers.AddChildFirst(button);
+							}
+						}
+						
+						activePlayerCount = activePlayers.Count;
+					}
+					
+					refreshTimer.Reset();
+				}
+			}
 			#region notTesting
 			if(!testing)
 			{
@@ -1078,6 +1142,12 @@ namespace TheATeam
 //				}
 			}
 		}
+
+		void HandleButtonTouchEventReceived (object sender, TouchEventArgs e)
+		{
+			lobbyUI.BtnJoinGame.Enabled = true;
+			lobbyUI.BtnJoinGame.Visible = true;
+		}
 		
 		private void FadeText(float dt,Sce.PlayStation.HighLevel.GameEngine2D.Label l,int player , bool fadeUp, bool fadeDown)
 		{
@@ -1217,7 +1287,7 @@ namespace TheATeam
 		
 		public void PostRequest()
 		{
-			var request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/adduser");
+			var request = (HttpWebRequest)WebRequest.Create("http://192.168.0.23:3000/adduser");
 				
 					var postData = "username=" +AppMain.PLAYERNAME;
 					postData += "&ipaddress=" + AppMain.IPADDRESS;
@@ -1240,17 +1310,25 @@ namespace TheATeam
 		
 		public void GetRequest()
 		{
-			var request = (HttpWebRequest)WebRequest.Create("http://localhost:3000/userlist");
+			var request = (HttpWebRequest)WebRequest.Create("http://192.168.0.23:3000/userlist");
 
 				var response = (HttpWebResponse)request.GetResponse();
 
 				var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();	
 				var res = JsonValue.Parse(responseString);
 			
-					foreach (var item in res)
+				foreach (var item in res)
+				{
+					string ip = item.Value.GetValue("ipaddress").ToString();
+					ip = ip.Trim('"');
+					string user = item.Value.GetValue("username").ToString();
+					user = user.Trim('"');
+//					Console.WriteLine(item.Value.GetValue("username"));
+					if(!activePlayers.ContainsKey(ip))
 					{
-					//	Console.WriteLine(item.Value.GetValue("username"));
+						activePlayers.Add(ip,user);
 					}
+				}
 		}
 	}
 }

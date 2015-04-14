@@ -22,9 +22,9 @@ namespace TheATeam
         void HandleBtnJoinGameTouchEventReceived (object sender, TouchEventArgs e)
         {
         	AppMain.ISHOST = false;
-			PushTransition push = new PushTransition();
-			push.MoveDirection = FourWayDirection.Up;
-			AppMain.runningDirector = true;
+			//PushTransition push = new PushTransition();
+			//push.MoveDirection = FourWayDirection.Up;
+			//AppMain.runningDirector = true;
 			Director.Instance.ReplaceScene(new TwoPlayer());
 			//UISystem.SetScene(new LobbyUI(), push);
 			
@@ -34,7 +34,7 @@ namespace TheATeam
         {
 			AppMain.ISHOST = true;
 			//AppMain.runningDirector = true;
-			AppMain.runningDirector = true;
+			//AppMain.runningDirector = true;
 			Director.Instance.ReplaceScene(new TwoPlayer());
 //			PushTransition push = new PushTransition();
 //			push.MoveDirection = FourWayDirection.Up;

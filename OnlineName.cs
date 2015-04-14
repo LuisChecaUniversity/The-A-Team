@@ -13,7 +13,8 @@ namespace TheATeam
         {
             InitializeWidget();
 			
-				
+				EditableText_1.Text = "";
+			EditableText_1.DefaultText = "Enter Name Here";
 		btnBack.TouchEventReceived += Handle_btnBackTouchEventReceived;
 			btnEnter.TouchEventReceived += HandleBtnEnterTouchEventReceived;
         }

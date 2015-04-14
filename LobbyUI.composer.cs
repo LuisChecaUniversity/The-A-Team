@@ -12,14 +12,19 @@ namespace TheATeam
     partial class LobbyUI
     {
         ImageBox ImageBox_1;
-        Panel Panel_1;
-        Label Label_1;
-        Panel Panel_2;
-        Label lblLobbyChat;
-        Button btnBack;
-        Button btnJoinGame;
-        Label Label_2;
+        Panel pnlActivePlayers;
 
+		
+
+        Panel pnlLobbyChat;
+        Label lblLobbyChat;
+
+		
+
+        Button btnMainMenu;
+        Button btnJoinGame;
+
+		
         private void InitializeWidget()
         {
             InitializeWidget(LayoutOrientation.Horizontal);
@@ -29,48 +34,36 @@ namespace TheATeam
         {
             ImageBox_1 = new ImageBox();
             ImageBox_1.Name = "ImageBox_1";
-            Panel_1 = new Panel();
-            Panel_1.Name = "Panel_1";
-            Label_1 = new Label();
-            Label_1.Name = "Label_1";
-            Panel_2 = new Panel();
-            Panel_2.Name = "Panel_2";
+            pnlActivePlayers = new Panel();
+            pnlActivePlayers.Name = "pnlActivePlayers";
+            pnlLobbyChat = new Panel();
+            pnlLobbyChat.Name = "pnlLobbyChat";
             lblLobbyChat = new Label();
             lblLobbyChat.Name = "lblLobbyChat";
-            btnBack = new Button();
-            btnBack.Name = "btnBack";
+            btnMainMenu = new Button();
+            btnMainMenu.Name = "btnMainMenu";
             btnJoinGame = new Button();
             btnJoinGame.Name = "btnJoinGame";
-            Label_2 = new Label();
-            Label_2.Name = "Label_2";
 
             // LobbyUI
             this.RootWidget.AddChildLast(ImageBox_1);
-            this.RootWidget.AddChildLast(Panel_1);
-            this.RootWidget.AddChildLast(Panel_2);
-            this.RootWidget.AddChildLast(Label_2);
+            this.RootWidget.AddChildLast(pnlActivePlayers);
+            this.RootWidget.AddChildLast(pnlLobbyChat);
 
             // ImageBox_1
             ImageBox_1.Image = new ImageAsset("/Application/assets/BGPlain.png");
             ImageBox_1.ImageScaleType = ImageScaleType.Center;
 
-            // Panel_1
-            Panel_1.BackgroundColor = new UIColor(153f / 255f, 153f / 255f, 153f / 255f, 204f / 255f);
-            Panel_1.Clip = true;
-            Panel_1.AddChildLast(Label_1);
+            // pnlActivePlayers
+            pnlActivePlayers.BackgroundColor = new UIColor(153f / 255f, 153f / 255f, 153f / 255f, 255f / 255f);
+            pnlActivePlayers.Clip = true;
 
-            // Label_1
-            Label_1.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
-            Label_1.Font = new UIFont(FontAlias.System, 25, FontStyle.Regular);
-            Label_1.LineBreak = LineBreak.Character;
-            Label_1.HorizontalAlignment = HorizontalAlignment.Center;
-
-            // Panel_2
-            Panel_2.BackgroundColor = new UIColor(153f / 255f, 153f / 255f, 153f / 255f, 204f / 255f);
-            Panel_2.Clip = true;
-            Panel_2.AddChildLast(lblLobbyChat);
-            Panel_2.AddChildLast(btnBack);
-            Panel_2.AddChildLast(btnJoinGame);
+            // pnlLobbyChat
+            pnlLobbyChat.BackgroundColor = new UIColor(153f / 255f, 153f / 255f, 153f / 255f, 255f / 255f);
+            pnlLobbyChat.Clip = true;
+            pnlLobbyChat.AddChildLast(lblLobbyChat);
+            pnlLobbyChat.AddChildLast(btnMainMenu);
+            pnlLobbyChat.AddChildLast(btnJoinGame);
 
             // lblLobbyChat
             lblLobbyChat.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
@@ -78,19 +71,13 @@ namespace TheATeam
             lblLobbyChat.LineBreak = LineBreak.Character;
             lblLobbyChat.VerticalAlignment = VerticalAlignment.Top;
 
-            // btnBack
-            btnBack.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
-            btnBack.TextFont = new UIFont(FontAlias.System, 25, FontStyle.Regular);
+            // btnMainMenu
+            btnMainMenu.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
+            btnMainMenu.TextFont = new UIFont(FontAlias.System, 25, FontStyle.Regular);
 
             // btnJoinGame
             btnJoinGame.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
             btnJoinGame.TextFont = new UIFont(FontAlias.System, 25, FontStyle.Regular);
-
-            // Label_2
-            Label_2.TextColor = new UIColor(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
-            Label_2.Font = new UIFont(FontAlias.System, 25, FontStyle.Regular);
-            Label_2.LineBreak = LineBreak.Character;
-            Label_2.HorizontalAlignment = HorizontalAlignment.Center;
 
             SetWidgetLayout(orientation);
 
@@ -106,45 +93,35 @@ namespace TheATeam
                     this.DesignWidth = 544;
                     this.DesignHeight = 960;
 
-                    ImageBox_1.SetPosition(-155, -79);
+                    ImageBox_1.SetPosition(-88, -125);
                     ImageBox_1.SetSize(200, 200);
                     ImageBox_1.Anchors = Anchors.None;
                     ImageBox_1.Visible = true;
 
-                    Panel_1.SetPosition(578, 89);
-                    Panel_1.SetSize(100, 100);
-                    Panel_1.Anchors = Anchors.None;
-                    Panel_1.Visible = true;
+                    pnlActivePlayers.SetPosition(604, 140);
+                    pnlActivePlayers.SetSize(100, 100);
+                    pnlActivePlayers.Anchors = Anchors.None;
+                    pnlActivePlayers.Visible = true;
 
-                    Label_1.SetPosition(545, 73);
-                    Label_1.SetSize(214, 36);
-                    Label_1.Anchors = Anchors.None;
-                    Label_1.Visible = true;
+                    pnlLobbyChat.SetPosition(100, 113);
+                    pnlLobbyChat.SetSize(100, 100);
+                    pnlLobbyChat.Anchors = Anchors.None;
+                    pnlLobbyChat.Visible = true;
 
-                    Panel_2.SetPosition(115, 105);
-                    Panel_2.SetSize(100, 100);
-                    Panel_2.Anchors = Anchors.None;
-                    Panel_2.Visible = true;
-
-                    lblLobbyChat.SetPosition(70, 180);
+                    lblLobbyChat.SetPosition(50, 159);
                     lblLobbyChat.SetSize(214, 36);
                     lblLobbyChat.Anchors = Anchors.None;
                     lblLobbyChat.Visible = true;
 
-                    btnBack.SetPosition(80, 427);
-                    btnBack.SetSize(214, 56);
-                    btnBack.Anchors = Anchors.None;
-                    btnBack.Visible = true;
+                    btnMainMenu.SetPosition(0, 373);
+                    btnMainMenu.SetSize(214, 56);
+                    btnMainMenu.Anchors = Anchors.None;
+                    btnMainMenu.Visible = true;
 
-                    btnJoinGame.SetPosition(280, 431);
+                    btnJoinGame.SetPosition(230, 402);
                     btnJoinGame.SetSize(214, 56);
                     btnJoinGame.Anchors = Anchors.None;
                     btnJoinGame.Visible = true;
-
-                    Label_2.SetPosition(333, 8);
-                    Label_2.SetSize(214, 36);
-                    Label_2.Anchors = Anchors.None;
-                    Label_2.Visible = true;
 
                     break;
 
@@ -157,40 +134,30 @@ namespace TheATeam
                     ImageBox_1.Anchors = Anchors.None;
                     ImageBox_1.Visible = true;
 
-                    Panel_1.SetPosition(564, 57);
-                    Panel_1.SetSize(376, 466);
-                    Panel_1.Anchors = Anchors.None;
-                    Panel_1.Visible = true;
+                    pnlActivePlayers.SetPosition(573, 46);
+                    pnlActivePlayers.SetSize(360, 471);
+                    pnlActivePlayers.Anchors = Anchors.None;
+                    pnlActivePlayers.Visible = true;
 
-                    Label_1.SetPosition(81, 19);
-                    Label_1.SetSize(214, 36);
-                    Label_1.Anchors = Anchors.None;
-                    Label_1.Visible = true;
+                    pnlLobbyChat.SetPosition(50, 66);
+                    pnlLobbyChat.SetSize(453, 436);
+                    pnlLobbyChat.Anchors = Anchors.None;
+                    pnlLobbyChat.Visible = true;
 
-                    Panel_2.SetPosition(44, 57);
-                    Panel_2.SetSize(462, 466);
-                    Panel_2.Anchors = Anchors.None;
-                    Panel_2.Visible = true;
-
-                    lblLobbyChat.SetPosition(12, 19);
-                    lblLobbyChat.SetSize(426, 300);
+                    lblLobbyChat.SetPosition(18, 28);
+                    lblLobbyChat.SetSize(403, 248);
                     lblLobbyChat.Anchors = Anchors.None;
                     lblLobbyChat.Visible = true;
 
-                    btnBack.SetPosition(12, 403);
-                    btnBack.SetSize(214, 56);
-                    btnBack.Anchors = Anchors.None;
-                    btnBack.Visible = true;
+                    btnMainMenu.SetPosition(7, 336);
+                    btnMainMenu.SetSize(214, 56);
+                    btnMainMenu.Anchors = Anchors.None;
+                    btnMainMenu.Visible = true;
 
-                    btnJoinGame.SetPosition(234, 403);
+                    btnJoinGame.SetPosition(227, 336);
                     btnJoinGame.SetSize(214, 56);
                     btnJoinGame.Anchors = Anchors.None;
                     btnJoinGame.Visible = true;
-
-                    Label_2.SetPosition(373, 12);
-                    Label_2.SetSize(214, 36);
-                    Label_2.Anchors = Anchors.None;
-                    Label_2.Visible = true;
 
                     break;
             }
@@ -199,15 +166,11 @@ namespace TheATeam
 
         public void UpdateLanguage()
         {
-            Label_1.Text = "Available Players";
-
             lblLobbyChat.Text = "Welcome";
 
-            btnBack.Text = "Back";
+            btnMainMenu.Text = "Main Menu";
 
             btnJoinGame.Text = "Join Game";
-
-            Label_2.Text = "Lobby";
         }
 
         private void onShowing(object sender, EventArgs e)

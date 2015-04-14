@@ -141,13 +141,13 @@ namespace TheATeam
 		
 		public static void Update (float dt)
 		{
-			if(runningDirector)
-			{
+			//if(runningDirector)
+			//{
 				if(gsm != null)
 				gsm.Update(dt);
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				List<TouchData> touchDataList = Touch.GetData(0);
 					UISystem.Update(touchDataList);
 				
@@ -232,7 +232,7 @@ namespace TheATeam
 //				
 //				}
 //			
-			}
+			//}
 			
 		}
 		

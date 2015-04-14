@@ -471,6 +471,29 @@ namespace TheATeam
 				//IPAddress ipAdd = IPAddress.Parse("192.168.0.26");
 				//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 				
+					IPHostEntry host;
+		   			host = Dns.GetHostEntry(Dns.GetHostName());
+					
+					if(AppMain.ISCOMPUTER)
+					{
+						ipAddress = host.AddressList[1];
+							
+					}
+					else
+					{
+			   			foreach (IPAddress ipp in host.AddressList)
+			   			{
+							
+			     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
+			     			{
+						       	ipAddress = ipp;
+			       				break;
+			     			}
+			   			}
+				
+					}
+					AppMain.IPADDRESS = ipAddress.ToString();
+				
 				IPEndPoint EP = new IPEndPoint(ipAddress, port);
 				socket.BeginConnect(EP, new AsyncCallback(SocketEventCallback.ConnectCallback), this);
 			}
