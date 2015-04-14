@@ -81,9 +81,8 @@ namespace TheATeam
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
 			
-			string level = "/Application/assets/level" + Info.Rnd.Next(2,6) + ".txt";
-			if(AppMain.TYPEOFGAME == "DUAL")
-				level = "/Application/assets/level1.txt";
+			string level = "/Application/assets/level" + (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6)) + ".txt";
+	
 			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
