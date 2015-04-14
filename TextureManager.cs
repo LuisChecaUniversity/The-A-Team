@@ -75,7 +75,7 @@ namespace TheATeam
 			AddAsset("shieldhp", "shieldhp.png");
 			AddAsset("items", "ItemSpriteSheet.png", new Vector2i(1, 6));
 			AddAsset("mana", "mana.png");
-			AddAsset("players", "PlayerSpriteSheet.png", new Vector2i(4,6));
+			AddAsset("players", "PlayerSpriteSheet+.png", new Vector2i(4,6));
 			AddAsset("pointer", "pointer.png");
 			AddAsset("tiles", "WallSpriteSheet.png", new Vector2i(4, 7));
 			AddAsset("shields", "ShieldSpriteSheet.png", new Vector2i(1, 3));

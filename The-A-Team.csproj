@@ -103,7 +103,6 @@
     <Content Include="assets\pointer.png" />
     <Content Include="assets\Game Over.png" />
     <Content Include="assets\Base.png" />
-    <Content Include="assets\PlayerSpriteSheet.png" />
     <Content Include="assets\ItemSpriteSheet.png" />
     <Content Include="assets\HUDBar.png" />
     <Content Include="assets\WallSpriteSheet.png" />
@@ -111,5 +110,6 @@
     <Content Include="assets\shieldhp.png" />
     <Content Include="assets\ShieldSpriteSheet.png" />
     <Content Include="assets\RingSpriteSheet.png" />
+    <Content Include="assets\PlayerSpriteSheet+.png" />
   </ItemGroup>
 </Project>

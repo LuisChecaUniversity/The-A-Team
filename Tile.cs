@@ -133,7 +133,7 @@ namespace TheATeam
 		{ 
 			get
 			{
-				Vector2 boundsScale = new Vector2(0.95f);
+				Vector2 boundsScale = new Vector2(0.72f, 1f);
 				Bounds2 thisBounds = this.GetlContentLocalBounds();
 				this.GetContentWorldBounds(ref thisBounds);
 				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
@@ -144,13 +144,13 @@ namespace TheATeam
 		public Tile(Vector2 position): base()
 		{
 			Position = position;
-			TextureInfo = TexInfo;
-			Quad.S = TextureInfo.TileSizeInPixelsf;
 			IsCollidable = false;
 		}
 
 		public Tile(char loadKey, Vector2 position): this(position)
 		{
+			TextureInfo = TexInfo;
+			Quad.S = TextureInfo.TileSizeInPixelsf;
 			Key = loadKey;
 		}
 		
