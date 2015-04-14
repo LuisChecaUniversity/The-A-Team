@@ -103,10 +103,10 @@ namespace TheATeam
         {
 			if(e.TouchEvents[0].Type == TouchEventType.Down)
 			{
-        	AppMain.client.Connect();
+        		AppMain.client.Connect();
 				twoPlayer.PostRequest();
-			p2Ready = true;
-			Console.WriteLine("Player 2 is " + p2Ready);
+				p2Ready = true;
+				Console.WriteLine("Player 2 is " + p2Ready);
 			}
         }
 

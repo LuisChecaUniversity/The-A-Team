@@ -467,32 +467,32 @@ namespace TheATeam
 //					ipAdd = IPAddress.Parse("192.168.43.105");
 //				else
 //					ipAdd = null;
-				//IPAddress ipAdd = IPAddress.Parse("10.56.152.173");
+				IPAddress ipAdd = IPAddress.Parse(AppMain.IPADDRESS);
 				//IPAddress ipAdd = IPAddress.Parse("192.168.0.26");
 				//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 				
-					IPHostEntry host;
-		   			host = Dns.GetHostEntry(Dns.GetHostName());
-					
-					if(AppMain.ISCOMPUTER)
-					{
-						ipAddress = host.AddressList[1];
-							
-					}
-					else
-					{
-			   			foreach (IPAddress ipp in host.AddressList)
-			   			{
-							
-			     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
-			     			{
-						       	ipAddress = ipp;
-			       				break;
-			     			}
-			   			}
-				
-					}
-					AppMain.IPADDRESS = ipAddress.ToString();
+//					IPHostEntry host;
+//		   			host = Dns.GetHostEntry(Dns.GetHostName());
+//					
+//					if(AppMain.ISCOMPUTER)
+//					{
+//						ipAddress = host.AddressList[1];
+//							
+//					}
+//					else
+//					{
+//			   			foreach (IPAddress ipp in host.AddressList)
+//			   			{
+//							
+//			     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
+//			     			{
+//						       	ipAddress = ipp;
+//			       				break;
+//			     			}
+//			   			}
+//				
+//					}
+//					AppMain.IPADDRESS = ipAddress.ToString();
 				
 				IPEndPoint EP = new IPEndPoint(ipAddress, port);
 				socket.BeginConnect(EP, new AsyncCallback(SocketEventCallback.ConnectCallback), this);

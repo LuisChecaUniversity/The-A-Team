@@ -925,6 +925,7 @@ namespace TheATeam
 			}
 			else
 			{
+				#region chatlobbyrefreshdots
 				if(chatlobbyRefreshTimer.Milliseconds() > 1000 && lobbychat1dot )
 				{
 					lobbychat1dot = false;
@@ -956,10 +957,12 @@ namespace TheATeam
 					lobbyUI.LblLobbyChat.Text = lobbyUI.LblLobbyChat.Text.Substring(0,lobbyUI.LblLobbyChat.Text.Length -6);//
 				chatlobbyRefreshTimer.Reset();	
 				}
+				#endregion
+				
 				//Console.WriteLine(refreshTimer.Milliseconds());
 				if( refreshTimer.Milliseconds() > 3000)
 				{
-					Console.WriteLine("REFRESHED \n Checking Players : P1 =" + lobbyUI.p1Ready + " AND P2 = " + lobbyUI.p2Ready);
+					//Console.WriteLine("REFRESHED \n Checking Players : P1 =" + lobbyUI.p1Ready + " AND P2 = " + lobbyUI.p2Ready);
 					GetRequest();
 					if(activePlayers.Count > activePlayerCount)
 					{
@@ -987,15 +990,18 @@ namespace TheATeam
 				{
 					if(AppMain.client.IsConnect)
 					{
+						lobbyUI.p2Ready = true;
 						Console.WriteLine("Player 2 Ready");	
 					}
 				}
 				else
 				{
-//					if(AppMain.client.IsConnect)
-//					{
-//						Console.WriteLine("Player 1 Ready");	
-//					}
+					if(AppMain.client.IsConnect)
+					{
+						lobbyUI.p1Ready = true;
+						Console.WriteLine("Player 1 Ready");	
+					}
+					
 				}
 			}
 			#region notTesting
@@ -1149,8 +1155,23 @@ namespace TheATeam
 
 		void HandleButtonTouchEventReceived (object sender, TouchEventArgs e)
 		{
-			lobbyUI.BtnJoinGame.Enabled = true;
-			lobbyUI.BtnJoinGame.Visible = true;
+			if(e.TouchEvents[0].Type == TouchEventType.Down)
+			{
+				Button button = (Button)sender;
+				//Console.WriteLine(button.Text);
+				lobbyUI.BtnJoinGame.Enabled = true;
+				lobbyUI.BtnJoinGame.Visible = true;
+				
+				foreach(var item in activePlayers)
+				{
+					if(item.Value.Equals(button.Text))
+					{
+						Console.WriteLine(item.Value + " : " + item.Key);
+						AppMain.IPADDRESS = item.Key;
+						                 
+					}
+				}
+			}
 		}
 		
 		private void FadeText(float dt,Sce.PlayStation.HighLevel.GameEngine2D.Label l,int player , bool fadeUp, bool fadeDown)
@@ -1291,15 +1312,9 @@ namespace TheATeam
 		
 		public void PostRequest()
 		{
-			string LocalIP ="";
-			if(whichInternet == "Uni")
-				LocalIP = "http://10.54.152.187:3000/adduser";
-			else if(whichInternet == "Mobile")
-				LocalIP = "http://192.168.43.40:3000/adduser";
-			else if(whichInternet == "Home")
-				LocalIP = "http://192.168.0.23:3000/adduser";
 			
-				var request = (HttpWebRequest)WebRequest.Create(LocalIP);
+			
+				var request = (HttpWebRequest)WebRequest.Create("https://ec-server.herokuapp.com/adduser");
 			
 				
 					var postData = "username=" +AppMain.PLAYERNAME;
@@ -1323,15 +1338,9 @@ namespace TheATeam
 		
 		public void GetRequest()
 		{
-			string LocalIP ="";
-			if(whichInternet == "Uni")
-				LocalIP = "http://10.54.152.187:3000/userlist";
-			else if(whichInternet == "Mobile")
-				LocalIP = "http://192.168.43.40:3000/userlist";
-			else if(whichInternet == "Home")
-				LocalIP = "http://192.168.0.23:3000/userlist";
 			
-			var request = (HttpWebRequest)WebRequest.Create(LocalIP);
+			
+			var request = (HttpWebRequest)WebRequest.Create("https://ec-server.herokuapp.com/userlist");
 
 				var response = (HttpWebResponse)request.GetResponse();
 
