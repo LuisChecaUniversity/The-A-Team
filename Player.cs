@@ -93,6 +93,7 @@ namespace TheATeam
 			base(position)
 		{
 			TextureInfo = TextureManager.Get("players");
+			Quad.S = TextureInfo.TileSizeInPixelsf;
 			
 			// Assign variables
 			this.animationRangeX = animationRangeX;
@@ -468,6 +469,7 @@ namespace TheATeam
 					}
 				}
 			}
+			// Loop through enemy tiles
 			Player p = Info.P1 == this ? Info.P2 : Info.P1;
 			foreach (Tile t in p.playerTiles)
 			{
@@ -524,6 +526,7 @@ namespace TheATeam
 			case "Neutral":
 				// reset all buffs
 				_stats.Reset();
+				elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
 				ShieldVisible = false;
 				break;
 			case "Earth":
@@ -535,6 +538,7 @@ namespace TheATeam
 			case "Water":
 				// Adds a shield
 				_stats.MaxShield = _stats.MaxHealth;
+				elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
 				ShieldVisible = true;
 				break;
 			case "Air":
@@ -557,7 +561,6 @@ namespace TheATeam
 			if ((Element == 'W' && Element2 == 'E') || (Element == 'E' && Element2 == 'W'))
 			{
 				_stats.MaxShield = _stats.MaxHealth * 2;
-				elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
 			}
 			// Water + Air -> KnockBack shield
 			if ((Element == 'W' && Element2 == 'A') || (Element == 'A' && Element2 == 'W'))
@@ -582,7 +585,7 @@ namespace TheATeam
 			{
 				_stats.moveSpeed = 2f;
 			}
-			// Fire + Earth -> Collsion with Walls cause damage, implemented in Handle Collisions()
+			// Fire + Earth -> Collsion with Walls cause damage, implemented in HandleCollisions()
 			
 		}
 		
@@ -598,7 +601,6 @@ namespace TheATeam
 			}
 			else
 			{
-				
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
@@ -705,11 +707,11 @@ namespace TheATeam
 		
 		public void ShieldCollision(Player p)
 		{
-			if (ShieldCollidable)
+			if (ShieldCollidable && ShieldVisible)
 			{
 				if (p.Overlaps(elementShield))
 				{
-					switch (ShieldEffect)
+					switch (this.ShieldEffect)
 					{
 					case ShieldEffect.Damage:
 						p.TakeDamage(1);
