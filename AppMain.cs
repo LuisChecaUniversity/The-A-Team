@@ -21,6 +21,7 @@ namespace TheATeam
 	}
 	public class AppMain
 	{	
+		public static bool 					ISCOMPUTER = false;
 		public static string 				TYPEOFGAME;
 		public static bool 					ISHOST = false;
 		public static string 				IPADDRESS;

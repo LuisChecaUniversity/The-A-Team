@@ -400,18 +400,26 @@ namespace TheATeam
 				
 					IPHostEntry host;
 		   			host = Dns.GetHostEntry(Dns.GetHostName());
-		   			foreach (IPAddress ipp in host.AddressList)
-		   			{
-						
-		     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
-		     			{
-					       	ipAddress = ipp;
-		       				break;
-		     			}
-		   			}
-				
-			
 					
+					if(AppMain.ISCOMPUTER)
+					{
+						ipAddress = host.AddressList[1];
+							
+					}
+					else
+					{
+			   			foreach (IPAddress ipp in host.AddressList)
+			   			{
+							
+			     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
+			     			{
+						       	ipAddress = ipp;
+			       				break;
+			     			}
+			   			}
+				
+					}
+					AppMain.IPADDRESS = ipAddress.ToString();
 			//	ipAddress = IPAddress.Parse("192.168.43.40");
 					//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 					

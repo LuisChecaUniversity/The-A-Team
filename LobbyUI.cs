@@ -4,17 +4,25 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Imaging;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.HighLevel.UI;
+using Sce.PlayStation.HighLevel.GameEngine2D;
 
 namespace TheATeam
 {
-    public partial class LobbyUI : Scene
+    public partial class LobbyUI : Sce.PlayStation.HighLevel.UI.Scene
     {
-		bool isPlayer1Ready = false;
+	
+		TwoPlayer twoPlayer;
         public LobbyUI()
         {
+			//twoPlayer = new TwoPlayer();
+			//Director.Instance.ReplaceScene(twoPlayer);
+			
             InitializeWidget();
 			
 		 	btnBack.TouchEventReceived += HandleBtnBackTouchEventReceived;
+			
+			lblLobbyChat.Text += " " +AppMain.PLAYERNAME;
+			
 			
 			if(AppMain.ISHOST)
 			{
@@ -25,8 +33,9 @@ namespace TheATeam
 					//server = new LocalTCPConnection(true, 11000);
 					if(AppMain.client.Listen())
 					{
-						lblLobbyChat.Text += ("\n working ");
-						isPlayer1Ready = true;
+						lblLobbyChat.Text += ("\n \n \n Connected Waiting for Player  ");
+						//twoPlayer.isPlayer1Ready = true;
+						//twoPlayer.PostRequest();
 					}
 					else
 					{
@@ -37,10 +46,10 @@ namespace TheATeam
 			{
 				AppMain.client = new LocalTCPConnection(false,11000);
 				AppMain.client.SetIPAddress(AppMain.IPADDRESS);
-				lblLobbyChat.Text += ("\n WORKING ");
+				lblLobbyChat.Text += ("\n working ");
 			}
 			
-			lblLobbyChat.Text += " " +AppMain.PLAYERNAME;
+			
         }
 
         void HandleBtnBackTouchEventReceived (object sender, TouchEventArgs e)
@@ -49,5 +58,10 @@ namespace TheATeam
 			push.MoveDirection = FourWayDirection.Right;
 			UISystem.SetScene(new OnlineHostJoin(), push);
         }
+		
+		public void Update()
+		{
+			
+		}
     }
 }

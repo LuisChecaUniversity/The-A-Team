@@ -4,10 +4,11 @@ using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Imaging;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.HighLevel.UI;
+using Sce.PlayStation.HighLevel.GameEngine2D;
 
 namespace TheATeam
 {
-    public partial class OnlineHostJoin : Scene
+    public partial class OnlineHostJoin : Sce.PlayStation.HighLevel.UI.Scene
     {
         public OnlineHostJoin()
         {
@@ -23,15 +24,21 @@ namespace TheATeam
         	AppMain.ISHOST = false;
 			PushTransition push = new PushTransition();
 			push.MoveDirection = FourWayDirection.Up;
-			UISystem.SetScene(new LobbyUI(), push);
+			AppMain.runningDirector = true;
+			Director.Instance.ReplaceScene(new TwoPlayer());
+			//UISystem.SetScene(new LobbyUI(), push);
+			
         }
 
         void HandleBtnHostGameTouchEventReceived (object sender, TouchEventArgs e)
         {
 			AppMain.ISHOST = true;
-			PushTransition push = new PushTransition();
-			push.MoveDirection = FourWayDirection.Up;
-			UISystem.SetScene(new LobbyUI(), push);
+			//AppMain.runningDirector = true;
+			AppMain.runningDirector = true;
+			Director.Instance.ReplaceScene(new TwoPlayer());
+//			PushTransition push = new PushTransition();
+//			push.MoveDirection = FourWayDirection.Up;
+//			UISystem.SetScene(new LobbyUI(), push);
 			
         }
 
