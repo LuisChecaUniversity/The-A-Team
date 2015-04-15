@@ -19,7 +19,7 @@ namespace TheATeam
 		Player 				player2;
 		Font 				font;
 		FontMap 			debugFont;
-		
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
 		private Label 		lblTopLeft;
 		private Label 		lblTopRight;
 		private int 		screenWidth;
@@ -85,12 +85,12 @@ namespace TheATeam
 			{
 				blockedAreaSprite.Position = new Vector2(screenWidth/2, 0.0f);
 				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
+				lblTopLeft.FontMap = fontl;
 				lblTopLeft.Text = "";
 				lblTopLeft.Position = new Vector2(screenWidth/2 + 140, screenHeight/2 + 50 );
 				
 				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
+				lblTopRight.FontMap = fontl;
 				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(screenWidth/2 + 100, screenHeight/2- 150);
 			}
@@ -98,12 +98,12 @@ namespace TheATeam
 			{
 				blockedAreaSprite.Position = new Vector2(0, 0.0f);
 				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
+				lblTopLeft.FontMap = fontl;
 				lblTopLeft.Text = "";
 				lblTopLeft.Position = new Vector2(140, screenHeight/2 + 50 );
 				
 				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
+				lblTopRight.FontMap = fontl;
 				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(100, screenHeight/2- 150);
 			}

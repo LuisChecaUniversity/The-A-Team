@@ -53,6 +53,7 @@ namespace TheATeam
 		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
 		private bool pointerOn = false;
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
 		
 		public Level(): base()
 		{
@@ -144,12 +145,12 @@ namespace TheATeam
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 
 			lblTopLeft = new Label();
-			lblTopLeft.FontMap = debugFont;
+			lblTopLeft.FontMap = fontl;
 			lblTopLeft.Text = "";
 			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
 			lblTopRight = new Label();
-			lblTopRight.FontMap = debugFont;
+			lblTopRight.FontMap = fontl;
 			lblTopRight.Text = "Press Start to Continue";
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
@@ -215,7 +216,7 @@ namespace TheATeam
 			//Timer Stuff
 			lblTimer = new Label();
 			
-			FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
+			
 			lblTimer.FontMap = fontl;
 			lblTimer.Color = Colors.Grey80;
 			lblTimer.Text = ""; // might be worth having a ui to separate class
