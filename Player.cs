@@ -207,7 +207,7 @@ namespace TheATeam
 			
 			// Find current tile and apply collision
 			HandleCollision();
-		Position = Position + positionDelta;
+			Position = Position + positionDelta;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 		}
@@ -417,7 +417,7 @@ namespace TheATeam
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
 			float tileHeight = 64.0f/2;
-			float tileWidth = 45.0f/2;
+			float tileWidth = 40.0f/2;
 			
 			if(Center.X + width < t.Center.X - tileWidth)
 			{
@@ -458,7 +458,7 @@ namespace TheATeam
 				Position = new Vector2(Position.X, 0 + height);
 			
 			float tileHeight = 64.0f/2;
-			float tileWidth = 45.0f/2;
+			float tileWidth = 40.0f/2;
 			
 			// check tile collisions
 			foreach (Tile t in Tile.Collisions)
@@ -467,25 +467,26 @@ namespace TheATeam
 				{
 					if(hasCollidedTile(t))
 					{
+						float pushBack = 4.0f;
 						if(Center.X + width >= t.Center.X - tileWidth && Center.X - width <t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
 							Console.WriteLine("Left Col");
-							Position = new Vector2(t.Center.X - tileWidth - width - 1.0f, Position.Y);
+							Position = new Vector2(t.Center.X - tileWidth - width - pushBack, Position.Y);
 						}
 						else if(Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
 							Console.WriteLine("Right Col");
-							Position = new Vector2(t.Center.X + tileWidth + width + 1.0f, Position.Y);
+							Position = new Vector2(t.Center.X + tileWidth + width + pushBack, Position.Y);
 						}
-						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X < t.Center.X + tileWidth && Center.X > t.Center.X - tileWidth)
+						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
 						{
 							Console.WriteLine("Bot Col");
-							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - 1.0f);
+							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - pushBack);
 						}
-						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X < t.Center.X + tileWidth && Center.X > t.Center.X - tileWidth)
+						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
 						{
 							Console.WriteLine("Top Col");
-							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + 1.0f);
+							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + pushBack);
 						}
 						else // delete
 						{
