@@ -155,9 +155,9 @@ namespace TheATeam
 			UpdateShield(dt);
 			RegenHealth(dt);
 			SlowEffect(dt);
-			
-			//Position = Position + positionDelta;
-			
+			//_stats.moveSpeed = 0.1f;
+			Position = Position + positionDelta;
+			Console.WriteLine(_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -207,7 +207,7 @@ namespace TheATeam
 			
 			// Find current tile and apply collision
 			HandleCollision();
-			Position = Position + positionDelta;
+			//Position = Position + positionDelta;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 		}
@@ -617,6 +617,7 @@ namespace TheATeam
 				_stats.Reset();
 				elementShield.TileIndex2D.Y = (int)ShieldEffect.None;
 				ShieldVisible = false;
+				
 				break;
 			case "Earth":
 				// More health tiles, implemented in LoadTileProperties()
@@ -694,7 +695,7 @@ namespace TheATeam
 				Position = startingPosition;
 				_stats.health = _stats.MaxHealth;
 				_stats.mana = _stats.MaxMana;
-				_stats.moveSpeed = 1.0f;
+				
 				ElementBuff("Neutral");
 				ChangeTiles("Neutral");
 				Element = 'N';

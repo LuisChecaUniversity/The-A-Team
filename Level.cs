@@ -80,9 +80,12 @@ namespace TheATeam
 			Vector2 player2Pos = Vector2.Zero;
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
+			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6));
+			string level = "/Application/assets/level" + levelNumber + ".txt";
 			
-			string level = "/Application/assets/level" + (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6)) + ".txt";
-	
+			if(levelNumber == 2)
+				player1Deployed = maxDeployed;
+			
 			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
@@ -490,6 +493,7 @@ namespace TheATeam
 										t.Key = 'N';
 										Tile.Collisions.Add(t);
 										playerDeployed++;
+										
 									}
 								}
 								else if (t.Key == 'N')
