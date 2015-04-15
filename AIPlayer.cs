@@ -112,7 +112,7 @@ namespace TheATeam
 			
 			if(targetWP != null)
 			{
-				if(targetWP.tile.IsCollidable && targetWP.tile.Key != Element)
+				if(targetWP.tile.IsCollidable && (targetWP.tile.Key != Element || targetWP.tile.Key == 'N'))
 				{
 					if(_stats.mana > _stats.MaxMana/2)
 						Shoot (targetWP.tile.Center);
@@ -199,7 +199,7 @@ namespace TheATeam
 			if(!canShoot)
 				attackGap = Info.Rnd.Next(-10, 250);
 			Vector2 point;
-			if(ItemManager.Player1HoldingFlag || player1.Center.X > Director.Instance.GL.Context.GetViewport().Width * 0.66f)
+			if(ItemManager.Player1HoldingFlag && !ItemManager.Player2HoldingFlag || player1.Center.X > Director.Instance.GL.Context.GetViewport().Width * 0.66f)
 				point= player1.Center + Vec2DNormalize(player1Flag.position- player1.Center ) * attackGap;
 			else
 				point= player1.Center + Vec2DNormalize(player2Flag.position- player1.Center ) * attackGap;

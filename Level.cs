@@ -464,37 +464,40 @@ namespace TheATeam
 				float screenx = (testtouches[0].X + 0.5f) * screenwidth;
 				float screenY = screenHeight - (testtouches[0].Y + 0.5f) * screenheight;
 				Vector2 touchVec = new Vector2(screenx, screenY);
-					
-				if (testtouches[0].Status == TouchStatus.Down)
+				
+				if(screenY < screenheight - 32.0f) // prevents tiles behind UI
 				{
-					Console.WriteLine("Touched" + touchVec);
-					Console.WriteLine(player1Tiles[0].Position);
-					
-					
-					foreach (Tile t in playerTiles)
+					if (testtouches[0].Status == TouchStatus.Down)
 					{
-						if (t.Key == '_')
+						Console.WriteLine("Touched" + touchVec);
+						Console.WriteLine(player1Tiles[0].Position);
+						
+						
+						foreach (Tile t in playerTiles)
 						{
-							t.Key = 'B';
-						}
-
-						if (t.Overlaps(touchVec))
-						{
-							if (t.Key != 'N' && playerDeployed < maxDeployed)
-							{
-								// returns player 1 flag and checks if touch pos collides with it
-								if (!t.Overlaps(p1baseSprite) || !t.Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
-								{
-									t.Key = 'N';
-									Tile.Collisions.Add(t);
-									playerDeployed++;
-								}
-							}
-							else if (t.Key == 'N')
+							if (t.Key == '_')
 							{
 								t.Key = 'B';
-								Tile.Collisions.Remove(t);
-								playerDeployed--;
+							}
+	
+							if (t.Overlaps(touchVec))
+							{
+								if (t.Key != 'N' && playerDeployed < maxDeployed)
+								{
+									// returns player 1 flag and checks if touch pos collides with it
+									if (!t.Overlaps(p1baseSprite) || !t.Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
+									{
+										t.Key = 'N';
+										Tile.Collisions.Add(t);
+										playerDeployed++;
+									}
+								}
+								else if (t.Key == 'N')
+								{
+									t.Key = 'B';
+									Tile.Collisions.Remove(t);
+									playerDeployed--;
+								}
 							}
 						}
 					}

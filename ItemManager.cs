@@ -131,8 +131,8 @@ namespace TheATeam
 		
 		public void ItemCollision(Player p1, Player p2)
 		{
-			Vector2 p1Size = new Vector2(42.0f, 32.0f);//new Vector2(p1.Quad.Bounds2().Point11.X, p1.Quad.Bounds2().Point11.Y);
-			Vector2 p2Size = new Vector2(42.0f, 32.0f);//new Vector2(p2.Quad.Bounds2().Point11.X, p2.Quad.Bounds2().Point11.Y);
+			Vector2 p1Size = new Vector2(p1.Quad.Bounds2().Point11.X, p1.Quad.Bounds2().Point11.Y);
+			Vector2 p2Size = new Vector2(p2.Quad.Bounds2().Point11.X, p2.Quad.Bounds2().Point11.Y);
 			// Will need to check this against every tile + player positions
 			
 			foreach (Item item in items)
@@ -150,10 +150,11 @@ namespace TheATeam
 						{
 							ElementCollision(p1, item);
 						}
+						
 						switch (item.Name)
 						{
 						case "Player1Flag":
-							item.ResetFlag();
+							//item.ResetFlag();
 							item.iSprite.Visible = true;
 							item.collided = false;
 							break;
@@ -165,7 +166,7 @@ namespace TheATeam
 						}
 					}
 					//check player 2 with items
-					if (item.hasCollided(p2.Position, p2Size))
+					else if (item.hasCollided(p2.Position, p2Size))
 					{
 						item.iSprite.Visible = false;
 						item.collided = true;
@@ -179,7 +180,7 @@ namespace TheATeam
 							Player2HoldingFlag = true;
 							break;
 						case "Player2Flag":
-							item.ResetFlag();
+							//item.ResetFlag();
 							item.iSprite.Visible = true;
 							item.collided = false;
 							break;

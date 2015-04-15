@@ -157,6 +157,7 @@ namespace TheATeam
 			SlowEffect(dt);
 			
 			Position = Position + positionDelta;
+			Console.WriteLine("MS " +_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -206,7 +207,7 @@ namespace TheATeam
 			
 			// Find current tile and apply collision
 			HandleCollision();
-	
+		//Position = Position + positionDelta;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
 		}
@@ -411,65 +412,151 @@ namespace TheATeam
 				TileIndex2D.X = animationRangeX.X;
 			}
 		}
+		bool hasCollidedTile(Tile t)
+		{
+			float width = Quad.Bounds2().Point11.X;
+			float height = Quad.Bounds2().Point11.Y;
+			float tileHeight = 64.0f/2;
+			float tileWidth = 44.0f/2;
+			
+			if(Center.X + width < t.Center.X - tileWidth)
+			{
+				return false;
+			}
+			else if(Center.X - width> t.Center.X + tileWidth)
+			{
+				return false;
+			}
+			else if(Center.Y + height < t.Center.Y - tileHeight)
+			{
+				return false;
+			}
+			else if(Center.Y - height > t.Center.Y + tileHeight)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
 		
 		protected void HandleCollision()
 		{
-			Vector2 nextPos = Position + positionDelta;
-			float screenWidth = Director.Instance.GL.Context.Screen.Width;
-			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
+			float width = Quad.Bounds2().Point11.X;
+			float height = Quad.Bounds2().Point11.Y;
 
-			if (nextPos.X + PlayerSize > screenWidth + 50)
-			{
-				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
-			}
-
-			if (nextPos.X < 18)
-			{
-				Position = new Vector2(18, Position.Y);
-			}
 			
-			if (nextPos.Y < 18)
-			{
-				Position = new Vector2(Position.X, 18);
-			}
-
-			if (nextPos.Y + PlayerSize > screenHeight + 50)
-			{
-				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
-			}
-
-			// Loop through tiles
+			// check viewport collisions
+			if(Center.X + width > Director.Instance.GL.Context.Screen.Width)// right side
+				Position = new Vector2(Director.Instance.GL.Context.Screen.Width - width, Position.Y);
+			if(Center.X - width < 0) // left side
+				Position = new Vector2(0 + width, Position.Y);
+			if(Center.Y + height > Director.Instance.GL.Context.Screen.Height - 32.0f)// top
+				Position = new Vector2(Position.X,  Director.Instance.GL.Context.Screen.Height - height - 32.0f);
+			if(Center.Y - height < 0) // bottom
+				Position = new Vector2(Position.X, 0 + height);
+			
+			float tileHeight = 64.0f/2;
+			float tileWidth = 44.0f/2;
+			
+			// check tile collisions
 			foreach (Tile t in Tile.Collisions)
 			{
-				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
-				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
-				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
-				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
-				
-				if (fromLeft && fromRight && fromTop && fromBottom)
+				if(t.IsCollidable && (t.Key != Element || t.Key == 'N'))
 				{
-					if (!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
+					if(hasCollidedTile(t))
 					{
-						if (fromLeft && positionDelta.X > 0)
+						if(Center.X + width >= t.Center.X - tileWidth && Center.X - width <t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
+							Console.WriteLine("Left Col");
+							Position = new Vector2(t.Center.X - tileWidth - width - 1.0f, Position.Y);
 						}
-						else if (fromRight && positionDelta.X < 0)
+						else if(Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
+							Console.WriteLine("Right Col");
+							Position = new Vector2(t.Center.X + tileWidth + width + 1.0f, Position.Y);
 						}
-						else if (fromTop && positionDelta.Y < 0)
+						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight /*&& Center.X < t.Center.X + tileWidth && Center.X > t.Center.X - tileWidth*/)
 						{
-							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
+							Console.WriteLine("Bot Col");
+							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - 1.0f);
 						}
-						else if (fromBottom && positionDelta.Y > 0)
+						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight /*&& Center.X < t.Center.X + tileWidth && Center.X > t.Center.X - tileWidth*/)
 						{
-							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
+							Console.WriteLine("Top Col");
+							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + 1.0f);
 						}
-						positionDelta = Vector2.Zero;
+						else // delete
+						{
+							Console.WriteLine("---------------------------------");
+//							Vector2 point = Center.Reflect((Center - t.Center).Perpendicular()).Normalize();
+//							
+//							if(!point.IsNaN())
+//								Position = new Vector2(Position.X + point.X, Position.Y + point.Y);
+//							positionDelta = Vector2.Zero;
+						}
+						
 					}
 				}
 			}
+			
+//			Vector2 nextPos = Position + positionDelta;
+//			float screenWidth = Director.Instance.GL.Context.Screen.Width;
+//			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
+//
+//			if (nextPos.X + PlayerSize > screenWidth + 50)
+//			{
+//				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
+//			}
+//
+//			if (nextPos.X < 18)
+//			{
+//				Position = new Vector2(18, Position.Y);
+//			}
+//			
+//			if (nextPos.Y < 18)
+//			{
+//				Position = new Vector2(Position.X, 18);
+//			}
+//
+//			if (nextPos.Y + PlayerSize > screenHeight + 50)
+//			{
+//				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
+//			}
+//
+//			// Loop through tiles
+//			foreach (Tile t in Tile.Collisions)
+//			{
+//				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
+//				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
+//				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
+//				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
+//				
+//				if (fromLeft && fromRight && fromTop && fromBottom)
+//				{
+//					if (!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
+//					{
+//						if (fromLeft && positionDelta.X > 0)
+//						{
+//							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
+//						}
+//						else if (fromRight && positionDelta.X < 0)
+//						{
+//							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
+//						}
+//						else if (fromTop && positionDelta.Y < 0)
+//						{
+//							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
+//						}
+//						else if (fromBottom && positionDelta.Y > 0)
+//						{
+//							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
+//						}
+//						positionDelta = Vector2.Zero;
+//					}
+//				}
+//			}
 			// Loop through enemy tiles
 			Player p = Info.P1 == this ? Info.P2 : Info.P1;
 			foreach (Tile t in p.playerTiles)
@@ -662,21 +749,32 @@ namespace TheATeam
 		public void Player1Score()
 		{
 			Vector2 nextPos1 = Position + positionDelta;
+			Item p1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
 			
-			if (nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
+			if(p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
 				Info.IsGameOver = true;
 			}
+//			if (nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
+//			{
+//				Info.IsGameOver = true;
+//			}
 		}
 		
 		public void Player2Score()
 		{
-			Vector2 nextPos2 = Position + positionDelta;
+			Item p2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 			
-			if (nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
+			if(p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
 				Info.IsGameOver = true;
 			}
+//			Vector2 nextPos2 = Position + positionDelta;
+//			
+//			if (nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
+//			{
+//				Info.IsGameOver = true;
+//			}
 		}
 
 		public Vector2 GetShootingDirection()
