@@ -157,7 +157,7 @@ namespace TheATeam
 			SlowEffect(dt);
 			//_stats.moveSpeed = 0.1f;
 			Position = Position + positionDelta;
-			Console.WriteLine(_stats.moveSpeed);
+			//Console.WriteLine(_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -470,27 +470,27 @@ namespace TheATeam
 						float pushBack = 4.0f;
 						if(Center.X + width >= t.Center.X - tileWidth && Center.X - width <t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Left Col");
+							//Console.WriteLine("Left Col");
 							Position = new Vector2(t.Center.X - tileWidth - width - pushBack, Position.Y);
 						}
 						else if(Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Right Col");
+							//Console.WriteLine("Right Col");
 							Position = new Vector2(t.Center.X + tileWidth + width + pushBack, Position.Y);
 						}
 						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Bot Col");
+							//Console.WriteLine("Bot Col");
 							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - pushBack);
 						}
 						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Top Col");
+							//Console.WriteLine("Top Col");
 							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + pushBack);
 						}
 						else // delete
 						{
-							Console.WriteLine("---------------------------------");
+							//Console.WriteLine("---------------------------------");
 //							Vector2 point = Center.Reflect((Center - t.Center).Perpendicular()).Normalize();
 //							
 //							if(!point.IsNaN())
@@ -585,7 +585,7 @@ namespace TheATeam
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
 				ShootingDirection.Normalize();
-				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
+				//Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
 			}

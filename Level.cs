@@ -150,12 +150,12 @@ namespace TheATeam
 			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
 
 
-			lblTopLeft = new Label();
+			lblTopLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			lblTopLeft.FontMap = fontl;
 			lblTopLeft.Text = "";
 			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
-			lblTopRight = new Label();
+			lblTopRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
 			lblTopRight.FontMap = fontl;
 
 			lblTopRight.Text = "Press Start to Continue";
@@ -362,7 +362,7 @@ namespace TheATeam
 				collidingProjectile = ProjectileManager.Instance.ProjectileCollision(t);
 				if (collidingProjectile != null)
 				{
-					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
+					//Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
 					t.TakeDamage(collidingProjectile.GetPlayer().Element);
 					
 //					char collisionType = collidingProjectile.GetPlayer().Element;//ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
@@ -485,8 +485,8 @@ namespace TheATeam
 				{
 					if (testtouches[0].Status == TouchStatus.Down)
 					{
-						Console.WriteLine("Touched" + touchVec);
-						Console.WriteLine(player1Tiles[0].Position);
+						///Console.WriteLine("Touched" + touchVec);//
+						//Console.WriteLine(player1Tiles[0].Position);
 						
 						
 						foreach (Tile t in playerTiles)

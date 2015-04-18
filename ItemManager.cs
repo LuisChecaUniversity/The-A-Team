@@ -69,7 +69,7 @@ namespace TheATeam
 				}
 				
 				indexList.Add(r);
-				Console.WriteLine(r);
+				//Console.WriteLine(r);
 			}
 			
 			lightningElement = new Item(curScene, RandomPosition(indexList[0]), lightningIndex, ItemType.element, "Lightning");
@@ -142,7 +142,7 @@ namespace TheATeam
 					//check player 1 with items first
 					if (item.hasCollided(p1.Position, p1Size))
 					{
-						Console.WriteLine("Collided with " + item.Name);
+						//Console.WriteLine("Collided with " + item.Name);
 						item.iSprite.Visible = false;
 						item.collided = true;
 						
@@ -243,7 +243,7 @@ namespace TheATeam
 					}
 					else if (item.Name == "Player1Flag" && p.whichPlayer ==PlayerIndex.PlayerTwo)
 					{
-						Console.WriteLine("Reset " + item.Name);	
+						//Console.WriteLine("Reset " + item.Name);	
 						Player2HoldingFlag = false;
 						item.iSprite.Visible = true;
 						item.collided = false;
