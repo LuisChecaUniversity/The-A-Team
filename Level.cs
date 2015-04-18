@@ -125,13 +125,24 @@ namespace TheATeam
 			AddChild(p1baseSprite);
 			AddChild(p2baseSprite);
 			
-			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
+			
 			if(AppMain.TYPEOFGAME == "SINGLE")
-				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
-			else if(AppMain.TYPEOFGAME == "DUAL")
-
 			{
+				Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
+				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
+			}
+			else if(AppMain.TYPEOFGAME == "DUAL")
+			{
+				Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
+				player2.Update(0.0f);
+			}
+			else if(AppMain.TYPEOFGAME == "MULTIPLAYER")
+			{
+				//if(AppMain.ISHOST)
+					Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
+				//else
+					Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
 				player2.Update(0.0f);
 			}
 			
@@ -454,6 +465,10 @@ namespace TheATeam
 					}
 				}
 				
+				
+			}
+			else if (AppMain.TYPEOFGAME == "MULTIPLAYER")
+			{
 				
 			}
 		}
