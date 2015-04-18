@@ -19,13 +19,18 @@ namespace TheATeam
         {
 
 				InitializeWidget();
-	
+			
 					
 			btnSolo.TouchEventReceived += HandleBtnSoloTouchEventReceived;
 			btnDual.TouchEventReceived += HandleBtnDualTouchEventReceived;
 			btnOnline.TouchEventReceived += HandleBtnOnlineTouchEventReceived;
-			
+			btnQuit.TouchEventReceived += HandleBtnQuitTouchEventReceived;
 			//}
+        }
+
+        void HandleBtnQuitTouchEventReceived (object sender, TouchEventArgs e)
+        {
+        	AppMain.QUITGAME = true;
         }
 
         void HandleBtnOnlineTouchEventReceived (object sender, TouchEventArgs e)
