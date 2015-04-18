@@ -6,6 +6,10 @@ using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.HighLevel.UI;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 
+
+//TODO close sockets when you press main menu or back
+// try get a delete all fields before going to the company
+
 namespace TheATeam
 {
     public partial class LobbyUI : Sce.PlayStation.HighLevel.UI.Scene

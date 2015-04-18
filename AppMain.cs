@@ -144,6 +144,13 @@ namespace TheATeam
 				GameSceneManager.currentScene = placingTest;
 				Director.Instance.ReplaceScene(placingTest);
 				break;
+			case "MULTIPLAYER":
+				runningDirector = true;
+				Info.TotalGameTime = 0f;
+				Level multiLevel = new Level();
+				GameSceneManager.currentScene = multiLevel;
+				Director.Instance.ReplaceScene(multiLevel);
+				break;
 			default:
 				break;
 			}	

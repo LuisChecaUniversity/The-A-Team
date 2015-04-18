@@ -12,8 +12,8 @@ namespace TheATeam
         public OnlineName()
         {
             InitializeWidget();
-			
-				EditableText_1.Text = "";
+			Random r = new Random();
+				EditableText_1.Text = "Vita " + r.Next(1,10);
 			EditableText_1.DefaultText = "Enter Name Here";
 		btnBack.TouchEventReceived += Handle_btnBackTouchEventReceived;
 			btnEnter.TouchEventReceived += HandleBtnEnterTouchEventReceived;

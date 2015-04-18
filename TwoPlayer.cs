@@ -916,24 +916,9 @@ namespace TheATeam
 		
 			base.Update (dt);
 			
-			
-			
-			
 			if(lobbyUI.p1Ready && lobbyUI.p2Ready)
 			{
-				TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-			                                                 new Vector2i(4, 8)));
-					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-			                                                 new Vector2i(9, 14)));
-					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-					
-					Info.TotalGameTime = 0f;
-					
-					
-					MultiplayerLevel level = new MultiplayerLevel();
-					level.Camera.SetViewFromViewport();
-					GameSceneManager.currentScene = level;
-					Director.Instance.ReplaceScene(level);
+				AppMain.ChangeGame("MULTIPLAYER");
 			}
 			else
 			{
@@ -1178,7 +1163,7 @@ namespace TheATeam
 				{
 					if(item.Value.Equals(button.Text))
 					{
-						Console.WriteLine(item.Value + " : " + item.Key);
+						//Console.WriteLine(item.Value + " : " + item.Key);
 						AppMain.IPADDRESS = item.Key;
 						                 
 					}
