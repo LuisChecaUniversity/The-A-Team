@@ -31,7 +31,6 @@ namespace TheATeam
         void HandleBtnOnlineTouchEventReceived (object sender, TouchEventArgs e)
         {
 			AppMain.TYPEOFGAME="MULTIPLAYER";
-        	//UISystem.PushScene(new OnlineName());
 			PushTransition push = new PushTransition();
 			push.MoveDirection = FourWayDirection.Left;
 			UISystem.SetScene(new OnlineName(), push);

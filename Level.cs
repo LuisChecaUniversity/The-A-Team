@@ -118,7 +118,8 @@ namespace TheATeam
 				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
 			else if(AppMain.TYPEOFGAME == "DUAL")
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);	
-			
+			else if (AppMain.TYPEOFGAME == "MULTIPLAYER")
+				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
 			AddChild(player1);
 			AddChild(player2);
 		}
