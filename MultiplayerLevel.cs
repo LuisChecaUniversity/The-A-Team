@@ -19,7 +19,7 @@ namespace TheATeam
 		Player 				player2;
 		Font 				font;
 		FontMap 			debugFont;
-		
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
 		private Label 		lblTopLeft;
 		private Label 		lblTopRight;
 		private int 		screenWidth;
@@ -52,10 +52,12 @@ namespace TheATeam
 			Info.IsGameOver = false;
 			Vector2 player1Pos = Vector2.Zero;
 			Vector2 player2Pos = Vector2.Zero;
+			Vector2 p1Flag = Vector2.Zero;//new Vector2(p1baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
+			Vector2 p2Flag = Vector2.Zero; //new Vector2(screenWidth - p2baseSprite.Quad.S.X/2, (screenHeight + 32) / 2);
 			
             AddChild(new Background());
 			
-			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos, this);
+			Tile.Loader("/Application/assets/level2.txt", ref player1Pos, ref player2Pos,ref p1Flag, ref p2Flag, this);
 			for (int i = 0; i < 8; i++) 
 				{
 					for (int j = 0; j < 5; j++) 
@@ -83,12 +85,12 @@ namespace TheATeam
 			{
 				blockedAreaSprite.Position = new Vector2(screenWidth/2, 0.0f);
 				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
+				lblTopLeft.FontMap = fontl;
 				lblTopLeft.Text = "";
 				lblTopLeft.Position = new Vector2(screenWidth/2 + 140, screenHeight/2 + 50 );
 				
 				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
+				lblTopRight.FontMap = fontl;
 				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(screenWidth/2 + 100, screenHeight/2- 150);
 			}
@@ -96,12 +98,12 @@ namespace TheATeam
 			{
 				blockedAreaSprite.Position = new Vector2(0, 0.0f);
 				lblTopLeft = new Label();
-				lblTopLeft.FontMap = debugFont;
+				lblTopLeft.FontMap = fontl;
 				lblTopLeft.Text = "";
 				lblTopLeft.Position = new Vector2(140, screenHeight/2 + 50 );
 				
 				lblTopRight = new Label();
-				lblTopRight.FontMap = debugFont;
+				lblTopRight.FontMap = fontl;
 				lblTopRight.Text = "Press Start to Deploy!";
 				lblTopRight.Position = new Vector2(100, screenHeight/2- 150);
 			}
@@ -109,7 +111,7 @@ namespace TheATeam
 			this.AddChild(player1);
 			this.AddChild(player2);
 
-			ItemManager.Instance.initFlags(this);
+			ItemManager.Instance.initFlags(this, new Vector2(30, 290), new Vector2(926, 290));
 			ItemManager.Instance.initElements(this);
 
 			//this.AddChild(blockedAreaSprite);

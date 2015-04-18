@@ -129,11 +129,12 @@ namespace TheATeam
 		
 		public Sides Sides { get; set; }
 		
+		protected static Vector2 boundsScale = new Vector2(0.71f, 0.97f);
+		
 		public Bounds2 WorldBounds
-		{ 
+		{
 			get
 			{
-				Vector2 boundsScale = new Vector2(0.95f);
 				Bounds2 thisBounds = this.GetlContentLocalBounds();
 				this.GetContentWorldBounds(ref thisBounds);
 				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
@@ -144,13 +145,13 @@ namespace TheATeam
 		public Tile(Vector2 position): base()
 		{
 			Position = position;
-			TextureInfo = TexInfo;
-			Quad.S = TextureInfo.TileSizeInPixelsf;
 			IsCollidable = false;
 		}
 
 		public Tile(char loadKey, Vector2 position): this(position)
 		{
+			TextureInfo = TexInfo;
+			Quad.S = TextureInfo.TileSizeInPixelsf;
 			Key = loadKey;
 		}
 		
@@ -220,7 +221,10 @@ namespace TheATeam
 		{
 			if (IsAlive && _isWall)
 			{
-				_stats.health += damage * (element == Key ? 1 : -1);
+				if(element == 'N')
+					_stats.health -= damage;
+				else
+					_stats.health += damage * (element == Key ? 1 : -1);
 			}
 		}
 		
@@ -268,7 +272,8 @@ namespace TheATeam
 			return types;
 		}
 		
-		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, Scene scene)
+		public static void Loader(string filepath, ref Vector2 player1Pos, ref Vector2 player2Pos, 
+		                          ref Vector2 p1Flag, ref Vector2 p2Flag, Scene scene)
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
@@ -313,7 +318,15 @@ namespace TheATeam
 					// Player 2 start
 					if (c == '2')
 					{
-						player2Pos = pos;
+						player2Pos = new Vector2(pos.X + Width, pos.Y);
+					}
+					if(c== '3')
+					{
+						p1Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
+					}
+					if(c== '4')
+					{
+						p2Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
 					}
 
 					// End col: Move to next tile "grid"

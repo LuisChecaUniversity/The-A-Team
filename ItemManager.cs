@@ -37,13 +37,13 @@ namespace TheATeam
 			items = new List<Item>();
 		}
 
-		public void initFlags(Scene curScene)
+		public void initFlags(Scene curScene, Vector2 p1Flag, Vector2 p2Flag)
 		{
 			Player1HoldingFlag = false;
 			Player2HoldingFlag = false;
-			FirstFlag = new Vector2(30, 290);
+			FirstFlag = p1Flag;//new Vector2(30, 290);
+			SecondFlag = p2Flag;//new Vector2(926, 290);
 			leftFlag = new Item(curScene, FirstFlag, flagIndex, ItemType.flag, "Player1Flag");
-			SecondFlag = new Vector2(926, 290);
 			rightFlag = new Item(curScene, SecondFlag, flagIndex, ItemType.flag, "Player2Flag");
 			
 			items.Clear();
@@ -53,23 +53,60 @@ namespace TheATeam
 
 		public void initElements(Scene curScene)
 		{
-			Vector2 pos1 = new Vector2(400, 50);
-			Vector2 pos2 = new Vector2(560, 150);
-			Vector2 pos3 = new Vector2(480, 250);
-			Vector2 pos4 = new Vector2(400, 350);
-			Vector2 pos5 = new Vector2(560, 450);
+//			Vector2 pos1 = new Vector2(400, 50);
+//			Vector2 pos2 = new Vector2(570, 140);
+//			Vector2 pos3 = new Vector2(480, 250);
+//			Vector2 pos4 = new Vector2(390, 370);
+//			Vector2 pos5 = new Vector2(560, 450);
 			
-			lightningElement = new Item(curScene, pos1, lightningIndex, ItemType.element, "Lightning");
-			airElement = new Item(curScene, pos2, airIndex, ItemType.element, "Air");
-			earthElement = new Item(curScene, pos3, earthIndex, ItemType.element, "Earth");
-			fireElement = new Item(curScene, pos4, fireIndex, ItemType.element, "Fire");
-			waterElement = new Item(curScene, pos5, waterIndex, ItemType.element, "Water");
+			List<int> indexList = new List<int>();
+			for (int i = 0; i < 5; i++) 
+			{
+				int r = Info.Rnd.Next(0,5);
+				while(indexList.Contains(r))
+				{
+					r = Info.Rnd.Next(0,5);
+				}
+				
+				indexList.Add(r);
+				Console.WriteLine(r);
+			}
+			
+			lightningElement = new Item(curScene, RandomPosition(indexList[0]), lightningIndex, ItemType.element, "Lightning");
+			airElement = new Item(curScene, RandomPosition(indexList[1]), airIndex, ItemType.element, "Air");
+			earthElement = new Item(curScene, RandomPosition(indexList[2]), earthIndex, ItemType.element, "Earth");
+			fireElement = new Item(curScene, RandomPosition(indexList[3]), fireIndex, ItemType.element, "Fire");
+			waterElement = new Item(curScene, RandomPosition(indexList[4]), waterIndex, ItemType.element, "Water");
 			
 			items.Add(lightningElement);
 			items.Add(airElement);
 			items.Add(earthElement);
 			items.Add(fireElement);
 			items.Add(waterElement);
+		}
+		private Vector2 RandomPosition(int i)
+		{
+			Vector2 pos = Vector2.Zero;
+			switch(i)
+			{
+			case 0:
+				pos = new Vector2(400, 50);
+				break;
+			case 1:
+				pos = new Vector2(570, 140);
+			break;
+			case 2:
+				pos = new Vector2(480, 250);
+				break;
+			case 3:
+				pos = new Vector2(390, 370);
+				break;
+			case 4:
+				pos = new Vector2(560, 450);
+				break;
+			}
+			return pos;
+			
 		}
 		
 		public void Update(float dt)
@@ -113,10 +150,11 @@ namespace TheATeam
 						{
 							ElementCollision(p1, item);
 						}
+						
 						switch (item.Name)
 						{
 						case "Player1Flag":
-							item.ResetFlag();
+							//item.ResetFlag();
 							item.iSprite.Visible = true;
 							item.collided = false;
 							break;
@@ -128,7 +166,7 @@ namespace TheATeam
 						}
 					}
 					//check player 2 with items
-					if (item.hasCollided(p2.Position, p2Size))
+					else if (item.hasCollided(p2.Position, p2Size))
 					{
 						item.iSprite.Visible = false;
 						item.collided = true;
@@ -142,7 +180,7 @@ namespace TheATeam
 							Player2HoldingFlag = true;
 							break;
 						case "Player2Flag":
-							item.ResetFlag();
+							//item.ResetFlag();
 							item.iSprite.Visible = true;
 							item.collided = false;
 							break;

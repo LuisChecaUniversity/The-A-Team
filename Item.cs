@@ -54,6 +54,8 @@ namespace TheATeam
 		public Vector2 position;
 		private Vector2 initialPosition;
 		public bool collided;
+		private float width = 32.0f;
+		private float height = 24.0f;
 		
 		public Item (Scene scene, Vector2 pos, Vector2i spriteIndex2D, ItemType type, string name)
 		{
@@ -90,35 +92,24 @@ namespace TheATeam
 			}
 		}
 		
-		public bool hasCollided(Vector2 objectPosition, Vector2 objectSize)
+		public bool hasCollided(Vector2 playerPosition, Vector2 playerSize)
 		{
 			// Collision for objects that are centred
 			
 			Bounds2 iBounds = iSprite.Quad.Bounds2();
-			float iWidth = iBounds.Point11.X;
-			float iHeight = iBounds.Point11.Y;
-			
-			float objectWidth = objectSize.X;
-			float objectHeight = objectSize.Y;
-//			
-//			if((position.X) < objectPosition.X - objectWidth)
-//				return false;
-//			else if(position.X - iWidth > (objectPosition.X ))
-//				return false;
-//			else if((position.Y) < objectPosition.Y - objectHeight)
-//				return false;
-//			else if(position.Y - iHeight > (objectPosition.Y ))
-//				return false;
-//			else 
-//				return true;
-			
-			if(position.X - iWidth> objectPosition.X + objectWidth)
+			float iWidth = width / 2 ;//iBounds.Point11.X;
+			float iHeight = height /2;// iBounds.Point11.Y;
+
+			float playerWidth = playerSize.X/2;
+			float playerHeight = playerSize.Y/2;
+
+			if(position.X - iWidth> playerPosition.X + playerWidth)
 				return false;
-			else if(position.X + iHeight < objectPosition.X )
+			else if(position.X + iHeight < playerPosition.X - playerWidth)
 				return false;
-			else if(position.Y - iWidth > objectPosition.Y + objectHeight)
+			else if(position.Y - iWidth > playerPosition.Y + playerHeight)
 				return false;
-			else if(position.Y + iHeight < objectPosition.Y )
+			else if(position.Y + iHeight < playerPosition.Y - playerHeight)
 				return false;
 			else 
 				return true;

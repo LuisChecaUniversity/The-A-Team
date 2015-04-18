@@ -42,12 +42,12 @@ namespace TheATeam
 			}
 				
 			
-			if(Input2.GamePad0.Square.Press)
+			if(Input2.GamePad0.Cross.Press)
 			{
 				switch(option)
 				{
 				case 1:	
-					//AppMain.TYPEOFGAME = "DUAL";
+					AppMain.TYPEOFGAME = "SINGLE";
 					Info.TotalGameTime = 0f;
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();
