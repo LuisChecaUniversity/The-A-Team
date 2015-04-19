@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-
 using Sce.PlayStation.Core;
 using Sce.PlayStation.Core.Environment;
 using Sce.PlayStation.Core.Graphics;
@@ -158,7 +156,7 @@ namespace TheATeam
 					case State.ChooseTypeGame:
 						if (buttonClient.HitTest(new Vector2(screenx, screenY)) && touchDataList[0].Status == TouchStatus.Down)
 						{
-							Console.WriteLine("Duo Player");
+							System.Diagnostics.Debug.WriteLine("Duo Player");
 							TYPEOFGAME = "DUAL";
 							graphics.Dispose();
 							runningDirector = true;
@@ -166,7 +164,7 @@ namespace TheATeam
 						}	
 						if (buttonHost.HitTest(new Vector2(screenx, screenY)) && touchDataList[0].Status == TouchStatus.Down)
 						{
-							Console.WriteLine("Single Player");
+							System.Diagnostics.Debug.WriteLine("Single Player");
 							TYPEOFGAME = "SINGLE";
 							graphics.Dispose();
 							runningDirector = true;
@@ -174,7 +172,7 @@ namespace TheATeam
 						}
 						if (buttonMulti.HitTest(new Vector2(screenx, screenY)) && touchDataList[0].Status == TouchStatus.Down)
 						{
-							Console.WriteLine("MultiPlayer");
+							System.Diagnostics.Debug.WriteLine("MultiPlayer");
 							TYPEOFGAME = "MULTIPLAYER";
 							buttonMulti.Visible = false;
 							buttonHost.Text = "Host";
@@ -185,7 +183,7 @@ namespace TheATeam
 					case State.ChooseHostClient:
 						if (buttonHost.HitTest(new Vector2(screenx, screenY)) && touchDataList[0].Status == TouchStatus.Down)
 						{
-							Console.WriteLine("Host");
+							System.Diagnostics.Debug.WriteLine("Host");
 							ISHOST = true;
 							TYPEOFGAME = "MULTIPLAYER";
 							graphics.Dispose();
@@ -195,7 +193,7 @@ namespace TheATeam
 						}
 						else if (buttonClient.HitTest(new Vector2(screenx, screenY)) && touchDataList[0].Status == TouchStatus.Down)
 						{
-							Console.WriteLine("OK");
+							System.Diagnostics.Debug.WriteLine("OK");
 							ISHOST = false;
 							textbox.Visible = true;
 							buttonHost.Visible = false;

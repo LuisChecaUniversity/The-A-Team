@@ -1,9 +1,7 @@
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
@@ -119,7 +117,7 @@ namespace TheATeam
 				}
 				else
 				{
-					System.Console.WriteLine("Failed to get world bounds");
+					System.Diagnostics.Debug.WriteLine("Failed to get world bounds");
 				}
 				return thisBounds;
 			}

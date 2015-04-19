@@ -1,12 +1,9 @@
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.Core.Imaging;
-using Sce.PlayStation.Core.Audio;
-using Sce.PlayStation.Core.Environment;
-using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
 using System.Timers;
 
@@ -254,7 +251,7 @@ namespace TheATeam
 
 		}
 
-		private void tickDown(object sender, EventArgs e)
+		private void tickDown(object sender, System.EventArgs e)
 		{
 			if (levelStage == LevelStage.CombatStage)
 			{
@@ -353,7 +350,7 @@ namespace TheATeam
 				collidingProjectile = ProjectileManager.Instance.ProjectileCollision(t);
 				if (collidingProjectile != null)
 				{
-					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
+					Debug.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
 					t.TakeDamage(collidingProjectile.GetPlayer().Element);
 				}
 				// Remove from collisions if true
@@ -436,8 +433,6 @@ namespace TheATeam
 						PostBuildStage();
 					}
 				}
-				
-				
 			}
 		}
 
@@ -469,8 +464,8 @@ namespace TheATeam
 				{
 					if (testtouches[0].Status == TouchStatus.Down)
 					{
-						Console.WriteLine("Touched" + touchVec);
-						Console.WriteLine(player1Tiles[0].Position);
+						Debug.WriteLine("Touched" + touchVec);
+						Debug.WriteLine(player1Tiles[0].Position);
 						
 						
 						foreach (Tile t in playerTiles)
@@ -523,6 +518,7 @@ namespace TheATeam
 			this.RemoveChild(lblTopLeft, true);
 			this.RemoveChild(lblTopRight, true);
 			levelStage = LevelStage.CombatStage;
+			string debugLine = "";
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
 			{
@@ -535,6 +531,12 @@ namespace TheATeam
 					}
 				}
 			}
+			
+			for(int j = player1Tiles.Count - 2; j >= 0; j--)
+			{
+				debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
+			}
+			System.Diagnostics.Debug.WriteLine(debugLine);
 			
 			ItemManager.Instance.initElements(this);
 		}

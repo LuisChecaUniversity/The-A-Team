@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
@@ -69,7 +66,7 @@ namespace TheATeam
 				}
 				
 				indexList.Add(r);
-				Console.WriteLine(r);
+				System.Diagnostics.Debug.WriteLine(r);
 			}
 			
 			lightningElement = new Item(curScene, RandomPosition(indexList[0]), lightningIndex, ItemType.element, "Lightning");
@@ -143,7 +140,7 @@ namespace TheATeam
 					//check player 1 with items first
 					if (item.hasCollided(p1.Position, p1Size))
 					{
-						Console.WriteLine("Collided with " + item.Name);
+						System.Diagnostics.Debug.WriteLine("Collided with " + item.Name);
 						item.iSprite.Visible = false;
 						item.collided = true;
 						
@@ -250,7 +247,7 @@ namespace TheATeam
 					}
 					else if (item.Name == "Player1Flag" && p.playerIndex == PlayerIndex.PlayerTwo)
 					{
-						Console.WriteLine("Reset " + item.Name);	
+						System.Diagnostics.Debug.WriteLine("Reset " + item.Name);	
 						Player2HoldingFlag = false;
 						item.iSprite.Visible = true;
 						item.collided = false;

@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D;
@@ -159,7 +159,7 @@ namespace TheATeam
 			RegenHealth(dt);
 			SlowEffect(dt);
 			Position = Position + (positionDelta * dt / 16f);
-			Console.WriteLine(_stats.moveSpeed);
+			//Debug.WriteLine(_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -450,27 +450,27 @@ namespace TheATeam
 						float pushBack = 4.0f;
 						if (Center.X + width >= t.Center.X - tileWidth && Center.X - width < t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Left Col");
+							Debug.WriteLine("Left Col");
 							Position = new Vector2(t.Center.X - tileWidth - width - pushBack, Position.Y);
 						}
 						else if (Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Right Col");
+							Debug.WriteLine("Right Col");
 							Position = new Vector2(t.Center.X + tileWidth + width + pushBack, Position.Y);
 						}
 						else if (Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Bot Col");
+							Debug.WriteLine("Bot Col");
 							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - pushBack);
 						}
 						else if (Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Top Col");
+							Debug.WriteLine("Top Col");
 							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + pushBack);
 						}
 						else // delete
 						{
-							Console.WriteLine("---------------------------------");
+							Debug.WriteLine("---------------------------------");
 //							Vector2 point = Center.Reflect((Center - t.Center).Perpendicular()).Normalize();
 //							
 //							if(!point.IsNaN())
@@ -526,7 +526,7 @@ namespace TheATeam
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
 				ShootingDirection.Normalize();
-				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
+				Debug.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
 				AudioManager.PlaySound("fire");
@@ -726,7 +726,7 @@ namespace TheATeam
 			if (slowed)
 			{
 				slowTimer += dt / 1000;
-				//Console.WriteLine("slowed " + slowTimer);
+				//Debug.WriteLine("slowed " + slowTimer);
 				_stats.moveSpeed = 0.3f;
 				
 				if (slowTimer > 2.0f)
