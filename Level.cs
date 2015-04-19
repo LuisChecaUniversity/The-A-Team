@@ -420,23 +420,23 @@ namespace TheATeam
 				if(AppMain.ISHOST)
 					{
 						player1.Update(dt);
-					if(canSend)
-					{
+					//if(canSend)
+					//{
 						AppMain.client.DataExchange();
-						Console.WriteLine("Sent message");
-						canSend = false;	
-					}
+					//	Console.WriteLine("Sent message");
+					//	canSend = false;	
+					//}
 						player2.Update(dt);
 					}
 					else
 					{
 						player2.Update(dt);
-					if(canSend)
-					{
+					//if(canSend)/
+					//{
 						AppMain.client.DataExchange();
-						Console.WriteLine("Sent message");
-						canSend = false;	
-					}
+					//	Console.WriteLine("Sent message");
+					//	canSend = false;	
+					//}
 						player1.Update(dt);
 					}
 			}
