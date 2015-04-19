@@ -633,7 +633,7 @@ namespace TheATeam
 				break;
 			case "Air":
 				// Speed boost
-				_stats.moveSpeed = 1.5f;
+				_stats.moveSpeed = 1.33f;
 				break;
 			case "Lightning":
 				// Increased mana regen
@@ -673,7 +673,7 @@ namespace TheATeam
 			// Earth + Air -> Tiles Grant Speed Boost
 			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
 			{
-				_stats.moveSpeed = 2f;
+				_stats.moveSpeed = 1.75f;
 			}
 			// Fire + Earth -> Collsion with Walls cause damage, implemented in HandleCollisions()
 			
