@@ -53,7 +53,7 @@ namespace TheATeam
 		private SpriteTile[] UIElements;
 		private SpriteUV hudBar;
 		private bool pointerOn = false;
-		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 27, FontStyle.Regular), 512);
 		
 		public Level(): base()
 		{
