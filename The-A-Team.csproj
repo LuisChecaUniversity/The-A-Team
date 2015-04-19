@@ -64,12 +64,6 @@
     <Compile Include="GameOver.cs" />
     <Compile Include="AIPlayer.cs" />
     <Compile Include="PathFinder.cs" />
-    <Compile Include="..\..\..\..\..\ecui\MenuScene1.composer.cs">
-      <Link>MenuScene1.composer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\..\..\ecui\MenuScene1.cs">
-      <Link>MenuScene1.cs</Link>
-    </Compile>
     <Compile Include="ECUIMainMenu.composer.cs" />
     <Compile Include="ECUIMainMenu.cs" />
     <Compile Include="OnlineName.cs" />
