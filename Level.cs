@@ -59,7 +59,7 @@ namespace TheATeam
 		
 		
 		//network variables
-		private float sendMessageTime = 1.0f;
+		private float sendMessageTime = 3.0f;
 		private float curSendTime = 0.0f;
 		private bool canSend;
 		
@@ -410,6 +410,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 				curSendTime += dt/100;
+				Console.WriteLine(curSendTime.ToString());
 				if(curSendTime > sendMessageTime)
 				{
 					canSend = true;
