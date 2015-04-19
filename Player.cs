@@ -19,14 +19,17 @@ namespace TheATeam
 		Shooting,
 	}
 	
-	public enum ShieldEffect { None = 2, Damage = 1, KnockBack = 0 }
+	public enum ShieldEffect
+	{
+		None = 2,
+		Damage = 1,
+		KnockBack = 0
+	}
 
 	public class Player: Tile
 	{
 		private static int Y_INDEX = 5;
 		private static float MoveDelta = 4f;
-		private static float PlayerSize = 64; // 64x64 px
-		private static float UISize = 32;
 		new static Vector2 boundsScale = new Vector2(1f);
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
@@ -155,7 +158,6 @@ namespace TheATeam
 			UpdateShield(dt);
 			RegenHealth(dt);
 			SlowEffect(dt);
-			//_stats.moveSpeed = 0.1f;
 			Position = Position + positionDelta;
 			Console.WriteLine(_stats.moveSpeed);
 			
@@ -316,7 +318,7 @@ namespace TheATeam
 		
 		private void DualUpdate(float dt)
 		{
-			if(whichPlayer == PlayerIndex.PlayerOne)
+			if (whichPlayer == PlayerIndex.PlayerOne)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
@@ -341,7 +343,7 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-			else if(whichPlayer == PlayerIndex.PlayerTwo)
+			else if (whichPlayer == PlayerIndex.PlayerTwo)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
@@ -412,26 +414,27 @@ namespace TheATeam
 				TileIndex2D.X = animationRangeX.X;
 			}
 		}
+
 		bool hasCollidedTile(Tile t)
 		{
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
-			float tileHeight = 64.0f/2;
-			float tileWidth = 40.0f/2;
+			float tileHeight = 64.0f / 2;
+			float tileWidth = 40.0f / 2;
 			
-			if(Center.X + width < t.Center.X - tileWidth)
+			if (Center.X + width < t.Center.X - tileWidth)
 			{
 				return false;
 			}
-			else if(Center.X - width> t.Center.X + tileWidth)
+			else if (Center.X - width > t.Center.X + tileWidth)
 			{
 				return false;
 			}
-			else if(Center.Y + height < t.Center.Y - tileHeight)
+			else if (Center.Y + height < t.Center.Y - tileHeight)
 			{
 				return false;
 			}
-			else if(Center.Y - height > t.Center.Y + tileHeight)
+			else if (Center.Y - height > t.Center.Y + tileHeight)
 			{
 				return false;
 			}
@@ -448,42 +451,54 @@ namespace TheATeam
 
 			
 			// check viewport collisions
-			if(Center.X + width > Director.Instance.GL.Context.Screen.Width)// right side
+			if (Center.X + width > Director.Instance.GL.Context.Screen.Width)
+			{
+				// right side
 				Position = new Vector2(Director.Instance.GL.Context.Screen.Width - width, Position.Y);
-			if(Center.X - width < 0) // left side
+			}
+			if (Center.X - width < 0)
+			{
+				// left side
 				Position = new Vector2(0 + width, Position.Y);
-			if(Center.Y + height > Director.Instance.GL.Context.Screen.Height - 32.0f)// top
-				Position = new Vector2(Position.X,  Director.Instance.GL.Context.Screen.Height - height - 32.0f);
-			if(Center.Y - height < 0) // bottom
+			}
+			if (Center.Y + height > Director.Instance.GL.Context.Screen.Height - 32.0f)
+			{
+				// top
+				Position = new Vector2(Position.X, Director.Instance.GL.Context.Screen.Height - height - 32.0f);
+			}
+			if (Center.Y - height < 0)
+			{
+				// bottom
 				Position = new Vector2(Position.X, 0 + height);
+			}
 			
-			float tileHeight = 64.0f/2;
-			float tileWidth = 40.0f/2;
+			float tileHeight = 64.0f / 2;
+			float tileWidth = 40.0f / 2;
 			
 			// check tile collisions
 			foreach (Tile t in Tile.Collisions)
 			{
-				if(t.IsCollidable && (t.Key != Element || t.Key == 'N'))
+				if (t.IsCollidable && (t.Key != Element || t.Key == 'N'))
 				{
-					if(hasCollidedTile(t))
+					if (hasCollidedTile(t))
 					{
 						float pushBack = 4.0f;
-						if(Center.X + width >= t.Center.X - tileWidth && Center.X - width <t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
+						if (Center.X + width >= t.Center.X - tileWidth && Center.X - width < t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
 							Console.WriteLine("Left Col");
 							Position = new Vector2(t.Center.X - tileWidth - width - pushBack, Position.Y);
 						}
-						else if(Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
+						else if (Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
 							Console.WriteLine("Right Col");
 							Position = new Vector2(t.Center.X + tileWidth + width + pushBack, Position.Y);
 						}
-						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
+						else if (Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
 							Console.WriteLine("Bot Col");
 							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - pushBack);
 						}
-						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
+						else if (Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
 							Console.WriteLine("Top Col");
 							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + pushBack);
@@ -693,8 +708,7 @@ namespace TheATeam
 			{
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
-				_stats.health = _stats.MaxHealth;
-				_stats.mana = _stats.MaxMana;
+				_stats.Reset();
 				
 				ElementBuff("Neutral");
 				ChangeTiles("Neutral");
@@ -753,7 +767,7 @@ namespace TheATeam
 			Vector2 nextPos1 = Position + positionDelta;
 			Item p1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
 			
-			if(p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
+			if (p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
 				Info.IsGameOver = true;
 			}
@@ -767,7 +781,7 @@ namespace TheATeam
 		{
 			Item p2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 			
-			if(p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
+			if (p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
 				Info.IsGameOver = true;
 			}
@@ -818,8 +832,9 @@ namespace TheATeam
 						p.TakeDamage(1);
 						break;
 					case ShieldEffect.KnockBack:
-						p.Position = p.Position - (new Vector2(50) * p.Direction);
-						break;						
+						p.Position = p.Position - ((p.LocalBounds.Size) * p.Direction);
+						_stats.shield = 0;
+						break;
 					case ShieldEffect.None:
 					default:
 						break;

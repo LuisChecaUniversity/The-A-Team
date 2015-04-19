@@ -128,10 +128,10 @@ namespace TheATeam
 			else if(AppMain.TYPEOFGAME == "DUAL")
 			{
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
-				player2.Update(0.0f);
+				//player2.Update(0.0f);
 			}
 			
-			player1.Update(0.0f);
+			//player1.Update(0.0f);
 			
 			
 			AddChild(player1);

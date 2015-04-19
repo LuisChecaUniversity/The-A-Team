@@ -85,7 +85,6 @@
     <Content Include="assets\tiles.xml" />
     <Content Include="assets\MainMenu.png" />
     <Content Include="assets\selectIcon.png" />
-    <Content Include="assets\SplashScreen.png" />
     <Content Include="assets\TitleScreen.png" />
     <Content Include="assets\FireBullet.png" />
     <Content Include="assets\WaterBullet.png" />

@@ -19,7 +19,6 @@ namespace TheATeam
 	public class Stats
 	{
 		private int _maxHealth, _maxMana, _maxShield;
-		private Stats initialStats = null;
 
 		public int MaxHealth
 		{
@@ -57,25 +56,25 @@ namespace TheATeam
 		public int manaRecharge = 25;
 		public int healthRecharge = 180;
 		public float moveSpeed = 1f;
+		private int initialMaxHealth, initialMaxMana, initialMaxShield;
 		
 		public Stats(int maxHealth=30, int maxMana=100, int maxShield=0)
 		{
-			MaxHealth = maxHealth;
-			MaxMana = maxMana;
-			MaxShield = maxShield;
-			initialStats = (Stats)this.MemberwiseClone();
+			initialMaxHealth = MaxHealth = maxHealth;
+			initialMaxMana = MaxMana = maxMana;
+			initialMaxShield = MaxShield = maxShield;
 		}
 		
 		public void Reset()
 		{
-			MaxHealth = initialStats.MaxHealth;
-			MaxMana = initialStats.MaxMana;
-			MaxShield = initialStats.MaxShield;
-			manaCost = initialStats.manaCost;
-			shieldRecharge = initialStats.shieldRecharge;
-			manaRecharge = initialStats.manaRecharge;
-			healthRecharge = initialStats.healthRecharge;
-			moveSpeed = initialStats.moveSpeed;
+			MaxHealth = initialMaxHealth;
+			MaxMana = initialMaxMana;
+			MaxShield = initialMaxShield;
+			manaCost = 30;
+			shieldRecharge = 85;
+			manaRecharge = 25;
+			healthRecharge = 180;
+			moveSpeed = 1f;
 		}
 	}
 	
@@ -129,15 +128,23 @@ namespace TheATeam
 		
 		public Sides Sides { get; set; }
 		
-		protected static Vector2 boundsScale = new Vector2(0.71f, 0.97f);
+		protected static Vector2 boundsScale = new Vector2(40/64f, 1f);
+		
+		public Bounds2 LocalBounds { get { return this.Quad.Bounds2(); } }
 		
 		public Bounds2 WorldBounds
 		{
 			get
 			{
-				Bounds2 thisBounds = this.GetlContentLocalBounds();
-				this.GetContentWorldBounds(ref thisBounds);
-				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
+				Bounds2 thisBounds = default(Bounds2);
+				if (this.GetContentWorldBounds(ref thisBounds))
+				{
+					thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
+				}
+				else
+				{
+					System.Console.WriteLine("Failed to get world bounds");
+				}
 				return thisBounds;
 			}
 		}
@@ -241,8 +248,16 @@ namespace TheATeam
 
 		public bool Overlaps(SpriteBase sprite)
 		{
-			Bounds2 otherBounds = sprite.GetlContentLocalBounds();
-			sprite.GetContentWorldBounds(ref otherBounds);
+			Tile t = sprite as Tile;
+			Bounds2 otherBounds = default(Bounds2);
+			if (t != null)
+			{
+				otherBounds = t.WorldBounds;
+			}
+			else
+			{
+				sprite.GetContentWorldBounds(ref otherBounds);
+			}
 			return Overlaps(otherBounds);
 		}
 		
