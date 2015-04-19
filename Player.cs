@@ -42,7 +42,7 @@ namespace TheATeam
 
 		public int Mana { get { return _stats.mana; } }
 		
-		private float manaTimer, healthTimer, shieldTimer, slowTimer;
+		private float manaTimer, healthTimer, shieldTimer, slowTimer, speedTimer;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -206,7 +206,7 @@ namespace TheATeam
 			HandleDirectionAnimation();
 			
 			// Find current tile and apply collision
-			HandleCollision();
+			HandleCollision(dt);
 			//Position = Position + positionDelta;
 			// Make camera follow the player
 			Info.CameraCenter = Position;
@@ -441,7 +441,7 @@ namespace TheATeam
 			}
 		}
 		
-		protected void HandleCollision()
+		protected void HandleCollision(float dt)
 		{
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
@@ -568,6 +568,23 @@ namespace TheATeam
 					if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
 					{
 						TakeDamage(1);
+					}
+				}
+			}
+			
+			foreach (Tile t in playerTiles)
+			{
+				if (t.Key != '_' && t.Overlaps(this))
+				{
+					//Earth + Air -> Tiles Grant Speed Boost
+					if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+					{ speedTimer += dt;
+						_stats.moveSpeed = 2f;
+						
+						if(speedTimer > 3f)
+						{
+							_stats.moveSpeed = 1f;
+						}
 					}
 				}
 			}
