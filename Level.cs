@@ -128,10 +128,7 @@ namespace TheATeam
 			else if(AppMain.TYPEOFGAME == "DUAL")
 			{
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
-				//player2.Update(0.0f);
 			}
-			
-			//player1.Update(0.0f);
 			
 			
 			AddChild(player1);
@@ -352,14 +349,6 @@ namespace TheATeam
 				{
 					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
 					t.TakeDamage(collidingProjectile.GetPlayer().Element);
-					
-//					char collisionType = collidingProjectile.GetPlayer().Element;//ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
-//					
-//					if (collisionType != 'X')
-//					{
-//						Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
-//						t.TakeDamage(collidingProjectile.bulletDamage);
-//					}
 				}
 				// Remove from collisions if true
 				if (t.WallDamage(dt))
@@ -536,37 +525,6 @@ namespace TheATeam
 					if (t.Key == 'B')
 					{
 						t.Key = '_';
-					}
-					else if (t.Key == 'N')
-					{
-						if (i > 0)
-						{
-							if (Tile.Grid[i - 1][j].Key == 'N')
-							{
-								t.Sides += (int)Sides.Top;
-							}
-						}
-						if (j > 0)
-						{
-							if (Tile.Grid[i][j - 1].Key == 'N')
-							{
-								t.Sides += (int)Sides.Left;
-							}
-						}
-						if (j < Tile.Grid[i].Count - 1)
-						{
-							if (Tile.Grid[i][j + 1].Key == 'N')
-							{
-								t.Sides += (int)Sides.Right;
-							}
-						}
-						if (i < Tile.Grid.Count - 1)
-						{
-							if (Tile.Grid[i + 1][j].Key == 'N')
-							{
-								t.Sides += (int)Sides.Bottom;
-							}
-						}
 					}
 				}
 			}

@@ -91,7 +91,7 @@ namespace TheATeam
 			}
 		}
 		
-		public List<Tile> playerTiles = new List<Tile>();
+		public List<Tile> playerTiles;
 
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
@@ -183,8 +183,6 @@ namespace TheATeam
 
 					// Apply the movement
 					Position = Position + positionDelta;
-					// Make camera follow the player
-					Info.CameraCenter = Position;
 					//Set Position for Data Message
 					AppMain.client.SetMyPosition(Position.X, Position.Y);
 				}
@@ -209,9 +207,6 @@ namespace TheATeam
 			
 			// Find current tile and apply collision
 			HandleCollision();
-			//Position = Position + positionDelta;
-			// Make camera follow the player
-			Info.CameraCenter = Position;
 		}
 		
 		private void HandleInput(float dt)
@@ -368,36 +363,6 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-			
-			//no movement for dual player - Didnt think we continuing with this feature
-//			if (whichPlayer == PlayerIndex.PlayerOne)
-//			{
-//				if (Input2.GamePad0.Up.Down)
-//				{
-//					if (canShoot)
-//					{
-//						Shoot();
-//					}
-//				}
-//				if (Input2.GamePad0.Up.Release)
-//				{
-//					canShoot = true;
-//				}
-//			}
-//			else
-//			{
-//				if (Input2.GamePad0.Triangle.Down)
-//				{
-//					if (canShoot)
-//					{
-//						Shoot();
-//					}
-//				}
-//				if (Input2.GamePad0.Triangle.Release)
-//				{
-//					canShoot = true;
-//				}
-//			}
 		}
 		
 		protected void HandleDirectionAnimation()
@@ -415,7 +380,7 @@ namespace TheATeam
 			}
 		}
 
-		bool hasCollidedTile(Tile t)
+		private bool hasCollidedTile(Tile t)
 		{
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
@@ -516,68 +481,12 @@ namespace TheATeam
 					}
 				}
 			}
-			
-//			Vector2 nextPos = Position + positionDelta;
-//			float screenWidth = Director.Instance.GL.Context.Screen.Width;
-//			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
-//
-//			if (nextPos.X + PlayerSize > screenWidth + 50)
-//			{
-//				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
-//			}
-//
-//			if (nextPos.X < 18)
-//			{
-//				Position = new Vector2(18, Position.Y);
-//			}
-//			
-//			if (nextPos.Y < 18)
-//			{
-//				Position = new Vector2(Position.X, 18);
-//			}
-//
-//			if (nextPos.Y + PlayerSize > screenHeight + 50)
-//			{
-//				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
-//			}
-//
-//			// Loop through tiles
-//			foreach (Tile t in Tile.Collisions)
-//			{
-//				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
-//				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
-//				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
-//				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
-//				
-//				if (fromLeft && fromRight && fromTop && fromBottom)
-//				{
-//					if (!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
-//					{
-//						if (fromLeft && positionDelta.X > 0)
-//						{
-//							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
-//						}
-//						else if (fromRight && positionDelta.X < 0)
-//						{
-//							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
-//						}
-//						else if (fromTop && positionDelta.Y < 0)
-//						{
-//							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
-//						}
-//						else if (fromBottom && positionDelta.Y > 0)
-//						{
-//							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
-//						}
-//						positionDelta = Vector2.Zero;
-//					}
-//				}
-//			}
+
 			// Loop through enemy tiles
 			Player p = Info.P1 == this ? Info.P2 : Info.P1;
 			foreach (Tile t in p.playerTiles)
 			{
-				if (t.Key != '_' && t.Overlaps(this))
+				if (t.IsWall && t.Overlaps(this))
 				{
 					// Fire + Earth -> Collsion with Walls cause damage
 					if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
@@ -764,17 +673,12 @@ namespace TheATeam
 		
 		public void Player1Score()
 		{
-			Vector2 nextPos1 = Position + positionDelta;
 			Item p1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
 			
 			if (p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
 				Info.IsGameOver = true;
 			}
-//			if (nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
-//			{
-//				Info.IsGameOver = true;
-//			}
 		}
 		
 		public void Player2Score()
@@ -785,12 +689,6 @@ namespace TheATeam
 			{
 				Info.IsGameOver = true;
 			}
-//			Vector2 nextPos2 = Position + positionDelta;
-//			
-//			if (nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
-//			{
-//				Info.IsGameOver = true;
-//			}
 		}
 
 		public Vector2 GetShootingDirection()

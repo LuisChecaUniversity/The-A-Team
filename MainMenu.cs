@@ -48,7 +48,6 @@ namespace TheATeam
 				{
 				case 1:	
 					AppMain.TYPEOFGAME = "SINGLE";
-					Info.TotalGameTime = 0f;
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = level;
@@ -65,7 +64,6 @@ namespace TheATeam
 					
 				case 3:
 					AppMain.TYPEOFGAME = "DUAL";
-					Info.TotalGameTime = 0f;
 					Level placingTest = new Level();
 					placingTest.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = placingTest;
