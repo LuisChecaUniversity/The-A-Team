@@ -110,5 +110,10 @@
     <Content Include="assets\ShieldSpriteSheet.png" />
     <Content Include="assets\RingSpriteSheet.png" />
     <Content Include="assets\PlayerSpriteSheet+.png" />
+    <Content Include="assets\bgm.mp3" />
+    <Content Include="assets\Fire.wav" />
+    <Content Include="assets\Lose.wav" />
+    <Content Include="assets\Pickup.wav" />
+    <Content Include="assets\Win.wav" />
   </ItemGroup>
 </Project>
