@@ -81,11 +81,13 @@ namespace TheATeam
 			Vector2 player2Pos = Vector2.Zero;
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
-			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6));
+			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2, 6));
 			string level = "/Application/assets/level" + levelNumber + ".txt";
 			
-			if(levelNumber == 2)
+			if (levelNumber == 2)
+			{
 				player1Deployed = maxDeployed;
+			}
 			
 			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
@@ -123,9 +125,11 @@ namespace TheATeam
 			AddChild(p2baseSprite);
 			
 			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
-			if(AppMain.TYPEOFGAME == "SINGLE")
+			if (AppMain.TYPEOFGAME == "SINGLE")
+			{
 				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
-			else if(AppMain.TYPEOFGAME == "DUAL")
+			}
+			else if (AppMain.TYPEOFGAME == "DUAL")
 			{
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
 			}
@@ -200,7 +204,7 @@ namespace TheATeam
 			AddChild(p1ManaSprite);
 			AddChild(p2ManaSprite);
 			
-			if(pointerOn)
+			if (pointerOn)
 			{
 				playerPointer = new SpriteUV(TextureManager.Get("pointer"));
 				playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
@@ -263,9 +267,7 @@ namespace TheATeam
 					lblTimer.Text = "Game Over";
 					Info.IsGameOver = true;
 					timerA.Stop();
-					
-				}	
-				
+				}
 				if (countSecs < 0)
 				{
 					countSecs = 59;
@@ -284,8 +286,6 @@ namespace TheATeam
 				GameOver go = new GameOver();
 				GameSceneManager.currentScene = go;
 				Director.Instance.ReplaceScene(go);
-				AudioManager.StopMusic();
-				AudioManager.PlaySound("win");
 			}
 			
 			if (levelStage == LevelStage.CombatStage)
@@ -311,7 +311,7 @@ namespace TheATeam
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
 			
-			if(pointerOn)
+			if (pointerOn)
 			{
 				playerPointer.Rotation = player1.GetShootingDirection();
 				playerPointer.Position = player1.Position;
@@ -331,16 +331,20 @@ namespace TheATeam
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player1))//.Position, player1.Quad.Bounds2()))
 			{
 				player1.TakeDamage(collidingProjectile.bulletDamage);
-				if(collidingProjectile.getType() == Type.FireAir)
+				if (collidingProjectile.getType() == Type.FireAir)
+				{
 					player1.isSlowed(true);
+				}
 			}
 			
 			collidingProjectile = ProjectileManager.Instance.ProjectileCollision(player2);
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player2))//.Position, player2.Quad.Bounds2()))
 			{
 				player2.TakeDamage(collidingProjectile.bulletDamage);
-				if(collidingProjectile.getType() == Type.FireAir)
+				if (collidingProjectile.getType() == Type.FireAir)
+				{
 					player2.isSlowed(true);
+				}
 			}
 
 			for (int i = 0; i < Tile.Collisions.Count; i++)
@@ -371,7 +375,7 @@ namespace TheATeam
 
 		private void BuildStage(float dt)
 		{
-			if(AppMain.TYPEOFGAME == "SINGLE")
+			if (AppMain.TYPEOFGAME == "SINGLE")
 			{
 				if (player1Deployed == maxDeployed)
 				{
@@ -390,9 +394,9 @@ namespace TheATeam
 					PostBuildStage();
 				}
 			}
-			else if(AppMain.TYPEOFGAME == "DUAL")
+			else if (AppMain.TYPEOFGAME == "DUAL")
 			{
-				if(player1Turn)
+				if (player1Turn)
 				{
 					lblTopRight.Text = "Press Square for Player 2\n          Deployment";
 					if (player1Deployed == maxDeployed)
@@ -436,17 +440,18 @@ namespace TheATeam
 				
 			}
 		}
+
 		private void PlaceDefence(Player player)
 		{
 			var testtouches = Touch.GetData(0);
 			List<Tile> playerTiles = new List<Tile>();
 			int playerDeployed = 0;
-			if(player == player1)
+			if (player == player1)
 			{
 				playerTiles = player1Tiles;
 				playerDeployed = player1Deployed;
 			}
-			else if(player == player2)
+			else if (player == player2)
 			{
 				playerTiles = player2Tiles;
 				playerDeployed = player2Deployed;
@@ -460,7 +465,7 @@ namespace TheATeam
 				float screenY = screenHeight - (testtouches[0].Y + 0.5f) * screenheight;
 				Vector2 touchVec = new Vector2(screenx, screenY);
 				
-				if(screenY < screenheight - 32.0f) // prevents tiles behind UI
+				if (screenY < screenheight - 32.0f) // prevents tiles behind UI
 				{
 					if (testtouches[0].Status == TouchStatus.Down)
 					{
@@ -500,12 +505,12 @@ namespace TheATeam
 				}
 			}
 			
-			if(player == player1)
+			if (player == player1)
 			{
 				player1Tiles = playerTiles;
 				player1Deployed = playerDeployed;
 			}
-			else if(player == player2)
+			else if (player == player2)
 			{
 				player2Tiles = playerTiles;
 				player2Deployed = playerDeployed;

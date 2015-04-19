@@ -60,12 +60,12 @@ namespace TheATeam
 //			Vector2 pos5 = new Vector2(560, 450);
 			
 			List<int> indexList = new List<int>();
-			for (int i = 0; i < 5; i++) 
+			for (int i = 0; i < 5; i++)
 			{
-				int r = Info.Rnd.Next(0,5);
-				while(indexList.Contains(r))
+				int r = Info.Rnd.Next(0, 5);
+				while (indexList.Contains(r))
 				{
-					r = Info.Rnd.Next(0,5);
+					r = Info.Rnd.Next(0, 5);
 				}
 				
 				indexList.Add(r);
@@ -84,17 +84,18 @@ namespace TheATeam
 			items.Add(fireElement);
 			items.Add(waterElement);
 		}
+
 		private Vector2 RandomPosition(int i)
 		{
 			Vector2 pos = Vector2.Zero;
-			switch(i)
+			switch (i)
 			{
 			case 0:
 				pos = new Vector2(400, 50);
 				break;
 			case 1:
 				pos = new Vector2(570, 140);
-			break;
+				break;
 			case 2:
 				pos = new Vector2(480, 250);
 				break;
@@ -220,34 +221,34 @@ namespace TheATeam
 		
 		public void ResetItems(Player p)
 		{
-			if (p.whichPlayer == PlayerIndex.PlayerOne)
+			if (p.playerIndex == PlayerIndex.PlayerOne)
 			{
 				Player1HoldingFlag = false;
 				
 			}
-			else if (p.whichPlayer ==PlayerIndex.PlayerTwo)
+			else if (p.playerIndex == PlayerIndex.PlayerTwo)
 			{
 				Player2HoldingFlag = false;
 			}
 			       
 			foreach (Item item in items)
 			{
-				if(item.collided)
+				if (item.collided)
 				{
 					if (p.Element == item.Name[0] || p.Element2 == item.Name[0])
-					 {
+					{
 						item.iSprite.Visible = true;
 						item.collided = false;
 						
 					}
-					if(item.Name == "Player2Flag" && p.whichPlayer == PlayerIndex.PlayerOne)
+					if (item.Name == "Player2Flag" && p.playerIndex == PlayerIndex.PlayerOne)
 					{
 						Player1HoldingFlag = false;
 						item.iSprite.Visible = true;
 						item.collided = false;
 						
 					}
-					else if (item.Name == "Player1Flag" && p.whichPlayer ==PlayerIndex.PlayerTwo)
+					else if (item.Name == "Player1Flag" && p.playerIndex == PlayerIndex.PlayerTwo)
 					{
 						Console.WriteLine("Reset " + item.Name);	
 						Player2HoldingFlag = false;

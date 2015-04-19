@@ -36,7 +36,7 @@ namespace TheATeam
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
-		public PlayerIndex whichPlayer;
+		public PlayerIndex playerIndex;
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }
@@ -143,7 +143,7 @@ namespace TheATeam
 
 			CenterSprite();	
 
-			whichPlayer = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
+			playerIndex = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f, 0.0f);
@@ -176,7 +176,7 @@ namespace TheATeam
 				break;
 				
 			case "MULTIPLAYER":
-				if (AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
+				if (AppMain.ISHOST && playerIndex == PlayerIndex.PlayerOne || !AppMain.ISHOST && playerIndex == PlayerIndex.PlayerTwo)
 				{
 					// Handle movement/attacks
 					HandleInput(dt);
@@ -258,8 +258,8 @@ namespace TheATeam
 		
 		private void SingleUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
 			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
 			if (ShootingDirection.IsZero())
@@ -313,7 +313,7 @@ namespace TheATeam
 		
 		private void DualUpdate(float dt)
 		{
-			if (whichPlayer == PlayerIndex.PlayerOne)
+			if (playerIndex == PlayerIndex.PlayerOne)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
@@ -338,7 +338,7 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-			else if (whichPlayer == PlayerIndex.PlayerTwo)
+			else if (playerIndex == PlayerIndex.PlayerTwo)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
@@ -695,6 +695,7 @@ namespace TheATeam
 			
 			if (p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
+				Info.Winner = Info.P1;
 				Info.IsGameOver = true;
 			}
 		}
@@ -705,6 +706,7 @@ namespace TheATeam
 			
 			if (p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
+				Info.Winner = Info.P2;
 				Info.IsGameOver = true;
 			}
 		}

@@ -18,7 +18,7 @@ namespace TheATeam
 		{
 			Initialise();
 			AudioManager.StopMusic();
-			AudioManager.PlayMusic("bgm", true, 0.5f);
+			AudioManager.PlayMusic("bgm", true, 0.4f);
 		}
 
 		public override void Update(float dt)
@@ -74,8 +74,6 @@ namespace TheATeam
 					break;
 					
 				case 4:
-					AudioManager.StopSounds();
-					AudioManager.PlaySound("lose");
 					AppMain.QUITGAME = true;
 					break;
 				default:
