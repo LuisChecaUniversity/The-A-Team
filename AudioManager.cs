@@ -5,135 +5,138 @@ using Sce.PlayStation.Core.Audio;
 
 namespace TheATeam
 {
-	public static class AudioManager
+	public class AudioManager
 	{
-		//Contains all the sounds that are currently loaded
-		private static Dictionary<string, Sound> soundList = new Dictionary<string, Sound>();
-		
-		//Contains all of the music that is currently loaded
-		private static Dictionary<string, Bgm> musicList = new Dictionary<string, Bgm>();
-
-		//The players that control the playback of music and sound respectivly
+		// The players that control the playback of music and sound respectivly
 		private static BgmPlayer musicPlayer = null;
 		private static List<SoundPlayer> soundPlayers = new List<SoundPlayer>();
 
-		//Adds loaded music and sound data to the manager
-		public static void AddMusic(string key, Bgm music)
-		{
-			musicList.Add(key, music);
+		// Gets if music is playing
+		public static bool IsMusicPlaying {	get { return (musicPlayer != null) ? (musicPlayer.Status == BgmStatus.Playing) : false; } }
+		
+		// Checks to see if there are any sounds playing
+		public static bool IsSoundPlaying
+		{ 
+			get
+			{
+				if (soundPlayers.Count <= 0)
+				{
+					return false;
+				}
+				for (int i = 0; i < soundPlayers.Count; i++)
+				{
+					if (soundPlayers[i].Status == SoundStatus.Playing)
+					{
+						return true;
+					}
+				}
+				return false;
+			}
 		}
 
-		public static void AddMusic(string filename, string key)
+		// Adds and or loads music and sound data to the manager
+		
+		public static bool AddMusic(string key, Bgm music)
 		{
-			if(!musicList.ContainsKey(key))
-			{
-				Bgm music = new Bgm(filename);
-				musicList.Add(key, music);
-			}
+			return AssetManager<Bgm>.Add(key, music);
+		}
+
+		public static bool AddMusic(string key, string filename)
+		{
+			return AssetManager<Bgm>.Add(key, filename);
 		}
 		
-		public static void AddSound(string key, Sound sound)
+		public static bool AddSound(string key, Sound sound)
 		{
-			soundList.Add(key, sound);
+			return AssetManager<Sound>.Add(key, sound);
 		}
 
-		public static void AddSound(string filename, string key)
+		public static bool AddSound(string key, string filename)
 		{
-			if(!soundList.ContainsKey(key))
-			{
-				Sound sound = new Sound(filename);
-				soundList.Add(key, sound);
-			}
+			return AssetManager<Sound>.Add(key, filename);
 		}
 
-		//Removes sound and music data from the manager
-		//and disposes of the data
+		// Removes sound and music data from the manager and disposes of it
 
-		public static void RemoveMusic(string key)
+		public static bool RemoveMusic(string key)
 		{
-			musicList[key].Dispose();
-			musicList.Remove(key);
+			return AssetManager<Bgm>.Remove(key);
 		}
 
-		public static void RemoveSound(string key)
+		public static bool RemoveSound(string key)
 		{
-			soundList[key].Dispose();
-			soundList.Remove(key);
+			return AssetManager<Sound>.Remove(key);
 		}
 
-		//Checks that sound or music with the given key is loaded
+		// Checks that sound or music with the given key is loaded
 		public static bool IsMusicLoaded(string key)
 		{
-			return musicList.ContainsKey(key);
+			return AssetManager<Bgm>.IsAssetLoaded(key);
 		}
 
 		public static bool IsSoundLoaded(string key)
 		{
-			return soundList.ContainsKey(key);
+			return AssetManager<Sound>.IsAssetLoaded(key);
 		}
 
-		//Tells the audio manager to playback sounds or music respectivly
+		// Tells the audio manager to playback sounds or music respectively, returns false if the specified key is not in the dictionary
 
-		//returns false if the specified key is not in the dictionary
-
-		public static bool PlayMusic(string key, bool isLooping, float volume,
-								float playbackRate)
+		public static bool PlayMusic(string key, bool isLooping=true, float volume=1.0f, float playbackRate=1f)
 		{
-			if(musicList.ContainsKey(key))
-			{
-				if(IsMusicPlaying())
-					return false;
-				//Returns an instance of BgmPlayer to play this music data NOTE: is null until here
-				musicPlayer = musicList[key].CreatePlayer();
-				musicPlayer.Volume = volume;
-				musicPlayer.Loop = isLooping;
-				musicPlayer.PlaybackRate = playbackRate;
-				musicPlayer.Play();
-				return true;	
-			}
-			else
+			if (!IsMusicLoaded(key) || IsMusicPlaying)
 			{
 				return false;
 			}
+			
+			// Returns an instance of BgmPlayer to play this music data NOTE: is null until here
+			musicPlayer = AssetManager<Bgm>.Get(key).CreatePlayer();
+			musicPlayer.Volume = volume;
+			musicPlayer.Loop = isLooping;
+			musicPlayer.PlaybackRate = playbackRate;
+			musicPlayer.Play();
+			return true;
 		}
 
-		public static bool PlaySound(string key, bool isLooping, float volume,
-							float playbackRate, float pan)
+		public static bool PlaySound(string key, bool isLooping=false, float volume=1f, float playbackRate=1f, float pan=0f)
 		{
-			if(soundList.ContainsKey(key))
-			{
-				//Returns an instance of the SoundPlayer to play this sound data NOTE: is null until here
-				SoundPlayer soundPlayer = soundList[key].CreatePlayer();
-				soundPlayer.Volume = volume;
-				soundPlayer.Loop = isLooping;
-				soundPlayer.PlaybackRate = playbackRate;
-				soundPlayer.Pan = pan;
-				soundPlayer.Play();
-				soundPlayers.Add(soundPlayer);
-				return true;
-			}
-			else
+			if (!IsSoundLoaded(key))
 			{
 				return false;
 			}
+			
+			// Returns an instance of the SoundPlayer to play this sound data NOTE: is null until here
+			SoundPlayer soundPlayer = AssetManager<Sound>.Get(key).CreatePlayer();
+			soundPlayer.Volume = volume;
+			soundPlayer.Loop = isLooping;
+			soundPlayer.PlaybackRate = playbackRate;
+			soundPlayer.Pan = pan;
+			soundPlayer.Play();
+			soundPlayers.Add(soundPlayer);
+			return true;
 		}
 
-		//Stops any music or sounds that are currently playing then disposes of the player
+		// Stops any music or sounds that are currently playing then disposes of the player
 		public static void StopMusic()
 		{
-			if(musicPlayer != null)
+			if (musicPlayer == null)
 			{	
-				musicPlayer.Stop();
-				musicPlayer.Dispose();
-				musicPlayer = null;
-			}	
+				return;
+			}
+			
+			musicPlayer.Stop();
+			musicPlayer.Dispose();
+			musicPlayer = null;
 		}
-		/*
-		* Stops any sounds currently playing
-		*/
+		
+		// Stops any sounds currently playing
 		public static void StopSounds()
 		{
-			for(int i = 0; i < soundPlayers.Count; i++)
+			if (soundPlayers.Count <= 0)
+			{
+				return;
+			}
+			
+			for (int i = 0; i < soundPlayers.Count; i++)
 			{
 				soundPlayers[i].Stop();
 				soundPlayers[i].Dispose();
@@ -141,64 +144,10 @@ namespace TheATeam
 			}
 		}
 
-		//Gets if music or sound is playing
-		public static bool IsMusicPlaying()
-		{
-			if(musicPlayer != null)
-			{
-				if(musicPlayer.Status == BgmStatus.Stopped
-							|| musicPlayer.Status == BgmStatus.Paused)
-				{
-					return false;
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		//Checks to see if there are any sounds playing
-		public static bool IsSoundPlaying()
-		{
-			if(soundPlayers.Count != 0)
-			{
-				for(int i = 0; i < soundPlayers.Count; i++)
-				{
-					if(soundPlayers[i].Status == SoundStatus.Playing)
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		//checks if the music is paused
-		public static bool IsMusicPaused()
-		{
-			if(musicPlayer != null && musicPlayer.Status == BgmStatus.Paused)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		//Pause and resume the music
+		// Pause and resume the music
 		public static void PauseMusic()
 		{
-			if(musicPlayer != null && musicPlayer.Status != BgmStatus.Paused)
+			if (musicPlayer != null && musicPlayer.Status != BgmStatus.Paused)
 			{
 				musicPlayer.Pause();
 			}
@@ -206,10 +155,20 @@ namespace TheATeam
 
 		public static void ResumeMusic()
 		{
-			if(musicPlayer != null && musicPlayer.Status != BgmStatus.Playing)
+			if (musicPlayer != null && musicPlayer.Status != BgmStatus.Playing)
 			{
 				musicPlayer.Resume();
 			}
+		}
+		
+		public static bool Initialise()
+		{
+			AddMusic("bgm", "bgm.mp3");
+			AddSound("fire", "Fire.wav");
+			AddSound("lose", "Lose.wav");
+			AddSound("pickup", "Pickup.wav");
+			AddSound("win", "Win.wav");
+			return true;
 		}
 	}
 }

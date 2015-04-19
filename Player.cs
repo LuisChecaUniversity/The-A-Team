@@ -529,6 +529,7 @@ namespace TheATeam
 				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
+				AudioManager.PlaySound("fire");
 			}
 		}
 		

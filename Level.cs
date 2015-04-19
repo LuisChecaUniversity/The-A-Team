@@ -283,7 +283,9 @@ namespace TheATeam
 				//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
 				GameOver go = new GameOver();
 				GameSceneManager.currentScene = go;
-				Director.Instance.ReplaceScene(go);	
+				Director.Instance.ReplaceScene(go);
+				AudioManager.StopMusic();
+				AudioManager.PlaySound("win");
 			}
 			
 			if (levelStage == LevelStage.CombatStage)

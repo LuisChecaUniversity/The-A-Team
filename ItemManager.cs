@@ -188,6 +188,12 @@ namespace TheATeam
 							break;
 						}
 					}
+					
+					// Play sound if collision took place
+					if (item.collided)
+					{
+						AudioManager.PlaySound("pickup");
+					}
 				}
 			}
 		}
