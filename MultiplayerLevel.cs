@@ -19,7 +19,7 @@ namespace TheATeam
 		Player 				player2;
 		Font 				font;
 		FontMap 			debugFont;
-		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 27, FontStyle.Regular), 512);
 		private Label 		lblTopLeft;
 		private Label 		lblTopRight;
 		private int 		screenWidth;
