@@ -144,11 +144,13 @@ namespace TheATeam
 
 			lblTopLeft = new Label();
 			lblTopLeft.FontMap = fontl;
+			lblTopLeft.Color = Colors.Grey90;
 			lblTopLeft.Text = "";
 			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
 			lblTopRight = new Label();
 			lblTopRight.FontMap = fontl;
+			lblTopRight.Color = Colors.Grey90;
 			lblTopRight.Text = "Press Start to Continue";
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
@@ -216,7 +218,7 @@ namespace TheATeam
 			
 			
 			lblTimer.FontMap = fontl;
-			lblTimer.Color = Colors.Grey80;
+			lblTimer.Color = Colors.Grey90;
 			lblTimer.Text = ""; // might be worth having a ui to separate class
 			lblTimer.Position = new Vector2((screenWidth / 2) - 90, screenHeight - 32);//-100
 			AddChild(lblTimer);
