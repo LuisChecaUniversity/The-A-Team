@@ -311,6 +311,7 @@ namespace TheATeam
 			{
 				if (canShoot)
 				{
+					AppMain.client.SetMyShootingDirection(ShootingDirection.X,ShootingDirection.Y);
 					Shoot(true);
 				}
 			
