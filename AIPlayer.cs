@@ -73,7 +73,7 @@ namespace TheATeam
 			updateBehaviours(dt);
 			
 			MoveInHeadingDirection(dt);
-			HandleCollision();			
+			HandleCollision(dt);			
 			
 			shootTimer += dt;
 			
