@@ -84,12 +84,31 @@ namespace TheATeam
 			Vector2 player2Pos = Vector2.Zero;
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
-			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6));
-			string level = "/Application/assets/level" + levelNumber + ".txt";
-			
-			if(levelNumber == 2)
-				player1Deployed = maxDeployed;
-			
+			string level;
+			if(AppMain.TYPEOFGAME != "MULTIPLAYER")
+			{
+				int levelNumber = (AppMain.TYPEOFGAME == "DUAL" || AppMain.TYPEOFGAME == "MULTIPLAYER" ? 1 : Info.Rnd.Next(2,6));
+				level = "/Application/assets/level" + levelNumber + ".txt";
+				
+				if(levelNumber == 2)
+					player1Deployed = maxDeployed;
+			}
+			else
+			{
+				string status = AppMain.client.statusString;
+					if(status.Equals("None"))
+					{
+						AppMain.client.ChangeStatus();
+					}
+					
+					Console.WriteLine(AppMain.client.ActionMsg.ToString());
+				
+				level = "/Application/assets/level" + 2 + ".txt";	
+				levelStage = LevelStage.CombatStage;
+				PostBuildStage();
+				
+				
+			}
 			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
@@ -110,6 +129,15 @@ namespace TheATeam
 						player2Tiles.Add(Tile.Grid[i][j]);
 					}
 				}
+			}
+			
+			for (int y = Tile.Grid.Count-1; y > 0; y--)
+			{
+				for (int x = 0; x < Tile.Grid[0].Count; x++)
+				{
+					Console.Write(Tile.Grid[y][x].Key);	
+				}
+				Console.WriteLine("");
 			}
 			
 			p1baseSprite = new SpriteUV(TextureManager.Get("base"));
@@ -139,11 +167,9 @@ namespace TheATeam
 			}
 			else if(AppMain.TYPEOFGAME == "MULTIPLAYER")
 			{
-				//if(AppMain.ISHOST)
 					Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
-				//else
 					Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
-				player2.Update(0.0f);
+					//player2.Update(0.0f);
 			}
 			
 			player1.Update(0.0f);
@@ -156,27 +182,48 @@ namespace TheATeam
 				
 		private void InitExtras()
 		{
-			blockedAreaSprite = new SpriteUV(TextureManager.Get("blockedArea"));
-			blockedAreaSprite.Quad.S = blockedAreaSprite.TextureInfo.TextureSizef;
-			blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
-
-
-			lblTopLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
-			lblTopLeft.FontMap = fontl;
-			lblTopLeft.Text = "";
-			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
+			if( AppMain.TYPEOFGAME == "SINGLE" ||  AppMain.TYPEOFGAME == "DUAL")
+			{
+				blockedAreaSprite = new SpriteUV(TextureManager.Get("blockedArea"));
+				blockedAreaSprite.Quad.S = blockedAreaSprite.TextureInfo.TextureSizef;
+	
+				lblTopLeft = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+				lblTopLeft.FontMap = fontl;
+				lblTopLeft.Text = "";
+				
+				lblTopRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
+				lblTopRight.FontMap = fontl;
+				lblTopRight.Text = "Press Start to Continue";
+				
+				
+				blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
+				lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
+				lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+				
+				AddChild(blockedAreaSprite);
+				AddChild(lblTopLeft);
+				AddChild(lblTopRight);
+			}
+//			else if( AppMain.TYPEOFGAME == "MULTIPLAYER" && AppMain.ISHOST)
+//			{
+//				blockedAreaSprite.Position = new Vector2(screenWidth / 2, 0.0f);
+//				lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
+//				lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
+//				lblTopRight.Text = "Game Starts in";
+//			}
+//			else if( AppMain.TYPEOFGAME == "MULTIPLAYER" && !AppMain.ISHOST)
+//			{
+//				blockedAreaSprite.Position = new Vector2(0.0f, 0.0f);			
+//				lblTopLeft.Position = new Vector2(140, screenHeight / 2 + 50);					
+//				lblTopRight.Position = new Vector2(100, screenHeight / 2 - 150);
+//				lblTopRight.Text = "Game Starts in" ;
+//				
+//			}
 			
-			lblTopRight = new Sce.PlayStation.HighLevel.GameEngine2D.Label();
-			lblTopRight.FontMap = fontl;
-
-			lblTopRight.Text = "Press Start to Continue";
-			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
 			ItemManager.Instance.initFlags(this, p1baseSprite.Position, p2baseSprite.Position);
 			
-			AddChild(blockedAreaSprite);
-			AddChild(lblTopLeft);
-			AddChild(lblTopRight);
+			
 		}
 
 		private void InitUI()
@@ -314,6 +361,16 @@ namespace TheATeam
 			
 			if (levelStage == LevelStage.CombatStage)
 			{		
+				if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				{
+					string status = AppMain.client.statusString;
+					if(status.Equals("None"))
+					{
+						AppMain.client.ChangeStatus();
+					}
+			
+					Console.WriteLine(status);	
+				}
 				CombatStage(dt);
 			}
 			else if (levelStage == LevelStage.BuildStage)
@@ -415,11 +472,12 @@ namespace TheATeam
 				}
 				
 				PlaceDefence(player1);
-				
+				//BuildDefence(player1);
 	
 				if (Input2.GamePad0.Start.Down)
 				{
 					PostBuildStage();
+
 				}
 			}
 			else if(AppMain.TYPEOFGAME == "DUAL")
@@ -435,19 +493,20 @@ namespace TheATeam
 					{
 						lblTopLeft.Text = "Objects Left: " + (maxDeployed - player1Deployed);
 					}
-					PlaceDefence(player1);
-		
+					//PlaceDefence(player1);
+					BuildDefence(player1);
 					if (Input2.GamePad0.Square.Down)
 					{
 						player1Turn = false;
+						blockedAreaSprite.Position = new Vector2(0.0f, 0.0f);			
+						lblTopLeft.Position = new Vector2(140, screenHeight / 2 + 50);					
+						lblTopRight.Position = new Vector2(100, screenHeight / 2 - 150);
+						lblTopRight.Text = "Press Start to Continue";
 					}
 				}
 				else
 				{
-					blockedAreaSprite.Position = new Vector2(0.0f, 0.0f);			
-					lblTopLeft.Position = new Vector2(140, screenHeight / 2 + 50);					
-					lblTopRight.Position = new Vector2(100, screenHeight / 2 - 150);
-					lblTopRight.Text = "Press Start to Continue";
+					
 					
 					if (player2Deployed == maxDeployed)
 					{
@@ -469,9 +528,90 @@ namespace TheATeam
 			}
 			else if (AppMain.TYPEOFGAME == "MULTIPLAYER")
 			{
+				if(AppMain.ISHOST)
+				{
+					if (player1Deployed == maxDeployed)
+					{
+						lblTopLeft.Text = "Maximum Deployed";
+					}
+					else
+					{
+						lblTopLeft.Text = "Objects Left: " + (maxDeployed - player1Deployed);
+					}
+					PlaceDefence(player1);
+					
+					if (Input2.GamePad0.Start.Down)
+					{
+						String tilesLayout;
+						
+					}
+				}
+				else
+				{
+						if (player2Deployed == maxDeployed)
+					{
+						lblTopLeft.Text = "Maximum Deployed";
+					}
+					else
+					{
+						lblTopLeft.Text = "Objects Left: " + (maxDeployed - player2Deployed);
+					}
+					PlaceDefence(player2);
+				}
+			}
+		}
+		
+		private void BuildDefence(Player player)
+		{
+			var testtouches = Touch.GetData(0);
+			int playerDeployed = 0;
+			if (testtouches.Count > 0)
+			{
+				float screenheight = Director.Instance.GL.Context.GetViewport().Height;
+				float screenwidth = Director.Instance.GL.Context.GetViewport().Width;
+				float screenx = (testtouches[0].X + 0.5f) * screenwidth;
+				float screenY = screenHeight - (testtouches[0].Y + 0.5f) * screenheight;
+				Vector2 touchVec = new Vector2(screenx, screenY);
+		
+				if(screenY < screenheight - 32.0f) // prevents tiles behind UI
+				{
+					if (testtouches[0].Status == TouchStatus.Down)
+					{
+						
+						for (int y = 0; y < 9; y++)
+						{
+							for (int x = 0; x < 5; x++)
+							{
+								if(Tile.Grid[y][x].Overlaps(touchVec))
+								{
+									if (Tile.Grid[y][x].Key != 'N' && playerDeployed < maxDeployed)
+									{
+										// returns player 1 flag and checks if touch pos collides with it
+										if (!Tile.Grid[y][x].Overlaps(p1baseSprite) || !Tile.Grid[y][x].Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
+										{
+											Tile.Grid[y][x].Key = 'N';
+											Tile.Collisions.Add(Tile.Grid[y][x]);
+											playerDeployed++;
+											
+										}
+									}
+									else if (Tile.Grid[y][x].Key == 'N')
+									{
+										Tile.Grid[y][x].Key = 'B';
+										Tile.Collisions.Remove(Tile.Grid[y][x]);
+										playerDeployed--;
+									}
+								}
+							}
+						}
+						
+					}
+					
+				}
 				
 			}
 		}
+		
 		private void PlaceDefence(Player player)
 		{
 			var testtouches = Touch.GetData(0);
@@ -500,9 +640,6 @@ namespace TheATeam
 				{
 					if (testtouches[0].Status == TouchStatus.Down)
 					{
-						///Console.WriteLine("Touched" + touchVec);//
-						//Console.WriteLine(player1Tiles[0].Position);
-						
 						
 						foreach (Tile t in playerTiles)
 						{

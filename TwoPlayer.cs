@@ -915,10 +915,12 @@ namespace TheATeam
 		{
 		
 			base.Update (dt);
-			
+						
 			if(lobbyUI.p1Ready && lobbyUI.p2Ready)
 			{
+				
 				AppMain.ChangeGame("MULTIPLAYER");
+				lobbyUI.Dispose();
 			}
 			else
 			{

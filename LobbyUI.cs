@@ -14,8 +14,8 @@ namespace TheATeam
 {
     public partial class LobbyUI : Sce.PlayStation.HighLevel.UI.Scene
     {
-		public bool p1Ready;
-		public bool p2Ready;
+		public bool p1Ready = false;
+		public bool p2Ready = false;
 		TwoPlayer twoPlayer;
 		
 		public Panel PnlActivePlayers {
@@ -56,8 +56,7 @@ namespace TheATeam
 		
         public LobbyUI(TwoPlayer twoPlayerScene)
         {
-			//twoPlayer = new TwoPlayer();
-			//Director.Instance.ReplaceScene(twoPlayer);
+			
 			twoPlayer = twoPlayerScene;
 				
             InitializeWidget();
@@ -76,10 +75,10 @@ namespace TheATeam
 				btnJoinGame.Visible = false;
 				
 				AppMain.client = new LocalTCPConnection(true,11000);
-					//server = new LocalTCPConnection(true, 11000);
+					
 					if(AppMain.client.Listen())
 					{
-						p1Ready =true;
+						p1Ready = true;
 						lblLobbyChat.Text += ("\n \n \n Connected Waiting for Player  ");
 						twoPlayer.PostRequest();
 					}
@@ -94,7 +93,7 @@ namespace TheATeam
 				btnJoinGame.Visible = false;
 				
 				AppMain.client = new LocalTCPConnection(false,11000);
-				//AppMain.client.SetIPAddress(AppMain.IPADDRESS);
+				
 				lblLobbyChat.Text += ("\n Choose Player to the right \n" +
 				 	" Then click Join Game below to Start");
 				
@@ -121,6 +120,21 @@ namespace TheATeam
 			UISystem.SetScene(new OnlineHostJoin(), push);
         }
 		
-		
+			public void Dispose()
+		{
+				foreach (var item in this.RootWidget.Children)
+			{
+				this.RootWidget.RemoveChild(item);
+				Console.WriteLine("Removed " + item);
+			}
+			this.RootWidget.Dispose();
+			
+			if(btnMainMenu != null)btnMainMenu.Dispose();
+			if(btnJoinGame != null)btnJoinGame.Dispose();
+			if(pnlLobbyChat!= null)pnlLobbyChat.Dispose();	
+			if(pnlActivePlayers!= null)pnlActivePlayers.Dispose();
+			if(lblLobbyChat!= null)lblLobbyChat.Dispose();
+			if(ImageBox_1 != null) ImageBox_1.Dispose();
+		}
     }
 }
