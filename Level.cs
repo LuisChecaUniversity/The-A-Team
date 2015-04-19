@@ -369,7 +369,7 @@ namespace TheATeam
 						AppMain.client.ChangeStatus();
 					}
 			
-					Console.WriteLine(status);	
+					//Console.WriteLine(status);	
 				}
 				CombatStage(dt);
 			}
@@ -398,9 +398,26 @@ namespace TheATeam
 				playerPointer.Position = player1.Position;
 			}
 			
-			player1.Update(dt);
-			player2.Update(dt);
-			
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			{
+				if(AppMain.ISHOST)
+					{
+						player1.Update(dt);
+						AppMain.client.DataExchange();
+						player2.Update(dt);
+					}
+					else
+					{
+						player2.Update(dt);
+						AppMain.client.DataExchange();
+						player1.Update(dt);
+					}
+			}
+			else
+			{
+				player1.Update(dt);
+				player2.Update(dt);
+			}
 			if (timerA.Enabled == true)
 			{
 				lblTimer.Text = "Time Left: " + countMins + ":" + countSecs.ToString().PadLeft(2, '0');
