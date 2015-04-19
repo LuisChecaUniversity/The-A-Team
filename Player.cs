@@ -158,7 +158,7 @@ namespace TheATeam
 			UpdateShield(dt);
 			RegenHealth(dt);
 			SlowEffect(dt);
-			Position = Position + positionDelta;
+			Position = Position + (positionDelta * dt / 16f);
 			Console.WriteLine(_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
