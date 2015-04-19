@@ -742,6 +742,8 @@ namespace TheATeam
 		bool lobbychat1dot = true;
 		bool lobbychat2dot;
 		bool lobbychat3dot;
+		
+		string hostIP;
 		public TwoPlayer ()
 		{
 			
@@ -852,7 +854,7 @@ namespace TheATeam
 			Director.Instance.DebugFlags = Director.Instance.DebugFlags | DebugFlags.DrawGrid;
 			this.DrawGridStep = 20.0f;
 			
-			
+			GetRequest();
 			
 //			var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/newemployee");
 //			
@@ -1166,7 +1168,8 @@ namespace TheATeam
 					if(item.Value.Equals(button.Text))
 					{
 						//Console.WriteLine(item.Value + " : " + item.Key);
-						AppMain.IPADDRESS = item.Key;
+						AppMain.CONNECTINGHOSTIPADDRESS = item.Key;
+						
 						                 
 					}
 				}

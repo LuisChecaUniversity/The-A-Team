@@ -467,7 +467,7 @@ namespace TheATeam
 //					ipAdd = IPAddress.Parse("192.168.43.105");
 //				else
 //					ipAdd = null;
-				IPAddress ipAdd = IPAddress.Parse(AppMain.IPADDRESS);
+				IPAddress ipAdd = IPAddress.Parse(AppMain.CONNECTINGHOSTIPADDRESS);
 				//IPAddress ipAdd = IPAddress.Parse("192.168.0.26");
 				//IPEndPoint EP = new IPEndPoint(IPAddress.Loopback, port);
 				

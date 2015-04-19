@@ -220,7 +220,7 @@ namespace TheATeam
 				SingleUpdate(dt);
 				break;
 			case "MULTIPLAYER":
-				Console.WriteLine("PLAYER UPDATE HANDLE INPUT");
+				
 				MultiplayerUpdate(dt);
 				break;
 			case "DUAL":

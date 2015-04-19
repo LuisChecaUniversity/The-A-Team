@@ -25,6 +25,7 @@ namespace TheATeam
 		public static string 				TYPEOFGAME;
 		public static bool 					ISHOST = false;
 		public static string 				IPADDRESS;
+		public static string 				CONNECTINGHOSTIPADDRESS;
 		public static string 				WHEREWIFI = "PHONE";
 		public static string 				PLAYERNAME ;
 		public static bool 					QUITGAME = false;
