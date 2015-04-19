@@ -592,7 +592,7 @@ namespace TheATeam
 				}
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
-				ShootingDirection = AppMain.client.networkShootDir;
+				
 				ShootingDirection.Normalize();
 				//Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);

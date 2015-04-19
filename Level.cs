@@ -57,6 +57,12 @@ namespace TheATeam
 		private bool pointerOn = false;
 		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
 		
+		
+		//network variables
+		private float sendMessageTime = 1.0f;
+		private float curSendTime = 0.0f;
+		private bool canSend;
+		
 		public Level(): base()
 		{
 			
@@ -381,6 +387,7 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
+			
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
 			
@@ -398,18 +405,37 @@ namespace TheATeam
 				playerPointer.Position = player1.Position;
 			}
 			
+			
+			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
+				curSendTime += dt/100;
+				if(curSendTime > sendMessageTime)
+				{
+					canSend = true;
+					curSendTime = 0.0f;
+				}
+				
 				if(AppMain.ISHOST)
 					{
 						player1.Update(dt);
+					if(canSend)
+					{
 						AppMain.client.DataExchange();
+						Console.WriteLine("Sent message");
+						canSend = false;	
+					}
 						player2.Update(dt);
 					}
 					else
 					{
 						player2.Update(dt);
+					if(canSend)
+					{
 						AppMain.client.DataExchange();
+						Console.WriteLine("Sent message");
+						canSend = false;	
+					}
 						player1.Update(dt);
 					}
 			}
