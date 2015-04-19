@@ -193,7 +193,7 @@ namespace TheATeam
 					Direction = AppMain.client.NetworkDirection;
 					if (AppMain.client.HasShot)
 					{
-						Shoot();	
+						Shoot(false);	
 						AppMain.client.SetHasShot(false);	
 					}
 				}
@@ -291,6 +291,12 @@ namespace TheATeam
 		{
 			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
 			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
+			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
+			if (ShootingDirection.IsZero())
+			{
+				ShootingDirection = Direction;
+			}
 			if (positionDelta.IsZero())
 			{
 				AppMain.client.SetActionMessage('I');
@@ -298,14 +304,14 @@ namespace TheATeam
 			else
 			{
 				AppMain.client.SetActionMessage('M');
-				Direction = positionDelta;
+				Direction = positionDelta.Normalize();
 				AppMain.client.SetMyDirection(Direction.X, Direction.Y);
 			}			
 			if (Input2.GamePad0.R.Down)
 			{
 				if (canShoot)
 				{
-					Shoot();
+					Shoot(true);
 				}
 			
 			}
@@ -585,13 +591,35 @@ namespace TheATeam
 				}
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
+				ShootingDirection = AppMain.client.networkShootDir;
 				ShootingDirection.Normalize();
 				//Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
 			}
 		}
-		
+		virtual public void Shoot(bool isMeShooting)
+		{
+			if (_stats.mana >= _stats.manaCost)
+			{
+				_stats.mana -= _stats.manaCost;
+				if (isMeShooting)
+				{
+					AppMain.client.SetActionMessage('S');
+				}
+				else
+				{
+					ShootingDirection = AppMain.client.networkShootDir;
+				}
+				playerState = PlayerState.Shooting;
+				Vector2 pos = new Vector2(Position.X, Position.Y);
+				
+				ShootingDirection.Normalize();
+				//Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
+				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
+				canShoot = false;
+			}
+		}
 		public void ChangeTiles(string type)
 		{
 			foreach (Tile t in playerTiles)
