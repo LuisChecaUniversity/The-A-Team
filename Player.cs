@@ -45,7 +45,7 @@ namespace TheATeam
 
 		public int Mana { get { return _stats.mana; } }
 		
-		private float manaTimer, healthTimer, shieldTimer, slowTimer, speedTimer;
+		private float manaTimer, healthTimer, shieldTimer, slowTimer, speedTimer = 0.0f;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -57,7 +57,7 @@ namespace TheATeam
 		
 		private ShieldEffect ShieldEffect { get { return (ShieldEffect)elementShield.TileIndex2D.Y; } }
 		
-		private float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
+		public float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
 		
 		private bool ShieldVisible
 		{
@@ -496,19 +496,27 @@ namespace TheATeam
 				}
 			}
 			
+			
+			
+			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+			{ 
+				speedTimer += dt/1000;
+				if(speedTimer > 1.75f)
+				{
+					_stats.moveSpeed = 1.33f;
+					speedTimer =   0.0f;
+				}
+			}
+			
+			
 			foreach (Tile t in playerTiles)
 			{
 				if (t.Key != '_' && t.Overlaps(this))
 				{
 					//Earth + Air -> Tiles Grant Speed Boost
 					if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
-					{ speedTimer += dt;
-						_stats.moveSpeed = 2f;
-						
-						if(speedTimer > 3f)
-						{
-							_stats.moveSpeed = 1f;
-						}
+					{ 
+						_stats.moveSpeed = 1.75f;	
 					}
 				}
 			}
@@ -615,7 +623,7 @@ namespace TheATeam
 			// Earth + Air -> Tiles Grant Speed Boost
 			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
 			{
-				_stats.moveSpeed = 1.75f;
+				//_stats.moveSpeed = 1.75f;
 			}
 			// Fire + Earth -> Collsion with Walls cause damage, implemented in HandleCollisions()
 			
