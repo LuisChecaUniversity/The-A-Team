@@ -142,7 +142,7 @@ namespace TheATeam
 					//check player 1 with items first
 					if (item.hasCollided(p1.Position, p1Size))
 					{
-						//Console.WriteLine("Collided with " + item.Name);
+						Console.WriteLine("Collided with " + item.Name);
 						item.iSprite.Visible = false;
 						item.collided = true;
 						

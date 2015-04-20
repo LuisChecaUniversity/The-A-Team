@@ -409,36 +409,18 @@ namespace TheATeam
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				curSendTime += dt/100;
-				Console.WriteLine(curSendTime.ToString());
-				if(curSendTime > sendMessageTime)
-				{
-					canSend = true;
-					curSendTime = 0.0f;
-				}
-				
 				if(AppMain.ISHOST)
-					{
-						player1.Update(dt);
-					//if(canSend)
-					//{
-						AppMain.client.DataExchange();
-					//	Console.WriteLine("Sent message");
-					//	canSend = false;	
-					//}
-						player2.Update(dt);
-					}
-					else
-					{
-						player2.Update(dt);
-					//if(canSend)/
-					//{
-						AppMain.client.DataExchange();
-					//	Console.WriteLine("Sent message");
-					//	canSend = false;	
-					//}
-						player1.Update(dt);
-					}
+				{
+					player1.Update(dt);
+					AppMain.client.DataExchange();
+					player2.Update(dt);
+				}
+				else
+				{
+					player2.Update(dt);
+					AppMain.client.DataExchange();
+					player1.Update(dt);
+				}
 			}
 			else
 			{

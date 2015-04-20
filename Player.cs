@@ -23,6 +23,10 @@ namespace TheATeam
 
 	public class Player: Tile
 	{
+		
+		private float updatePosTime = 5.0f;
+		private float curUpdatePosTime;
+		
 		private static int Y_INDEX = 5;
 		private static float MoveDelta = 4f;
 		private static float PlayerSize = 64; // 64x64 px
@@ -188,9 +192,19 @@ namespace TheATeam
 				}
 				else
 				{
-					//set position and direction from the network positions of enemy
-					Position = AppMain.client.networkPosition;
 					Direction = AppMain.client.NetworkDirection;
+					//set position and direction from the network positions of enemy
+					Position += Direction * _stats.moveSpeed * 2.0f;
+					
+					curUpdatePosTime += dt;
+					if(curUpdatePosTime > updatePosTime)
+					{
+						Position = AppMain.client.networkPosition;
+						curUpdatePosTime = 0.0f;
+					}
+					
+					//Position = AppMain.client.networkPosition;
+					
 					if (AppMain.client.HasShot)
 					{
 						Shoot(false);	

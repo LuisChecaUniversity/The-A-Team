@@ -854,7 +854,7 @@ namespace TheATeam
 			Director.Instance.DebugFlags = Director.Instance.DebugFlags | DebugFlags.DrawGrid;
 			this.DrawGridStep = 20.0f;
 			
-			GetRequest();
+		//	GetRequest();
 			
 //			var request = (HttpWebRequest)WebRequest.Create("http://localhost:9010/newemployee");
 //			
