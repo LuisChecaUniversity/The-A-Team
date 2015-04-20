@@ -111,7 +111,7 @@ namespace TheATeam
 				
 				level = "/Application/assets/level" + 2 + ".txt";	
 				levelStage = LevelStage.CombatStage;
-				PostBuildStage();
+				
 				
 				
 			}
@@ -175,6 +175,7 @@ namespace TheATeam
 			{
 					Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
 					Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
+				PostBuildStage();
 					//player2.Update(0.0f);
 			}
 			
