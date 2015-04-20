@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D;
@@ -19,21 +19,24 @@ namespace TheATeam
 		Shooting,
 	}
 	
-	public enum ShieldEffect { None = 2, Damage = 1, KnockBack = 0 }
+	public enum ShieldEffect
+	{
+		None = 2,
+		Damage = 1,
+		KnockBack = 0
+	}
 
 	public class Player: Tile
 	{
 		private static int Y_INDEX = 5;
 		private static float MoveDelta = 4f;
-		private static float PlayerSize = 64; // 64x64 px
-		private static float UISize = 32;
 		new static Vector2 boundsScale = new Vector2(1f);
 		protected bool canShoot = true;
 		private bool keyboardTest = true;
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
-		public PlayerIndex whichPlayer;
+		public PlayerIndex playerIndex;
 		protected PlayerState playerState;
 
 		public int Health { get { return _stats.health; } }
@@ -42,7 +45,7 @@ namespace TheATeam
 
 		public int Mana { get { return _stats.mana; } }
 		
-		private float manaTimer, healthTimer, shieldTimer, slowTimer;
+		private float manaTimer, healthTimer, shieldTimer, slowTimer, speedTimer = 0.0f;
 		private Vector2 startingPosition;
 		private Vector2 positionDelta;
 		private Vector2i animationRangeX;
@@ -54,7 +57,7 @@ namespace TheATeam
 		
 		private ShieldEffect ShieldEffect { get { return (ShieldEffect)elementShield.TileIndex2D.Y; } }
 		
-		private float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
+		public float ShieldScale { get { return (_stats.MaxShield > 0) ? _stats.shield / (float)_stats.MaxShield : 1f; } }
 		
 		private bool ShieldVisible
 		{
@@ -88,7 +91,7 @@ namespace TheATeam
 			}
 		}
 		
-		public List<Tile> playerTiles = new List<Tile>();
+		public List<Tile> playerTiles;
 
 		private Player(int spriteIndexY, Vector2 position, Vector2i animationRangeX, float interval=0.2f):
 			base(position)
@@ -140,7 +143,7 @@ namespace TheATeam
 
 			CenterSprite();	
 
-			whichPlayer = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
+			playerIndex = isPlayer1 ? PlayerIndex.PlayerOne : PlayerIndex.PlayerTwo;
 			
 			playerState = PlayerState.Idle;
 			Direction = new Vector2(1.0f, 0.0f);
@@ -155,9 +158,8 @@ namespace TheATeam
 			UpdateShield(dt);
 			RegenHealth(dt);
 			SlowEffect(dt);
-			//_stats.moveSpeed = 0.1f;
-			Position = Position + positionDelta;
-			Console.WriteLine(_stats.moveSpeed);
+			Position = Position + (positionDelta * dt / 16f);
+			//Debug.WriteLine(_stats.moveSpeed);
 			
 			switch (AppMain.TYPEOFGAME)
 			{
@@ -174,15 +176,13 @@ namespace TheATeam
 				break;
 				
 			case "MULTIPLAYER":
-				if (AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerOne || !AppMain.ISHOST && whichPlayer == PlayerIndex.PlayerTwo)
+				if (AppMain.ISHOST && playerIndex == PlayerIndex.PlayerOne || !AppMain.ISHOST && playerIndex == PlayerIndex.PlayerTwo)
 				{
 					// Handle movement/attacks
 					HandleInput(dt);
 
 					// Apply the movement
 					Position = Position + positionDelta;
-					// Make camera follow the player
-					Info.CameraCenter = Position;
 					//Set Position for Data Message
 					AppMain.client.SetMyPosition(Position.X, Position.Y);
 				}
@@ -206,10 +206,7 @@ namespace TheATeam
 			HandleDirectionAnimation();
 			
 			// Find current tile and apply collision
-			HandleCollision();
-			//Position = Position + positionDelta;
-			// Make camera follow the player
-			Info.CameraCenter = Position;
+			HandleCollision(dt);
 		}
 		
 		private void HandleInput(float dt)
@@ -261,8 +258,8 @@ namespace TheATeam
 		
 		private void SingleUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
 			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
 			if (ShootingDirection.IsZero())
@@ -316,7 +313,7 @@ namespace TheATeam
 		
 		private void DualUpdate(float dt)
 		{
-			if(whichPlayer == PlayerIndex.PlayerOne)
+			if (playerIndex == PlayerIndex.PlayerOne)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
@@ -341,7 +338,7 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-			else if(whichPlayer == PlayerIndex.PlayerTwo)
+			else if (playerIndex == PlayerIndex.PlayerTwo)
 			{
 				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
 				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
@@ -366,36 +363,6 @@ namespace TheATeam
 					canShoot = true;
 				}
 			}
-			
-			//no movement for dual player - Didnt think we continuing with this feature
-//			if (whichPlayer == PlayerIndex.PlayerOne)
-//			{
-//				if (Input2.GamePad0.Up.Down)
-//				{
-//					if (canShoot)
-//					{
-//						Shoot();
-//					}
-//				}
-//				if (Input2.GamePad0.Up.Release)
-//				{
-//					canShoot = true;
-//				}
-//			}
-//			else
-//			{
-//				if (Input2.GamePad0.Triangle.Down)
-//				{
-//					if (canShoot)
-//					{
-//						Shoot();
-//					}
-//				}
-//				if (Input2.GamePad0.Triangle.Release)
-//				{
-//					canShoot = true;
-//				}
-//			}
 		}
 		
 		protected void HandleDirectionAnimation()
@@ -412,26 +379,27 @@ namespace TheATeam
 				TileIndex2D.X = animationRangeX.X;
 			}
 		}
-		bool hasCollidedTile(Tile t)
+
+		private bool hasCollidedTile(Tile t)
 		{
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
-			float tileHeight = 64.0f/2;
-			float tileWidth = 40.0f/2;
+			float tileHeight = 64.0f / 2;
+			float tileWidth = 40.0f / 2;
 			
-			if(Center.X + width < t.Center.X - tileWidth)
+			if (Center.X + width < t.Center.X - tileWidth)
 			{
 				return false;
 			}
-			else if(Center.X - width> t.Center.X + tileWidth)
+			else if (Center.X - width > t.Center.X + tileWidth)
 			{
 				return false;
 			}
-			else if(Center.Y + height < t.Center.Y - tileHeight)
+			else if (Center.Y + height < t.Center.Y - tileHeight)
 			{
 				return false;
 			}
-			else if(Center.Y - height > t.Center.Y + tileHeight)
+			else if (Center.Y - height > t.Center.Y + tileHeight)
 			{
 				return false;
 			}
@@ -441,56 +409,68 @@ namespace TheATeam
 			}
 		}
 		
-		protected void HandleCollision()
+		protected void HandleCollision(float dt)
 		{
 			float width = Quad.Bounds2().Point11.X;
 			float height = Quad.Bounds2().Point11.Y;
 
 			
 			// check viewport collisions
-			if(Center.X + width > Director.Instance.GL.Context.Screen.Width)// right side
+			if (Center.X + width > Director.Instance.GL.Context.Screen.Width)
+			{
+				// right side
 				Position = new Vector2(Director.Instance.GL.Context.Screen.Width - width, Position.Y);
-			if(Center.X - width < 0) // left side
+			}
+			if (Center.X - width < 0)
+			{
+				// left side
 				Position = new Vector2(0 + width, Position.Y);
-			if(Center.Y + height > Director.Instance.GL.Context.Screen.Height - 32.0f)// top
-				Position = new Vector2(Position.X,  Director.Instance.GL.Context.Screen.Height - height - 32.0f);
-			if(Center.Y - height < 0) // bottom
+			}
+			if (Center.Y + height > Director.Instance.GL.Context.Screen.Height - 32.0f)
+			{
+				// top
+				Position = new Vector2(Position.X, Director.Instance.GL.Context.Screen.Height - height - 32.0f);
+			}
+			if (Center.Y - height < 0)
+			{
+				// bottom
 				Position = new Vector2(Position.X, 0 + height);
+			}
 			
-			float tileHeight = 64.0f/2;
-			float tileWidth = 40.0f/2;
+			float tileHeight = 64.0f / 2;
+			float tileWidth = 40.0f / 2;
 			
 			// check tile collisions
 			foreach (Tile t in Tile.Collisions)
 			{
-				if(t.IsCollidable && (t.Key != Element || t.Key == 'N'))
+				if (t.IsCollidable && (t.Key != Element || t.Key == 'N'))
 				{
-					if(hasCollidedTile(t))
+					if (hasCollidedTile(t))
 					{
 						float pushBack = 4.0f;
-						if(Center.X + width >= t.Center.X - tileWidth && Center.X - width <t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
+						if (Center.X + width >= t.Center.X - tileWidth && Center.X - width < t.Center.X - tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Left Col");
+							Debug.WriteLine("Left Col");
 							Position = new Vector2(t.Center.X - tileWidth - width - pushBack, Position.Y);
 						}
-						else if(Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
+						else if (Center.X - width <= t.Center.X + tileWidth && Center.X + width > t.Center.X + tileWidth && Center.Y < t.Center.Y + tileHeight && Center.Y > t.Center.Y - tileHeight)
 						{
-							Console.WriteLine("Right Col");
+							Debug.WriteLine("Right Col");
 							Position = new Vector2(t.Center.X + tileWidth + width + pushBack, Position.Y);
 						}
-						else if(Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
+						else if (Center.Y + height >= t.Center.Y - tileHeight && Center.Y - height < t.Center.Y - tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Bot Col");
+							Debug.WriteLine("Bot Col");
 							Position = new Vector2(Position.X, t.Center.Y - tileHeight - height - pushBack);
 						}
-						else if(Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width> t.Center.X - tileWidth)
+						else if (Center.Y - height <= t.Center.Y + tileHeight && Center.Y + height > t.Center.Y + tileHeight && Center.X - width < t.Center.X + tileWidth && Center.X + width > t.Center.X - tileWidth)
 						{
-							Console.WriteLine("Top Col");
+							Debug.WriteLine("Top Col");
 							Position = new Vector2(Position.X, t.Center.Y + tileHeight + height + pushBack);
 						}
 						else // delete
 						{
-							Console.WriteLine("---------------------------------");
+							Debug.WriteLine("---------------------------------");
 //							Vector2 point = Center.Reflect((Center - t.Center).Perpendicular()).Normalize();
 //							
 //							if(!point.IsNaN())
@@ -501,73 +481,42 @@ namespace TheATeam
 					}
 				}
 			}
-			
-//			Vector2 nextPos = Position + positionDelta;
-//			float screenWidth = Director.Instance.GL.Context.Screen.Width;
-//			float screenHeight = Director.Instance.GL.Context.Screen.Height - UISize; // Blank space for UI.
-//
-//			if (nextPos.X + PlayerSize > screenWidth + 50)
-//			{
-//				Position = new Vector2(screenWidth + 50 - PlayerSize, Position.Y);
-//			}
-//
-//			if (nextPos.X < 18)
-//			{
-//				Position = new Vector2(18, Position.Y);
-//			}
-//			
-//			if (nextPos.Y < 18)
-//			{
-//				Position = new Vector2(Position.X, 18);
-//			}
-//
-//			if (nextPos.Y + PlayerSize > screenHeight + 50)
-//			{
-//				Position = new Vector2(Position.X, screenHeight + 50 - PlayerSize);
-//			}
-//
-//			// Loop through tiles
-//			foreach (Tile t in Tile.Collisions)
-//			{
-//				bool fromLeft = nextPos.X + PlayerSize > t.Position.X + 64;
-//				bool fromRight = nextPos.X < t.Position.X + Tile.Width;
-//				bool fromTop = nextPos.Y < t.Position.Y + 18 + Tile.Height;
-//				bool fromBottom = nextPos.Y + PlayerSize > t.Position.Y + 50;
-//				
-//				if (fromLeft && fromRight && fromTop && fromBottom)
-//				{
-//					if (!positionDelta.IsZero() && t.IsCollidable && (t.Key != Element || t.Key == 'N'))
-//					{
-//						if (fromLeft && positionDelta.X > 0)
-//						{
-//							Position = new Vector2(t.Position.X + 64 - PlayerSize, Position.Y);
-//						}
-//						else if (fromRight && positionDelta.X < 0)
-//						{
-//							Position = new Vector2(t.Position.X + PlayerSize, Position.Y);
-//						}
-//						else if (fromTop && positionDelta.Y < 0)
-//						{
-//							Position = new Vector2(Position.X, t.Position.Y + 18 + PlayerSize);
-//						}
-//						else if (fromBottom && positionDelta.Y > 0)
-//						{
-//							Position = new Vector2(Position.X, t.Position.Y + 50 - PlayerSize);
-//						}
-//						positionDelta = Vector2.Zero;
-//					}
-//				}
-//			}
+
 			// Loop through enemy tiles
 			Player p = Info.P1 == this ? Info.P2 : Info.P1;
 			foreach (Tile t in p.playerTiles)
 			{
-				if (t.Key != '_' && t.Overlaps(this))
+				if (t.IsWall && t.Overlaps(this))
 				{
 					// Fire + Earth -> Collsion with Walls cause damage
 					if ((p.Element == 'F' && p.Element2 == 'E') || (p.Element2 == 'F' && p.Element == 'E'))
 					{
 						TakeDamage(1);
+					}
+				}
+			}
+			
+			
+			
+			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+			{ 
+				speedTimer += dt/1000;
+				if(speedTimer > 1.75f)
+				{
+					_stats.moveSpeed = 1.33f;
+					speedTimer =   0.0f;
+				}
+			}
+			
+			
+			foreach (Tile t in playerTiles)
+			{
+				if (t.Key != '_' && t.Overlaps(this))
+				{
+					//Earth + Air -> Tiles Grant Speed Boost
+					if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+					{ 
+						_stats.moveSpeed = 1.75f;	
 					}
 				}
 			}
@@ -585,9 +534,10 @@ namespace TheATeam
 				playerState = PlayerState.Shooting;
 				Vector2 pos = new Vector2(Position.X, Position.Y);
 				ShootingDirection.Normalize();
-				Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
+				Debug.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
+				AudioManager.PlaySound("fire");
 			}
 		}
 		
@@ -673,7 +623,7 @@ namespace TheATeam
 			// Earth + Air -> Tiles Grant Speed Boost
 			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
 			{
-				_stats.moveSpeed = 1.75f;
+				//_stats.moveSpeed = 1.75f;
 			}
 			// Fire + Earth -> Collsion with Walls cause damage, implemented in HandleCollisions()
 			
@@ -693,8 +643,7 @@ namespace TheATeam
 			{
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
-				_stats.health = _stats.MaxHealth;
-				_stats.mana = _stats.MaxMana;
+				_stats.Reset();
 				
 				ElementBuff("Neutral");
 				ChangeTiles("Neutral");
@@ -750,33 +699,24 @@ namespace TheATeam
 		
 		public void Player1Score()
 		{
-			Vector2 nextPos1 = Position + positionDelta;
 			Item p1Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player1Flag");
 			
-			if(p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
+			if (p1Flag != null && p1Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
+				Info.Winner = Info.P1;
 				Info.IsGameOver = true;
 			}
-//			if (nextPos1.X < 64 && nextPos1.X > 0 && nextPos1.Y < 322 && nextPos1.Y > 258)
-//			{
-//				Info.IsGameOver = true;
-//			}
 		}
 		
 		public void Player2Score()
 		{
 			Item p2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 			
-			if(p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
+			if (p2Flag != null && p2Flag.hasCollided(Position, Quad.Bounds2().Point11))
 			{
+				Info.Winner = Info.P2;
 				Info.IsGameOver = true;
 			}
-//			Vector2 nextPos2 = Position + positionDelta;
-//			
-//			if (nextPos2.X < 958 && nextPos2.X > 894 && nextPos2.Y < 322 && nextPos2.Y > 258)
-//			{
-//				Info.IsGameOver = true;
-//			}
 		}
 
 		public Vector2 GetShootingDirection()
@@ -794,7 +734,7 @@ namespace TheATeam
 			if (slowed)
 			{
 				slowTimer += dt / 1000;
-				//Console.WriteLine("slowed " + slowTimer);
+				//Debug.WriteLine("slowed " + slowTimer);
 				_stats.moveSpeed = 0.3f;
 				
 				if (slowTimer > 2.0f)
@@ -818,8 +758,9 @@ namespace TheATeam
 						p.TakeDamage(1);
 						break;
 					case ShieldEffect.KnockBack:
-						p.Position = p.Position - (new Vector2(50) * p.Direction);
-						break;						
+						p.Position = p.Position - ((p.LocalBounds.Size) * p.Direction);
+						_stats.shield = 0;
+						break;
 					case ShieldEffect.None:
 					default:
 						break;

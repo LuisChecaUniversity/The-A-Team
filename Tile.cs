@@ -1,9 +1,7 @@
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
-using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 
@@ -19,7 +17,6 @@ namespace TheATeam
 	public class Stats
 	{
 		private int _maxHealth, _maxMana, _maxShield;
-		private Stats initialStats = null;
 
 		public int MaxHealth
 		{
@@ -57,65 +54,45 @@ namespace TheATeam
 		public int manaRecharge = 25;
 		public int healthRecharge = 180;
 		public float moveSpeed = 1f;
+		private int initialMaxHealth, initialMaxMana, initialMaxShield;
 		
 		public Stats(int maxHealth=30, int maxMana=100, int maxShield=0)
 		{
-			MaxHealth = maxHealth;
-			MaxMana = maxMana;
-			MaxShield = maxShield;
-			initialStats = (Stats)this.MemberwiseClone();
+			initialMaxHealth = MaxHealth = maxHealth;
+			initialMaxMana = MaxMana = maxMana;
+			initialMaxShield = MaxShield = maxShield;
 		}
 		
 		public void Reset()
 		{
-			MaxHealth = initialStats.MaxHealth;
-			MaxMana = initialStats.MaxMana;
-			MaxShield = initialStats.MaxShield;
-			manaCost = initialStats.manaCost;
-			shieldRecharge = initialStats.shieldRecharge;
-			manaRecharge = initialStats.manaRecharge;
-			healthRecharge = initialStats.healthRecharge;
-			moveSpeed = initialStats.moveSpeed;
+			MaxHealth = initialMaxHealth;
+			MaxMana = initialMaxMana;
+			MaxShield = initialMaxShield;
+			manaCost = 30;
+			shieldRecharge = 85;
+			manaRecharge = 25;
+			healthRecharge = 180;
+			moveSpeed = 1f;
 		}
 	}
 	
-	public enum Sides
-	{
-		None = 0,
-		Top = 1,
-		Left = 2,
-		TopLeft = 3,
-		Right = 4,
-		TopRight = 5,
-		LeftRight = 6,
-		TopLeftRight = 7,
-		Bottom = 8,
-		TopBottom = 9,
-		BottomLeft = 10,
-		BottomTopLeft = 11,
-		BottomRight = 12,
-		BottomTopRight = 13,
-		BottomLeftRight = 14,
-		All = 15
-	}
-
 	public class Tile: SpriteTile
 	{
 		private static Dictionary<char, TileType> _types = XMLTypeLoader();
-		protected Stats _stats = new Stats();
-		private char _key;
-		private float healthTimer = 0.0f;
-
-		private bool _isWall { get { return Elements.Contains(_key); } }
-		
+		protected static Vector2 boundsScale = new Vector2(40 / 64f, 1f);
 		public static TextureInfo TexInfo = TextureManager.Get("tiles");
 		public static List<char> Elements = new List<char> {'N', 'W', 'F', 'E', 'A', 'L'};
 		public static List<Tile> Collisions = new List<Tile>();
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
+		private char _key;
+		private float healthTimer = 0.0f;
+		protected Stats _stats = new Stats();
 
-		public static int Height { get { return (int)TexInfo.TileSizeInPixelsf.Y; } }
+		public bool IsWall { get { return Elements.Contains(_key); } }
 
-		public static int Width { get { return (int)TexInfo.TileSizeInPixelsf.X; } }
+		public int Height { get { return (int)LocalBounds.Size.Y; } }
+
+		public int Width { get { return (int)LocalBounds.Size.X; } }
 		
 		public Vector2 Center { get { return Position + Quad.Center; } }
 
@@ -127,17 +104,21 @@ namespace TheATeam
 		
 		public bool IsAlive { get { return _stats.health > 0; } }
 		
-		public Sides Sides { get; set; }
-		
-		protected static Vector2 boundsScale = new Vector2(0.71f, 0.97f);
+		public Bounds2 LocalBounds { get { return Quad.Bounds2().Scale(boundsScale, Quad.Center); } }
 		
 		public Bounds2 WorldBounds
 		{
 			get
 			{
-				Bounds2 thisBounds = this.GetlContentLocalBounds();
-				this.GetContentWorldBounds(ref thisBounds);
-				thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
+				Bounds2 thisBounds = default(Bounds2);
+				if (GetContentWorldBounds(ref thisBounds))
+				{
+					thisBounds = thisBounds.Scale(boundsScale, thisBounds.Center);
+				}
+				else
+				{
+					System.Diagnostics.Debug.WriteLine("Failed to get world bounds");
+				}
 				return thisBounds;
 			}
 		}
@@ -174,7 +155,7 @@ namespace TheATeam
 		
 		public bool WallDamage(float dt)
 		{			
-			if (!_isWall)
+			if (!IsWall)
 			{
 				return false;
 			}
@@ -208,7 +189,6 @@ namespace TheATeam
 				if (_stats.health < _stats.MaxHealth)
 				{
 					healthTimer += dt;
-					//_stats.health += _stats.healthRecharge;
 				}
 				if (healthTimer >= _stats.healthRecharge)
 				{
@@ -217,14 +197,19 @@ namespace TheATeam
 				}
 			}
 		}
+
 		public void TakeDamage(char element='N', int damage=10)
 		{
-			if (IsAlive && _isWall)
+			if (IsAlive && IsWall)
 			{
-				if(element == 'N')
+				if (element == 'N')
+				{
 					_stats.health -= damage;
+				}
 				else
+				{
 					_stats.health += damage * (element == Key ? 1 : -1);
+				}
 			}
 		}
 		
@@ -241,19 +226,17 @@ namespace TheATeam
 
 		public bool Overlaps(SpriteBase sprite)
 		{
-			Bounds2 otherBounds = sprite.GetlContentLocalBounds();
-			sprite.GetContentWorldBounds(ref otherBounds);
-			return Overlaps(otherBounds);
-		}
-		
-		public static Vector2i GetSpriteIndex(char loadkey)
-		{
-			TileType tt = new TileType();
-			if (_types.TryGetValue(loadkey, out tt))
+			Tile t = sprite as Tile;
+			Bounds2 otherBounds = default(Bounds2);
+			if (t != null)
 			{
-				return tt.tileIndex2D;
+				otherBounds = t.WorldBounds;
 			}
-			return new Vector2i(-1, -1);
+			else
+			{
+				sprite.GetContentWorldBounds(ref otherBounds);
+			}
+			return Overlaps(otherBounds);
 		}
 		
 		private static Dictionary<char, TileType> XMLTypeLoader(string filepath="/Application/assets/tiles.xml")
@@ -277,6 +260,7 @@ namespace TheATeam
 		{
 			Vector2 pos = Vector2.Zero;
 			Tile t = null;
+			const int TileSize = 64;
 			// Clear Grid list
 			Grid.Clear();
 			// Clear collision list
@@ -318,23 +302,27 @@ namespace TheATeam
 					// Player 2 start
 					if (c == '2')
 					{
-						player2Pos = new Vector2(pos.X + Width, pos.Y);
+						player2Pos = new Vector2(pos.X + TileSize, pos.Y);
 					}
-					if(c== '3')
+					
+					// Player 1 flag position
+					if (c == '3')
 					{
-						p1Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
+						p1Flag = new Vector2(pos.X + TileSize / 2, pos.Y + TileSize / 2);
 					}
-					if(c== '4')
+					
+					// Player 2 flag position
+					if (c == '4')
 					{
-						p2Flag = new Vector2(pos.X + Width/2, pos.Y + Height/2);
+						p2Flag = new Vector2(pos.X + TileSize / 2, pos.Y + TileSize / 2);
 					}
 
 					// End col: Move to next tile "grid"
-					pos.X += Width;
+					pos.X += TileSize;
 				}
 				Grid.Add(gridLine);
 				// End row: Move y position to next tile row
-				pos.Y += Height;
+				pos.Y += TileSize;
 			}
 
 			// Add Tiles to Scene

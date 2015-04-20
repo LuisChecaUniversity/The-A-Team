@@ -17,6 +17,8 @@ namespace TheATeam
 		public MainMenu()
 		{
 			Initialise();
+			AudioManager.StopMusic();
+			AudioManager.PlayMusic("bgm", true, 0.4f);
 		}
 
 		public override void Update(float dt)
@@ -48,7 +50,6 @@ namespace TheATeam
 				{
 				case 1:	
 					AppMain.TYPEOFGAME = "SINGLE";
-					Info.TotalGameTime = 0f;
 					Level level = new Level();
 					level.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = level;
@@ -65,7 +66,6 @@ namespace TheATeam
 					
 				case 3:
 					AppMain.TYPEOFGAME = "DUAL";
-					Info.TotalGameTime = 0f;
 					Level placingTest = new Level();
 					placingTest.Camera.SetViewFromViewport();
 					GameSceneManager.currentScene = placingTest;

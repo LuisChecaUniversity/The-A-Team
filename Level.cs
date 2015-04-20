@@ -1,12 +1,9 @@
-using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Sce.PlayStation.Core;
 using Sce.PlayStation.HighLevel.GameEngine2D;
 using Sce.PlayStation.HighLevel.GameEngine2D.Base;
 using Sce.PlayStation.Core.Imaging;
-using Sce.PlayStation.Core.Audio;
-using Sce.PlayStation.Core.Environment;
-using Sce.PlayStation.Core.Graphics;
 using Sce.PlayStation.Core.Input;
 using System.Timers;
 
@@ -81,11 +78,13 @@ namespace TheATeam
 			Vector2 player2Pos = Vector2.Zero;
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
-			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2,6));
+			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2, 6));
 			string level = "/Application/assets/level" + levelNumber + ".txt";
 			
-			if(levelNumber == 2)
+			if (levelNumber == 2)
+			{
 				player1Deployed = maxDeployed;
+			}
 			
 			Tile.Loader(level, ref player1Pos, ref player2Pos, ref p1Flag, ref p2Flag, this);
 			
@@ -123,15 +122,14 @@ namespace TheATeam
 			AddChild(p2baseSprite);
 			
 			Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
-			if(AppMain.TYPEOFGAME == "SINGLE")
+			if (AppMain.TYPEOFGAME == "SINGLE")
+			{
 				Info.P2 = player2 = new AIPlayer(player2Pos, false, player2Tiles, player1);
-			else if(AppMain.TYPEOFGAME == "DUAL")
+			}
+			else if (AppMain.TYPEOFGAME == "DUAL")
 			{
 				Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
-				player2.Update(0.0f);
 			}
-			
-			player1.Update(0.0f);
 			
 			
 			AddChild(player1);
@@ -146,11 +144,13 @@ namespace TheATeam
 
 			lblTopLeft = new Label();
 			lblTopLeft.FontMap = fontl;
+			lblTopLeft.Color = Colors.Grey90;
 			lblTopLeft.Text = "";
 			lblTopLeft.Position = new Vector2(screenWidth / 2 + 140, screenHeight / 2 + 50);
 			
 			lblTopRight = new Label();
 			lblTopRight.FontMap = fontl;
+			lblTopRight.Color = Colors.Grey90;
 			lblTopRight.Text = "Press Start to Continue";
 			lblTopRight.Position = new Vector2(screenWidth / 2 + 100, screenHeight / 2 - 150);
 			
@@ -203,7 +203,7 @@ namespace TheATeam
 			AddChild(p1ManaSprite);
 			AddChild(p2ManaSprite);
 			
-			if(pointerOn)
+			if (pointerOn)
 			{
 				playerPointer = new SpriteUV(TextureManager.Get("pointer"));
 				playerPointer.Quad.S = playerPointer.TextureInfo.TextureSizef;
@@ -218,7 +218,7 @@ namespace TheATeam
 			
 			
 			lblTimer.FontMap = fontl;
-			lblTimer.Color = Colors.Grey80;
+			lblTimer.Color = Colors.Grey90;
 			lblTimer.Text = ""; // might be worth having a ui to separate class
 			lblTimer.Position = new Vector2((screenWidth / 2) - 90, screenHeight - 32);//-100
 			AddChild(lblTimer);
@@ -253,7 +253,7 @@ namespace TheATeam
 
 		}
 
-		private void tickDown(object sender, EventArgs e)
+		private void tickDown(object sender, System.EventArgs e)
 		{
 			if (levelStage == LevelStage.CombatStage)
 			{
@@ -266,9 +266,7 @@ namespace TheATeam
 					lblTimer.Text = "Game Over";
 					Info.IsGameOver = true;
 					timerA.Stop();
-					
-				}	
-				
+				}
 				if (countSecs < 0)
 				{
 					countSecs = 59;
@@ -286,7 +284,7 @@ namespace TheATeam
 				//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
 				GameOver go = new GameOver();
 				GameSceneManager.currentScene = go;
-				Director.Instance.ReplaceScene(go);	
+				Director.Instance.ReplaceScene(go);
 			}
 			
 			if (levelStage == LevelStage.CombatStage)
@@ -312,7 +310,7 @@ namespace TheATeam
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
 			
-			if(pointerOn)
+			if (pointerOn)
 			{
 				playerPointer.Rotation = player1.GetShootingDirection();
 				playerPointer.Position = player1.Position;
@@ -332,16 +330,20 @@ namespace TheATeam
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player1))//.Position, player1.Quad.Bounds2()))
 			{
 				player1.TakeDamage(collidingProjectile.bulletDamage);
-				if(collidingProjectile.getType() == Type.FireAir)
+				if (collidingProjectile.getType() == Type.FireAir)
+				{
 					player1.isSlowed(true);
+				}
 			}
 			
 			collidingProjectile = ProjectileManager.Instance.ProjectileCollision(player2);
 			if (collidingProjectile != null)//ProjectileManager.Instance.ProjectileCollision(player2))//.Position, player2.Quad.Bounds2()))
 			{
 				player2.TakeDamage(collidingProjectile.bulletDamage);
-				if(collidingProjectile.getType() == Type.FireAir)
+				if (collidingProjectile.getType() == Type.FireAir)
+				{
 					player2.isSlowed(true);
+				}
 			}
 
 			for (int i = 0; i < Tile.Collisions.Count; i++)
@@ -350,16 +352,8 @@ namespace TheATeam
 				collidingProjectile = ProjectileManager.Instance.ProjectileCollision(t);
 				if (collidingProjectile != null)
 				{
-					Console.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
+					Debug.WriteLine(collidingProjectile.GetPlayer().Element); // **can hit more then 1 tile at a time**
 					t.TakeDamage(collidingProjectile.GetPlayer().Element);
-					
-//					char collisionType = collidingProjectile.GetPlayer().Element;//ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
-//					
-//					if (collisionType != 'X')
-//					{
-//						Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
-//						t.TakeDamage(collidingProjectile.bulletDamage);
-//					}
 				}
 				// Remove from collisions if true
 				if (t.WallDamage(dt))
@@ -380,7 +374,7 @@ namespace TheATeam
 
 		private void BuildStage(float dt)
 		{
-			if(AppMain.TYPEOFGAME == "SINGLE")
+			if (AppMain.TYPEOFGAME == "SINGLE")
 			{
 				if (player1Deployed == maxDeployed)
 				{
@@ -399,9 +393,9 @@ namespace TheATeam
 					PostBuildStage();
 				}
 			}
-			else if(AppMain.TYPEOFGAME == "DUAL")
+			else if (AppMain.TYPEOFGAME == "DUAL")
 			{
-				if(player1Turn)
+				if (player1Turn)
 				{
 					lblTopRight.Text = "Press Square for Player 2\n          Deployment";
 					if (player1Deployed == maxDeployed)
@@ -441,21 +435,20 @@ namespace TheATeam
 						PostBuildStage();
 					}
 				}
-				
-				
 			}
 		}
+
 		private void PlaceDefence(Player player)
 		{
 			var testtouches = Touch.GetData(0);
 			List<Tile> playerTiles = new List<Tile>();
 			int playerDeployed = 0;
-			if(player == player1)
+			if (player == player1)
 			{
 				playerTiles = player1Tiles;
 				playerDeployed = player1Deployed;
 			}
-			else if(player == player2)
+			else if (player == player2)
 			{
 				playerTiles = player2Tiles;
 				playerDeployed = player2Deployed;
@@ -469,12 +462,12 @@ namespace TheATeam
 				float screenY = screenHeight - (testtouches[0].Y + 0.5f) * screenheight;
 				Vector2 touchVec = new Vector2(screenx, screenY);
 				
-				if(screenY < screenheight - 32.0f) // prevents tiles behind UI
+				if (screenY < screenheight - 32.0f) // prevents tiles behind UI
 				{
 					if (testtouches[0].Status == TouchStatus.Down)
 					{
-						Console.WriteLine("Touched" + touchVec);
-						Console.WriteLine(player1Tiles[0].Position);
+						Debug.WriteLine("Touched" + touchVec);
+						Debug.WriteLine(player1Tiles[0].Position);
 						
 						
 						foreach (Tile t in playerTiles)
@@ -509,12 +502,12 @@ namespace TheATeam
 				}
 			}
 			
-			if(player == player1)
+			if (player == player1)
 			{
 				player1Tiles = playerTiles;
 				player1Deployed = playerDeployed;
 			}
-			else if(player == player2)
+			else if (player == player2)
 			{
 				player2Tiles = playerTiles;
 				player2Deployed = playerDeployed;
@@ -527,6 +520,7 @@ namespace TheATeam
 			this.RemoveChild(lblTopLeft, true);
 			this.RemoveChild(lblTopRight, true);
 			levelStage = LevelStage.CombatStage;
+			string debugLine = "";
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
 			{
@@ -537,39 +531,14 @@ namespace TheATeam
 					{
 						t.Key = '_';
 					}
-					else if (t.Key == 'N')
-					{
-						if (i > 0)
-						{
-							if (Tile.Grid[i - 1][j].Key == 'N')
-							{
-								t.Sides += (int)Sides.Top;
-							}
-						}
-						if (j > 0)
-						{
-							if (Tile.Grid[i][j - 1].Key == 'N')
-							{
-								t.Sides += (int)Sides.Left;
-							}
-						}
-						if (j < Tile.Grid[i].Count - 1)
-						{
-							if (Tile.Grid[i][j + 1].Key == 'N')
-							{
-								t.Sides += (int)Sides.Right;
-							}
-						}
-						if (i < Tile.Grid.Count - 1)
-						{
-							if (Tile.Grid[i + 1][j].Key == 'N')
-							{
-								t.Sides += (int)Sides.Bottom;
-							}
-						}
-					}
 				}
 			}
+			
+			for(int j = player1Tiles.Count - 2; j >= 0; j--)
+			{
+				debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
+			}
+			System.Diagnostics.Debug.WriteLine(debugLine);
 			
 			ItemManager.Instance.initElements(this);
 		}

@@ -85,7 +85,6 @@
     <Content Include="assets\tiles.xml" />
     <Content Include="assets\MainMenu.png" />
     <Content Include="assets\selectIcon.png" />
-    <Content Include="assets\SplashScreen.png" />
     <Content Include="assets\TitleScreen.png" />
     <Content Include="assets\FireBullet.png" />
     <Content Include="assets\WaterBullet.png" />
@@ -101,7 +100,6 @@
     <Content Include="assets\health.png" />
     <Content Include="assets\mana.png" />
     <Content Include="assets\pointer.png" />
-    <Content Include="assets\Game Over.png" />
     <Content Include="assets\Base.png" />
     <Content Include="assets\ItemSpriteSheet.png" />
     <Content Include="assets\HUDBar.png" />
@@ -111,5 +109,12 @@
     <Content Include="assets\ShieldSpriteSheet.png" />
     <Content Include="assets\RingSpriteSheet.png" />
     <Content Include="assets\PlayerSpriteSheet+.png" />
+    <Content Include="assets\bgm.mp3" />
+    <Content Include="assets\Fire.wav" />
+    <Content Include="assets\Lose.wav" />
+    <Content Include="assets\Pickup.wav" />
+    <Content Include="assets\Win.wav" />
+    <Content Include="assets\GO1.png" />
+    <Content Include="assets\GO2.png" />
   </ItemGroup>
 </Project>
