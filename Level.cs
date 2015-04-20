@@ -79,6 +79,9 @@ namespace TheATeam
 			InitExtras();
 			InitUI();
 			
+			//test
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				PostBuildStage();
 			Camera2D.SetViewFromViewport();
 		}
 		
@@ -175,7 +178,7 @@ namespace TheATeam
 			{
 					Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
 					Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
-				PostBuildStage();
+				
 					//player2.Update(0.0f);
 			}
 			
