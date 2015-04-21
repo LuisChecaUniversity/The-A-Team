@@ -599,7 +599,7 @@ namespace TheATeam
 						
 							byte[] mess = BitConverter.GetBytes(actionMsg);
 							mess.CopyTo(sendBuffer,0);
-						Console.WriteLine("SB LEN = " + sendBuffer.Length);
+							Console.WriteLine("SB LEN = " + sendBuffer.Length);
 						}
 					
 					//combat stage
@@ -753,7 +753,21 @@ namespace TheATeam
 								////////////////////////////////////////////////////////////////////TODO/////////////////////////////////////////
 								
 								
-								char action = BitConverter.ToChar(recvBuffer,2);
+								char action = 'x';
+								if(recvBuffer.Length == 2)
+								{
+									Console.WriteLine("Recieved the Z message");
+									action = BitConverter.ToChar(recvBuffer,0);
+								}
+								else if(recvBuffer.Length > 30)
+								{
+									action = BitConverter.ToChar(recvBuffer,2);
+								}
+									
+								else
+								{
+									action = BitConverter.ToChar(recvBuffer,0);
+								}
 								
 								networkActionMsg = action;
 								if(action.Equals('S'))

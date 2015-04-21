@@ -410,9 +410,10 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						Console.WriteLine("CLIENT HAS SENT ZZZZZ");
-							//levelStage = LevelStage.CombatStage;
-							//AppMain.client.recvBuffer = new byte[26];
-							//AppMain.client.sendBuffer = new byte[26];
+						AppMain.client.recvBuffer = new byte[26];
+						AppMain.client.sendBuffer = new byte[26];
+						levelStage = LevelStage.CombatStage;
+							
 					}
 				}
 				else
@@ -426,7 +427,7 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-							//levelStage = LevelStage.CombatStage;
+							levelStage = LevelStage.CombatStage;
 							
 						}
 					
