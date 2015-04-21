@@ -596,7 +596,7 @@ namespace TheATeam
 						else
 						{
 							sendBuffer = new byte[26];
-							recvBuffer = new byte[26];
+							recvBuffer = new byte[50];
 							byte[] action = BitConverter.GetBytes(actionMsg);
 							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
 							byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
