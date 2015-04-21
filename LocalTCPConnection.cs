@@ -800,23 +800,27 @@ namespace TheATeam
 								}
 								else if(action.Equals('L'))
 								{
-									int count = 0;
-									
-									for (int i = 0; i < 5; i++) 
+									if(layoutMessage.Length <2)
 									{
-										char eleSep = BitConverter.ToChar(recvBuffer,count);
-										char ele = BitConverter.ToChar(recvBuffer,count + 2);
-										float x = BitConverter.ToSingle(recvBuffer,count + 4);
-										char seperator = BitConverter.ToChar(recvBuffer,count + 8);
-										float y = BitConverter.ToSingle(recvBuffer,count + 10);
+										int count = 0;
+									
 										
-										layoutMessage += eleSep;
-										layoutMessage += ele;
-										layoutMessage += x;
-										layoutMessage += seperator;
-										layoutMessage += y;
-										
-										count += 14;
+										for (int i = 0; i < 5; i++) 
+										{
+											char eleSep = BitConverter.ToChar(recvBuffer,count);
+											char ele = BitConverter.ToChar(recvBuffer,count + 2);
+											float x = BitConverter.ToSingle(recvBuffer,count + 4);
+											char seperator = BitConverter.ToChar(recvBuffer,count + 8);
+											float y = BitConverter.ToSingle(recvBuffer,count + 10);
+											
+											layoutMessage += eleSep;
+											layoutMessage += ele;
+											layoutMessage += x;
+											layoutMessage += seperator;
+											layoutMessage += y;
+											
+											count += 14;
+										}
 									}
 									
 								}
