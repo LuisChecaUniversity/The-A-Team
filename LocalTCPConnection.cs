@@ -624,7 +624,7 @@ namespace TheATeam
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							else
 							{
-								Console.WriteLine("StoppeD");
+								//Console.WriteLine("StoppeD");
 							}
 							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							
@@ -808,6 +808,22 @@ namespace TheATeam
 								{
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
+								}
+								else if(action.Equals('L'))
+								{
+									int count = 0;
+									
+									for (int i = 0; i < 5; i++) 
+									{
+										char ele = BitConverter.ToChar(recvBuffer,count);
+										float x = BitConverter.ToSingle(recvBuffer,count + 2);
+										float y = BitConverter.ToSingle(recvBuffer,count + 6);
+										
+										layoutMessage += ele + x + y;
+										
+										count += 10;
+									}
+									
 								}
 								
 								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
