@@ -82,16 +82,8 @@ namespace TheATeam
 			//test
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-			
+				PostBuildStage();
 				
-					PostBuildStage();
-				//}//
-				//else
-				//{
-				//else
-				//	AppMain.client.SetActionMessage('L');
-
-				//}
 				if(AppMain.ISHOST)
 				{
 					levelStage = LevelStage.startingMultiplayerCombat;
@@ -128,8 +120,6 @@ namespace TheATeam
 					{
 						AppMain.client.ChangeStatus();
 					}
-					
-					Console.WriteLine(AppMain.client.ActionMsg.ToString());
 				
 				level = "/Application/assets/level" + 2 + ".txt";	
 				levelStage = LevelStage.CombatStage;
@@ -164,9 +154,9 @@ namespace TheATeam
 			{
 				for (int x = 0; x < Tile.Grid[0].Count; x++)
 				{
-					Console.Write(Tile.Grid[y][x].Key);	
+					//Console.Write(Tile.Grid[y][x].Key);	
 				}
-				Console.WriteLine("");
+				
 			}
 			
 			p1baseSprite = new SpriteUV(TextureManager.Get("base"));
@@ -198,7 +188,6 @@ namespace TheATeam
 					Info.P1 = player1 = new Player(player1Pos, true, player1Tiles);
 					Info.P2 = player2 = new Player(player2Pos, false, player2Tiles);
 				
-					//player2.Update(0.0f);
 			}
 			
 			
@@ -209,7 +198,7 @@ namespace TheATeam
 				
 		private void InitExtras()
 		{
-<<<<<<< HEAD
+			ItemManager.Instance.initFlags(this, p1baseSprite.Position, p2baseSprite.Position);
 			if( AppMain.TYPEOFGAME == "SINGLE" ||  AppMain.TYPEOFGAME == "DUAL")
 			{
 				blockedAreaSprite = new SpriteUV(TextureManager.Get("blockedArea"));
@@ -235,7 +224,7 @@ namespace TheATeam
 				AddChild(lblTopRight);
 			}
 
-			ItemManager.Instance.initFlags(this, p1baseSprite.Position, p2baseSprite.Position);
+			
 		}
 
 		private void InitUI()
@@ -418,12 +407,12 @@ namespace TheATeam
 					{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							Console.WriteLine("RECIEVED LAYOUTM MESSAGE");
+							//Console.WriteLine("RECIEVED LAYOUTM MESSAGE");
 							PostBuildStage();
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-							Console.WriteLine("SENT OVER MESSAGE = " + AppMain.client.ActionMsg);
+							//Console.WriteLine("SENT OVER MESSAGE = " + AppMain.client.ActionMsg);
 							clientSetUpLayout = true;
 							
 							//levelStage = LevelStage.CombatStage;
@@ -431,7 +420,7 @@ namespace TheATeam
 					}
 					else
 					{
-						Console.WriteLine("GOING TO NEXT STAGE");
+					//	Console.WriteLine("GOING TO NEXT STAGE");
 						p2Ready = true;
 //						if(AppMain.client.NetworkActionMsg.Equals('Z'))
 							levelStage = LevelStage.startingMultiplayerCombat;	
@@ -473,7 +462,7 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						p2Ready = true;
-						Console.WriteLine("PLAYER 2 READY");
+						//Console.WriteLine("PLAYER 2 READY");
 					}
 				}
 				else
@@ -489,7 +478,7 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
-			Console.WriteLine("COMBAT!!!!!!");
+			//Console.WriteLine("COMBAT!!!!!!");
 			
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
@@ -670,7 +659,7 @@ namespace TheATeam
 					
 					if (Input2.GamePad0.Start.Down)
 					{
-						String tilesLayout;
+						//String tilesLayout;
 						
 					}
 				}
@@ -881,9 +870,9 @@ namespace TheATeam
 			
 			for(int j = player1Tiles.Count - 2; j >= 0; j--)
 			{
-				debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
+				//debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
 			}
-			System.Diagnostics.Debug.WriteLine(debugLine);
+			//System.Diagnostics.Debug.WriteLine(debugLine);
 			
 			ItemManager.Instance.initElements(this);
 

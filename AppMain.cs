@@ -80,9 +80,6 @@ namespace TheATeam
 
 			timer = new Timer();
 			InitDirector();
-			
-
-			InitDirector();
 			AudioManager.Initialise();
 
 		}
@@ -140,7 +137,6 @@ namespace TheATeam
 			case "Solo":
 				TYPEOFGAME = "SINGLE";
 				runningDirector = true;
-				Info.TotalGameTime = 0f;
 				Level level = new Level();
 				GameSceneManager.currentScene = level;
 				Director.Instance.ReplaceScene(level);
@@ -149,7 +145,6 @@ namespace TheATeam
 				break;
 			case "Dual":
 				TYPEOFGAME = "DUAL";
-				Info.TotalGameTime = 0f;
 				runningDirector = true;
 				Level placingTest = new Level();
 				placingTest.Camera.SetViewFromViewport();
@@ -158,7 +153,6 @@ namespace TheATeam
 				break;
 			case "MULTIPLAYER":
 				runningDirector = true;
-				Info.TotalGameTime = 0f;
 				Level multiLevel = new Level();
 				GameSceneManager.currentScene = multiLevel;
 				Director.Instance.ReplaceScene(multiLevel);
