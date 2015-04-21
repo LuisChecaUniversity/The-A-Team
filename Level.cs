@@ -407,23 +407,26 @@ namespace TheATeam
 				AppMain.client.DataExchange();
 				if(AppMain.ISHOST)
 				{
-					if(AppMain.client.NetworkActionMsg.Equals('F'))
+					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
-							levelStage = LevelStage.CombatStage;
-							AppMain.client.recvBuffer = new byte[26];
-							AppMain.client.sendBuffer = new byte[26];
+						Console.WriteLine("CLIENT HAS SENT ZZZZZ");
+							//levelStage = LevelStage.CombatStage;
+							//AppMain.client.recvBuffer = new byte[26];
+							//AppMain.client.sendBuffer = new byte[26];
 					}
 				}
 				else
 				{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							AppMain.client.SetActionMessage('F');
-							AppMain.client.DataExchange();
+							//AppMain.client.recvBuffer = new byte[26];
+							//AppMain.client.sendBuffer = new byte[26];
+						
+							
 							ItemManager.Instance.initElements(this,true);
-							AppMain.client.recvBuffer = new byte[26];
-							AppMain.client.sendBuffer = new byte[26];
-							levelStage = LevelStage.CombatStage;
+							AppMain.client.SetActionMessage('Z');
+							AppMain.client.DataExchange();
+							//levelStage = LevelStage.CombatStage;
 							
 						}
 					
@@ -436,7 +439,7 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
-			
+			Console.WriteLine("COMBAT");
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
 			
