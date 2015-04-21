@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Net;
 using Sce.PlayStation.Core;
@@ -19,6 +18,7 @@ namespace TheATeam
 		ChooseHostClient,
 		ClientSide
 	}
+
 	public class AppMain
 	{	
 		public static bool 					ISCOMPUTER = true;
@@ -35,7 +35,7 @@ namespace TheATeam
 		public static Button 				button;
 		public static Button 				buttonHost;
 		public static Button 				buttonClient;
-		public static Button 				buttonMulti;		
+		public static Button 				buttonMulti;
 		public static EditableText 			textbox;
 		private static float 				prevTime;
 		private static State 				state = State.ChooseTypeGame;
@@ -48,10 +48,11 @@ namespace TheATeam
 		public static void Main(string[] args)
 		{
 			Initialize();
-			
+
 			while(!QUITGAME)
 			{
 				float curTime = (float)timer.Milliseconds();
+
 				
 				float dt = curTime - prevTime ;
 			
@@ -76,86 +77,42 @@ namespace TheATeam
 
 		public static void Initialize()
 		{
-//			string mess = "QA245S43QF567S23QE100S343QW25S43QL500S10";
-//			int i = 0;
-//			int finalLoop = 1;
-//			int phase = 1;
-//			while ((i = mess.IndexOf('Q',i)) != -1)
-//			{
-//				char element = mess[i+1];
-//				int pos = mess.IndexOf('S',phase);
-//				phase = pos;
-//				string t = mess.Substring(i+2,pos - (i+2));
-//				float xPos = float.Parse(t);
-//				
-//				string tester = "";
-//				int startTest = mess.IndexOf('S',pos );
-//				if(finalLoop==5)
-//				{
-//					int len = mess.Length - startTest;
-//					 tester = mess.Substring(startTest+1,len-1);
-//				}
-//				else
-//				{
-//					int endTest = -1;
-//					if(mess[startTest +3].Equals('Q'))
-//						endTest = startTest+2;
-//					else if(mess[startTest+4].Equals('Q'))
-//						endTest = startTest+3;
-//					tester = mess.Substring(startTest+1,endTest-startTest);
-//				}
-//				float yPos = float.Parse(tester);
-//				
-//				switch (element)
-//				{
-//				case 'A':
-//					
-//					break;
-//				case 'E':
-//					
-//					break;
-//				case 'F':
-//					
-//					break;
-//				case 'W':
-//					
-//					break;
-//				case 'L':
-//					
-//					break;
-//				default:
-//					break;
-//				}
-//				
-//				i++;
-//				phase++;
-//				finalLoop++;
-//			}
+
 			timer = new Timer();
 			InitDirector();
 			
+
+			InitDirector();
+			AudioManager.Initialise();
+
 		}
 		
-		public static void Update (float dt)
+		public static void Update(float dt)
 		{
+
 			if(gsm != null)
 				gsm.Update(dt);
 		
 			List<TouchData> touchDataList = Touch.GetData(0);
 			UISystem.Update(touchDataList);	
+
 		}
 		
 		public static void Render()
 		{
-			if(runningDirector)
+			if (runningDirector)
+			{
 				return;
-			// Clear the screen
-			graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-			graphics.Clear ();
-
-			// Present the screen
+			}
+			graphics.SetClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			graphics.Clear();
+            
+			// Render UI Toolkit
 			UISystem.Render();
-			graphics.SwapBuffers ();
+            
+			// Present the screen
+			graphics.SwapBuffers();	
+
 		}
 		
 		private static void InitDirector()

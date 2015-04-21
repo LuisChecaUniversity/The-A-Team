@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 
 
@@ -1068,89 +1068,24 @@ namespace TheATeam
 			else
 			{
 				
-				
-				 
-				
-//				float screenheight = 544.0f;
-//					float screenwidth = 960.0f;
-//				
-//				List<TouchData> touchDataList = Touch.GetData(0);
-//			UISystem.Update(touchDataList);
-//				//UISystem.Render();
-//			
-//				if(touchDataList.Count > 0)
-//				{
-//					float screenx = (touchDataList[0].X +0.5f) * screenwidth;
-//					float screenY = (touchDataList[0].Y +0.5f) * screenheight;
-//				if(buttonClient.HitTest(new Vector2(screenx,screenY)) && touchDataList[0].Status == TouchStatus.Down)
-//						{
-//							
-//							if(textbox.Text.Length > 0)
-//							{
-//								
-//								
-//							}
-//							
-//						}
-//				}
-//				if(isHost)
-//				{
-//					
-//					if(AppMain.client.IsConnect)
-//					{
-//						lblBottomRight.Text = "Ready";
-//						isPlayer2Ready = true;
-//					}
-//					
-//				}
-//				else
-//				{
-//					lblDebugCenter.Text = AppMain.client.GetIP;
-//					if(Input2.GamePad0.Circle.Press)
-//					{
-//						AppMain.client.Connect();
-//						lblBottomRight.Text = "Ready";
-//						isPlayer2Ready = true;
-//					}
-//					
-////				
-//					if(AppMain.client.IsConnect)
-//					{
-//						lblBottomLeft.Text = "Ready";
-//						isPlayer1Ready = true;
-//					}
-//				}
-//				
-//				if(isPlayer1Ready && isPlayer2Ready)
-//				{
-//					//sprite.Visible = true;
-//					//sprite2.Visible = true;
-//					lblBottomLeft.Visible = false;
-//					lblBottomRight.Visible = false;
-//					lblTopLeft.Visible = false;
-//					lblTopRight.Visible = false;
-//					lblDebugLeft.Visible = false;
-//					lblDebugCenter.Visible = false;
-//					
-////					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/tiles.png", false),
-////			                                                 new Vector2i(10, 3)));
-////					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-////			                                                 new Vector2i(9, 14)));
-////					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-//					
-//					TextureManager.AddAsset("tiles", new TextureInfo(new Texture2D("/Application/assets/SpriteSheetMaster-Recovered.png", false),
-//			                                                 new Vector2i(4, 8)));
-//					TextureManager.AddAsset("entities", new TextureInfo(new Texture2D("/Application/assets/dungeon_objects.png", false),
-//			                                                 new Vector2i(9, 14)));
-//					TextureManager.AddAsset("background", new TextureInfo("/Application/assets/Background.png"));
-//					
-//					Info.TotalGameTime = 0f;
-//					
-//					MultiplayerLevel level = new MultiplayerLevel();
-//					level.Camera.SetViewFromViewport();
-//					GameSceneManager.currentScene = level;
-//					Director.Instance.ReplaceScene(level);
-//				}
+
+				if(isPlayer1Ready && isPlayer2Ready)
+				{
+					//sprite.Visible = true;
+					//sprite2.Visible = true;
+					lblBottomLeft.Visible = false;
+					lblBottomRight.Visible = false;
+					lblTopLeft.Visible = false;
+					lblTopRight.Visible = false;
+					lblDebugLeft.Visible = false;
+					lblDebugCenter.Visible = false;
+					
+					MultiplayerLevel level = new MultiplayerLevel();
+					level.Camera.SetViewFromViewport();
+					GameSceneManager.currentScene = level;
+					Director.Instance.ReplaceScene(level);
+				}
+
 			}
 		}
 

@@ -19,7 +19,7 @@ namespace TheATeam
 		Player 				player2;
 		Font 				font;
 		FontMap 			debugFont;
-		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 28, FontStyle.Regular), 512);
+		FontMap fontl = new FontMap(new Font("Application/assets/LaSegunda.ttf", 27, FontStyle.Regular), 512);
 		private Label 		lblTopLeft;
 		private Label 		lblTopRight;
 		private int 		screenWidth;
@@ -151,9 +151,9 @@ namespace TheATeam
 					ProjectileManager.Instance.Update(dt);
 
 					if(ProjectileManager.Instance.ProjectileCollision(player1.Position, player1.Quad.Bounds2()))
-						Console.WriteLine("Player 1 got hit");
+						System.Diagnostics.Debug.WriteLine("Player 1 got hit");
 					if(ProjectileManager.Instance.ProjectileCollision(player2.Position, player2.Quad.Bounds2()))
-						Console.WriteLine("Player 2 got hit");
+						System.Diagnostics.Debug.WriteLine("Player 2 got hit");
 		
 		
 
@@ -164,7 +164,7 @@ namespace TheATeam
 						char collisionType = ProjectileManager.Instance.ProjectileTileCollision(t.Position, t.Quad.Bounds2());
 						if(collisionType != 'X')
 						{
-							Console.WriteLine(collisionType); // **can hit more then 1 tile at a time**
+							System.Diagnostics.Debug.WriteLine(collisionType); // **can hit more then 1 tile at a time**
 							t.TakeDamage(collisionType);
 
 						}

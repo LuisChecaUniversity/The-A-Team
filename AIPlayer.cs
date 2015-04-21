@@ -73,7 +73,7 @@ namespace TheATeam
 			updateBehaviours(dt);
 			
 			MoveInHeadingDirection(dt);
-			HandleCollision();			
+			HandleCollision(dt);			
 			
 			shootTimer += dt;
 			
@@ -154,7 +154,7 @@ namespace TheATeam
 				return;
 			}
 			attackTimer += dt / 1000;
-			//Console.WriteLine(attackTimer);
+			//Debug.WriteLine(attackTimer);
 			if(attackTimer < attackTime)
 			{
 				if(ItemManager.Player2HoldingFlag && !ItemManager.Player1HoldingFlag) // while holding p1 flag (if killed player and they drop flag) - return flag
