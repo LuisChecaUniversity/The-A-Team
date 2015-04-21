@@ -90,16 +90,11 @@ namespace TheATeam
 				}
 				else
 				{
-					do {
-						
+										
 					
-					AppMain.client.DataExchange();
-					if(AppMain.client.NetworkActionMsg.Equals('L'))
-					{
-						Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
-					}
-					}
-					while (!AppMain.client.NetworkActionMsg.Equals('L'));
+					
+					
+					
 				}
 			}
 			Camera2D.SetViewFromViewport();
@@ -400,7 +395,19 @@ namespace TheATeam
 					}
 			
 					//Console.WriteLine(status);	
+					
+					if(!AppMain.ISHOST)
+					{
+						AppMain.client.DataExchange();
+						if(AppMain.client.NetworkActionMsg.Equals('L'))
+						{
+							Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
+						}	
+					}
 				}
+				
+				
+				
 				CombatStage(dt);
 			}
 			else if (levelStage == LevelStage.BuildStage)
