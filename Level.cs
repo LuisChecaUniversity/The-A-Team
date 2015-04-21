@@ -444,6 +444,7 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
+							Console.WriteLine("SENT OVER MESSAGE = " + AppMain.client.ActionMsg);
 							clientSetUpLayout = true;
 							
 							//levelStage = LevelStage.CombatStage;
