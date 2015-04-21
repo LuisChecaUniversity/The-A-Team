@@ -581,7 +581,7 @@ namespace TheATeam
 								byte[] ele = BitConverter.GetBytes(item.Key);
 								byte[] x = BitConverter.GetBytes(item.Value[0]);
 								byte[] y = BitConverter.GetBytes(item.Value[1]);
-								byte[] seperator = BitConverter.GetBytes(':');
+								byte[] seperator = BitConverter.GetBytes('S');
 								byte[] eleSeperator = BitConverter.GetBytes('Q');
 								
 								eleSeperator.CopyTo(sendBuffer,count);
@@ -751,7 +751,7 @@ namespace TheATeam
 								////////////////////////////////////////////////////////////////////TODO/////////////////////////////////////////
 								
 								
-								char action = BitConverter.ToChar(recvBuffer,0);
+								char action = BitConverter.ToChar(recvBuffer,2);
 								networkActionMsg = action;
 								if(action.Equals('S'))
 									hasShot = true;
