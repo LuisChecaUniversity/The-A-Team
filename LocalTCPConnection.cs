@@ -805,7 +805,7 @@ namespace TheATeam
 							else{
 								
 								char action = 'x';
-								if(recvBuffer.Length > 30)
+								if(recvBuffer.Length > 26)
 								{
 									action = BitConverter.ToChar(recvBuffer,2);
 								}
@@ -815,7 +815,7 @@ namespace TheATeam
 									action = BitConverter.ToChar(recvBuffer,0);
 								}
 								networkActionMsg = action;
-								
+								Console.WriteLine(action);
 								if(action.Equals('S'))
 									hasShot = true;
 							
