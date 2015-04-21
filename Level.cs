@@ -84,7 +84,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 			
-				//{
+				
 					PostBuildStage();
 				//}//
 				//else
@@ -426,7 +426,7 @@ namespace TheATeam
 						{
 							
 						
-							
+							PostBuildStage();
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
@@ -826,14 +826,14 @@ namespace TheATeam
 					}
 				}
 			}
-			
-			ItemManager.Instance.initElements(this);
+			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+				ItemManager.Instance.initElements(this);
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 				if(AppMain.ISHOST)
 				{
-					
+					ItemManager.Instance.initElements(this);
 					Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
 						foreach (var item in ItemManager.Instance.Items)
 					{

@@ -87,6 +87,9 @@ namespace TheATeam
 		}
 		public void initElements(Scene curScene,bool isMultiplayerSetup)
 		{			
+			if(items.Count > 8)
+				return;
+			
 			string mess = AppMain.client.layoutMessage;
 			int i = 0;
 			int finalLoop = 1;
