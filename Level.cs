@@ -419,6 +419,7 @@ namespace TheATeam
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
 							AppMain.client.SetActionMessage('F');
+							AppMain.client.DataExchange();
 							ItemManager.Instance.initElements(this,true);
 							levelStage = LevelStage.CombatStage;
 							AppMain.client.recvBuffer = new byte[26];
