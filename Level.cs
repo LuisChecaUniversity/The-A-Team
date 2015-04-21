@@ -79,9 +79,18 @@ namespace TheATeam
 			InitExtras();
 			InitUI();
 			
+			
 			//test
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			{
 				PostBuildStage();
+				
+				if(AppMain.ISHOST)
+				{
+					AppMain.client.SetActionMessage('L');
+					
+				}
+			}
 			Camera2D.SetViewFromViewport();
 		}
 		
@@ -766,6 +775,28 @@ namespace TheATeam
 			}
 			
 			ItemManager.Instance.initElements(this);
+			
+			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			{
+				string elementsMessage = "";
+				Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
+					foreach (var item in ItemManager.Instance.Items)
+				{
+					if(!item.Name.Equals("Player1Flag") && !item.Name.Equals("Player2Flag"))
+					{
+						//Console.WriteLine(item.Name);	
+						List<float> l = new List<float>();
+						l.Add(item.position.X);
+						l.Add(item.position.Y);
+						elementsList.Add(item.Name[0], l);
+						//Console.WriteLine(elementsMessage);
+					}
+				}
+				AppMain.client.SetActionMessage('L');
+				AppMain.client.setUpMessage = elementsList;
+				AppMain.client.DataExchange();
+			}
+			
 		}
 
 		private void UpdateUIElements()

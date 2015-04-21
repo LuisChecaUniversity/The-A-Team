@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace TheATeam
 {
@@ -261,6 +262,8 @@ namespace TheATeam
         private byte[] sendBuffer = new byte[26];
 		private byte[] recvBuffer = new byte[26];
 
+		public Dictionary <char,List<float>> setUpMessage = new Dictionary<char,List<float>>();
+		
 		public string testStatus = "Nothing";
 
 		/**
@@ -572,13 +575,55 @@ namespace TheATeam
 						byte[] ShootDirX = BitConverter.GetBytes(myShootingDirection.X);
 						byte[] ShootDirY = BitConverter.GetBytes(myShootingDirection.Y);
 					
-						action.CopyTo(sendBuffer,0);
-						ArrayX.CopyTo(sendBuffer, action.Length);
-						ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
-						DirectionX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length);
-						DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
-						ShootDirX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length);
-						ShootDirY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length );
+						if(actionMsg.Equals('L'))
+						{
+						char firstEle = 'A';
+						char secondEle= 'A';
+						char thirdEle= 'A';
+						char fouthEle= 'A';
+						char fifthEle= 'A';
+						char[] eles = new char[5];
+						float[] Xs = new float[5];
+						float[] Ys = new float[5];
+						//float firstX,firstY;
+						//float secondX,secondY;
+						//float thirdX,thirdY;
+						//float fourthX,fourthY;
+						//float fifthX,fifthY;
+						byte[] fullSetUp = new byte[50];
+						int count = 1;
+						foreach (var item in setUpMessage)
+						{  
+							//count = 0;
+								byte[] ele = BitConverter.GetBytes(item.Key);
+								byte[] x = BitConverter.GetBytes(item.Value[0]);
+								byte[] y = BitConverter.GetBytes(item.Value[1]);
+								
+							ele.CopyTo(fullSetUp,count);
+							x.CopyTo(fullSetUp,count + 2);
+							y.CopyTo(fullSetUp,count +6);
+							
+							count+= 10;
+							
+						}
+							
+						
+						for (int i = 1; i < 6; i++)
+						{
+							byte[] X, Y;	
+						}
+							Console.WriteLine("Size of setup = " );	
+						}
+						else
+						{
+							action.CopyTo(sendBuffer,0);
+							ArrayX.CopyTo(sendBuffer, action.Length);
+							ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
+							DirectionX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length);
+							DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
+							ShootDirX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length);
+							ShootDirY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length );
+						}
 					
 						if (isServer)
 						{

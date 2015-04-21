@@ -18,6 +18,7 @@ namespace TheATeam
 	{
 		private static ItemManager instance = new ItemManager();
 		private List<Item> items;
+		public List<Item> Items { get { return items;}}
 		private Item leftFlag, rightFlag, lightningElement, airElement, earthElement, fireElement, waterElement;
 		private static Vector2i flagIndex = new Vector2i();
 		private static Vector2i lightningIndex = new Vector2i(0, 1);
