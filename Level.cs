@@ -91,6 +91,8 @@ namespace TheATeam
 				}//
 				//else
 				//{
+				else
+					AppMain.client.SetActionMessage('L');
 
 				//}
 				levelStage = LevelStage.MulitplayerSetUp;
@@ -412,7 +414,9 @@ namespace TheATeam
 						{
 							AppMain.client.SetActionMessage('F');
 							ItemManager.Instance.initElements(this,true);
-						}	
+						}
+					
+					
 				}
 				
 				

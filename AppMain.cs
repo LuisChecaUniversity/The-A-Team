@@ -76,61 +76,61 @@ namespace TheATeam
 
 		public static void Initialize()
 		{
-			string mess = "QA245S43QF567S23QE100S343QW25S43QL500S10";
-			int i = 0;
-			int finalLoop = 1;
-			int phase = 1;
-			while ((i = mess.IndexOf('Q',i)) != -1)
-			{
-				char element = mess[i+1];
-				int pos = mess.IndexOf('S',phase);
-				phase = pos;
-				string t = mess.Substring(i+2,pos - (i+2));
-				float xPos = float.Parse(t);
-				
-				string tester = "";
-				int startTest = mess.IndexOf('S',pos );
-				if(finalLoop==5)
-				{
-					int len = mess.Length - startTest;
-					 tester = mess.Substring(startTest+1,len-1);
-				}
-				else
-				{
-					int endTest = -1;
-					if(mess[startTest +3].Equals('Q'))
-						endTest = startTest+2;
-					else if(mess[startTest+4].Equals('Q'))
-						endTest = startTest+3;
-					tester = mess.Substring(startTest+1,endTest-startTest);
-				}
-				float yPos = float.Parse(tester);
-				
-				switch (element)
-				{
-				case 'A':
-					
-					break;
-				case 'E':
-					
-					break;
-				case 'F':
-					
-					break;
-				case 'W':
-					
-					break;
-				case 'L':
-					
-					break;
-				default:
-					break;
-				}
-				
-				i++;
-				phase++;
-				finalLoop++;
-			}
+//			string mess = "QA245S43QF567S23QE100S343QW25S43QL500S10";
+//			int i = 0;
+//			int finalLoop = 1;
+//			int phase = 1;
+//			while ((i = mess.IndexOf('Q',i)) != -1)
+//			{
+//				char element = mess[i+1];
+//				int pos = mess.IndexOf('S',phase);
+//				phase = pos;
+//				string t = mess.Substring(i+2,pos - (i+2));
+//				float xPos = float.Parse(t);
+//				
+//				string tester = "";
+//				int startTest = mess.IndexOf('S',pos );
+//				if(finalLoop==5)
+//				{
+//					int len = mess.Length - startTest;
+//					 tester = mess.Substring(startTest+1,len-1);
+//				}
+//				else
+//				{
+//					int endTest = -1;
+//					if(mess[startTest +3].Equals('Q'))
+//						endTest = startTest+2;
+//					else if(mess[startTest+4].Equals('Q'))
+//						endTest = startTest+3;
+//					tester = mess.Substring(startTest+1,endTest-startTest);
+//				}
+//				float yPos = float.Parse(tester);
+//				
+//				switch (element)
+//				{
+//				case 'A':
+//					
+//					break;
+//				case 'E':
+//					
+//					break;
+//				case 'F':
+//					
+//					break;
+//				case 'W':
+//					
+//					break;
+//				case 'L':
+//					
+//					break;
+//				default:
+//					break;
+//				}
+//				
+//				i++;
+//				phase++;
+//				finalLoop++;
+//			}
 			timer = new Timer();
 			InitDirector();
 			
