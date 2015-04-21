@@ -83,12 +83,19 @@ namespace TheATeam
 			//test
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				PostBuildStage();
+				
 				
 				if(AppMain.ISHOST)
 				{
-					AppMain.client.SetActionMessage('L');
-					
+					PostBuildStage();
+				}
+				else
+				{
+					AppMain.client.DataExchange();
+					if(AppMain.client.NetworkActionMsg.Equals('L'))
+					{
+						Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
+					}
 				}
 			}
 			Camera2D.SetViewFromViewport();
@@ -776,25 +783,28 @@ namespace TheATeam
 			
 			ItemManager.Instance.initElements(this);
 			
-			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				string elementsMessage = "";
-				Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
-					foreach (var item in ItemManager.Instance.Items)
+				if(AppMain.ISHOST)
 				{
-					if(!item.Name.Equals("Player1Flag") && !item.Name.Equals("Player2Flag"))
+					
+					Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
+						foreach (var item in ItemManager.Instance.Items)
 					{
-						//Console.WriteLine(item.Name);	
-						List<float> l = new List<float>();
-						l.Add(item.position.X);
-						l.Add(item.position.Y);
-						elementsList.Add(item.Name[0], l);
-						//Console.WriteLine(elementsMessage);
+						if(!item.Name.Equals("Player1Flag") && !item.Name.Equals("Player2Flag"))
+						{
+							//Console.WriteLine(item.Name);	
+							List<float> l = new List<float>();
+							l.Add(item.position.X);
+							l.Add(item.position.Y);
+							elementsList.Add(item.Name[0], l);
+							//Console.WriteLine(elementsMessage);
+						}
 					}
+					AppMain.client.SetActionMessage('L');
+					AppMain.client.setUpMessage = elementsList;
+					AppMain.client.DataExchange();
 				}
-				AppMain.client.SetActionMessage('L');
-				AppMain.client.setUpMessage = elementsList;
-				AppMain.client.DataExchange();
 			}
 			
 		}

@@ -567,55 +567,44 @@ namespace TheATeam
 					enterCriticalSection();
 					
 						
-						byte[] action = BitConverter.GetBytes(actionMsg);
-						byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
-						byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
-						byte[] DirectionX = BitConverter.GetBytes(myDirection.X);
-						byte[] DirectionY = BitConverter.GetBytes(myDirection.Y);
-						byte[] ShootDirX = BitConverter.GetBytes(myShootingDirection.X);
-						byte[] ShootDirY = BitConverter.GetBytes(myShootingDirection.Y);
-					
+						
+					//setting up level
 						if(actionMsg.Equals('L'))
 						{
-						char firstEle = 'A';
-						char secondEle= 'A';
-						char thirdEle= 'A';
-						char fouthEle= 'A';
-						char fifthEle= 'A';
-						char[] eles = new char[5];
-						float[] Xs = new float[5];
-						float[] Ys = new float[5];
-						//float firstX,firstY;
-						//float secondX,secondY;
-						//float thirdX,thirdY;
-						//float fourthX,fourthY;
-						//float fifthX,fifthY;
-						byte[] fullSetUp = new byte[50];
-						int count = 1;
-						foreach (var item in setUpMessage)
-						{  
-							//count = 0;
+						
+							byte[] fullSetUp = new byte[50];
+							int count = 0;
+							foreach (var item in setUpMessage)
+							{  
 								byte[] ele = BitConverter.GetBytes(item.Key);
 								byte[] x = BitConverter.GetBytes(item.Value[0]);
 								byte[] y = BitConverter.GetBytes(item.Value[1]);
+									
+								ele.CopyTo(fullSetUp,count);
+								x.CopyTo(fullSetUp,count + 2);
+								y.CopyTo(fullSetUp,count +6);
 								
-							ele.CopyTo(fullSetUp,count);
-							x.CopyTo(fullSetUp,count + 2);
-							y.CopyTo(fullSetUp,count +6);
-							
-							count+= 10;
+								count+= 10;
+								
+							}
+						sendBuffer = new byte[fullSetUp.Length];
+						recvBuffer = new byte[fullSetUp.Length];
+						                     
 							
 						}
-							
-						
-						for (int i = 1; i < 6; i++)
-						{
-							byte[] X, Y;	
-						}
-							Console.WriteLine("Size of setup = " );	
-						}
+					//combat stage
 						else
 						{
+							sendBuffer = new byte[26];
+							recvBuffer = new byte[26];
+							byte[] action = BitConverter.GetBytes(actionMsg);
+							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
+							byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
+							byte[] DirectionX = BitConverter.GetBytes(myDirection.X);
+							byte[] DirectionY = BitConverter.GetBytes(myDirection.Y);
+							byte[] ShootDirX = BitConverter.GetBytes(myShootingDirection.X);
+							byte[] ShootDirY = BitConverter.GetBytes(myShootingDirection.Y);
+						
 							action.CopyTo(sendBuffer,0);
 							ArrayX.CopyTo(sendBuffer, action.Length);
 							ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
