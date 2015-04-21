@@ -438,7 +438,7 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-						levelStage = LevelStage.MulitplayerSetUp;
+						levelStage = LevelStage.startingMultiplayerCombat;
 							//levelStage = LevelStage.CombatStage;
 						}
 //					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
