@@ -259,8 +259,8 @@ namespace TheATeam
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        private byte[] sendBuffer = new byte[50];//[26];
-		private byte[] recvBuffer = new byte[50];
+        private byte[] sendBuffer = new byte[60];//[26];
+		private byte[] recvBuffer = new byte[60];
 		
 		public string layoutMessage="";
 		
@@ -581,12 +581,14 @@ namespace TheATeam
 								byte[] ele = BitConverter.GetBytes(item.Key);
 								byte[] x = BitConverter.GetBytes(item.Value[0]);
 								byte[] y = BitConverter.GetBytes(item.Value[1]);
-									
+								byte[] seperator = BitConverter.GetBytes(':');
 								ele.CopyTo(sendBuffer,count);
+							
 								x.CopyTo(sendBuffer,count + 2);
-								y.CopyTo(sendBuffer,count +6);
+							seperator.CopyTo(sendBuffer,count + 6);
+								y.CopyTo(sendBuffer,count +8);
 								
-								count+= 10;
+								count+= 12;
 								
 							}
 						
@@ -757,22 +759,7 @@ namespace TheATeam
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
-								else if(action.Equals('L'))
-								{
-									int count = 0;
-									
-									for (int i = 0; i < 5; i++) 
-									{
-										char ele = BitConverter.ToChar(recvBuffer,count);
-										float x = BitConverter.ToSingle(recvBuffer,count + 2);
-										float y = BitConverter.ToSingle(recvBuffer,count + 6);
-										
-										layoutMessage += ele + x + y;
-										
-										count += 10;
-									}
-									
-								}
+								
 								
 								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
 								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
@@ -817,13 +804,15 @@ namespace TheATeam
 									{
 										char ele = BitConverter.ToChar(recvBuffer,count);
 										float x = BitConverter.ToSingle(recvBuffer,count + 2);
-										float y = BitConverter.ToSingle(recvBuffer,count + 6);
+										char seperator = BitConverter.ToChar(recvBuffer,count + 6);
+										float y = BitConverter.ToSingle(recvBuffer,count + 8);
 										
 										layoutMessage += ele;
 										layoutMessage += x;
+										layoutMessage += seperator;
 										layoutMessage += y;
 										
-										count += 10;
+										count += 12;
 									}
 									
 								}

@@ -96,6 +96,9 @@ namespace TheATeam
 			
 			string mess = AppMain.client.layoutMessage;
 			
+			//"A34523B345343"
+			
+			
 			Console.WriteLine(mess);
 //			lightningElement = new Item(curScene, , lightningIndex, ItemType.element, "Lightning");
 //			airElement = new Item(curScene, ), airIndex, ItemType.element, "Air");
