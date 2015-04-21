@@ -85,14 +85,13 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 			
-				if(AppMain.ISHOST)
-				{
+				//{
 					PostBuildStage();
-				}//
+				//}//
 				//else
 				//{
-				else
-					AppMain.client.SetActionMessage('L');
+				//else
+				//	AppMain.client.SetActionMessage('L');
 
 				//}
 				levelStage = LevelStage.MulitplayerSetUp;
