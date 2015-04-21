@@ -408,12 +408,12 @@ namespace TheATeam
 				{
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
-						Console.WriteLine("CLIENT HAS SENT ZZZZZ");
+						Console.WriteLine("HOST RECIEVED CLIENTS Z");
 						AppMain.client.SetActionMessage('Z');
 						AppMain.client.DataExchange();
 						
 						//TODO move to combat stage and then cst buffer sizes
-						levelStage = LevelStage.CombatStage;
+						//levelStage = LevelStage.CombatStage;
 						//AppMain.client.recvBuffer = new byte[26];
 						//AppMain.client.sendBuffer = new byte[26];
 						//levelStage = LevelStage.CombatStage;
@@ -432,10 +432,12 @@ namespace TheATeam
 							AppMain.client.DataExchange();
 							//levelStage = LevelStage.CombatStage;
 						}
-					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
-					        AppMain.client.NetworkActionMsg.Equals('M') ||
-					        AppMain.client.NetworkActionMsg.Equals('S'))
-						levelStage = LevelStage.CombatStage; 
+//					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
+//					        AppMain.client.NetworkActionMsg.Equals('M') ||
+//					        AppMain.client.NetworkActionMsg.Equals('S'))
+//						levelStage = LevelStage.CombatStage; 
+					else if (AppMain.client.NetworkActionMsg.Equals('Z'))
+					         Console.WriteLine("CLIENT RECIVED HOST Z");
 					
 					
 				}
