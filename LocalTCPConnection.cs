@@ -787,7 +787,7 @@ namespace TheATeam
 							}
 							else{
 								
-								char action = BitConverter.ToChar(recvBuffer,0);
+								char action = BitConverter.ToChar(recvBuffer,2);
 								networkActionMsg = action;
 								
 								if(action.Equals('S'))
