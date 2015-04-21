@@ -624,7 +624,7 @@ namespace TheATeam
 							{
 								return false;
 							}
-							if(!actionMsg.Equals('I') && !networkActionMsg.Equals('F'))
+							if(!actionMsg.Equals('I'))
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							else
 							{
@@ -749,9 +749,16 @@ namespace TheATeam
 								
 								
 								////////////////////////////////////////////////////////////////////TODO/////////////////////////////////////////
-								
-								
-								char action = BitConverter.ToChar(recvBuffer,2);
+								char action = 'x';
+								if(recvBuffer.Length > 30)
+								{
+									action = BitConverter.ToChar(recvBuffer,2);
+								}
+									
+								else
+								{
+									action = BitConverter.ToChar(recvBuffer,0);
+								}
 								networkActionMsg = action;
 								if(action.Equals('S'))
 									hasShot = true;
@@ -787,7 +794,16 @@ namespace TheATeam
 							}
 							else{
 								
-								char action = BitConverter.ToChar(recvBuffer,2);
+								char action = 'x';
+								if(recvBuffer.Length > 30)
+								{
+									action = BitConverter.ToChar(recvBuffer,2);
+								}
+									
+								else
+								{
+									action = BitConverter.ToChar(recvBuffer,0);
+								}
 								networkActionMsg = action;
 								
 								if(action.Equals('S'))
