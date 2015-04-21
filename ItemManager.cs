@@ -86,31 +86,70 @@ namespace TheATeam
 			items.Add(waterElement);
 		}
 		public void initElements(Scene curScene,bool isMultiplayerSetup)
-		{
-//			Vector2 pos1 = new Vector2(400, 50);
-//			Vector2 pos2 = new Vector2(570, 140);
-//			Vector2 pos3 = new Vector2(480, 250);
-//			Vector2 pos4 = new Vector2(390, 370);
-//			Vector2 pos5 = new Vector2(560, 450);
-			
-			
+		{			
 			string mess = AppMain.client.layoutMessage;
+			int i = 0;
+			int finalLoop = 1;
+			int phase = 1;
+			while ((i = mess.IndexOf('Q',i)) != -1)
+			{
+				char element = mess[i+1];
+				int pos = mess.IndexOf('S',phase);
+				phase = pos;
+				string t = mess.Substring(i+2,pos - (i+2));
+				float xPos = float.Parse(t);
+				
+				string tester = "";
+				int startTest = mess.IndexOf('S',pos );
+				if(finalLoop==5)
+				{
+					int len = mess.Length - startTest;
+					 tester = mess.Substring(startTest+1,len-1);
+				}
+				else
+				{
+					int endTest = -1;
+					if(mess[startTest +3].Equals('Q'))
+						endTest = startTest+2;
+					else if(mess[startTest+4].Equals('Q'))
+						endTest = startTest+3;
+					tester = mess.Substring(startTest+1,endTest-startTest);
+				}
+				float yPos = float.Parse(tester);
+				
+				switch (element)
+				{
+				case 'A':
+					airElement = new Item(curScene, new Vector2(xPos,yPos), airIndex, ItemType.element, "Air");
+					break;
+				case 'E':
+					earthElement = new Item(curScene,new Vector2(xPos,yPos), earthIndex, ItemType.element, "Earth");
+					break;
+				case 'F':
+					fireElement = new Item(curScene, new Vector2(xPos,yPos), fireIndex, ItemType.element, "Fire");
+					break;
+				case 'W':
+					waterElement = new Item(curScene,new Vector2(xPos,yPos), waterIndex, ItemType.element, "Water");
+					break;
+				case 'L':
+					lightningElement = new Item(curScene, new Vector2(xPos,yPos), lightningIndex, ItemType.element, "Lightning");
+					break;
+				default:
+					break;
+				}
+				
+				i++;
+				phase++;
+				finalLoop++;
+			}
 			
-			//"A34523B345343"
-			
-			
-			Console.WriteLine(mess);
-//			lightningElement = new Item(curScene, , lightningIndex, ItemType.element, "Lightning");
-//			airElement = new Item(curScene, ), airIndex, ItemType.element, "Air");
-//			earthElement = new Item(curScene, ), earthIndex, ItemType.element, "Earth");
-//			fireElement = new Item(curScene, ), fireIndex, ItemType.element, "Fire");
-//			waterElement = new Item(curScene, ), waterIndex, ItemType.element, "Water");
-//			
-//			items.Add(lightningElement);
-//			items.Add(airElement);
-//			items.Add(earthElement);
-//			items.Add(fireElement);
-//			items.Add(waterElement);
+			items.Add(lightningElement);
+			items.Add(airElement);
+			items.Add(earthElement);
+			items.Add(fireElement);
+			items.Add(waterElement);
+
+
 		}
 		private Vector2 RandomPosition(int i)
 		{

@@ -797,10 +797,10 @@ namespace TheATeam
 			
 			ItemManager.Instance.initElements(this);
 			
-			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				//if(AppMain.ISHOST)
-				//{
+				if(AppMain.ISHOST)
+				{
 					
 					Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
 						foreach (var item in ItemManager.Instance.Items)
@@ -836,7 +836,7 @@ namespace TheATeam
 					AppMain.client.SetActionMessage('L');
 					AppMain.client.setUpMessage = elementsList;
 					AppMain.client.DataExchange();
-				//}
+				}
 			}
 			
 		}

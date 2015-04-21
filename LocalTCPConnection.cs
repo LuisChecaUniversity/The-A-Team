@@ -259,8 +259,8 @@ namespace TheATeam
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        private byte[] sendBuffer = new byte[60];//[26];
-		private byte[] recvBuffer = new byte[60];
+        private byte[] sendBuffer = new byte[70];//[26];
+		private byte[] recvBuffer = new byte[70];
 		
 		public string layoutMessage="";
 		
@@ -582,13 +582,15 @@ namespace TheATeam
 								byte[] x = BitConverter.GetBytes(item.Value[0]);
 								byte[] y = BitConverter.GetBytes(item.Value[1]);
 								byte[] seperator = BitConverter.GetBytes(':');
-								ele.CopyTo(sendBuffer,count);
-							
-								x.CopyTo(sendBuffer,count + 2);
-							seperator.CopyTo(sendBuffer,count + 6);
-								y.CopyTo(sendBuffer,count +8);
+								byte[] eleSeperator = BitConverter.GetBytes('Q');
 								
-								count+= 12;
+								eleSeperator.CopyTo(sendBuffer,count);
+								ele.CopyTo(sendBuffer,count + 2);
+								x.CopyTo(sendBuffer,count + 4);
+							seperator.CopyTo(sendBuffer,count + 8);
+								y.CopyTo(sendBuffer,count +10);
+								
+								count+= 14;
 								
 							}
 						
@@ -802,17 +804,19 @@ namespace TheATeam
 									
 									for (int i = 0; i < 5; i++) 
 									{
-										char ele = BitConverter.ToChar(recvBuffer,count);
-										float x = BitConverter.ToSingle(recvBuffer,count + 2);
-										char seperator = BitConverter.ToChar(recvBuffer,count + 6);
-										float y = BitConverter.ToSingle(recvBuffer,count + 8);
+										char eleSep = BitConverter.ToChar(recvBuffer,count);
+										char ele = BitConverter.ToChar(recvBuffer,count + 2);
+										float x = BitConverter.ToSingle(recvBuffer,count + 4);
+										char seperator = BitConverter.ToChar(recvBuffer,count + 8);
+										float y = BitConverter.ToSingle(recvBuffer,count + 10);
 										
+										layoutMessage += eleSep;
 										layoutMessage += ele;
 										layoutMessage += x;
 										layoutMessage += seperator;
 										layoutMessage += y;
 										
-										count += 12;
+										count += 14;
 									}
 									
 								}
