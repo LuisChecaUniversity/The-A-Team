@@ -819,7 +819,9 @@ namespace TheATeam
 										float x = BitConverter.ToSingle(recvBuffer,count + 2);
 										float y = BitConverter.ToSingle(recvBuffer,count + 6);
 										
-										layoutMessage += ele + x + y;
+										layoutMessage += ele;
+										layoutMessage += x;
+										layoutMessage += y;
 										
 										count += 10;
 									}
