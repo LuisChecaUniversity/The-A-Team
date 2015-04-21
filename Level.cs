@@ -874,7 +874,6 @@ namespace TheATeam
 			}
 			//System.Diagnostics.Debug.WriteLine(debugLine);
 			
-			ItemManager.Instance.initElements(this);
 
 		}
 
