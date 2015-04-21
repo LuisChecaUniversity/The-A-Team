@@ -17,6 +17,7 @@ namespace TheATeam
 	{
 		BuildStage,
 		CombatStage,
+		MulitplayerSetUp,
 		None
 	}
 
@@ -83,19 +84,16 @@ namespace TheATeam
 			//test
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-							
+			
 				if(AppMain.ISHOST)
 				{
 					PostBuildStage();
 				}
 				else
 				{
-										
-					
-					
-					
-					
+
 				}
+				levelStage = LevelStage.MulitplayerSetUp;
 			}
 			Camera2D.SetViewFromViewport();
 		}
@@ -393,17 +391,6 @@ namespace TheATeam
 					{
 						AppMain.client.ChangeStatus();
 					}
-			
-					//Console.WriteLine(status);	
-					
-					if(!AppMain.ISHOST)
-					{
-						AppMain.client.DataExchange();
-						if(AppMain.client.NetworkActionMsg.Equals('L'))
-						{
-							Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
-						}	
-					}
 				}
 				
 				
@@ -413,7 +400,22 @@ namespace TheATeam
 			else if (levelStage == LevelStage.BuildStage)
 			{
 				BuildStage(dt);
-			}				
+			}
+			else if(levelStage == LevelStage.MulitplayerSetUp)
+			{
+				AppMain.client.DataExchange();
+				if(AppMain.ISHOST)
+					Console.WriteLine(AppMain.client.ActionMsg);
+				else
+				{
+						if(AppMain.client.NetworkActionMsg.Equals('L'))
+						{
+							Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
+						}	
+				}
+				
+				
+			}
 		}
 		
 		private void CombatStage(float dt)
