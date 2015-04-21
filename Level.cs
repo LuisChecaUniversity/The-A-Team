@@ -428,9 +428,12 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-							levelStage = LevelStage.CombatStage;
-							
+							//levelStage = LevelStage.CombatStage;
 						}
+					else if(AppMain.client.NetworkActionMsg.Equals('L') ||
+					        AppMain.client.NetworkActionMsg.Equals('L') ||
+					        AppMain.client.NetworkActionMsg.Equals('L'))
+						levelStage = LevelStage.CombatStage; 
 					
 					
 				}
@@ -442,7 +445,7 @@ namespace TheATeam
 		private void CombatStage(float dt)
 		{
 			
-			Console.WriteLine("COMBAT");
+			
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
 			
