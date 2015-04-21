@@ -780,7 +780,7 @@ namespace TheATeam
 								
 								char action = BitConverter.ToChar(recvBuffer,0);
 								networkActionMsg = action;
-								Console.WriteLine("ENEMY + "  + networkPosition.ToString());
+								Console.WriteLine("ENEMY + "  + action);
 								if(action.Equals('S'))
 									hasShot = true;
 							
