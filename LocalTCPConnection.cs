@@ -259,8 +259,8 @@ namespace TheATeam
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        private byte[] sendBuffer = new byte[26];
-		private byte[] recvBuffer = new byte[26];
+        private byte[] sendBuffer = new byte[50];//[26];
+		private byte[] recvBuffer = new byte[50];
 
 		public Dictionary <char,List<float>> setUpMessage = new Dictionary<char,List<float>>();
 		
@@ -572,7 +572,7 @@ namespace TheATeam
 						if(actionMsg.Equals('L'))
 						{
 						
-							byte[] fullSetUp = new byte[50];
+							
 							int count = 0;
 							foreach (var item in setUpMessage)
 							{  
@@ -580,15 +580,14 @@ namespace TheATeam
 								byte[] x = BitConverter.GetBytes(item.Value[0]);
 								byte[] y = BitConverter.GetBytes(item.Value[1]);
 									
-								ele.CopyTo(fullSetUp,count);
-								x.CopyTo(fullSetUp,count + 2);
-								y.CopyTo(fullSetUp,count +6);
+								ele.CopyTo(sendBuffer,count);
+								x.CopyTo(sendBuffer,count + 2);
+								y.CopyTo(sendBuffer,count +6);
 								
 								count+= 10;
 								
 							}
-						sendBuffer = new byte[fullSetUp.Length];
-						recvBuffer = new byte[fullSetUp.Length];
+						
 						                     
 							
 						}
