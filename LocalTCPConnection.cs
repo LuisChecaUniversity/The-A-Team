@@ -749,16 +749,10 @@ namespace TheATeam
 								
 								
 								////////////////////////////////////////////////////////////////////TODO/////////////////////////////////////////
-								char action = 'x';
-								if(recvBuffer.Length > 30)
-								{
-									action = BitConverter.ToChar(recvBuffer,2);
-								}
-									
-								else
-								{
-									action = BitConverter.ToChar(recvBuffer,0);
-								}
+								
+								
+								char action = BitConverter.ToChar(recvBuffer,2);
+								
 								networkActionMsg = action;
 								if(action.Equals('S'))
 									hasShot = true;
