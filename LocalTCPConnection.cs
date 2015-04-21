@@ -261,7 +261,9 @@ namespace TheATeam
 		public char ActionMsg { get { return actionMsg;}}
         private byte[] sendBuffer = new byte[50];//[26];
 		private byte[] recvBuffer = new byte[50];
-
+		
+		public string layoutMessage="";
+		
 		public Dictionary <char,List<float>> setUpMessage = new Dictionary<char,List<float>>();
 		
 		public string testStatus = "Nothing";
@@ -594,8 +596,7 @@ namespace TheATeam
 					//combat stage
 						else
 						{
-							sendBuffer = new byte[50];
-							recvBuffer = new byte[50];
+							
 							byte[] action = BitConverter.GetBytes(actionMsg);
 							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
 							byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
@@ -619,9 +620,12 @@ namespace TheATeam
 							{
 								return false;
 							}
-							if(!actionMsg.Equals('I'))
+							if(!actionMsg.Equals('I') && !networkActionMsg.Equals('F'))
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
-							
+							else
+							{
+								Console.WriteLine("StoppeD");
+							}
 							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							
 						}
@@ -753,6 +757,22 @@ namespace TheATeam
 									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
 									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 								}
+								else if(action.Equals('L'))
+								{
+									int count = 0;
+									
+									for (int i = 0; i < 5; i++) 
+									{
+										char ele = BitConverter.ToChar(recvBuffer,count);
+										float x = BitConverter.ToSingle(recvBuffer,count + 2);
+										float y = BitConverter.ToSingle(recvBuffer,count + 6);
+										
+										layoutMessage += ele + x + y;
+										
+										count += 10;
+									}
+									
+								}
 								
 								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
 								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
@@ -780,7 +800,7 @@ namespace TheATeam
 								
 								char action = BitConverter.ToChar(recvBuffer,0);
 								networkActionMsg = action;
-								Console.WriteLine("ENEMY + "  + action);
+								
 								if(action.Equals('S'))
 									hasShot = true;
 							
@@ -842,13 +862,13 @@ namespace TheATeam
 					if (IsServer){
 						if (ClientSocket != null){
 							Len = ClientSocket.EndSend(AsyncResult);
-							Console.WriteLine(sendBuffer[0] + ": " + sendBuffer[1]);
+							
 						}
 					}
 					else{
 						if (Socket != null){
 							Len = Socket.EndSend(AsyncResult);
-							Console.WriteLine("FINSIHED SENDING");;
+							
 						}
 					}
                     // Disconnection detection should go here...

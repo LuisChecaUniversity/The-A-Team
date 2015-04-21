@@ -410,7 +410,8 @@ namespace TheATeam
 				{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
+							AppMain.client.SetActionMessage('F');
+							ItemManager.Instance.initElements(this,true);
 						}	
 				}
 				

@@ -85,6 +85,30 @@ namespace TheATeam
 			items.Add(fireElement);
 			items.Add(waterElement);
 		}
+		public void initElements(Scene curScene,bool isMultiplayerSetup)
+		{
+//			Vector2 pos1 = new Vector2(400, 50);
+//			Vector2 pos2 = new Vector2(570, 140);
+//			Vector2 pos3 = new Vector2(480, 250);
+//			Vector2 pos4 = new Vector2(390, 370);
+//			Vector2 pos5 = new Vector2(560, 450);
+			
+			
+			string mess = AppMain.client.layoutMessage;
+			
+			Console.WriteLine(mess);
+//			lightningElement = new Item(curScene, , lightningIndex, ItemType.element, "Lightning");
+//			airElement = new Item(curScene, ), airIndex, ItemType.element, "Air");
+//			earthElement = new Item(curScene, ), earthIndex, ItemType.element, "Earth");
+//			fireElement = new Item(curScene, ), fireIndex, ItemType.element, "Fire");
+//			waterElement = new Item(curScene, ), waterIndex, ItemType.element, "Water");
+//			
+//			items.Add(lightningElement);
+//			items.Add(airElement);
+//			items.Add(earthElement);
+//			items.Add(fireElement);
+//			items.Add(waterElement);
+		}
 		private Vector2 RandomPosition(int i)
 		{
 			Vector2 pos = Vector2.Zero;
