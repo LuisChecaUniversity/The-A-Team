@@ -407,7 +407,7 @@ namespace TheATeam
 				//AppMain.client.DataExchange();
 				if(AppMain.ISHOST)
 				{
-					AppMain.client.SetActionMessage('I');
+					AppMain.client.SetActionMessage('Z');
 					AppMain.client.DataExchange();
 					
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
@@ -427,7 +427,7 @@ namespace TheATeam
 				}
 				else
 				{
-					AppMain.client.SetActionMessage('I');
+					//AppMain.client.SetActionMessage('I');
 					AppMain.client.DataExchange();
 					
 						if(AppMain.client.NetworkActionMsg.Equals('L'))

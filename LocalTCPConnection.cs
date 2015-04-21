@@ -594,8 +594,8 @@ namespace TheATeam
 						}
 						else if(actionMsg.Equals('Z'))
 					    {
-							//sendBuffer = new byte[2];
-							//recvBuffer = new byte[2];
+							sendBuffer = new byte[2];
+							recvBuffer = new byte[2];
 						
 							byte[] mess = BitConverter.GetBytes(actionMsg);
 							mess.CopyTo(sendBuffer,0);
