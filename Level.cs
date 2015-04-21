@@ -83,19 +83,23 @@ namespace TheATeam
 			//test
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				
-				
+							
 				if(AppMain.ISHOST)
 				{
 					PostBuildStage();
 				}
 				else
 				{
+					do {
+						
+					
 					AppMain.client.DataExchange();
 					if(AppMain.client.NetworkActionMsg.Equals('L'))
 					{
 						Console.WriteLine("RECEIEVED LAYOUT MESSAGE");	
 					}
+					}
+					while (!AppMain.client.NetworkActionMsg.Equals('L'));
 				}
 			}
 			Camera2D.SetViewFromViewport();
