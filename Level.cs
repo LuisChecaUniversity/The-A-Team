@@ -420,13 +420,14 @@ namespace TheATeam
 				{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							//AppMain.client.recvBuffer = new byte[26];
-							//AppMain.client.sendBuffer = new byte[26];
+							
 						
 							
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
+							AppMain.client.recvBuffer = new byte[26];
+							AppMain.client.sendBuffer = new byte[26];
 							levelStage = LevelStage.CombatStage;
 							
 						}
