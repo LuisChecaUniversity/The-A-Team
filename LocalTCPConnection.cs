@@ -635,7 +635,7 @@ namespace TheATeam
 								socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							
 						socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
-							//Console.WriteLine("SENT AND RECIVED");
+							Console.WriteLine("SENT AND RECIVED");
 						}
 					
 				}
@@ -842,11 +842,13 @@ namespace TheATeam
 					if (IsServer){
 						if (ClientSocket != null){
 							Len = ClientSocket.EndSend(AsyncResult);
+							Console.WriteLine("FINSIHED SENDING");;
 						}
 					}
 					else{
 						if (Socket != null){
 							Len = Socket.EndSend(AsyncResult);
+							Console.WriteLine("FINSIHED SENDING");;
 						}
 					}
                     // Disconnection detection should go here...
