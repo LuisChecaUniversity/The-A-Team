@@ -409,9 +409,11 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						Console.WriteLine("CLIENT HAS SENT ZZZZZ");
+						AppMain.client.SetActionMessage('Z');
+						AppMain.client.DataExchange();
 						
 						//TODO move to combat stage and then cst buffer sizes
-						levelStage = LevelStage.CombatStage;
+						//levelStage = LevelStage.CombatStage;
 						//AppMain.client.recvBuffer = new byte[26];
 						//AppMain.client.sendBuffer = new byte[26];
 						//levelStage = LevelStage.CombatStage;

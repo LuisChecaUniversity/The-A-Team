@@ -599,7 +599,7 @@ namespace TheATeam
 						
 							byte[] mess = BitConverter.GetBytes(actionMsg);
 							mess.CopyTo(sendBuffer,0);
-							Console.WriteLine("SB LEN = " + sendBuffer.Length);
+							//Console.WriteLine("SB LEN = " + sendBuffer.Length);
 						}
 					
 					//combat stage
