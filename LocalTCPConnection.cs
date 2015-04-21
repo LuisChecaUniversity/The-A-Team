@@ -595,7 +595,7 @@ namespace TheATeam
 					//combat stage
 						else
 						{
-							sendBuffer = new byte[26];
+							sendBuffer = new byte[50];
 							recvBuffer = new byte[50];
 							byte[] action = BitConverter.GetBytes(actionMsg);
 							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
@@ -635,7 +635,7 @@ namespace TheATeam
 								socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							
 						socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
-							Console.WriteLine("SENT AND RECIVED");
+							
 						}
 					
 				}

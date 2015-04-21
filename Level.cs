@@ -85,14 +85,14 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 			
-				if(AppMain.ISHOST)
-				{
+				//if(AppMain.ISHOST)
+				//{
 					PostBuildStage();
-				}
-				else
-				{
+				//}//
+				//else
+				//{
 
-				}
+				//}
 				levelStage = LevelStage.MulitplayerSetUp;
 			}
 			Camera2D.SetViewFromViewport();
