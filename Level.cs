@@ -61,9 +61,10 @@ namespace TheATeam
 		
 		
 		//network variables
-		
+		private bool clientSetUpLayout;
 		private bool changedBuffer;
-		
+		private bool p1Ready;
+		private bool p2Ready;
 		public Level(): base()
 		{
 			
@@ -94,7 +95,13 @@ namespace TheATeam
 				//	AppMain.client.SetActionMessage('L');
 
 				//}
-				levelStage = LevelStage.MulitplayerSetUp;
+				if(AppMain.ISHOST)
+				{
+					levelStage = LevelStage.startingMultiplayerCombat;
+					p1Ready = true;	
+				}
+				else
+					levelStage = LevelStage.MulitplayerSetUp;
 			}
 			Camera2D.SetViewFromViewport();
 		}
@@ -407,40 +414,54 @@ namespace TheATeam
 				//AppMain.client.DataExchange();
 				if(AppMain.ISHOST)
 				{
-					AppMain.client.SetActionMessage('Z');
-					AppMain.client.DataExchange();
-					
-					if(AppMain.client.NetworkActionMsg.Equals('Z'))
-					{
-						Console.WriteLine("HOST RECIEVED CLIENTS Z");
-						levelStage = LevelStage.startingMultiplayerCombat;
-//						AppMain.client.SetActionMessage('Z');
-//						AppMain.client.DataExchange();
-						
-						//TODO move to combat stage and then cst buffer sizes
-						//levelStage = LevelStage.CombatStage;
-						//AppMain.client.recvBuffer = new byte[26];
-						//AppMain.client.sendBuffer = new byte[26];
-						//levelStage = LevelStage.CombatStage;
-							
-					}
+//					AppMain.client.SetActionMessage('Z');
+//					AppMain.client.DataExchange();
+//					
+//					if(AppMain.client.NetworkActionMsg.Equals('Z'))
+//					{
+//						Console.WriteLine("HOST RECIEVED CLIENTS Z");
+//						levelStage = LevelStage.startingMultiplayerCombat;
+////						AppMain.client.SetActionMessage('Z');
+////						AppMain.client.DataExchange();
+//						
+//						//TODO move to combat stage and then cst buffer sizes
+//						//levelStage = LevelStage.CombatStage;
+//						//AppMain.client.recvBuffer = new byte[26];
+//						//AppMain.client.sendBuffer = new byte[26];
+//						//levelStage = LevelStage.CombatStage;
+//							
+//					}
 				}
 				else
 				{
-					//AppMain.client.SetActionMessage('I');
 					AppMain.client.DataExchange();
-					
+					if(!clientSetUpLayout)
+					{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							
-						
+							Console.WriteLine("RECIEVED LAYOUTM MESSAGE");
 							PostBuildStage();
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-						levelStage = LevelStage.startingMultiplayerCombat;
+							clientSetUpLayout = true;
+							
 							//levelStage = LevelStage.CombatStage;
 						}
+					}
+					else
+					{
+						Console.WriteLine("GOING TO NEXT STAGE");
+						if(AppMain.client.NetworkActionMsg.Equals('Z'))
+							levelStage = LevelStage.startingMultiplayerCombat;	
+						   else
+							Console.WriteLine(AppMain.client.NetworkActionMsg);
+						   
+					}
+					//AppMain.client.SetActionMessage('I');
+					
+					
+						
 //					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
 //					        AppMain.client.NetworkActionMsg.Equals('M') ||
 //					        AppMain.client.NetworkActionMsg.Equals('S'))
@@ -455,7 +476,28 @@ namespace TheATeam
 			}
 			else if(levelStage == LevelStage.MulitplayerSetUp)
 			{
-				Console.WriteLine("INSIDE SETUPCOMBAT");	
+				if(p1Ready && p2Ready)
+				{
+					AppMain.client.recvBuffer = new byte[26];
+					AppMain.client.sendBuffer = new byte[26];
+					levelStage = LevelStage.CombatStage;
+				}
+				
+				if(AppMain.ISHOST)
+				{
+					AppMain.client.SetActionMessage('Z');
+					AppMain.client.DataExchange();
+					
+					if(AppMain.client.NetworkActionMsg.Equals("Z"))
+					{
+						p2Ready = true;
+						Console.WriteLine("PLAYER 2 READY");
+					}
+				}
+				else
+				{
+					Console.WriteLine("INSIDE NEXT STAGE");	
+				}
 			}
 		}
 		
@@ -797,7 +839,7 @@ namespace TheATeam
 			this.RemoveChild(blockedAreaSprite, true);
 			this.RemoveChild(lblTopLeft, true);
 			this.RemoveChild(lblTopRight, true);
-			levelStage = LevelStage.CombatStage;
+			
 			
 			for (int i = 0; i < Tile.Grid.Count; i++)
 			{
@@ -842,8 +884,10 @@ namespace TheATeam
 				}
 			}
 			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			{
 				ItemManager.Instance.initElements(this);
-			
+				levelStage = LevelStage.CombatStage;
+			}
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
 				if(AppMain.ISHOST)
