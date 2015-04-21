@@ -475,7 +475,7 @@ namespace TheATeam
 				
 				
 			}
-			else if(levelStage == LevelStage.MulitplayerSetUp)
+			else if(levelStage == LevelStage.startingMultiplayerCombat)
 			{
 				if(p1Ready && p2Ready)
 				{
@@ -489,7 +489,7 @@ namespace TheATeam
 					AppMain.client.SetActionMessage('Z');
 					AppMain.client.DataExchange();
 					
-					if(AppMain.client.NetworkActionMsg.Equals("Z"))
+					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						p2Ready = true;
 						Console.WriteLine("PLAYER 2 READY");
