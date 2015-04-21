@@ -60,9 +60,8 @@ namespace TheATeam
 		
 		
 		//network variables
-		private float sendMessageTime = 3.0f;
-		private float curSendTime = 0.0f;
-		private bool canSend;
+		
+		private bool changedBuffer;
 		
 		public Level(): base()
 		{
@@ -410,6 +409,9 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						Console.WriteLine("CLIENT HAS SENT ZZZZZ");
+						
+						//TODO move to combat stage and then cst buffer sizes
+						levelStage = LevelStage.CombatStage;
 						//AppMain.client.recvBuffer = new byte[26];
 						//AppMain.client.sendBuffer = new byte[26];
 						//levelStage = LevelStage.CombatStage;
@@ -426,7 +428,7 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-							//levelStage = LevelStage.CombatStage;
+							levelStage = LevelStage.CombatStage;
 							
 						}
 					
@@ -439,6 +441,7 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
+			
 			Console.WriteLine("COMBAT");
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
@@ -461,6 +464,12 @@ namespace TheATeam
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
+				if(!changedBuffer)
+				{
+					AppMain.client.sendBuffer = new byte[26];	
+					AppMain.client.recvBuffer = new byte[26];
+					changedBuffer = true;
+				}
 				if(AppMain.ISHOST)
 				{
 					player1.Update(dt);
