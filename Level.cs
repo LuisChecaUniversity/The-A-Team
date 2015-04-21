@@ -453,6 +453,7 @@ namespace TheATeam
 					else
 					{
 						Console.WriteLine("GOING TO NEXT STAGE");
+						p2Ready = true;
 //						if(AppMain.client.NetworkActionMsg.Equals('Z'))
 							levelStage = LevelStage.startingMultiplayerCombat;	
 //						   else
@@ -498,14 +499,18 @@ namespace TheATeam
 				}
 				else
 				{
-					Console.WriteLine("INSIDE NEXT STAGE");	
+					AppMain.client.SetActionMessage('Z');
+					AppMain.client.DataExchange();
+					
+					if(AppMain.client.NetworkActionMsg.Equals('Z'))
+						p1Ready = true;
 				}
 			}
 		}
 		
 		private void CombatStage(float dt)
 		{
-			
+			Console.WriteLine("COMBAT!!!!!!");
 			
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
