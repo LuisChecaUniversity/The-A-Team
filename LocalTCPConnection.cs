@@ -594,8 +594,8 @@ namespace TheATeam
 						}
 						else if(actionMsg.Equals('Z'))
 					    {
-							sendBuffer = new byte[2];
-							recvBuffer = new byte[2];
+							//sendBuffer = new byte[2];
+							//recvBuffer = new byte[2];
 						
 							byte[] mess = BitConverter.GetBytes(actionMsg);
 							mess.CopyTo(sendBuffer,0);
@@ -805,7 +805,12 @@ namespace TheATeam
 							else{
 								
 								char action = 'x';
-								if(recvBuffer.Length > 26)
+								if(recvBuffer.Length == 2)
+								{
+									Console.WriteLine("Recieved the Z message");
+									action = BitConverter.ToChar(recvBuffer,0);
+								}
+								else if(recvBuffer.Length > 26)
 								{
 									action = BitConverter.ToChar(recvBuffer,2);
 								}
@@ -815,7 +820,7 @@ namespace TheATeam
 									action = BitConverter.ToChar(recvBuffer,0);
 								}
 								networkActionMsg = action;
-								Console.WriteLine(action);
+								
 								if(action.Equals('S'))
 									hasShot = true;
 							

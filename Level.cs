@@ -18,6 +18,7 @@ namespace TheATeam
 		BuildStage,
 		CombatStage,
 		MulitplayerSetUp,
+		startingMultiplayerCombat,
 		None
 	}
 
@@ -403,14 +404,18 @@ namespace TheATeam
 			}
 			else if(levelStage == LevelStage.MulitplayerSetUp)
 			{
-				AppMain.client.DataExchange();
+				//AppMain.client.DataExchange();
 				if(AppMain.ISHOST)
 				{
+					AppMain.client.SetActionMessage('I');
+					AppMain.client.DataExchange();
+					
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						Console.WriteLine("HOST RECIEVED CLIENTS Z");
-						AppMain.client.SetActionMessage('Z');
-						AppMain.client.DataExchange();
+						levelStage = LevelStage.startingMultiplayerCombat;
+//						AppMain.client.SetActionMessage('Z');
+//						AppMain.client.DataExchange();
 						
 						//TODO move to combat stage and then cst buffer sizes
 						//levelStage = LevelStage.CombatStage;
@@ -422,6 +427,9 @@ namespace TheATeam
 				}
 				else
 				{
+					AppMain.client.SetActionMessage('I');
+					AppMain.client.DataExchange();
+					
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
 							
@@ -430,19 +438,24 @@ namespace TheATeam
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
+						levelStage = LevelStage.MulitplayerSetUp;
 							//levelStage = LevelStage.CombatStage;
 						}
 //					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
 //					        AppMain.client.NetworkActionMsg.Equals('M') ||
 //					        AppMain.client.NetworkActionMsg.Equals('S'))
 //						levelStage = LevelStage.CombatStage; 
-					else if (AppMain.client.NetworkActionMsg.Equals('Z'))
-					         Console.WriteLine("CLIENT RECIVED HOST Z");
+//					else if (AppMain.client.NetworkActionMsg.Equals('Z'))
+//					         Console.WriteLine("CLIENT RECIVED HOST Z");
 					
 					
 				}
 				
 				
+			}
+			else if(levelStage == LevelStage.MulitplayerSetUp)
+			{
+				Console.WriteLine("INSIDE SETUPCOMBAT");	
 			}
 		}
 		
