@@ -573,8 +573,6 @@ namespace TheATeam
 					//setting up level
 						if(actionMsg.Equals('L'))
 						{
-						
-							
 							int count = 0;
 							foreach (var item in setUpMessage)
 							{  
@@ -593,10 +591,17 @@ namespace TheATeam
 								count+= 14;
 								
 							}
-						
-						                     
-							
 						}
+						else if(actionMsg.Equals('Z'))
+					    {
+							sendBuffer = new byte[2];
+							recvBuffer = new byte[2];
+						
+							byte[] mess = BitConverter.GetBytes(actionMsg);
+							mess.CopyTo(sendBuffer,0);
+						Console.WriteLine("SB LEN = " + sendBuffer.Length);
+						}
+					
 					//combat stage
 						else
 						{
@@ -626,10 +631,7 @@ namespace TheATeam
 							}
 							if(!actionMsg.Equals('I'))
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
-							else
-							{
-								//Console.WriteLine("StoppeD");
-							}
+							
 							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							
 						}
