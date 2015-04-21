@@ -781,6 +781,7 @@ namespace TheATeam
 								
 								char action = BitConverter.ToChar(recvBuffer,0);
 								networkActionMsg = action;
+								Console.WriteLine("ENEMY + "  + networkPosition.ToString());
 								if(action.Equals('S'))
 									hasShot = true;
 							
@@ -842,7 +843,7 @@ namespace TheATeam
 					if (IsServer){
 						if (ClientSocket != null){
 							Len = ClientSocket.EndSend(AsyncResult);
-							Console.WriteLine("FINSIHED SENDING");;
+							Console.WriteLine(sendBuffer[0] + ": " + sendBuffer[1]);
 						}
 					}
 					else{
