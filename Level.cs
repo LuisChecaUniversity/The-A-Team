@@ -453,10 +453,10 @@ namespace TheATeam
 					else
 					{
 						Console.WriteLine("GOING TO NEXT STAGE");
-						if(AppMain.client.NetworkActionMsg.Equals('Z'))
+//						if(AppMain.client.NetworkActionMsg.Equals('Z'))
 							levelStage = LevelStage.startingMultiplayerCombat;	
-						   else
-							Console.WriteLine(AppMain.client.NetworkActionMsg);
+//						   else
+//							Console.WriteLine(AppMain.client.NetworkActionMsg);
 						   
 					}
 					//AppMain.client.SetActionMessage('I');
@@ -481,6 +481,7 @@ namespace TheATeam
 				{
 					AppMain.client.recvBuffer = new byte[26];
 					AppMain.client.sendBuffer = new byte[26];
+					
 					levelStage = LevelStage.CombatStage;
 				}
 				
