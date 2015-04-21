@@ -406,13 +406,23 @@ namespace TheATeam
 			{
 				AppMain.client.DataExchange();
 				if(AppMain.ISHOST)
-					Console.WriteLine(AppMain.client.ActionMsg);
+				{
+					if(AppMain.client.NetworkActionMsg.Equals('F'))
+					{
+							levelStage = LevelStage.CombatStage;
+							AppMain.client.recvBuffer = new byte[26];
+							AppMain.client.sendBuffer = new byte[26];
+					}
+				}
 				else
 				{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
 							AppMain.client.SetActionMessage('F');
 							ItemManager.Instance.initElements(this,true);
+							levelStage = LevelStage.CombatStage;
+							AppMain.client.recvBuffer = new byte[26];
+							AppMain.client.sendBuffer = new byte[26];
 						}
 					
 					

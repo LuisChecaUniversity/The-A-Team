@@ -259,8 +259,8 @@ namespace TheATeam
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        private byte[] sendBuffer = new byte[70];//[26];
-		private byte[] recvBuffer = new byte[70];
+        public byte[] sendBuffer = new byte[70];//[26];
+		public byte[] recvBuffer = new byte[70];
 		
 		public string layoutMessage="";
 		
