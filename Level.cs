@@ -488,14 +488,14 @@ namespace TheATeam
 						player2.Element = AppMain.client.NetworkElement1;
 						player2.Element2 = AppMain.client.NetworkElement2;
 						string element = "";
-						char c;
+						char c=' ';
 						
 						for (int i = 0; i < 2; i++) 
 						{
 							if(i == 0) c = player2.Element;
 							else if(i ==1) c = player2.Element2;
 							
-							switch (Element) 
+							switch (c) 
 							{
 							case 'A':
 								element = "Air";
@@ -539,14 +539,14 @@ namespace TheATeam
 						player1.Element = AppMain.client.NetworkElement1;
 						player1.Element2 = AppMain.client.NetworkElement2;
 						string element = "";
-						char c;
+						char c =' ';
 						
 						for (int i = 0; i < 2; i++) 
 						{
 							if(i == 0) c = player1.Element;
 							else if(i ==1) c = player1.Element2;
 							
-							switch (Element) 
+							switch (c) 
 							{
 							case 'A':
 								element = "Air";
