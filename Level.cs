@@ -482,8 +482,9 @@ namespace TheATeam
 					AppMain.client.DataExchange();
 					player1.Update(dt);
 				}
-				
-				Debug.WriteLine("Network element1 = " + AppMain.client.NetworkElement1 + " && Network element2 = " + AppMain.client.NetworkElement2);
+				Debug.WriteLine("ELEMENT 1 = " +AppMain.client.MyElement1);
+				Debug.WriteLine("ELEMENT 2 = " +AppMain.client.MyElement2);
+				//Debug.WriteLine("Network element1 = " + AppMain.client.NetworkElement1 + " && Network element2 = " + AppMain.client.NetworkElement2);
 			}
 			else
 			{
