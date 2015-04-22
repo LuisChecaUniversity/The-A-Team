@@ -872,14 +872,23 @@ namespace TheATeam
 								{
 									action = BitConverter.ToChar(recvBuffer,0);
 									
-								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
-								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
-								
-								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
-								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
-								
-								networkElement1 = BitConverter.ToChar(recvBuffer,26);
-								networkElement2 = BitConverter.ToChar(recvBuffer,28);
+									if(action.Equals('S'))
+									hasShot = true;
+							
+									else if(action.Equals('M'))
+									{
+										networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
+										networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
+									}
+									
+									networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+									networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
+								//	Console.WriteLine("NETWORK - DIRX = " + networkDirection.X + ": DIRY = " + networkDirection.Y);
+									networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
+									networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
+								//	Console.WriteLine("NETWORK - DIRX = " + networkDirection.X + ": DIRY = " + networkDirection.Y);
+									networkElement1 = BitConverter.ToChar(recvBuffer,26);
+									networkElement2 = BitConverter.ToChar(recvBuffer,28);
 								}
 								networkActionMsg = action;
 								
