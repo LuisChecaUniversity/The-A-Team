@@ -738,6 +738,7 @@ namespace TheATeam
 		public Dictionary<string,string> activePlayers = new Dictionary<string, string>();
 		private int activePlayerCount = 0;
 		
+		private bool hostPosted;
 		//chat lobby ... update
 		bool lobbychat1dot = true;
 		bool lobbychat2dot;
@@ -926,6 +927,7 @@ namespace TheATeam
 			}
 			else
 			{
+				
 				#region chatlobbyrefreshdots
 				if(chatlobbyRefreshTimer.Milliseconds() > 1000 && lobbychat1dot )
 				{
@@ -938,6 +940,15 @@ namespace TheATeam
 				}
 				if(chatlobbyRefreshTimer.Milliseconds() > 2000 && lobbychat2dot )
 				{
+					if(AppMain.ISHOST)
+					{
+						if(!hostPosted)
+						{
+							PostRequest();
+							hostPosted = true;	
+						}
+					}
+					
 					lobbychat2dot = false;
 					lobbychat3dot = true;
 					string lob = lobbyUI.LblLobbyChat.Text;

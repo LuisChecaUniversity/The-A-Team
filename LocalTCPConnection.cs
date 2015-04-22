@@ -271,7 +271,7 @@ namespace TheATeam
 		/**
 		 * Our position or the other party's
 		 */
-		private Sce.PlayStation.Core.Vector2 myPosition		= new Sce.PlayStation.Core.Vector2(400, 200);
+		private Sce.PlayStation.Core.Vector2 myPosition		= new Sce.PlayStation.Core.Vector2(0, 0);
 		public	Sce.PlayStation.Core.Vector2 MyPosition
 		{
 			get { return myPosition; }
@@ -283,7 +283,7 @@ namespace TheATeam
 		}
 
 		
-		public Sce.PlayStation.Core.Vector2 networkPosition	= new Sce.PlayStation.Core.Vector2(400, 200);
+		public Sce.PlayStation.Core.Vector2 networkPosition	= new Sce.PlayStation.Core.Vector2(0, 0);
 		public Sce.PlayStation.Core.Vector2 NetworkPosition
 		{
 			get { return networkPosition; }

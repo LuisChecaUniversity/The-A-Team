@@ -80,7 +80,7 @@ namespace TheATeam
 					{
 						p1Ready = true;
 						lblLobbyChat.Text += ("\n \n \n Connected Waiting for Player  ");
-						twoPlayer.PostRequest();
+						//twoPlayer.PostRequest();
 					}
 					else
 					{
@@ -115,6 +115,7 @@ namespace TheATeam
 
         void HandleBtnBackTouchEventReceived (object sender, TouchEventArgs e)
         {
+			if(AppMain.client!= null) AppMain.client.Disconnect();
         	PushTransition push = new PushTransition();
 			push.MoveDirection = FourWayDirection.Right;
 			UISystem.SetScene(new OnlineHostJoin(), push);

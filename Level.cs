@@ -350,6 +350,8 @@ namespace TheATeam
 				//need to dispose each thing in order to reinit on next game!!!!!!!! TODO
 				
 				//this.RemoveAllChildren(true);
+				if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+					if(AppMain.client!= null) AppMain.client.Disconnect();
 				
 				GameOver go = new GameOver();
 				GameSceneManager.currentScene = go;
