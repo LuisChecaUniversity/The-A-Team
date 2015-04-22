@@ -644,12 +644,14 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
 				_stats.Reset();
-				
-				ElementBuff("Neutral");
-				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
+				ElementBuff("Neutral");
+				ChangeTiles("Neutral");
+				
 				slowed = false;
+				
+				
 			}
 		}
 		
