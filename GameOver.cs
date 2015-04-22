@@ -14,8 +14,14 @@ namespace TheATeam
 
 		public GameOver()
 		{
-			
-			backgroundTexinfo = TextureManager.Get((Info.Winner.playerIndex == PlayerIndex.PlayerOne ? "gameover1" : "gameover2"));
+			if (Info.Winner != null)
+			{
+				backgroundTexinfo = TextureManager.Get((Info.Winner.playerIndex == PlayerIndex.PlayerOne ? "gameover1" : "gameover2"));
+			}
+			else
+			{
+				backgroundTexinfo = TextureManager.Get("gameover");
+			}
 			backgroundSprite = new SpriteUV(backgroundTexinfo);
 			backgroundSprite.Quad.S = backgroundTexinfo.TextureSizef;
 			
@@ -25,7 +31,10 @@ namespace TheATeam
 			ScheduleUpdate();
 			
 			AudioManager.StopMusic();
-			AudioManager.PlaySound((Info.Winner.playerIndex == PlayerIndex.PlayerOne ? "win" : "lose"));
+			if (Info.Winner != null)
+			{
+				AudioManager.PlaySound((Info.Winner.playerIndex == PlayerIndex.PlayerOne ? "win" : "lose"));
+			}
 		}
 
 		public override void Update(float dt)

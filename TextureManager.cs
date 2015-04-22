@@ -46,6 +46,7 @@ namespace TheATeam
 			Add("hudbar", "HUDBar.png");
 			Add("base", "Base.png");
 			Add("blockedArea", "BlockedArea.png");
+			Add("gameover", "Game Over.png");
 			Add("gameover1", "GO1.png");
 			Add("gameover2", "GO2.png");
 			Add("health", "health.png");
