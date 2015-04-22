@@ -381,26 +381,9 @@ namespace TheATeam
 			}
 			else if(levelStage == LevelStage.MulitplayerSetUp)
 			{
-				//AppMain.client.DataExchange();
+				
 				if(AppMain.ISHOST)
 				{
-//					AppMain.client.SetActionMessage('Z');
-//					AppMain.client.DataExchange();
-//					
-//					if(AppMain.client.NetworkActionMsg.Equals('Z'))
-//					{
-//						Console.WriteLine("HOST RECIEVED CLIENTS Z");
-//						levelStage = LevelStage.startingMultiplayerCombat;
-////						AppMain.client.SetActionMessage('Z');
-////						AppMain.client.DataExchange();
-//						
-//						//TODO move to combat stage and then cst buffer sizes
-//						//levelStage = LevelStage.CombatStage;
-//						//AppMain.client.recvBuffer = new byte[26];
-//						//AppMain.client.sendBuffer = new byte[26];
-//						//levelStage = LevelStage.CombatStage;
-//							
-//					}
 				}
 				else
 				{
@@ -409,38 +392,18 @@ namespace TheATeam
 					{
 						if(AppMain.client.NetworkActionMsg.Equals('L'))
 						{
-							//Console.WriteLine("RECIEVED LAYOUTM MESSAGE");
 							PostBuildStage();
 							ItemManager.Instance.initElements(this,true);
 							AppMain.client.SetActionMessage('Z');
 							AppMain.client.DataExchange();
-							//Console.WriteLine("SENT OVER MESSAGE = " + AppMain.client.ActionMsg);
 							clientSetUpLayout = true;
-							
-							//levelStage = LevelStage.CombatStage;
 						}
 					}
 					else
 					{
-					//	Console.WriteLine("GOING TO NEXT STAGE");
 						p2Ready = true;
-//						if(AppMain.client.NetworkActionMsg.Equals('Z'))
 							levelStage = LevelStage.startingMultiplayerCombat;	
-//						   else
-//							Console.WriteLine(AppMain.client.NetworkActionMsg);
-						   
 					}
-					//AppMain.client.SetActionMessage('I');
-					
-					
-						
-//					else if(AppMain.client.NetworkActionMsg.Equals('I') ||
-//					        AppMain.client.NetworkActionMsg.Equals('M') ||
-//					        AppMain.client.NetworkActionMsg.Equals('S'))
-//						levelStage = LevelStage.CombatStage; 
-//					else if (AppMain.client.NetworkActionMsg.Equals('Z'))
-//					         Console.WriteLine("CLIENT RECIVED HOST Z");
-					
 					
 				}
 				
@@ -464,7 +427,6 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						p2Ready = true;
-						//Console.WriteLine("PLAYER 2 READY");
 					}
 				}
 				else
@@ -480,7 +442,6 @@ namespace TheATeam
 		
 		private void CombatStage(float dt)
 		{
-			//Console.WriteLine("COMBAT!!!!!!");
 			
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
