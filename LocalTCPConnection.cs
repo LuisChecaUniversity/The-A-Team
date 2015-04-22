@@ -836,7 +836,7 @@ namespace TheATeam
 									Console.WriteLine("Recieved the Z message");
 									action = BitConverter.ToChar(recvBuffer,0);
 								}
-								else if(recvBuffer.Length > 26)
+								else if(recvBuffer.Length > 30)
 								{
 									action = BitConverter.ToChar(recvBuffer,2);
 								}
