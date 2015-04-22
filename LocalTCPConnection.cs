@@ -640,8 +640,8 @@ namespace TheATeam
 							DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
 							ShootDirX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length);
 							ShootDirY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length );
-							//Element1.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length);
-							//Element2.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length + Element1.Length);
+							Element1.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length);
+							Element2.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length + Element1.Length);
 						}
 					
 						if (isServer)
@@ -807,8 +807,8 @@ namespace TheATeam
 								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
 								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
 								
-								//networkElement1 = BitConverter.ToChar(recvBuffer,26);
-							//	networkElement2 = BitConverter.ToChar(recvBuffer,28);
+								networkElement1 = BitConverter.ToChar(recvBuffer,26);
+								networkElement2 = BitConverter.ToChar(recvBuffer,28);
 								
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 //								if(networkPosition.X == 0 && networkPosition.Y == 0)
@@ -887,8 +887,8 @@ namespace TheATeam
 								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
 								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
 								
-								//networkElement1 = BitConverter.ToChar(recvBuffer,26);
-							//	networkElement2 = BitConverter.ToChar(recvBuffer,28);
+								networkElement1 = BitConverter.ToChar(recvBuffer,26);
+								networkElement2 = BitConverter.ToChar(recvBuffer,28);
 								
 								//								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
 //								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);

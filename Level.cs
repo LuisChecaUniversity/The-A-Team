@@ -469,8 +469,8 @@ namespace TheATeam
 			{
 				if(!changedBuffer)
 				{
-					AppMain.client.sendBuffer = new byte[26];	
-					AppMain.client.recvBuffer = new byte[26];
+					AppMain.client.sendBuffer = new byte[30];	
+					AppMain.client.recvBuffer = new byte[30];
 					changedBuffer = true;
 				}
 				if(AppMain.ISHOST)

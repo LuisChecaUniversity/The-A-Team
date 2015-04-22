@@ -186,7 +186,7 @@ namespace TheATeam
 					HandleInput(dt);
 
 					// Apply the movement
-					//Position = Position + (positionDelta * dt / 16f);
+					Position = Position + (positionDelta * dt / 16f);
 					//Set Position for Data Message
 					AppMain.client.SetMyPosition(Position.X, Position.Y);
 				}
