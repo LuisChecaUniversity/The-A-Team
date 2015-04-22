@@ -109,7 +109,7 @@ namespace TheATeam
 			if(AppMain.TYPEOFGAME != "MULTIPLAYER")
 			{
 				int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? Info.Rnd.Next(1, 3) :Info.Rnd.Next(3, 7));
-				string level = "/Application/assets/level" + levelNumber + ".txt";
+				level = "/Application/assets/level" + levelNumber + ".txt";
 			
 			
 				if (levelNumber == 5)
@@ -478,13 +478,21 @@ namespace TheATeam
 					player1.Update(dt);
 					AppMain.client.DataExchange();
 					player2.Update(dt);
+					
+					AppMain.client.SetMyElement1(player1.Element);
+					AppMain.client.SetMyElement2(player1.Element2);
+						
 				}
 				else
 				{
 					player2.Update(dt);
 					AppMain.client.DataExchange();
 					player1.Update(dt);
+					AppMain.client.SetMyElement1(player2.Element);
+					AppMain.client.SetMyElement2(player2.Element2);
 				}
+				
+				
 				Debug.WriteLine("ELEMENT 1 = " +AppMain.client.MyElement1);
 				Debug.WriteLine("ELEMENT 2 = " +AppMain.client.MyElement2);
 				//Debug.WriteLine("Network element1 = " + AppMain.client.NetworkElement1 + " && Network element2 = " + AppMain.client.NetworkElement2);
