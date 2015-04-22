@@ -406,6 +406,7 @@ namespace TheATeam
 					{
 						p2Ready = true;
 							levelStage = LevelStage.startingMultiplayerCombat;	
+						Debug.WriteLine("MOVING TO STARTINGCOMBAT");
 					}
 					
 				}
@@ -430,6 +431,7 @@ namespace TheATeam
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						p2Ready = true;
+					
 					}
 				}
 				else
