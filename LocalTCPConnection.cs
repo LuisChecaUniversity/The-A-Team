@@ -777,7 +777,7 @@ namespace TheATeam
 								char action = 'x';
 								if(recvBuffer.Length == 2)
 								{
-									Console.WriteLine("Recieved the Z message");
+									//Console.WriteLine("Recieved the Z message");
 									action = BitConverter.ToChar(recvBuffer,0);
 								}
 								else if(recvBuffer.Length > 30)
@@ -809,7 +809,8 @@ namespace TheATeam
 								
 								networkElement1 = BitConverter.ToChar(recvBuffer,26);
 								networkElement2 = BitConverter.ToChar(recvBuffer,28);
-								
+								Console.WriteLine("NE1 = " + networkElement1);
+								Console.WriteLine("NE2 = " + networkElement2);
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 //								if(networkPosition.X == 0 && networkPosition.Y == 0)
 //								{
