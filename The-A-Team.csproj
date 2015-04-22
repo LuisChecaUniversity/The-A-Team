@@ -91,7 +91,6 @@
     <Content Include="assets\level2.txt" />
     <Content Include="assets\level3.txt" />
     <Content Include="assets\level4.txt" />
-    <Content Include="assets\level5.txt" />
     <Content Include="assets\Background.png" />
     <Content Include="assets\ATeam.png" />
     <Content Include="assets\TheATeam.png" />
@@ -116,5 +115,7 @@
     <Content Include="assets\Win.wav" />
     <Content Include="assets\GO1.png" />
     <Content Include="assets\GO2.png" />
+    <Content Include="assets\level6.txt" />
+    <Content Include="assets\level5.txt" />
   </ItemGroup>
 </Project>

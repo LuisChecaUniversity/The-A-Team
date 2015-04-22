@@ -78,10 +78,11 @@ namespace TheATeam
 			Vector2 player2Pos = Vector2.Zero;
 			Vector2 p1Flag = new Vector2(32, (screenHeight + 32) / 2);
 			Vector2 p2Flag = new Vector2(screenWidth - 32, (screenHeight + 32) / 2);
-			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? 1 : Info.Rnd.Next(2, 6));
+			int levelNumber = (AppMain.TYPEOFGAME == "DUAL" ? Info.Rnd.Next(1, 3) :Info.Rnd.Next(3, 7));
 			string level = "/Application/assets/level" + levelNumber + ".txt";
 			
-			if (levelNumber == 2)
+			Debug.WriteLine("lvl " + levelNumber);
+			if (levelNumber == 5)
 			{
 				player1Deployed = maxDeployed;
 			}
@@ -482,7 +483,7 @@ namespace TheATeam
 								if (t.Key != 'N' && playerDeployed < maxDeployed)
 								{
 									// returns player 1 flag and checks if touch pos collides with it
-									if (!t.Overlaps(p1baseSprite) || !t.Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
+									if (t.Key != '3' && t.Key != '4')//!t.Overlaps(p1baseSprite) || !t.Overlaps(p2baseSprite))//!p1Flag.hasCollided(touchVec, new Vector2(6, 6)))
 									{
 										t.Key = 'N';
 										Tile.Collisions.Add(t);

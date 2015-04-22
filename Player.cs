@@ -649,6 +649,7 @@ namespace TheATeam
 				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
+				slowed = false;
 			}
 		}
 		
