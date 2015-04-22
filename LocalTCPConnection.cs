@@ -788,29 +788,30 @@ namespace TheATeam
 								else
 								{
 									action = BitConverter.ToChar(recvBuffer,0);
+									if(action.Equals('S'))
+									hasShot = true;
+							
+									else if(action.Equals('M'))
+									{
+										networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
+										networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
+									}
+									
+									
+									networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+									networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
+									
+									networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
+									networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
+									
+									networkElement1 = BitConverter.ToChar(recvBuffer,26);
+									networkElement2 = BitConverter.ToChar(recvBuffer,28);
+									Console.WriteLine("NE1 = " + networkElement1);
+									Console.WriteLine("NE2 = " + networkElement2);
 								}
 								
 								networkActionMsg = action;
-								if(action.Equals('S'))
-									hasShot = true;
-							
-								else if(action.Equals('M'))
-								{
-									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
-									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
-								}
 								
-								
-								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
-								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
-								
-								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
-								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
-								
-								networkElement1 = BitConverter.ToChar(recvBuffer,26);
-								networkElement2 = BitConverter.ToChar(recvBuffer,28);
-								Console.WriteLine("NE1 = " + networkElement1);
-								Console.WriteLine("NE2 = " + networkElement2);
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 //								if(networkPosition.X == 0 && networkPosition.Y == 0)
 //								{
@@ -839,49 +840,38 @@ namespace TheATeam
 								else if(recvBuffer.Length > 30)
 								{
 									action = BitConverter.ToChar(recvBuffer,2);
+									if(action.Equals('L'))
+									{
+										if(layoutMessage.Length <2)
+										{
+											int count = 0;
+										
+											
+											for (int i = 0; i < 5; i++) 
+											{
+												char eleSep = BitConverter.ToChar(recvBuffer,count);
+												char ele = BitConverter.ToChar(recvBuffer,count + 2);
+												float x = BitConverter.ToSingle(recvBuffer,count + 4);
+												char seperator = BitConverter.ToChar(recvBuffer,count + 8);
+												float y = BitConverter.ToSingle(recvBuffer,count + 10);
+												
+												layoutMessage += eleSep;
+												layoutMessage += ele;
+												layoutMessage += x;
+												layoutMessage += seperator;
+												layoutMessage += y;
+												
+												count += 14;
+											}
+										}
+										
+									}
 								}
 									
 								else
 								{
 									action = BitConverter.ToChar(recvBuffer,0);
-								}
-								networkActionMsg = action;
-								
-								if(action.Equals('S'))
-									hasShot = true;
-							
-								else if(action.Equals('M'))
-								{
-									networkPosition.X = BitConverter.ToSingle(recvBuffer, 2);
-									networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
-								}
-								else if(action.Equals('L'))
-								{
-									if(layoutMessage.Length <2)
-									{
-										int count = 0;
 									
-										
-										for (int i = 0; i < 5; i++) 
-										{
-											char eleSep = BitConverter.ToChar(recvBuffer,count);
-											char ele = BitConverter.ToChar(recvBuffer,count + 2);
-											float x = BitConverter.ToSingle(recvBuffer,count + 4);
-											char seperator = BitConverter.ToChar(recvBuffer,count + 8);
-											float y = BitConverter.ToSingle(recvBuffer,count + 10);
-											
-											layoutMessage += eleSep;
-											layoutMessage += ele;
-											layoutMessage += x;
-											layoutMessage += seperator;
-											layoutMessage += y;
-											
-											count += 14;
-										}
-									}
-									
-								}
-								
 								networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
 								networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 								
@@ -890,6 +880,11 @@ namespace TheATeam
 								
 								networkElement1 = BitConverter.ToChar(recvBuffer,26);
 								networkElement2 = BitConverter.ToChar(recvBuffer,28);
+								}
+								networkActionMsg = action;
+								
+								
+								
 								
 								//								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
 //								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
