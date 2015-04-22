@@ -36,7 +36,8 @@ namespace TheATeam
 		private List<Waypoint> path;
 		private Item elementTarget;
 			
-
+		public bool HavePath{ set{havePath = value;}}
+		
 		public AIPlayer(Vector2 position, bool isPlayer1, List<Tile> tiles, Player player1):base(position, isPlayer1, tiles)
 		{
 			this.player1 = player1;
@@ -361,7 +362,7 @@ namespace TheATeam
 			}
 		}
 
-		void FindPath(Vector2 pos)
+		private void FindPath(Vector2 pos)
 		{
 			path = pathfinder.FindPath(pos);
 			havePath = true;
@@ -546,7 +547,7 @@ namespace TheATeam
 			//float oWidth = obstacle.Quad.Bounds2().Point11.X;
 			//float oHeight = obstacle.Quad.Bounds2().Point11.Y;
 			
-			float oWidth = 36.0f ;
+			float oWidth = 42.0f ;
 			float oHeight = 64.0f;
 		
 			if (ahead.X + width/2 < obstacle.Center.X - oWidth/ 2.0)
