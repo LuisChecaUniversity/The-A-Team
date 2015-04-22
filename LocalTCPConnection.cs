@@ -644,6 +644,8 @@ namespace TheATeam
 							Element2.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length + Element1.Length);
 						}
 					
+					Console.WriteLine("ACTION MESSAGE = " + actionMsg);
+					
 						if (isServer)
 						{
 							if (clientSocket == null || IsConnect == false)
