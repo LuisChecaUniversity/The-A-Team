@@ -615,16 +615,16 @@ namespace TheATeam
 			// Earth + Lightning -> Wall HP Regen
 			if ((Element == 'E' && Element2 == 'L') || (Element2 == 'E' && Element == 'L'))
 			{
-				foreach (Tile t in Tile.Collisions)
+				foreach (Tile t in playerTiles)
 				{ 
 					t.IsRegenerative = true;
 				}
 			}
 			// Earth + Air -> Tiles Grant Speed Boost
-			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
-			{
-				//_stats.moveSpeed = 1.75f;
-			}
+//			if ((Element == 'E' && Element2 == 'A') || (Element2 == 'E' && Element == 'A'))
+//			{
+//				//_stats.moveSpeed = 1.75f;
+//			}
 			// Fire + Earth -> Collsion with Walls cause damage, implemented in HandleCollisions()
 			
 		}
@@ -758,8 +758,13 @@ namespace TheATeam
 						p.TakeDamage(1);
 						break;
 					case ShieldEffect.KnockBack:
-						p.Position = p.Position - ((p.LocalBounds.Size) * p.Direction);
+						p.Position = p.Position - ((p.LocalBounds.Size * 4.0f) * (Center - p.Center).Normalize());
 						_stats.shield = 0;
+						if(p is AIPlayer)
+						{
+							AIPlayer t = (AIPlayer)p;
+							t.HavePath = false;
+						}
 						break;
 					case ShieldEffect.None:
 					default:
