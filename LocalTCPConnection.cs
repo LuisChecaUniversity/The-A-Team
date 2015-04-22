@@ -633,6 +633,8 @@ namespace TheATeam
 							byte[] Element1 = BitConverter.GetBytes(myElement1);
 							byte[] Element2 = BitConverter.GetBytes(myElement2);
 						
+							Array.Clear(sendBuffer,0,sendBuffer.Length);
+							Array.Clear(recvBuffer,0,recvBuffer.Length);
 							action.CopyTo(sendBuffer,0);
 							ArrayX.CopyTo(sendBuffer, action.Length);
 							ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
