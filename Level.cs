@@ -482,45 +482,51 @@ namespace TheATeam
 					AppMain.client.SetMyElement1(player1.Element);
 					AppMain.client.SetMyElement2(player1.Element2);
 					
-					if(!player2.Element.Equals(AppMain.client.NetworkElement1) ||!player2.Element2.Equals(AppMain.client.NetworkElement2 ))
+					if(ItemManager.Instance.GetAllItems().Count >2)
 					{
-						ItemManager.Instance.ResetItems(player2);
-						player2.Element = AppMain.client.NetworkElement1;
-						player2.Element2 = AppMain.client.NetworkElement2;
-						string element = "";
-						char c=' ';
-						
-						for (int i = 0; i < 2; i++) 
+						if(!player2.Element.Equals(AppMain.client.NetworkElement1) ||!player2.Element2.Equals(AppMain.client.NetworkElement2 ))
 						{
-							if(i == 0) c = player2.Element;
-							else if(i ==1) c = player2.Element2;
+							ItemManager.Instance.ResetItems(player2);
+							player2.Element = AppMain.client.NetworkElement1;
+							player2.Element2 = AppMain.client.NetworkElement2;
+							string element = "";
+							char c=' ';
 							
-							switch (c) 
+							for (int i = 0; i < 2; i++) 
 							{
-							case 'A':
-								element = "Air";
-								break;
-							case 'E':
-								element = "Earth";
-								break;
-							case 'L':
-								element = "Lightning";
-								break;
-							case 'F':
-								element = "Fire";
-								break;
-							case 'W':
-								element = "Water";
-								break;
-							default:
-								break;
+								if(i == 0) c = player2.Element;
+								else if(i ==1) c = player2.Element2;
+								
+								switch (c) 
+								{
+								case 'A':
+									element = "Air";
+									break;
+								case 'E':
+									element = "Earth";
+									break;
+								case 'L':
+									element = "Lightning";
+									break;
+								case 'F':
+									element = "Fire";
+									break;
+								case 'W':
+									element = "Water";
+									break;
+								default:
+									break;
+								}
+								
+								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
+								if(ele != null)
+								{
+									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
+									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
+								}
 							}
 							
-							ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
-							ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
 						}
-						
-						
 						
 					}
 						
@@ -533,45 +539,51 @@ namespace TheATeam
 					AppMain.client.SetMyElement1(player2.Element);
 					AppMain.client.SetMyElement2(player2.Element2);
 					
-					if(!player1.Element.Equals(AppMain.client.NetworkElement1) ||!player1.Element2.Equals(AppMain.client.NetworkElement2 ))
+					if(ItemManager.Instance.GetAllItems().Count > 2)
 					{
-						ItemManager.Instance.ResetItems(player1);
-						player1.Element = AppMain.client.NetworkElement1;
-						player1.Element2 = AppMain.client.NetworkElement2;
-						string element = "";
-						char c =' ';
-						
-						for (int i = 0; i < 2; i++) 
+						if(!player1.Element.Equals(AppMain.client.NetworkElement1) ||!player1.Element2.Equals(AppMain.client.NetworkElement2 ))
 						{
-							if(i == 0) c = player1.Element;
-							else if(i ==1) c = player1.Element2;
+							ItemManager.Instance.ResetItems(player1);
+							player1.Element = AppMain.client.NetworkElement1;
+							player1.Element2 = AppMain.client.NetworkElement2;
+							string element = "";
+							char c =' ';
 							
-							switch (c) 
+							for (int i = 0; i < 2; i++) 
 							{
-							case 'A':
-								element = "Air";
-								break;
-							case 'E':
-								element = "Earth";
-								break;
-							case 'L':
-								element = "Lightning";
-								break;
-							case 'F':
-								element = "Fire";
-								break;
-							case 'W':
-								element = "Water";
-								break;
-							default:
-								break;
+								if(i == 0) c = player1.Element;
+								else if(i ==1) c = player1.Element2;
+								
+								switch (c) 
+								{
+								case 'A':
+									element = "Air";
+									break;
+								case 'E':
+									element = "Earth";
+									break;
+								case 'L':
+									element = "Lightning";
+									break;
+								case 'F':
+									element = "Fire";
+									break;
+								case 'W':
+									element = "Water";
+									break;
+								default:
+									break;
+								}
+								
+								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
+								if(ele != null)
+								{
+									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
+									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
+								}
 							}
-							
-							ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
-							ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
+						
 						}
-						
-						
 						
 					}
 				}
