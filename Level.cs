@@ -466,8 +466,8 @@ namespace TheATeam
 			{
 				if(!changedBuffer)
 				{
-					AppMain.client.sendBuffer = new byte[26];	
-					AppMain.client.recvBuffer = new byte[26];
+					AppMain.client.sendBuffer = new byte[30];	
+					AppMain.client.recvBuffer = new byte[30];
 					changedBuffer = true;
 				}
 				if(AppMain.ISHOST)
@@ -482,6 +482,8 @@ namespace TheATeam
 					AppMain.client.DataExchange();
 					player1.Update(dt);
 				}
+				
+				Debug.WriteLine("Network element1 = " + AppMain.client.NetworkElement1 + " && Network element2 = " + AppMain.client.NetworkElement2);
 			}
 			else
 			{

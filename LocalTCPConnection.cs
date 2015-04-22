@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Collections.Generic;
 
+
 namespace TheATeam
 {
 	/**
@@ -253,13 +254,29 @@ namespace TheATeam
         /**
          * transceiver buffer
          */
+		private char myElement1 = 'N';
+		public void SetMyElement1 (char val){myElement1 = val;}
+		public char MyElement1 { get {return myElement1; }}
+		
+		private char myElement2 = 'N';
+		public void SetMyElement2 (char val){myElement2 = val;}
+		public char MyElement2 { get {return myElement2; }}
+		
+		private char networkElement1 = 'N';
+		public void SetNetworkElement1 (char val){networkElement1 = val;}
+		public char NetworkElement1 { get {return networkElement1; }}
+		
+		private char networkElement2 = 'N';
+		public void SetNetworkElement2 (char val){networkElement2 = val;}
+		public char NetworkElement2 { get {return networkElement2; }}
+		
 		private char actionMsg = 'D';
 		public void SetActionMessage(char c)
 		{
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        public byte[] sendBuffer = new byte[70];//[26];
+        public byte[] sendBuffer = new byte[70];//[70][26];
 		public byte[] recvBuffer = new byte[70];
 		
 		public string layoutMessage="";
@@ -613,6 +630,8 @@ namespace TheATeam
 							byte[] DirectionY = BitConverter.GetBytes(myDirection.Y);
 							byte[] ShootDirX = BitConverter.GetBytes(myShootingDirection.X);
 							byte[] ShootDirY = BitConverter.GetBytes(myShootingDirection.Y);
+							byte[] Element1 = BitConverter.GetBytes(myElement1);
+							byte[] Element2 = BitConverter.GetBytes(myElement2);
 						
 							action.CopyTo(sendBuffer,0);
 							ArrayX.CopyTo(sendBuffer, action.Length);
@@ -621,6 +640,8 @@ namespace TheATeam
 							DirectionY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length);
 							ShootDirX.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length);
 							ShootDirY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length );
+							Element1.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length);
+							Element2.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length + Element1.Length);
 						}
 					
 						if (isServer)
@@ -785,6 +806,10 @@ namespace TheATeam
 								
 								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
 								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
+								
+								networkElement1 = BitConverter.ToChar(recvBuffer,26);
+								networkElement2 = BitConverter.ToChar(recvBuffer,28);
+								
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 //								if(networkPosition.X == 0 && networkPosition.Y == 0)
 //								{
@@ -861,7 +886,11 @@ namespace TheATeam
 								
 								networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
 								networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
-//								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
+								
+								networkElement1 = BitConverter.ToChar(recvBuffer,26);
+								networkElement2 = BitConverter.ToChar(recvBuffer,28);
+								
+								//								networkPosition.X = BitConverter.ToSingle(recvBuffer, 0);
 //								networkPosition.Y = BitConverter.ToSingle(recvBuffer, 4);
 								//Console.WriteLine ("RECIEVED = " + networkPosition.X + " : " + networkPosition.Y);
 								if(networkPosition.X == 0 && networkPosition.Y == 0)
