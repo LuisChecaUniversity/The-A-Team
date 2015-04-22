@@ -806,8 +806,8 @@ namespace TheATeam
 									
 									networkElement1 = BitConverter.ToChar(recvBuffer,26);
 									networkElement2 = BitConverter.ToChar(recvBuffer,28);
-									Console.WriteLine("NE1 = " + networkElement1);
-									Console.WriteLine("NE2 = " + networkElement2);
+									//Console.WriteLine("NE1 = " + networkElement1);
+									//Console.WriteLine("NE2 = " + networkElement2);
 								}
 								
 								networkActionMsg = action;
