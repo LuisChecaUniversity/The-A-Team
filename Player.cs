@@ -691,10 +691,11 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
 				_stats.Reset();
+				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
 				ElementBuff("Neutral");
-				ChangeTiles("Neutral");
+				
 				
 				slowed = false;
 				
