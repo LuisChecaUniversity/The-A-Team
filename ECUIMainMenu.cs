@@ -20,7 +20,7 @@ namespace TheATeam
 
 				InitializeWidget();
 			AudioManager.StopMusic();
-			//AudioManager.PlayMusic("bgm", true, 0.4f);
+			AudioManager.PlayMusic("bgm", true, 0.4f);
 					
 			btnSolo.TouchEventReceived += HandleBtnSoloTouchEventReceived;
 			btnDual.TouchEventReceived += HandleBtnDualTouchEventReceived;

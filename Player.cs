@@ -560,6 +560,8 @@ namespace TheATeam
 				//Console.WriteLine("X: " + ShootingDirection.X + " Y: " + ShootingDirection.Y);
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
+				if(!AudioManager.IsSoundPlaying)
+					AudioManager.PlaySound("fire");
 			}
 		}
 		virtual public void Shoot(bool isMeShooting)
@@ -582,7 +584,8 @@ namespace TheATeam
 
 				ProjectileManager.Instance.Shoot(this);//pos, ShootingDirection, _element);
 				canShoot = false;
-				AudioManager.PlaySound("fire");
+				if(!AudioManager.IsSoundPlaying)
+					AudioManager.PlaySound("fire");
 			}
 		}
 		public void ChangeTiles(string type)

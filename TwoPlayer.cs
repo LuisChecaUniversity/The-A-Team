@@ -735,7 +735,7 @@ namespace TheATeam
 		
 		public Timer refreshTimer;
 		private Timer chatlobbyRefreshTimer;
-		public Dictionary<string,string> activePlayers = new Dictionary<string, string>();
+		public Dictionary<string,string[]> activePlayers = new Dictionary<string, string[]>();
 		private int activePlayerCount = 0;
 		
 		private bool hostPosted;
@@ -743,7 +743,7 @@ namespace TheATeam
 		bool lobbychat1dot = true;
 		bool lobbychat2dot;
 		bool lobbychat3dot;
-		
+		List<Button> hostButtons = new List<Button>();
 		string hostIP;
 		public TwoPlayer ()
 		{
@@ -978,18 +978,25 @@ namespace TheATeam
 					GetRequest();
 					if(activePlayers.Count > activePlayerCount)
 					{
+					
+						
 						int i = 1;
+						int startCount = 0;
+						int a;
 					 	foreach( var item in activePlayers)
 						{
-							if(!item.Value.Equals(AppMain.PLAYERNAME) && !item.Key.Equals(AppMain.IPADDRESS))
-							{
-								Button button = new Button();
-								button.SetPosition(80,70 * i);
-								button.Text = item.Value;
-								button.TouchEventReceived += HandleButtonTouchEventReceived;
-								i++;
-								lobbyUI.PnlActivePlayers.AddChildFirst(button);
-							}
+						
+								if(!item.Value[1].Equals(AppMain.PLAYERNAME) && !item.Value[0].Equals(AppMain.IPADDRESS))
+								{
+									Button button = new Button();
+									button.SetPosition(80,70 * i);
+									button.Text = item.Value[1];
+									button.TouchEventReceived += HandleButtonTouchEventReceived;
+									i++;
+									lobbyUI.PnlActivePlayers.AddChildFirst(button);
+									
+								}
+							
 						}
 						
 						activePlayerCount = activePlayers.Count;
@@ -1297,16 +1304,21 @@ namespace TheATeam
 			
 				foreach (var item in res)
 				{
+				string[] vals = new string[2];
 					string ip = item.Value.GetValue("ipaddress").ToString();
 					ip = ip.Trim('"');
 					string user = item.Value.GetValue("username").ToString();
 					user = user.Trim('"');
+					string id = item.Value.GetValue("_id").ToString();
+					id = id.Trim('"');
+				vals[0] = ip;
+				vals[1] = user;
 //					Console.WriteLine(item.Value.GetValue("username"));
-					if(!activePlayers.ContainsKey(ip))
+					if(!activePlayers.ContainsKey(id))
 					{
-					
-						activePlayers.Add(ip,user);
+						activePlayers.Add(id,vals);
 					}
+					
 				}
 		}
 	}

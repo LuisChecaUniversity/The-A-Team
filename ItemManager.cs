@@ -272,7 +272,7 @@ namespace TheATeam
 					// Play sound if collision took place
 					if (item.collided && !AudioManager.IsSoundPlaying)
 					{
-					//	AudioManager.PlaySound("pickup");
+						AudioManager.PlaySound("pickup");
 					}
 				}
 			}
