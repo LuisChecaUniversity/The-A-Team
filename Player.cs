@@ -29,7 +29,7 @@ namespace TheATeam
 	public class Player: Tile
 	{
 		
-		private float updatePosTime = 5.0f;
+		private float updatePosTime = 3.0f;
 		private float curUpdatePosTime;
 		
 		private static int Y_INDEX = 5;

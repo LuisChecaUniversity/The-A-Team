@@ -42,6 +42,9 @@ namespace TheATeam
 
 		public override void Update(float dt)
 		{
+			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+					if(AppMain.client!= null) AppMain.client.Disconnect();
+			
 			if (Input2.GamePad0.Start.Press)
 			{
 //				MainMenu mainMenu = new MainMenu();

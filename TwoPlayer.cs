@@ -1118,10 +1118,10 @@ namespace TheATeam
 				
 				foreach(var item in activePlayers)
 				{
-					if(item.Value.Equals(button.Text))
+					if(item.Value[1].Equals(button.Text))
 					{
 						//Console.WriteLine(item.Value + " : " + item.Key);
-						AppMain.CONNECTINGHOSTIPADDRESS = item.Key;
+						AppMain.CONNECTINGHOSTIPADDRESS = item.Value[0];
 						
 						                 
 					}
