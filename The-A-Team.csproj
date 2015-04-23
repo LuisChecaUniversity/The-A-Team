@@ -133,5 +133,6 @@
     <Content Include="assets\GO2.png" />
     <Content Include="assets\level6.txt" />
     <Content Include="assets\level5.txt" />
+    <Content Include="assets\Game Over.png" />
   </ItemGroup>
 </Project>

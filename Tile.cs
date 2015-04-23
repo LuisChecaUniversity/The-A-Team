@@ -86,7 +86,7 @@ namespace TheATeam
 		public static List<List<Tile>> Grid = new List<List<Tile>>();
 		private char _key;
 		private float healthTimer = 0.0f;
-		protected Stats _stats = new Stats();
+		public Stats _stats = new Stats();
 
 		public bool IsWall { get { return Elements.Contains(_key); } }
 

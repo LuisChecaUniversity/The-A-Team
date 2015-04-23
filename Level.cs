@@ -452,10 +452,33 @@ namespace TheATeam
 			p1HealthSprite.Quad.S = new Vector2(player1.Health, 26.0f);
 			p2HealthSprite.Quad.S = new Vector2(player2.Health, 26.0f);
 			
-			p1ShieldhpSprite.Visible = true;
-			p2ShieldhpSprite.Visible = true;
-			p1ShieldhpSprite.Quad.S = new Vector2(player1.Shield, 26.0f);
-			p2ShieldhpSprite.Quad.S = new Vector2(player2.Shield, 26.0f);
+			if(player1.Shield > 0)
+			{
+				p1ShieldhpSprite.Visible = true;
+				float p1s = 0.0f;
+				if(player1._stats.MaxShield > 0)
+					p1s = ((float)player1.Shield / (float)player1._stats.MaxShield) * player1._stats.MaxHealth;
+				p1ShieldhpSprite.Quad.S = new Vector2(p1s, 26.0f);
+	
+			}
+			else
+			{
+				p1ShieldhpSprite.Visible = false;
+			}
+			if(player2.Shield > 0)
+			{
+				p2ShieldhpSprite.Visible = true;
+				
+				float p2s = 0.0f;
+				if(player2._stats.MaxShield > 0)
+					p2s = ((float)player2.Shield / (float)player2._stats.MaxShield) * player2._stats.MaxHealth;
+				p2ShieldhpSprite.Quad.S = new Vector2(p2s, 26.0f);
+			}
+			else
+			{
+				p2ShieldhpSprite.Visible = false;
+			}
+			
 			
 			p1ManaSprite.Quad.S = new Vector2(player1.Mana, 26.0f);
 			p2ManaSprite.Quad.S = new Vector2(player2.Mana, 26.0f);
