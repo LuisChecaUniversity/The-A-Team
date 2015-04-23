@@ -32,7 +32,7 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		new static Vector2 boundsScale = new Vector2(1f);
 		protected bool canShoot = true;
-		private bool keyboardTest = true;
+		private bool keyboardTest = false;
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
@@ -650,7 +650,6 @@ namespace TheATeam
 				ChangeTiles("Neutral");
 				
 				slowed = false;
-				
 				
 			}
 		}
