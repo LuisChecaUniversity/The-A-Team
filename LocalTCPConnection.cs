@@ -254,6 +254,10 @@ namespace TheATeam
         /**
          * transceiver buffer
          */
+		private char oldAction;
+		private float oldDirX;
+		private float oldDirY;
+		
 		private char myElement1 = 'N';
 		public void SetMyElement1 (char val){myElement1 = val;}
 		public char MyElement1 { get {return myElement1; }}
@@ -645,6 +649,7 @@ namespace TheATeam
 //						else
 //						{
 							
+							
 							byte[] action = BitConverter.GetBytes(actionMsg);
 							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
 							byte[] ArrayY = BitConverter.GetBytes(myPosition.Y);
@@ -677,7 +682,7 @@ namespace TheATeam
 							{
 								return false;
 							}
-							if(!actionMsg.Equals('I'))
+							if(!actionMsg.Equals('I') || (oldAction.Equals(actionMsg) && oldDirX == myDirection.X && oldDirY == myDirection.Y))
 								clientSocket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							
 							clientSocket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
@@ -688,12 +693,15 @@ namespace TheATeam
 							if (socket == null || IsConnect == false){
 								return false;
 							}
-							if(!actionMsg.Equals('I'))
+							if(!actionMsg.Equals('I')|| (oldAction.Equals(actionMsg) && oldDirX == myDirection.X && oldDirY == myDirection.Y))
 								socket.BeginSend(sendBuffer, 0, sendBuffer.Length, 0, new AsyncCallback(SocketEventCallback.SendCallback), this);
 							
 						socket.BeginReceive(recvBuffer, 0, recvBuffer.Length, 0, new AsyncCallback(SocketEventCallback.ReceiveCallback), this);
 							
 						}
+					oldAction = actionMsg;
+					oldDirX = myDirection.X;
+					oldDirY = myDirection.Y;
 					
 				}
 				finally
