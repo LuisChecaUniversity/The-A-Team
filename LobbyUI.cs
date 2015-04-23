@@ -106,10 +106,12 @@ namespace TheATeam
         {
 			if(e.TouchEvents[0].Type == TouchEventType.Down)
 			{
+				btnJoinGame.Enabled = false;
         		AppMain.client.Connect();
 				twoPlayer.PostRequest();
 				p2Ready = true;
 				Console.WriteLine("Player 2 is " + p2Ready);
+				
 			}
         }
 

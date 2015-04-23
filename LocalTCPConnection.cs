@@ -276,8 +276,8 @@ namespace TheATeam
 			actionMsg = c;	
 		}
 		public char ActionMsg { get { return actionMsg;}}
-        public byte[] sendBuffer = new byte[70];//[70][26];
-		public byte[] recvBuffer = new byte[70];
+        public byte[] sendBuffer = new byte[30];//[70][26];
+		public byte[] recvBuffer = new byte[30];
 		
 		public string layoutMessage="";
 		
@@ -490,6 +490,28 @@ namespace TheATeam
 			{
 				enterCriticalSection();
 				socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+				
+				IPHostEntry host;
+		   			host = Dns.GetHostEntry(Dns.GetHostName());
+				if(AppMain.ISCOMPUTER)
+					{
+						ipAddress = host.AddressList[1];
+							
+					}
+					else
+					{
+			   			foreach (IPAddress ipp in host.AddressList)
+			   			{
+							
+			     			if (ipp.AddressFamily == AddressFamily.InterNetwork)
+			     			{
+						       	ipAddress = ipp;
+			       				break;
+			     			}
+			   			}
+				
+					}
+					AppMain.IPADDRESS = ipAddress.ToString();
 //				IPAddress ipAdd;
 //				//IPAddress ipAdd = IPAddress.Parse("192.168.1.105");
 //				//PHONE 
@@ -588,40 +610,40 @@ namespace TheATeam
 						
 						
 					//setting up level
-						if(actionMsg.Equals('L'))
-						{
-							int count = 0;
-							foreach (var item in setUpMessage)
-							{  
-								byte[] ele = BitConverter.GetBytes(item.Key);
-								byte[] x = BitConverter.GetBytes(item.Value[0]);
-								byte[] y = BitConverter.GetBytes(item.Value[1]);
-								byte[] seperator = BitConverter.GetBytes('S');
-								byte[] eleSeperator = BitConverter.GetBytes('Q');
-								
-								eleSeperator.CopyTo(sendBuffer,count);
-								ele.CopyTo(sendBuffer,count + 2);
-								x.CopyTo(sendBuffer,count + 4);
-							seperator.CopyTo(sendBuffer,count + 8);
-								y.CopyTo(sendBuffer,count +10);
-								
-								count+= 14;
-								
-							}
-						}
-						else if(actionMsg.Equals('Z'))
-					    {
-							sendBuffer = new byte[2];
-							recvBuffer = new byte[2];
-						
-							byte[] mess = BitConverter.GetBytes(actionMsg);
-							mess.CopyTo(sendBuffer,0);
-							//Console.WriteLine("SB LEN = " + sendBuffer.Length);
-						}
-					
-					//combat stage
-						else
-						{
+//						if(actionMsg.Equals('L'))
+//						{
+//							int count = 0;
+//							foreach (var item in setUpMessage)
+//							{  
+//								byte[] ele = BitConverter.GetBytes(item.Key);
+//								byte[] x = BitConverter.GetBytes(item.Value[0]);
+//								byte[] y = BitConverter.GetBytes(item.Value[1]);
+//								byte[] seperator = BitConverter.GetBytes('S');
+//								byte[] eleSeperator = BitConverter.GetBytes('Q');
+//								
+//								eleSeperator.CopyTo(sendBuffer,count);
+//								ele.CopyTo(sendBuffer,count + 2);
+//								x.CopyTo(sendBuffer,count + 4);
+//							seperator.CopyTo(sendBuffer,count + 8);
+//								y.CopyTo(sendBuffer,count +10);
+//								
+//								count+= 14;
+//								
+//							}
+//						}
+//						else if(actionMsg.Equals('Z'))
+//					    {
+//							sendBuffer = new byte[2];
+//							recvBuffer = new byte[2];
+//						
+//							byte[] mess = BitConverter.GetBytes(actionMsg);
+//							mess.CopyTo(sendBuffer,0);
+//							//Console.WriteLine("SB LEN = " + sendBuffer.Length);
+//						}
+//					
+//					//combat stage
+//						else
+//						{
 							
 							byte[] action = BitConverter.GetBytes(actionMsg);
 							byte[] ArrayX	= BitConverter.GetBytes(myPosition.X);
@@ -633,8 +655,9 @@ namespace TheATeam
 							byte[] Element1 = BitConverter.GetBytes(myElement1);
 							byte[] Element2 = BitConverter.GetBytes(myElement2);
 						
-							Array.Clear(sendBuffer,0,sendBuffer.Length);
-							Array.Clear(recvBuffer,0,recvBuffer.Length);
+							//Array.Clear(sendBuffer,0,sendBuffer.Length);
+							//Array.Clear(recvBuffer,0,recvBuffer.Length);
+						
 							action.CopyTo(sendBuffer,0);
 							ArrayX.CopyTo(sendBuffer, action.Length);
 							ArrayY.CopyTo(sendBuffer, action.Length + ArrayX.Length);
@@ -644,9 +667,9 @@ namespace TheATeam
 							ShootDirY.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length );
 							Element1.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length);
 							Element2.CopyTo(sendBuffer, action.Length + ArrayX.Length+ ArrayY.Length + DirectionX.Length + DirectionY.Length +ShootDirX.Length + ShootDirY.Length + Element1.Length);
-						}
+					//	}
 					
-					Console.WriteLine("ACTION MESSAGE = " + actionMsg);
+					//Console.WriteLine("ACTION MESSAGE = " + actionMsg);
 					
 						if (isServer)
 						{
@@ -779,18 +802,19 @@ namespace TheATeam
 								
 								
 								char action = 'x';
-								if(recvBuffer.Length == 2)
-								{
-									//Console.WriteLine("Recieved the Z message");
-									action = BitConverter.ToChar(recvBuffer,0);
-								}
-								else if(recvBuffer.Length > 30)
-								{
-									action = BitConverter.ToChar(recvBuffer,2);
-								}
-									
-								else
-								{
+//								Console.WriteLine("RecBuffer Size : " + recvBuffer.Length.ToString());
+//								if(recvBuffer.Length == 2)
+//								{
+//									//Console.WriteLine("Recieved the Z message");
+//									action = BitConverter.ToChar(recvBuffer,0);
+//								}
+//								else if(recvBuffer.Length > 30)
+//								{
+//									action = BitConverter.ToChar(recvBuffer,2);
+//								}
+//									
+//								else
+//								{
 									action = BitConverter.ToChar(recvBuffer,0);
 									if(action.Equals('S'))
 									hasShot = true;
@@ -801,18 +825,16 @@ namespace TheATeam
 										networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 									}
 									
+								
+										networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+										networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 									
-									networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
-									networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
-									
-									networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
-									networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
-									
-									networkElement1 = BitConverter.ToChar(recvBuffer,26);
-									networkElement2 = BitConverter.ToChar(recvBuffer,28);
-									//Console.WriteLine("NE1 = " + networkElement1);
-									//Console.WriteLine("NE2 = " + networkElement2);
-								}
+										networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
+										networkShootDir.Y = BitConverter.ToSingle(recvBuffer,22);
+										
+										networkElement1 = BitConverter.ToChar(recvBuffer,26);
+										networkElement2 = BitConverter.ToChar(recvBuffer,28);
+										
 								
 								networkActionMsg = action;
 								
@@ -836,44 +858,45 @@ namespace TheATeam
 							else{
 								
 								char action = 'x';
-								if(recvBuffer.Length == 2)
-								{
-									Console.WriteLine("Recieved the Z message");
-									action = BitConverter.ToChar(recvBuffer,0);
-								}
-								else if(recvBuffer.Length > 30)
-								{
-									action = BitConverter.ToChar(recvBuffer,2);
-									if(action.Equals('L'))
-									{
-										if(layoutMessage.Length <2)
-										{
-											int count = 0;
-										
-											
-											for (int i = 0; i < 5; i++) 
-											{
-												char eleSep = BitConverter.ToChar(recvBuffer,count);
-												char ele = BitConverter.ToChar(recvBuffer,count + 2);
-												float x = BitConverter.ToSingle(recvBuffer,count + 4);
-												char seperator = BitConverter.ToChar(recvBuffer,count + 8);
-												float y = BitConverter.ToSingle(recvBuffer,count + 10);
-												
-												layoutMessage += eleSep;
-												layoutMessage += ele;
-												layoutMessage += x;
-												layoutMessage += seperator;
-												layoutMessage += y;
-												
-												count += 14;
-											}
-										}
-										
-									}
-								}
-									
-								else
-								{
+//								Console.WriteLine("RecBuffer Size : " + recvBuffer.Length.ToString());
+//								if(recvBuffer.Length == 2)
+//								{
+//								//	Console.WriteLine("Recieved the Z message");
+//									action = BitConverter.ToChar(recvBuffer,0);
+//								}
+//								else if(recvBuffer.Length > 30)
+//								{
+//									action = BitConverter.ToChar(recvBuffer,2);
+//									if(action.Equals('L'))
+//									{
+//										if(layoutMessage.Length <2)
+//										{
+//											int count = 0;
+//										
+//											
+//											for (int i = 0; i < 5; i++) 
+//											{
+//												char eleSep = BitConverter.ToChar(recvBuffer,count);
+//												char ele = BitConverter.ToChar(recvBuffer,count + 2);
+//												float x = BitConverter.ToSingle(recvBuffer,count + 4);
+//												char seperator = BitConverter.ToChar(recvBuffer,count + 8);
+//												float y = BitConverter.ToSingle(recvBuffer,count + 10);
+//												
+//												layoutMessage += eleSep;
+//												layoutMessage += ele;
+//												layoutMessage += x;
+//												layoutMessage += seperator;
+//												layoutMessage += y;
+//												
+//												count += 14;
+//											}
+//										}
+//										
+//									}
+//								}
+//									
+//								else
+//								{
 									action = BitConverter.ToChar(recvBuffer,0);
 									
 									if(action.Equals('S'))
@@ -885,7 +908,7 @@ namespace TheATeam
 										networkPosition.Y = BitConverter.ToSingle(recvBuffer, 6);
 									}
 									
-									networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
+										networkDirection.X = BitConverter.ToSingle(recvBuffer,10);
 									networkDirection.Y = BitConverter.ToSingle(recvBuffer,14);
 								//	Console.WriteLine("NETWORK - DIRX = " + networkDirection.X + ": DIRY = " + networkDirection.Y);
 									networkShootDir.X = BitConverter.ToSingle(recvBuffer,18);
@@ -893,7 +916,9 @@ namespace TheATeam
 								//	Console.WriteLine("NETWORK - DIRX = " + networkDirection.X + ": DIRY = " + networkDirection.Y);
 									networkElement1 = BitConverter.ToChar(recvBuffer,26);
 									networkElement2 = BitConverter.ToChar(recvBuffer,28);
-								}
+									
+									
+								//}
 								networkActionMsg = action;
 								
 								

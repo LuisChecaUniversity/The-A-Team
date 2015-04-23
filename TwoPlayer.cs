@@ -1304,6 +1304,7 @@ namespace TheATeam
 //					Console.WriteLine(item.Value.GetValue("username"));
 					if(!activePlayers.ContainsKey(ip))
 					{
+					
 						activePlayers.Add(ip,user);
 					}
 				}

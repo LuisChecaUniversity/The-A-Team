@@ -84,13 +84,13 @@ namespace TheATeam
 			{
 				PostBuildStage();
 				
-				if(AppMain.ISHOST)
-				{
-					levelStage = LevelStage.startingMultiplayerCombat;
-					p1Ready = true;	
-				}
-				else
-					levelStage = LevelStage.MulitplayerSetUp;
+//				if(AppMain.ISHOST)
+//				{
+//					levelStage = LevelStage.startingMultiplayerCombat;
+//					p1Ready = true;	
+//				}
+//				else
+//					levelStage = LevelStage.MulitplayerSetUp;
 			}
 			Camera2D.SetViewFromViewport();
 		}
@@ -427,7 +427,8 @@ namespace TheATeam
 				{
 					AppMain.client.SetActionMessage('Z');
 					AppMain.client.DataExchange();
-					
+					Debug.WriteLine("CLIENTS ACTION= " + AppMain.client.NetworkActionMsg);
+					                
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 					{
 						p2Ready = true;
@@ -438,7 +439,7 @@ namespace TheATeam
 				{
 					AppMain.client.SetActionMessage('Z');
 					AppMain.client.DataExchange();
-					
+					Debug.WriteLine("HOSTS ACTION= " + AppMain.client.NetworkActionMsg);
 					if(AppMain.client.NetworkActionMsg.Equals('Z'))
 						p1Ready = true;
 				}
@@ -469,12 +470,7 @@ namespace TheATeam
 			
 			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				if(!changedBuffer)
-				{
-					AppMain.client.sendBuffer = new byte[30];	
-					AppMain.client.recvBuffer = new byte[30];
-					changedBuffer = true;
-				}
+				
 				if(AppMain.ISHOST)
 				{
 					player1.Update(dt);
@@ -483,54 +479,53 @@ namespace TheATeam
 					
 					AppMain.client.SetMyElement1(player1.Element);
 					AppMain.client.SetMyElement2(player1.Element2);
-//					
-//					if(ItemManager.Instance.GetAllItems().Count >2)
-//					{
-//						if(!player2.Element.Equals(AppMain.client.NetworkElement1) ||!player2.Element2.Equals(AppMain.client.NetworkElement2 ))
-//						{
-//							ItemManager.Instance.ResetItems(player2);
-//							player2.Element = AppMain.client.NetworkElement1;
-//							player2.Element2 = AppMain.client.NetworkElement2;
-//							string element = "";
-//							char c=' ';
-//							
-//							for (int i = 0; i < 2; i++) 
-//							{
-//								if(i == 0) c = player2.Element;
-//								else if(i ==1) c = player2.Element2;
-//								
-//								switch (c) 
-//								{
-//								case 'A':
-//									element = "Air";
-//									break;
-//								case 'E':
-//									element = "Earth";
-//									break;
-//								case 'L':
-//									element = "Lightning";
-//									break;
-//								case 'F':
-//									element = "Fire";
-//									break;
-//								case 'W':
-//									element = "Water";
-//									break;
-//								default:
-//									break;
-//								}
-//								
-//								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
-//								if(ele != null)
-//								{
-//									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
-//									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
-//								}
-//							}
-//							
-//						}
+					
+					
+						if(!player2.Element.Equals(AppMain.client.NetworkElement1) ||!player2.Element2.Equals(AppMain.client.NetworkElement2 ))
+						{
+							ItemManager.Instance.ResetItems(player2);
+							player2.Element = AppMain.client.NetworkElement1;
+							player2.Element2 = AppMain.client.NetworkElement2;
+							string element = "";
+							char c=' ';
+							
+							for (int i = 0; i < 2; i++) 
+							{
+								if(i == 0) c = player2.Element;
+								else if(i ==1) c = player2.Element2;
+								
+								switch (c) 
+								{
+								case 'A':
+									element = "Air";
+									break;
+								case 'E':
+									element = "Earth";
+									break;
+								case 'L':
+									element = "Lightning";
+									break;
+								case 'F':
+									element = "Fire";
+									break;
+								case 'W':
+									element = "Water";
+									break;
+								default:
+									break;
+								}
+								
+								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
+								if(ele != null)
+								{
+									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
+									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
+								}
+							}
+							
 						
-					//}
+					
+					}
 						
 				}
 				else
@@ -540,54 +535,53 @@ namespace TheATeam
 					player1.Update(dt);
 					AppMain.client.SetMyElement1(player2.Element);
 					AppMain.client.SetMyElement2(player2.Element2);
-//					
-//					if(ItemManager.Instance.GetAllItems().Count > 2)
-//					{
-//						if(!player1.Element.Equals(AppMain.client.NetworkElement1) ||!player1.Element2.Equals(AppMain.client.NetworkElement2 ))
-//						{
-//							ItemManager.Instance.ResetItems(player1);
-//							player1.Element = AppMain.client.NetworkElement1;
-//							player1.Element2 = AppMain.client.NetworkElement2;
-//							string element = "";
-//							char c =' ';
-//							
-//							for (int i = 0; i < 2; i++) 
-//							{
-//								if(i == 0) c = player1.Element;
-//								else if(i ==1) c = player1.Element2;
-//								
-//								switch (c) 
-//								{
-//								case 'A':
-//									element = "Air";
-//									break;
-//								case 'E':
-//									element = "Earth";
-//									break;
-//								case 'L':
-//									element = "Lightning";
-//									break;
-//								case 'F':
-//									element = "Fire";
-//									break;
-//								case 'W':
-//									element = "Water";
-//									break;
-//								default:
-//									break;
-//								}
-//								
-//								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
-//								if(ele != null)
-//								{
-//									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
-//									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
-//								}
-//							}
-//						
-//						}
-//						
-//					}
+					
+					
+						if(!player1.Element.Equals(AppMain.client.NetworkElement1) ||!player1.Element2.Equals(AppMain.client.NetworkElement2 ))
+						{
+							ItemManager.Instance.ResetItems(player1);
+							player1.Element = AppMain.client.NetworkElement1;
+							player1.Element2 = AppMain.client.NetworkElement2;
+							string element = "";
+							char c =' ';
+							
+							for (int i = 0; i < 2; i++) 
+							{
+								if(i == 0) c = player1.Element;
+								else if(i ==1) c = player1.Element2;
+								
+								switch (c) 
+								{
+								case 'A':
+									element = "Air";
+									break;
+								case 'E':
+									element = "Earth";
+									break;
+								case 'L':
+									element = "Lightning";
+									break;
+								case 'F':
+									element = "Fire";
+									break;
+								case 'W':
+									element = "Water";
+									break;
+								default:
+									break;
+								}
+								
+								Item ele = ItemManager.Instance.GetItem(ItemType.element,element);
+								if(ele != null)
+								{
+									ItemManager.Instance.GetItem(ItemType.element,element).iSprite.Visible = false;
+									ItemManager.Instance.GetItem(ItemType.element,element).collided = true;
+								}
+							}
+						
+						}
+						
+					
 				}
 				
 				
@@ -896,57 +890,57 @@ namespace TheATeam
 					}
 				}
 			}
-			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
+			//if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+			//{
 				ItemManager.Instance.initElements(this);
 				levelStage = LevelStage.CombatStage;
-			}
-			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
-			{
-				if(AppMain.ISHOST)
-				{
-					ItemManager.Instance.initElements(this);
-					Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
-						foreach (var item in ItemManager.Instance.Items)
-					{
-						if(!item.Name.Equals("Player1Flag") && !item.Name.Equals("Player2Flag"))
-						{
-							//Console.WriteLine(item.Name);	
-							List<float> l = new List<float>();
-							string xStr = item.position.X.ToString();
-							if(xStr.Length ==2)
-							{
-								xStr = "0";
-								xStr += item.position.X.ToString();
-								l.Add(float.Parse(xStr));
-							}
-							else
-								l.Add(item.position.X);
-							
-							string yStr = item.position.Y.ToString();
-							if(yStr.Length ==2)
-							{
-								yStr = "0";
-								yStr += item.position.Y.ToString();
-								l.Add(float.Parse(yStr));
-							}
-							else
-								l.Add(item.position.Y);
-							
-							elementsList.Add(item.Name[0], l);
-							//Console.WriteLine(elementsMessage);
-						}
-					}
-					AppMain.client.SetActionMessage('L');
-					AppMain.client.setUpMessage = elementsList;
-					AppMain.client.DataExchange();
-				}
-			}
+		//	}
+//			if(AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
+//			{
+//				if(AppMain.ISHOST)
+//				{
+//					ItemManager.Instance.initElements(this);
+//					Dictionary<char, List<float> > elementsList = new Dictionary<char, List<float> >();
+//						foreach (var item in ItemManager.Instance.Items)
+//					{
+//						if(!item.Name.Equals("Player1Flag") && !item.Name.Equals("Player2Flag"))
+//						{
+//							//Console.WriteLine(item.Name);	
+//							List<float> l = new List<float>();
+//							string xStr = item.position.X.ToString();
+//							if(xStr.Length ==2)
+//							{
+//								xStr = "0";
+//								xStr += item.position.X.ToString();
+//								l.Add(float.Parse(xStr));
+//							}
+//							else
+//								l.Add(item.position.X);
+//							
+//							string yStr = item.position.Y.ToString();
+//							if(yStr.Length ==2)
+//							{
+//								yStr = "0";
+//								yStr += item.position.Y.ToString();
+//								l.Add(float.Parse(yStr));
+//							}
+//							else
+//								l.Add(item.position.Y);
+//							
+//							elementsList.Add(item.Name[0], l);
+//							//Console.WriteLine(elementsMessage);
+//						}
+//					}
+//					AppMain.client.SetActionMessage('L');
+//					AppMain.client.setUpMessage = elementsList;
+//					AppMain.client.DataExchange();
+//				}
+//			}
 			
-			for(int j = player1Tiles.Count - 2; j >= 0; j--)
-			{
-				//debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
-			}
+//			for(int j = player1Tiles.Count - 2; j >= 0; j--)
+//			{
+//				//debugLine += player1Tiles[j].Key + (j % 5 != 0 ?  "," : "\n");
+//			}
 			//System.Diagnostics.Debug.WriteLine(debugLine);
 			
 

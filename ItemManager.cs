@@ -57,24 +57,36 @@ namespace TheATeam
 //			Vector2 pos4 = new Vector2(390, 370);
 //			Vector2 pos5 = new Vector2(560, 450);
 			
-			List<int> indexList = new List<int>();
-			for (int i = 0; i < 5; i++)
+			if(!AppMain.TYPEOFGAME.Equals("MULTIPLAYER"))
 			{
-				int r = Info.Rnd.Next(0, 5);
-				while (indexList.Contains(r))
+				List<int> indexList = new List<int>();
+				for (int i = 0; i < 5; i++)
 				{
-					r = Info.Rnd.Next(0, 5);
+					int r = Info.Rnd.Next(0, 5);
+					while (indexList.Contains(r))
+					{
+						r = Info.Rnd.Next(0, 5);
+					}
+					
+					indexList.Add(r);
+	
 				}
 				
-				indexList.Add(r);
-
+				lightningElement = new Item(curScene, RandomPosition(indexList[0]), lightningIndex, ItemType.element, "Lightning");
+				airElement = new Item(curScene, RandomPosition(indexList[1]), airIndex, ItemType.element, "Air");
+				earthElement = new Item(curScene, RandomPosition(indexList[2]), earthIndex, ItemType.element, "Earth");
+				fireElement = new Item(curScene, RandomPosition(indexList[3]), fireIndex, ItemType.element, "Fire");
+				waterElement = new Item(curScene, RandomPosition(indexList[4]), waterIndex, ItemType.element, "Water");
+			}
+			else
+			{
+				lightningElement = new Item(curScene, RandomPosition(0), lightningIndex, ItemType.element, "Lightning");
+				airElement = new Item(curScene, RandomPosition(1), airIndex, ItemType.element, "Air");
+				earthElement = new Item(curScene, RandomPosition(2), earthIndex, ItemType.element, "Earth");
+				fireElement = new Item(curScene, RandomPosition(3), fireIndex, ItemType.element, "Fire");
+				waterElement = new Item(curScene, RandomPosition(4), waterIndex, ItemType.element, "Water");
 			}
 			
-			lightningElement = new Item(curScene, RandomPosition(indexList[0]), lightningIndex, ItemType.element, "Lightning");
-			airElement = new Item(curScene, RandomPosition(indexList[1]), airIndex, ItemType.element, "Air");
-			earthElement = new Item(curScene, RandomPosition(indexList[2]), earthIndex, ItemType.element, "Earth");
-			fireElement = new Item(curScene, RandomPosition(indexList[3]), fireIndex, ItemType.element, "Fire");
-			waterElement = new Item(curScene, RandomPosition(indexList[4]), waterIndex, ItemType.element, "Water");
 			
 			items.Add(lightningElement);
 			items.Add(airElement);
@@ -210,7 +222,7 @@ namespace TheATeam
 					//check player 1 with items first
 					if (item.hasCollided(p1.Position, p1Size))
 					{
-						System.Diagnostics.Debug.WriteLine("Collided with " + item.Name);
+						//System.Diagnostics.Debug.WriteLine("Collided with " + item.Name);
 						item.iSprite.Visible = false;
 						item.collided = true;
 						
@@ -258,9 +270,9 @@ namespace TheATeam
 					}
 					
 					// Play sound if collision took place
-					if (item.collided)
+					if (item.collided && !AudioManager.IsSoundPlaying)
 					{
-						AudioManager.PlaySound("pickup");
+					//	AudioManager.PlaySound("pickup");
 					}
 				}
 			}
