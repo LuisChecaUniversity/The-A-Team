@@ -32,7 +32,7 @@ namespace TheATeam
 		private static float MoveDelta = 4f;
 		new static Vector2 boundsScale = new Vector2(1f);
 		protected bool canShoot = true;
-		private bool keyboardTest = false;
+		private bool keyboardTest = true;
 		private char _element, _element2;
 		protected Vector2 Direction;
 		protected Vector2 ShootingDirection;
@@ -644,10 +644,11 @@ namespace TheATeam
 				ItemManager.Instance.ResetItems(this);
 				Position = startingPosition;
 				_stats.Reset();
+				ChangeTiles("Neutral");
 				Element = 'N';
 				Element2 = 'N';
 				ElementBuff("Neutral");
-				ChangeTiles("Neutral");
+				
 				
 				slowed = false;
 				
