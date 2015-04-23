@@ -285,8 +285,8 @@ namespace TheATeam
 		
 		private void MultiplayerUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 			if (positionDelta.IsZero())
 			{
 				AppMain.client.SetActionMessage('I');
@@ -315,8 +315,8 @@ namespace TheATeam
 		{
 			if (playerIndex == PlayerIndex.PlayerOne)
 			{
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 
 				if (ShootingDirection.IsZero())
 				{
@@ -340,8 +340,8 @@ namespace TheATeam
 			}
 			else if (playerIndex == PlayerIndex.PlayerTwo)
 			{
-				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
-				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
+				positionDelta.X = Input2.GamePad0.AnalogRight.X * MoveDelta * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * MoveDelta * _stats.moveSpeed;
 
 				if (ShootingDirection.IsZero())
 				{
