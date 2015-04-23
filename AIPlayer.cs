@@ -58,18 +58,18 @@ namespace TheATeam
 			if(player2Flag == null)
 				player2Flag = ItemManager.Instance.GetItem(ItemType.flag, "Player2Flag");
 
-			List<TouchData> touches = Touch.GetData(0);
-			foreach(TouchData data in touches)
-			{
-				float xPos = (data.X +0.5f) * 960.0f;
-				float yPos = 544.0f -((data.Y +0.5f) * 544.0f);
-				
-				if(new Vector2(xPos, yPos) != finalTarget)
-				{
-					finalTarget = new Vector2(xPos, yPos);
-					path = pathfinder.FindPath(finalTarget);
-				}
-			}
+//			List<TouchData> touches = Touch.GetData(0);
+//			foreach(TouchData data in touches)
+//			{
+//				float xPos = (data.X +0.5f) * 960.0f;
+//				float yPos = 544.0f -((data.Y +0.5f) * 544.0f);
+//				
+//				if(new Vector2(xPos, yPos) != finalTarget)
+//				{
+//					finalTarget = new Vector2(xPos, yPos);
+//					path = pathfinder.FindPath(finalTarget);
+//				}
+//			}
 			
 			updateBehaviours(dt);
 			
