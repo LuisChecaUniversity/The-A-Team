@@ -194,7 +194,7 @@ namespace TheATeam
 				{
 					Direction = AppMain.client.NetworkDirection;
 					//set position and direction from the network positions of enemy
-					Position += Direction * _stats.moveSpeed * 2.0f;
+					Position += Direction * _stats.moveSpeed * MoveDelta;
 					
 					curUpdatePosTime += dt;
 					if(curUpdatePosTime > updatePosTime)
@@ -300,8 +300,8 @@ namespace TheATeam
 		
 		private void MultiplayerUpdate(float dt)
 		{
-			positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+			positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+			positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 			ShootingDirection.X = Input2.GamePad0.AnalogRight.X;
 			ShootingDirection.Y = -Input2.GamePad0.AnalogRight.Y;
 			if (ShootingDirection.IsZero())
@@ -337,8 +337,8 @@ namespace TheATeam
 		{
 			if (playerIndex == PlayerIndex.PlayerOne)
 			{
-				positionDelta.X = Input2.GamePad0.AnalogLeft.X * 2.0f * _stats.moveSpeed;
-				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * 2.0f * _stats.moveSpeed;
+				positionDelta.X = Input2.GamePad0.AnalogLeft.X * MoveDelta * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogLeft.Y * MoveDelta * _stats.moveSpeed;
 
 				if (ShootingDirection.IsZero())
 				{
@@ -362,8 +362,8 @@ namespace TheATeam
 			}
 			else if (playerIndex == PlayerIndex.PlayerTwo)
 			{
-				positionDelta.X = Input2.GamePad0.AnalogRight.X * 2.0f * _stats.moveSpeed;
-				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * 2.0f * _stats.moveSpeed;
+				positionDelta.X = Input2.GamePad0.AnalogRight.X * MoveDelta * _stats.moveSpeed;
+				positionDelta.Y = -Input2.GamePad0.AnalogRight.Y * MoveDelta * _stats.moveSpeed;
 
 				if (ShootingDirection.IsZero())
 				{
